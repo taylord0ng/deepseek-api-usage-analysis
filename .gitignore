@@ -39,3 +39,12 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# claude code session data
+/.claude/
+
+# gstack session data
+/.gstack/
+
+# sample data (real DeepSeek CSVs with API key fragments)
+/sampleData/

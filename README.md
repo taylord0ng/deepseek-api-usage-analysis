@@ -1,36 +1,71 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# DeepSeek Usage Dashboard
 
-## Getting Started
+Drop your DeepSeek platform CSV exports and instantly see cost analytics, per-key breakdowns, cache hit analysis, and usage trends. Everything stays in your browser — no upload, no backend, no signup.
 
-First, run the development server:
+## How it works
+
+1. Go to [DeepSeek Platform](https://platform.deepseek.com) → Usage → Export monthly CSVs
+2. You get two files: `amount-{year}-{month}.csv` and `cost-{year}-{month}.csv`
+3. Drag both onto the dashboard
+4. Charts render instantly — nothing leaves your browser
+
+## Features
+
+- **Overview** — KPI cards (cost, tokens, cache rate, active keys) + daily cost bars + cost-by-key donut
+- **By Key** — Sortable table with per-key tokens, cost, cache hit rate, request counts, and inline usage bars
+- **Cache** — Hit rate gauge, daily cache trend, stacked hits vs misses by key
+- **Trends** — Toggleable line chart (cost / tokens / cache rate / requests)
+- **Zero config** — Auto-detects DeepSeek platform CSV format
+- **100% private** — Papa Parse processes everything in your browser
+
+## CSV Format
+
+Standard DeepSeek platform export:
+
+### `amount-{year}-{month}.csv`
+
+| Column | Description |
+|--------|-------------|
+| `utc_date` | Usage date |
+| `model` | `deepseek-chat`, `deepseek-reasoner`, etc. |
+| `api_key_name` | Your key label |
+| `api_key` | Key (masked) |
+| `type` | `request_count`, `output_tokens`, `input_cache_hit_tokens`, `input_cache_miss_tokens` |
+| `price` | Unit price (CNY) |
+| `amount` | Count |
+
+### `cost-{year}-{month}.csv`
+
+| Column | Description |
+|--------|-------------|
+| `utc_date` | Charge date |
+| `model` | Model name |
+| `cost` | Amount (negative = charge) |
+| `currency` | CNY |
+
+## Development
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev        # Dev server at localhost:3000
+npm run build      # Static export → out/
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Test with the sample CSVs in `public/sample-amount-2026-06.csv` and `public/sample-cost-2026-06.csv`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Stack
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Next.js 16 (static export) · React 19 · TypeScript · ECharts · Papa Parse · Tailwind CSS 4
 
-## Learn More
+## Deploy
 
-To learn more about Next.js, take a look at the following resources:
+Static output — deploy anywhere:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npm run build
+# out/ → Vercel, Netlify, GitHub Pages, Cloudflare Pages
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## License
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+MIT
