@@ -2,6 +2,8 @@
 
 Drop your DeepSeek platform CSV exports and instantly see cost analytics, per-key breakdowns, cache hit analysis, and usage trends. Everything stays in your browser — no upload, no backend, no signup.
 
+> 🇨🇳 [中文版](README_zh.md)
+
 ## How it works
 
 1. Go to [DeepSeek Platform](https://platform.deepseek.com) → Usage → Export monthly CSVs
@@ -15,6 +17,7 @@ Drop your DeepSeek platform CSV exports and instantly see cost analytics, per-ke
 - **By Key** — Sortable table with per-key tokens, cost, cache hit rate, request counts, and inline usage bars
 - **Cache** — Hit rate gauge, daily cache trend, stacked hits vs misses by key
 - **Trends** — Toggleable line chart (cost / tokens / cache rate / requests)
+- **🌐 Multi-language** — English and Chinese (中文), auto-detected from browser; manual switch available
 - **Zero config** — Auto-detects DeepSeek platform CSV format
 - **100% private** — Papa Parse processes everything in your browser
 

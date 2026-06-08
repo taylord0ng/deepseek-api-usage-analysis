@@ -1,0 +1,37 @@
+import type { Locale } from "@/i18n";
+
+/**
+ * Format a cost value in CNY.
+ * EN: ¥12,345.67  or ¥12.35K
+ * ZH: ¥12,345.67  or ¥1.23万
+ */
+export function formatCost(yuan: number, locale: Locale): string {
+  if (locale === "zh" && yuan >= 10000) {
+    return `¥${(yuan / 10000).toFixed(2)}万`;
+  }
+  if (locale === "en" && yuan >= 10000) {
+    return `¥${(yuan / 1000).toFixed(2)}K`;
+  }
+  return `¥${yuan.toFixed(2)}`;
+}
+
+/**
+ * Format a token count.
+ * EN: 1.2M / 1K / 123
+ * ZH: 1.2万 / 1K / 123
+ */
+export function formatTokens(n: number, locale?: Locale): string {
+  if (locale === "zh" && n >= 10_000) {
+    return `${(n / 10_000).toFixed(1)}万`;
+  }
+  if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M`;
+  if (n >= 1_000) return `${(n / 1_000).toFixed(0)}K`;
+  return String(n);
+}
+
+/**
+ * Format a ratio (0–1) as a percentage string.
+ */
+export function formatPercent(n: number): string {
+  return `${(n * 100).toFixed(1)}%`;
+}
