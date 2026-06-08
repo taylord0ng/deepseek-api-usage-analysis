@@ -48,3 +48,6 @@ next-env.d.ts
 
 # sample data (real DeepSeek CSVs with API key fragments)
 /sampleData/
+
+# local dev data
+/localFilesDev/
