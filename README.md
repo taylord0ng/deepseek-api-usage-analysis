@@ -67,7 +67,7 @@ npm run lint       # ESLint
 | Charts      | ECharts 6 + echarts-for-react           |
 | CSV Parsing | Papa Parse 5                            |
 | Styling     | Tailwind CSS v4 + CSS custom properties |
-| Typography  | Geist Sans + Geist Mono (next/font)     |
+| Typography  | Hubot Sans (local WOFF2) + Geist Mono (next/font/google) |
 | Language    | TypeScript 5 (strict mode)              |
 
 ### Project Structure
@@ -113,7 +113,7 @@ The dashboard follows an **Apple-minimalist** design language driven entirely by
 - **30+ theme tokens** — background, text (3 levels), border, accent, semantic colors (positive/danger/warning), error/warning banners, chart colors, dropzone states
 - **Light theme**: `#F5F5F7` cold gray paper background, `#1D1D1F` matte black text
 - **Dark theme**: `#000000` pure black background, `#F5F5F7` white text
-- **Typography**: Geist Sans, weight 350 body / 600 headings, tight letter-spacing
+- **Typography**: Hubot Sans, weight 400 body / 500–700 headings, tight letter-spacing
 - **Hero pattern**: `5rem` bold numbers in Overview / Keys / Cache / Trends — prominent, data-first presentation
 - **No-card layout**: Full-width modules separated by `1px solid var(--border)` dividers
 - **Micro-interactions**: Subtle hover transitions (200ms), fade-in (300ms) and slide-up (350ms) animations
@@ -129,6 +129,18 @@ npm run build
 ```
 
 ## Changelog
+
+### v0.2.2
+
+**Added:**
+
+- Logo icon and favicon.ico — added brand identity assets.
+- Replaced default English font with local Hubot Sans WOFF2 files.
+
+**Improved:**
+
+- Updated bilingual copy — refined upload area hint text and corrected ellipsis formatting.
+- Added global accessibility styles, smooth scrolling, and reduced-motion media query support.
 
 ### v0.2.1
 

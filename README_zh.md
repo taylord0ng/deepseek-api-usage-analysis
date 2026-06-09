@@ -67,7 +67,7 @@ npm run lint       # ESLint
 | 图表     | ECharts 6 + echarts-for-react      |
 | CSV 解析 | Papa Parse 5                       |
 | 样式     | Tailwind CSS v4 + CSS 自定义属性        |
-| 字体     | Geist Sans + Geist Mono（next/font） |
+| 字体     | Hubot Sans（本地 WOFF2）+ Geist Mono（next/font/google） |
 | 语言     | TypeScript 5（strict 严格模式）          |
 
 ### 项目结构
@@ -113,7 +113,7 @@ src/
 - **30+ 主题色值** — 背景、文字（3 级）、边框、强调色、语义色（正向/危险/警告）、错误/警告横幅、图表色、拖拽区状态色
 - **浅色主题**：`#F5F5F7` 冷灰纸质感底，`#1D1D1F` 哑光黑文字
 - **深色主题**：`#000000` 纯黑底，`#F5F5F7` 白色文字
-- **字体**：Geist Sans，正文 350 字重 / 标题 600 字重，紧凑字间距
+- **字体**：Hubot Sans，正文 400 字重 / 标题 500–700 字重，紧凑字间距
 - **Hero 模式**：总览/Key/缓存/趋势视图中 `5rem` 粗体大数字 — 数据优先的视觉呈现
 - **无卡片布局**：通栏模块，以 `1px solid var(--border)` 细线分割
 - **微交互**：细腻的 hover 过渡（200ms）、淡入（300ms）和上滑（350ms）动画
@@ -129,6 +129,18 @@ npm run build
 ```
 
 ## 更新日志
+
+### v0.2.2
+
+**新增：**
+
+- 新增 Logo 图标和 favicon.ico 文件。
+- 替换项目英文默认字体为本地Hubot Sans。
+
+**改进：**
+
+- 更新中英双语文案，完善上传区域的提示文本，修正省略号格式。
+- 添加全局无障碍样式、平滑滚动与减少动画的适配配置。
 
 ### v0.2.1
 

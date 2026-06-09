@@ -5,7 +5,7 @@
 const translations = {
   en: {
     app: {
-      title: "DeepSeek Usage",
+      title: "DeepSeek API Usage Analytics",
       subtitle: "Drop your monthly CSV exports to see usage analytics",
     },
     tabs: {
@@ -22,8 +22,8 @@ const translations = {
       text: "DeepSeek Usage Dashboard · Data processed locally in your browser · ",
     },
     dropzone: {
-      processing: "Processing CSVs...",
-      title: "Drop your DeepSeek CSVs here",
+      processing: "Processing CSVs\u2026",
+      title: "Drop your DeepSeek CSVs here or click to upload",
       hint: "Drop one or more months — amount-*.csv + cost-*.csv pairs",
       privacy:
         "Multiple months are auto-merged · Files stay in your browser — nothing is uploaded",
@@ -126,7 +126,7 @@ const translations = {
 
   zh: {
     app: {
-      title: "DeepSeek 用量",
+      title: "DeepSeek API 用量分析",
       subtitle: "拖拽月度 CSV 文件即可查看用量分析",
     },
     tabs: {
@@ -143,8 +143,8 @@ const translations = {
       text: "DeepSeek 用量仪表盘 · 数据仅在浏览器本地处理 · ",
     },
     dropzone: {
-      processing: "正在处理 CSV...",
-      title: "拖拽 DeepSeek CSV 文件到此处",
+      processing: "正在处理 CSV\u2026",
+      title: "拖拽 DeepSeek CSV 文件到此处或点击上传",
       hint: "拖拽一个或多个月份 — amount-*.csv + cost-*.csv 文件对",
       privacy: "多月份自动合并 · 文件仅存储在浏览器中 — 不会上传",
     },

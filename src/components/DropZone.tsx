@@ -73,7 +73,7 @@ export default function DropZone() {
   onDragOver={onDragOver}
   onDragLeave={onDragLeave}
   onClick={() => fileInputRef.current?.click()}
-  className="p-16 text-center cursor-pointer transition-all duration-300"
+  className="p-16 text-center cursor-pointer transition-[background,border-color] duration-300"
   style={{
   border: dragOver
    ? "2px dashed var(--dropzone-drag-border)"

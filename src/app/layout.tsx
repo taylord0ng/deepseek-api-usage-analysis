@@ -1,14 +1,11 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { DataProvider } from "@/lib/DataContext";
 import { ThemeProvider } from "@/lib/ThemeContext";
 import { AppI18nShell } from "./AppI18nShell";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+/** Hubot Sans 为本地 WOFF2 字体，通过 globals.css 中的 @font-face 加载 */
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
@@ -30,7 +27,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${geistMono.variable} h-full antialiased`}
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col">

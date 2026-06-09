@@ -1,12 +1,41 @@
 @import "tailwindcss";
 
 /* ================================================================== */
+/*  Hubot Sans 本地字体（英文字体）                                       */
+/* ================================================================== */
+
+@font-face {
+  font-family: "Hubot Sans";
+  src: url("/fonts/HubotSans-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Hubot Sans";
+  src: url("/fonts/HubotSans-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Hubot Sans";
+  src: url("/fonts/HubotSans-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ================================================================== */
 /*  CSS 变量：Apple 极简风格双主题                                        */
 /* ================================================================== */
 
 /* Light theme — 冷灰纸质感 (#F5F5F7) */
 :root,
 .light {
+  color-scheme: light;
   --bg:                 #F5F5F7;
   --bg-surface:         #FFFFFF;
   --bg-surface-hover:   #FAFAFA;
@@ -40,6 +69,7 @@
 
 /* Dark theme — 纯黑底 + 深灰面 */
 .dark {
+  color-scheme: dark;
   --bg:                 #000000;
   --bg-surface:         #1C1C1E;
   --bg-surface-hover:   #2C2C2E;
@@ -81,8 +111,9 @@
   --color-border:          var(--border);
   --color-accent:          var(--accent);
   --color-muted:           var(--text-secondary);
-  --font-sans:             var(--font-geist-sans), -apple-system, BlinkMacSystemFont,
-                           "SF Pro Text", "Helvetica Neue", sans-serif;
+  --font-sans:             "Hubot Sans", -apple-system, BlinkMacSystemFont,
+                           "SF Pro Text", "Helvetica Neue", "PingFang SC",
+                           "Microsoft YaHei", sans-serif;
   --font-mono:             var(--font-geist-mono), "SF Mono", Menlo, monospace;
 
   /* 动画 */
@@ -109,13 +140,15 @@ html {
   -moz-osx-font-smoothing: grayscale;
   /* 字体平滑 */
   text-rendering: optimizeLegibility;
+  /* 平滑滚动 */
+  scroll-behavior: smooth;
 }
 
 body {
   background-color: var(--bg);
   color: var(--text-primary);
   font-family: var(--font-sans);
-  font-weight: 350; /* 正文细字重 */
+  font-weight: 400; /* Hubot Sans Regular */
   letter-spacing: -0.01em;
   line-height: 1.6;
 }
@@ -173,4 +206,55 @@ a:hover {
 /* 微圆角 */
 .rounded-subtle {
   border-radius: 6px;
+}
+
+/* ================================================================== */
+/*  无障碍：尊重用户减少动画偏好                                           */
+/* ================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ================================================================== */
+/*  滚动渐显动画（Landing page 各 section）                                 */
+/* ================================================================== */
+
+/* 初始隐藏状态 */
+.reveal-section {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* 进入视口后淡入上移 */
+.reveal-section.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 手风琴折叠面板 */
+.accordion-panel {
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transition:
+    max-height 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.25s ease-out,
+    margin-top 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.accordion-panel.open {
+  max-height: 12rem;
+  opacity: 1;
+  margin-top: 0.5rem;
 }
