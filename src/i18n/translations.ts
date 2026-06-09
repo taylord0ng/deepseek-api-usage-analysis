@@ -45,6 +45,7 @@ const translations = {
       dailyTokens: "Daily Tokens",
       cacheHitRate: "Cache Hit Rate",
       requestCount: "Request Count",
+      heroSubtitle: "Over {days} days",
     },
     cache: {
       hitRateTitle: "Cache Hit Rate",
@@ -64,6 +65,7 @@ const translations = {
       cost: "Cost",
       cacheHit: "Cache Hit",
       requests: "Requests",
+      heroSubtitle: "{keys} key(s) · {models} model(s)",
     },
     error: {
       missingColumns: "CSV schema not recognized",
@@ -92,6 +94,9 @@ const translations = {
       dark: "Dark",
       switchToDark: "Switch to dark mode",
       switchToLight: "Switch to light mode",
+    },
+    modelFilter: {
+      allModels: "All Models",
     },
   },
 
@@ -136,6 +141,7 @@ const translations = {
       dailyTokens: "每日 Token",
       cacheHitRate: "缓存命中率",
       requestCount: "请求次数",
+      heroSubtitle: "共 {days} 天",
     },
     cache: {
       hitRateTitle: "缓存命中率",
@@ -154,6 +160,7 @@ const translations = {
       cost: "费用",
       cacheHit: "缓存命中",
       requests: "请求数",
+      heroSubtitle: "{keys} 个 Key · {models} 个模型",
     },
     error: {
       missingColumns: "CSV 格式无法识别",
@@ -182,6 +189,9 @@ const translations = {
       dark: "深色",
       switchToDark: "切换至深色模式",
       switchToLight: "切换至浅色模式",
+    },
+    modelFilter: {
+      allModels: "全部模型",
     },
   },
 } as const;

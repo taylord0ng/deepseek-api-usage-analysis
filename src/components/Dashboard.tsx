@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useCallback } from "react";
-import { useData } from "@/lib/DataContext";
+import { useData, ALL_MODELS } from "@/lib/DataContext";
 import { useTranslation } from "@/i18n";
 import DropZone from "./DropZone";
 import KPICards from "./KPICards";
@@ -27,7 +27,7 @@ type Tab = "overview" | "keys" | "cache" | "trends";
  * - 完整的 light/dark 双主题支持
  */
 export default function Dashboard() {
-  const { result, fileName, loadFiles, clear } = useData();
+  const { result, fileName, loadFiles, clear, selectedModel, setSelectedModel } = useData();
   const { t } = useTranslation();
   const [tab, setTab] = useState<Tab>("overview");
   const reuploadRef = useRef<HTMLInputElement>(null);
@@ -182,6 +182,45 @@ export default function Dashboard() {
             </button>
           ))}
         </nav>
+
+        {/* 模型筛选 — Apple 风格分段控件 / 胶囊按钮 */}
+        {result.summary.models.length > 1 && (
+          <div className="flex justify-center mb-8">
+            <div className="flex gap-1 p-1 rounded-full" style={{ background: "var(--border)" }}>
+              <button
+                onClick={() => setSelectedModel(ALL_MODELS)}
+                className="px-3.5 py-1.5 text-xs font-medium rounded-full transition-all duration-200"
+                style={{
+                  background: selectedModel === ALL_MODELS ? "var(--text-primary)" : "transparent",
+                  color: selectedModel === ALL_MODELS ? "var(--accent-inverse)" : "var(--text-tertiary)",
+                }}
+              >
+                {t.modelFilter.allModels}
+              </button>
+              {result.summary.models.map((model) => (
+                <button
+                  key={model}
+                  onClick={() => setSelectedModel(model)}
+                  className="px-3.5 py-1.5 text-xs font-medium rounded-full transition-all duration-200"
+                  style={{
+                    background: selectedModel === model ? "var(--text-primary)" : "transparent",
+                    color: selectedModel === model ? "var(--accent-inverse)" : "var(--text-tertiary)",
+                  }}
+                  onMouseEnter={(e) => {
+                    if (selectedModel !== model)
+                      (e.target as HTMLElement).style.color = "var(--text-secondary)";
+                  }}
+                  onMouseLeave={(e) => {
+                    if (selectedModel !== model)
+                      (e.target as HTMLElement).style.color = "var(--text-tertiary)";
+                  }}
+                >
+                  {model}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Tab 内容区 */}
         <div className="animate-fade-in">

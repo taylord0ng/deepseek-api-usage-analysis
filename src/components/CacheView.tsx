@@ -14,7 +14,7 @@ import { useTheme } from"@/lib/ThemeContext";
  * 日趋势图与堆叠图使用克制单色 + 主题感知。
  */
 export default function CacheView() {
- const { result } = useData();
+ const { filteredResult: result } = useData();
  const { locale, t } = useTranslation();
  const { theme } = useTheme();
  if (!result) return null;

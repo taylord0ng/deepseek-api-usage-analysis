@@ -13,10 +13,13 @@ Drop your DeepSeek platform CSV exports and instantly see cost analytics, per-ke
 
 ## Features
 
-- **Overview** — KPI cards (cost, tokens, cache rate, active keys) + daily cost bars + cost-by-key donut
+- **Overview** — KPI big numbers (cost, tokens, cache rate, active keys) + daily cost bars + cost-by-key donut
 - **By Key** — Sortable table with per-key tokens, cost, cache hit rate, request counts, and inline usage bars
-- **Cache** — Hit rate gauge, daily cache trend, stacked hits vs misses by key
+- **Cache** — Large-format hit rate gauge, daily cache trend, stacked hits vs misses by key
 - **Trends** — Toggleable line chart (cost / tokens / cache rate / requests)
+- **🌓 Dark mode** — Full light/dark theme support with automatic system preference detection; manual toggle available
+- **🎨 Apple-minimalist design** — Clean, spacious layout with "no-card" full-width modules, subtle dividers, and diffuse shadows
+- **🔍 Model filter** — Segmented control to filter all views by model (All / deepseek-chat / deepseek-reasoner / etc.)
 - **🌐 Multi-language** — English and Chinese (中文), auto-detected from browser; manual switch available
 - **Zero config** — Auto-detects DeepSeek platform CSV format
 - **100% private** — Papa Parse processes everything in your browser
@@ -58,7 +61,7 @@ Test with the sample CSVs in `public/sample-amount-2026-06.csv` and `public/samp
 
 ### Stack
 
-Next.js 16 (static export) · React 19 · TypeScript · ECharts · Papa Parse · Tailwind CSS 4
+Next.js 16 (static export) · React 19 · TypeScript · ECharts · Papa Parse · Tailwind CSS 4 · CSS custom properties
 
 ## Deploy
 

@@ -318,7 +318,7 @@ function joinCosts(
 /**
  * Compute per-key aggregate statistics.
  */
-function computeKeyStats(daily: DailyUsage[]): KeyStats[] {
+export function computeKeyStats(daily: DailyUsage[]): KeyStats[] {
   const map = new Map<string, {
     apiKeyName: string;
     totalTokens: number;
