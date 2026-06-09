@@ -1,26 +1,176 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ================================================================== */
+/*  CSS 变量：Apple 极简风格双主题                                        */
+/* ================================================================== */
+
+/* Light theme — 冷灰纸质感 (#F5F5F7) */
+:root,
+.light {
+  --bg:                 #F5F5F7;
+  --bg-surface:         #FFFFFF;
+  --bg-surface-hover:   #FAFAFA;
+  --text-primary:       #1D1D1F;   /* 深炭黑，不刺眼 */
+  --text-secondary:     #86868B;   /* 苹果中灰 */
+  --text-tertiary:      #98989D;
+  --border:             #E5E5EA;
+  --border-strong:      #D2D2D7;
+  --accent:             #1D1D1F;   /* 哑光黑作为强调色 */
+  --accent-hover:       #3A3A3C;
+  --accent-inverse:     #F5F5F7;
+  --error-bg:           #FDF2F2;
+  --error-border:       #FECACA;
+  --error-text:         #991B1B;
+  --warning-bg:         #FFFBEB;
+  --warning-border:     #FDE68A;
+  --warning-text:       #92400E;
+  --positive:           #059669;
+  --positive-subtle:    #ECFDF5;
+  --danger:             #DC2626;
+  --danger-subtle:      #FEF2F2;
+  --chart-grid:         #E5E5EA;
+  --chart-text:         #86868B;
+  --dropzone-drag-bg:   #EDEEF0;
+  --dropzone-drag-border: #86868B;
+
+  /* 弥散阴影（极淡、大范围） */
+  --shadow-sm: 0 2px 16px rgba(0, 0, 0, 0.03);
+  --shadow-md: 0 4px 32px rgba(0, 0, 0, 0.04);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* Dark theme — 纯黑底 + 深灰面 */
+.dark {
+  --bg:                 #000000;
+  --bg-surface:         #1C1C1E;
+  --bg-surface-hover:   #2C2C2E;
+  --text-primary:       #F5F5F7;
+  --text-secondary:     #98989D;
+  --text-tertiary:      #636366;
+  --border:             #38383A;
+  --border-strong:      #48484A;
+  --accent:             #F5F5F7;
+  --accent-hover:       #D2D2D7;
+  --accent-inverse:     #1D1D1F;
+  --error-bg:           #3B1717;
+  --error-border:       #7F1D1D;
+  --error-text:         #FCA5A5;
+  --warning-bg:         #3B2F0E;
+  --warning-border:     #78350F;
+  --warning-text:       #FDE68A;
+  --positive:           #34D399;
+  --positive-subtle:    #064E3B;
+  --danger:             #F87171;
+  --danger-subtle:      #3B1717;
+  --chart-grid:         #38383A;
+  --chart-text:         #98989D;
+  --dropzone-drag-bg:   #2C2C2E;
+  --dropzone-drag-border: #98989D;
+
+  --shadow-sm: 0 2px 16px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 32px rgba(0, 0, 0, 0.5);
+}
+
+/* ================================================================== */
+/*  Tailwind v4 @theme 扩展                                              */
+/* ================================================================== */
+
+@theme inline {
+  --color-background:      var(--bg);
+  --color-foreground:      var(--text-primary);
+  --color-surface:         var(--bg-surface);
+  --color-border:          var(--border);
+  --color-accent:          var(--accent);
+  --color-muted:           var(--text-secondary);
+  --font-sans:             var(--font-geist-sans), -apple-system, BlinkMacSystemFont,
+                           "SF Pro Text", "Helvetica Neue", sans-serif;
+  --font-mono:             var(--font-geist-mono), "SF Mono", Menlo, monospace;
+
+  /* 动画 */
+  --animate-fade-in:       fade-in 0.3s ease-out;
+  --animate-slide-up:      slide-up 0.35s ease-out;
+
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+  @keyframes slide-up {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0);   }
   }
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* ================================================================== */
+/*  全局基础样式                                                         */
+/* ================================================================== */
+
+html {
+  /* 文本渲染优化 */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* 字体平滑 */
+  text-rendering: optimizeLegibility;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--bg);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-weight: 350; /* 正文细字重 */
+  letter-spacing: -0.01em;
+  line-height: 1.6;
+}
+
+/* 标题：粗字重，建立视觉层级 */
+h1, h2, h3, h4 {
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+/* 链接样式 */
+a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+a:hover {
+  color: var(--text-primary);
+}
+
+/* 选择文本颜色 */
+::selection {
+  background-color: var(--text-primary);
+  color: var(--accent-inverse);
+}
+
+/* 滚动条 */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-tertiary);
+}
+
+/* ================================================================== */
+/*  通用工具类                                                           */
+/* ================================================================== */
+
+/* 弥散阴影卡片（仅在必须使用容器时） */
+.shadow-diffuse {
+  box-shadow: var(--shadow-sm);
+}
+.shadow-diffuse-md {
+  box-shadow: var(--shadow-md);
+}
+
+/* 微圆角 */
+.rounded-subtle {
+  border-radius: 6px;
 }

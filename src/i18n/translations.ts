@@ -87,6 +87,12 @@ const translations = {
     langSwitcher: {
       label: "Language",
     },
+    theme: {
+      light: "Light",
+      dark: "Dark",
+      switchToDark: "Switch to dark mode",
+      switchToLight: "Switch to light mode",
+    },
   },
 
   zh: {
@@ -170,6 +176,12 @@ const translations = {
     },
     langSwitcher: {
       label: "语言",
+    },
+    theme: {
+      light: "浅色",
+      dark: "深色",
+      switchToDark: "切换至深色模式",
+      switchToLight: "切换至浅色模式",
     },
   },
 } as const;

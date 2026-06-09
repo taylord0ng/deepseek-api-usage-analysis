@@ -11,9 +11,21 @@ import CacheView from "./CacheView";
 import TrendsView from "./TrendsView";
 import ErrorDisplay, { WarningBanner } from "./ErrorDisplay";
 import LanguageSwitcher from "./LanguageSwitcher";
+import ThemeSwitcher from "./ThemeSwitcher";
 
 type Tab = "overview" | "keys" | "cache" | "trends";
 
+/**
+ * 主仪表盘组件
+ *
+ * Apple 极简风格重构：
+ * - 冷灰纸质感背景（#F5F5F7 / #000000）
+ * - 大留白、呼吸感间距
+ * - "无卡片"式布局：通栏模块 + 细横线分割
+ * - 微圆角、弥散阴影（仅在必须时使用）
+ * - 文字主色深炭黑，辅色优雅灰
+ * - 完整的 light/dark 双主题支持
+ */
 export default function Dashboard() {
   const { result, fileName, loadFiles, clear } = useData();
   const { t } = useTranslation();
@@ -41,47 +53,71 @@ export default function Dashboard() {
     [loadFiles]
   );
 
-  // Pre-upload state: just show the drop zone
+  // 上传前状态：仅展示拖拽区
   if (!result) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-6 bg-white">
+      <div
+        className="min-h-screen flex items-center justify-center p-8"
+        style={{ background: "var(--bg)" }}
+      >
         <div className="w-full max-w-lg">
-          <div className="text-center mb-8">
-            <h1 className="text-2xl font-bold text-gray-900 mb-2">
+          {/* 标题区 */}
+          <div className="text-center mb-10">
+            <h1
+              className="text-2xl font-bold mb-3 tracking-tight"
+              style={{ color: "var(--text-primary)", letterSpacing: "-0.03em" }}
+            >
               {t.app.title}
             </h1>
-            <p className="text-sm text-gray-500">
+            <p
+              className="text-sm leading-relaxed"
+              style={{ color: "var(--text-secondary)" }}
+            >
               {t.app.subtitle}
             </p>
           </div>
+
           <DropZone />
           <ErrorDisplay />
+
+          {/* 底部操作栏 */}
+          <div className="flex justify-center gap-4 mt-8">
+            <LanguageSwitcher />
+            <ThemeSwitcher />
+          </div>
         </div>
       </div>
     );
   }
 
-  // Post-upload state: full dashboard
+  // 数据加载后：完整仪表盘
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-6xl mx-auto px-4 py-6">
-        {/* Header */}
-        <header className="flex items-center justify-between mb-6">
+    <div
+      className="min-h-screen"
+      style={{ background: "var(--bg)" }}
+    >
+      <div className="max-w-6xl mx-auto px-6 py-8">
+        {/* Header — 大留白 */}
+        <header className="flex items-start justify-between mb-10">
           <div>
-            <h1 className="text-xl font-bold text-gray-900">
+            <h1
+              className="text-xl font-bold tracking-tight mb-1"
+              style={{ color: "var(--text-primary)", letterSpacing: "-0.03em" }}
+            >
               {t.app.title}
             </h1>
-            <p className="text-sm text-gray-500">
+            <p className="text-xs" style={{ color: "var(--text-tertiary)" }}>
               {fileName}
               {result.summary.dateRange && (
                 <span className="ml-2">
-                  · {result.summary.dateRange.start} ~ {result.summary.dateRange.end}
+                  · {result.summary.dateRange.start} — {result.summary.dateRange.end}
                 </span>
               )}
             </p>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-4">
             <LanguageSwitcher />
+            <ThemeSwitcher />
             <input
               ref={reuploadRef}
               type="file"
@@ -92,13 +128,27 @@ export default function Dashboard() {
             />
             <button
               onClick={() => reuploadRef.current?.click()}
-              className="text-sm text-gray-500 hover:text-gray-700 transition-colors"
+              className="text-xs font-medium transition-colors duration-200"
+              style={{ color: "var(--text-secondary)" }}
+              onMouseEnter={(e) => {
+                (e.target as HTMLElement).style.color = "var(--text-primary)";
+              }}
+              onMouseLeave={(e) => {
+                (e.target as HTMLElement).style.color = "var(--text-secondary)";
+              }}
             >
               {t.header.loadDifferent}
             </button>
             <button
               onClick={clear}
-              className="text-sm text-red-500 hover:text-red-700 transition-colors"
+              className="text-xs font-medium transition-colors duration-200"
+              style={{ color: "var(--danger)" }}
+              onMouseEnter={(e) => {
+                (e.target as HTMLElement).style.opacity = "0.8";
+              }}
+              onMouseLeave={(e) => {
+                (e.target as HTMLElement).style.opacity = "1";
+              }}
             >
               {t.header.clear}
             </button>
@@ -108,40 +158,49 @@ export default function Dashboard() {
         <ErrorDisplay />
         <WarningBanner />
 
-        {/* KPI Cards */}
+        {/* KPI 指标 */}
         <KPICards />
 
-        {/* Tab navigation */}
-        <nav className="flex gap-6 border-b border-gray-200 mb-6">
+        {/* Tab 导航 — Apple 风格下划线 */}
+        <nav className="flex gap-8 mb-10" style={{ borderBottom: "1px solid var(--border)" }}>
           {TABS.map((tabItem) => (
             <button
               key={tabItem.key}
               onClick={() => setTab(tabItem.key)}
-              className={`pb-2.5 text-sm font-medium transition-colors border-b-2 -mb-px ${
+              className={`pb-3 text-xs font-semibold tracking-wide uppercase transition-all duration-200 border-b-2 -mb-px ${
                 tab === tabItem.key
-                  ? "text-gray-900 border-gray-800"
-                  : "text-gray-500 border-transparent hover:text-gray-700"
+                  ? "border-accent"
+                  : "border-transparent"
               }`}
+              style={{
+                color: tab === tabItem.key
+                  ? "var(--text-primary)"
+                  : "var(--text-tertiary)",
+              }}
             >
               {tabItem.label}
             </button>
           ))}
         </nav>
 
-        {/* Tab content */}
-        {tab === "overview" && <OverviewView />}
-        {tab === "keys" && <KeyView />}
-        {tab === "cache" && <CacheView />}
-        {tab === "trends" && <TrendsView />}
+        {/* Tab 内容区 */}
+        <div className="animate-fade-in">
+          {tab === "overview" && <OverviewView />}
+          {tab === "keys" && <KeyView />}
+          {tab === "cache" && <CacheView />}
+          {tab === "trends" && <TrendsView />}
+        </div>
 
         {/* Footer */}
-        <footer className="mt-12 pt-4 border-t border-gray-200 text-center text-xs text-gray-400">
+        <footer className="mt-20 pt-6 text-center text-xs" style={{ color: "var(--text-tertiary)" }}>
+          <hr style={{ borderColor: "var(--border)", marginBottom: "1.5rem" }} />
           {t.footer.text}
           <a
             href="https://github.com"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-gray-500 hover:text-gray-700"
+            className="transition-colors duration-200 ml-1"
+            style={{ color: "var(--text-secondary)" }}
           >
             GitHub
           </a>

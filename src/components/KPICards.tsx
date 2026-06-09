@@ -4,6 +4,13 @@ import { useData } from"@/lib/DataContext";
 import { useTranslation } from"@/i18n";
 import { formatCost, formatTokens, formatPercent } from"@/lib/format";
 
+/**
+ * KPI 指标卡片
+ *
+ * Apple 极简风格 — "无卡片"设计：大数字 + 细标签。
+ * 用微妙的横线分割组间，而非封闭卡片。
+ * 大幅增加垂直间距，营造呼吸感。
+ */
 export default function KPICards() {
  const { result } = useData();
  const { locale, t } = useTranslation();
@@ -11,43 +18,55 @@ export default function KPICards() {
 
  const { summary } = result;
 
- const cards = [
- {
- value: formatCost(summary.totalCost, locale),
- label: t.kpi.totalCost,
- sub: summary.dateRange
- ? `${summary.dateRange.start} ~ ${summary.dateRange.end}`
- :"",
- },
- {
- value: formatTokens(summary.totalTokens, locale),
- label: t.kpi.totalTokens,
- sub: t.kpi.models.replace("{count}", String(summary.models.length)),
- },
- {
- value: formatPercent(summary.cacheHitRate),
- label: t.kpi.cacheHitRate,
- sub: t.kpi.saved.replace("{tokens}", formatTokens(summary.totalCacheHitTokens, locale)),
- },
- {
- value: String(summary.activeKeys),
- label: t.kpi.activeKeys,
- sub:"",
- },
+ const items = [
+  {
+  value: formatCost(summary.totalCost, locale),
+  label: t.kpi.totalCost,
+  sub: summary.dateRange
+   ? `${summary.dateRange.start} — ${summary.dateRange.end}`
+   :"",
+  },
+  {
+  value: formatTokens(summary.totalTokens, locale),
+  label: t.kpi.totalTokens,
+  sub: t.kpi.models.replace("{count}", String(summary.models.length)),
+  },
+  {
+  value: formatPercent(summary.cacheHitRate),
+  label: t.kpi.cacheHitRate,
+  sub: t.kpi.saved.replace("{tokens}", formatTokens(summary.totalCacheHitTokens, locale)),
+  },
+  {
+  value: String(summary.activeKeys),
+  label: t.kpi.activeKeys,
+  sub:"",
+  },
  ];
 
  return (
- <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
- {cards.map((c) => (
- <div
- key={c.label}
- className="bg-white border border-gray-200 rounded-lg p-4"
- >
- <div className="text-2xl font-bold text-gray-900">{c.value}</div>
- <div className="text-sm text-gray-500 mt-1">{c.label}</div>
- {c.sub && <div className="text-xs text-gray-400 mt-0.5">{c.sub}</div>}
- </div>
- ))}
+ <div className="mb-12 mt-4">
+  <div className="grid grid-cols-2 lg:grid-cols-4">
+  {items.map((item) => (
+   <div key={item.label} className="px-0 py-5">
+   <div
+    className="text-3xl font-bold tracking-tight"
+    style={{ color: "var(--text-primary)", letterSpacing: "-0.03em" }}
+   >
+    {item.value}
+   </div>
+   <div className="text-xs font-medium mt-2 uppercase tracking-wider" style={{ color: "var(--text-secondary)" }}>
+    {item.label}
+   </div>
+   {item.sub && (
+    <div className="text-xs mt-0.5" style={{ color: "var(--text-tertiary)" }}>
+    {item.sub}
+    </div>
+   )}
+   </div>
+  ))}
+  </div>
+  {/* 底部通栏细横线分割 */}
+  <hr style={{ borderColor: "var(--border)", marginTop: "0.5rem" }} />
  </div>
  );
 }

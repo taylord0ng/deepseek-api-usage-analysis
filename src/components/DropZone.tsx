@@ -4,6 +4,13 @@ import { useState, useCallback, useRef, type DragEvent } from"react";
 import { useData } from"@/lib/DataContext";
 import { useTranslation } from"@/i18n";
 
+/**
+ * 拖拽上传区域
+ *
+ * Apple 极简风格 — 大留白、虚线边框、hover 微交互。
+ * 移除原本的异形圆角，改用克制的微圆角。
+ * 颜色通过 CSS 变量驱动，自动适配 light/dark 双主题。
+ */
 export default function DropZone() {
  const { loadFiles, loading } = useData();
  const { t } = useTranslation();
@@ -13,98 +20,104 @@ export default function DropZone() {
  const busy = loading || reading;
 
  const handleFiles = useCallback(
- async (files: FileList) => {
- const fileArr = Array.from(files);
- const csvs = fileArr.filter((f) => f.name.endsWith(".csv"));
- if (csvs.length === 0) return;
+  async (files: FileList) => {
+  const fileArr = Array.from(files);
+  const csvs = fileArr.filter((f) => f.name.endsWith(".csv"));
+  if (csvs.length === 0) return;
 
- setReading(true);
- try {
- const { concatMonthlyCSVs } = await import("@/lib/concatFiles");
- const result = await concatMonthlyCSVs(csvs);
- loadFiles(result.amountText, result.costText, result.label);
- } finally {
- setReading(false);
- }
- },
- [loadFiles]
+  setReading(true);
+  try {
+   const { concatMonthlyCSVs } = await import("@/lib/concatFiles");
+   const result = await concatMonthlyCSVs(csvs);
+   loadFiles(result.amountText, result.costText, result.label);
+  } finally {
+   setReading(false);
+  }
+  },
+  [loadFiles]
  );
 
  const onDrop = useCallback(
- (e: DragEvent) => {
- e.preventDefault();
- setDragOver(false);
- if (e.dataTransfer.files.length > 0) {
- handleFiles(e.dataTransfer.files);
- }
- },
- [handleFiles]
+  (e: DragEvent) => {
+  e.preventDefault();
+  setDragOver(false);
+  if (e.dataTransfer.files.length > 0) {
+   handleFiles(e.dataTransfer.files);
+  }
+  },
+  [handleFiles]
  );
 
  const onDragOver = useCallback((e: DragEvent) => {
- e.preventDefault();
- setDragOver(true);
+  e.preventDefault();
+  setDragOver(true);
  }, []);
 
  const onDragLeave = useCallback((e: DragEvent) => {
- e.preventDefault();
- setDragOver(false);
+  e.preventDefault();
+  setDragOver(false);
  }, []);
 
  const onChange = useCallback(
- (e: React.ChangeEvent<HTMLInputElement>) => {
- if (e.target.files && e.target.files.length > 0) {
- handleFiles(e.target.files);
- }
- },
- [handleFiles]
+  (e: React.ChangeEvent<HTMLInputElement>) => {
+  if (e.target.files && e.target.files.length > 0) {
+   handleFiles(e.target.files);
+  }
+  },
+  [handleFiles]
  );
 
  return (
  <div
- onDrop={onDrop}
- onDragOver={onDragOver}
- onDragLeave={onDragLeave}
- onClick={() => fileInputRef.current?.click()}
- className={`
- border-2 border-dashed rounded-lg p-12 text-center cursor-pointer
- transition-colors duration-200
- ${dragOver
- ?"border-blue-400 bg-blue-50"
- :"border-gray-300 bg-gray-50 hover:border-gray-400 hover:bg-gray-100"
- }
- `}
- style={{
- borderRadius:"255px 15px 225px 15px / 15px 225px 15px 255px",
- }}
+  onDrop={onDrop}
+  onDragOver={onDragOver}
+  onDragLeave={onDragLeave}
+  onClick={() => fileInputRef.current?.click()}
+  className="p-16 text-center cursor-pointer transition-all duration-300"
+  style={{
+  border: dragOver
+   ? "2px dashed var(--dropzone-drag-border)"
+   : "2px dashed var(--border)",
+  borderRadius: "6px",
+  background: dragOver
+   ? "var(--dropzone-drag-bg)"
+   : "transparent",
+  }}
  >
- <input
- ref={fileInputRef}
- type="file"
- multiple
- accept=".csv"
- className="hidden"
- onChange={onChange}
- />
- {busy ? (
- <div>
- <div className="inline-block w-8 h-8 border-2 border-gray-400 border-t-transparent rounded-full animate-spin mb-3"/>
- <p className="text-gray-600 font-medium">{t.dropzone.processing}</p>
- </div>
- ) : (
- <div>
- <div className="text-4xl mb-3">📊</div>
- <p className="text-gray-700 font-semibold text-lg mb-1">
- {t.dropzone.title}
- </p>
- <p className="text-sm text-gray-500">
- {t.dropzone.hint}
- </p>
- <p className="text-xs text-gray-400 mt-2">
- {t.dropzone.privacy}
- </p>
- </div>
- )}
+  <input
+  ref={fileInputRef}
+  type="file"
+  multiple
+  accept=".csv"
+  className="hidden"
+  onChange={onChange}
+  />
+  {busy ? (
+  <div>
+   <div
+   className="inline-block w-7 h-7 border-2 border-t-transparent rounded-full animate-spin mb-4"
+   style={{ borderColor: "var(--text-tertiary)", borderTopColor: "transparent" }}
+   />
+   <p className="font-medium text-base" style={{ color: "var(--text-secondary)" }}>
+   {t.dropzone.processing}
+   </p>
+  </div>
+  ) : (
+  <div>
+   <p
+   className="font-bold text-xl mb-2"
+   style={{ color: "var(--text-primary)", letterSpacing: "-0.02em" }}
+   >
+   {t.dropzone.title}
+   </p>
+   <p className="text-sm leading-relaxed" style={{ color: "var(--text-secondary)" }}>
+   {t.dropzone.hint}
+   </p>
+   <p className="text-xs mt-4" style={{ color: "var(--text-tertiary)" }}>
+   {t.dropzone.privacy}
+   </p>
+  </div>
+  )}
  </div>
  );
 }
