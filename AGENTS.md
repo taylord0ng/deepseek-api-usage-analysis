@@ -10,7 +10,7 @@ A browser-side dashboard for DeepSeek API usage analytics. Users drag their mont
 
 Strictly follows an Apple-minimalist design language: cold gray paper-texture backgrounds, ample whitespace, "no-card" full-width modules with thin horizontal dividers, subtle rounded corners, and diffuse shadows. Full light/dark dual-theme support driven by CSS custom properties.
 
-**Version**: 0.2.0
+**Version**: 0.2.1
 
 ## Architecture
 
@@ -22,16 +22,19 @@ src/
 │   ├── globals.css          # Tailwind v4 + CSS custom properties + @theme inline + base styles
 │   └── AppI18nShell.tsx     # Client shell: I18nProvider + <html lang> sync
 ├── components/
-│   ├── Dashboard.tsx        # Main layout, tabs, model filter, header, footer, re-upload
-│   ├── DropZone.tsx         # Drag-and-drop CSV uploader (supports multi-file)
-│   ├── KPICards.tsx         # Summary stat cards (card-less big-number layout)
-│   ├── OverviewView.tsx     # Hero total cost + daily cost bars + cost-by-key donut (theme-aware)
-│   ├── KeyView.tsx          # Hero key count + per-key table with inline bars & cache-hit color coding
-│   ├── CacheView.tsx        # Hero hit rate + daily trend line + per-key hits-vs-misses stacked bars
-│   ├── TrendsView.tsx       # Hero dynamic metric + toggleable multi-metric line chart (theme-aware)
-│   ├── ErrorDisplay.tsx     # Parse error + warning banners with i18n titles
-│   ├── LanguageSwitcher.tsx # EN / 中文 toggle (Apple-minimalist text buttons)
-│   └── ThemeSwitcher.tsx    # Light / Dark toggle (Apple-minimalist text button)
+│   ├── TitleBar.tsx          # Shared top nav: app name + LanguageSwitcher + ThemeSwitcher (sticky)
+│   ├── FooterBar.tsx         # Shared footer: thin divider + copyright + GitHub link
+│   ├── LandingPage.tsx       # Pre-upload landing: Hero + Upload + HowItWorks + QA + About sections
+│   ├── Dashboard.tsx         # Main layout: routes between LandingPage (no data) and Dashboard view
+│   ├── DropZone.tsx          # Drag-and-drop CSV uploader (supports multi-file)
+│   ├── KPICards.tsx          # Summary stat cards (card-less big-number layout)
+│   ├── OverviewView.tsx      # Hero total cost + daily cost bars + cost-by-key donut (theme-aware)
+│   ├── KeyView.tsx           # Hero key count + per-key table with inline bars & cache-hit color coding
+│   ├── CacheView.tsx         # Hero hit rate + daily trend line + per-key hits-vs-misses stacked bars
+│   ├── TrendsView.tsx        # Hero dynamic metric + toggleable multi-metric line chart (theme-aware)
+│   ├── ErrorDisplay.tsx      # Parse error + warning banners with i18n titles
+│   ├── LanguageSwitcher.tsx  # EN / 中文 toggle (Apple-minimalist text buttons)
+│   └── ThemeSwitcher.tsx     # Light / Dark toggle (Apple-minimalist text button)
 ├── i18n/
 │   ├── index.ts             # Barrel export
 │   ├── I18nProvider.tsx     # React context + useTranslation hook + localStorage persistence
@@ -213,6 +216,7 @@ A segmented control (pill buttons) below the tab bar lets users filter all views
 | `langSwitcher` | `label` | `LanguageSwitcher.tsx` |
 | `theme` | `light`, `dark`, `switchToDark`, `switchToLight` | `ThemeSwitcher.tsx` |
 | `modelFilter` | `allModels` | `Dashboard.tsx` model filter pill |
+| `landing` | `howItWorksTitle`, `howItWorksStep1Title`, `howItWorksStep1Desc`, `howItWorksStep2Title`, `howItWorksStep2Desc`, `howItWorksStep3Title`, `howItWorksStep3Desc`, `qaTitle`, `qaQ1`–`qaQ4`, `qaA1`–`qaA4`, `aboutTitle`, `aboutText` | `LandingPage.tsx` |
 
 ## Multi-month CSV support (concatFiles)
 
@@ -247,6 +251,40 @@ Both `DropZone.tsx` (initial upload) and `Dashboard.tsx` (re-upload) use `concat
 5. `computeKeyStats()` — aggregates per-key totals, computes cache hit rates
 6. Summary: total cost, total tokens, cache stats, active keys count, date range, model list
 
+## Page architecture
+
+The app has two distinct page states managed by `Dashboard.tsx`:
+
+### Landing page (pre-upload, `!result`)
+Rendered via `<LandingPage />` — a scrollable single-page layout with:
+1. **TitleBar** — sticky top bar with app name + LanguageSwitcher + ThemeSwitcher
+2. **Hero** — shorter section (`pt-16 pb-10`), centered title + subtitle
+3. **Upload** — `<DropZone />` + `<ErrorDisplay />`
+4. **How It Works** — 3-step grid layout (Export CSV → Drag & Drop → View Analytics)
+5. **QA** — 4 Q&A pairs (privacy, file requirements, multi-month, model support)
+6. **About** — project description
+7. **FooterBar** — shared footer
+
+### Dashboard view (post-upload, `result` exists)
+Rendered inline in `Dashboard.tsx` with:
+1. **TitleBar** — same shared component
+2. **Action bar** — file name + date range (left) + re-upload/clear buttons (right)
+3. **Content** — ErrorDisplay, KPICards, tabs, model filter, chart views
+4. **FooterBar** — same shared component
+
+### Shared components
+
+**TitleBar** (`src/components/TitleBar.tsx`):
+- Sticky top bar with `z-10`, thin bottom border (`var(--border)`)
+- Left: app title (`t.app.title`) in bold
+- Right: `<LanguageSwitcher />` + `<ThemeSwitcher />`
+- Used by both `LandingPage` and `Dashboard`
+
+**FooterBar** (`src/components/FooterBar.tsx`):
+- Thin HR divider + centered muted text + GitHub link
+- Text from `t.footer.text`
+- Used by both `LandingPage` and `Dashboard`
+
 ## Component patterns
 
 ### Hero + chart layout
@@ -272,12 +310,13 @@ Apple-style underline tabs: `text-xs font-semibold uppercase tracking-wide`, 2px
 
 ## Common tasks
 
-- **Adding a new UI string**: Add to both `en` and `zh` in `src/i18n/translations.ts`, then use `t.path.to.key` in the component
+- **Adding a new UI string**: Add to both `en` and `zh` in `src/i18n/translations.ts` as flat 2-level keys (`group.keyName`), then use `t.group.keyName` in the component. Do NOT nest deeper than 2 levels — the type system flattens leaf keys to `string`.
 - **Adding a new chart**: Use `ReactECharts` from `echarts-for-react`, construct option with `useMemo`, use `useTheme()` for theme-aware colors
 - **Modifying the parser**: Types in `src/lib/types.ts`, logic in `src/lib/parser.ts`
 - **Adding a new CSS variable**: Define in both `:root, .light` AND `.dark` blocks in `src/app/globals.css`, then reference as `var(--your-token)` in components
 - **Changing the visual design**: Update CSS variables in `globals.css` — do NOT hardcode colors in individual components
 - **Adding a new view/tab**: Add to `TABS` array in `Dashboard.tsx`, add translation keys in both locales, create component with Hero + chart pattern using `filteredResult`
+- **Adding or modifying a landing page section**: Edit `LandingPage.tsx` — add a new `<section>` block with Apple-minimalist spacing (`pb-12` or `pb-16`), centered `text-[11px]` uppercase section title, and content using `var(--text-primary)` / `var(--text-secondary)` colors. Add translation keys under `landing.*` group.
 - **Supporting a new CSV column**: Add to types in `types.ts`, update parser validation in `parser.ts`, add to pivot/join logic if needed
 - **Changing the font**: Update `--font-sans` / `--font-mono` in the `@theme inline` block in `globals.css`
 - **Adding a new animation**: Define `@keyframes` in `globals.css`, add to `@theme inline` block as `--animate-*`

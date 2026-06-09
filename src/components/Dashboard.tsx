@@ -3,15 +3,15 @@
 import { useState, useRef, useCallback } from "react";
 import { useData, ALL_MODELS } from "@/lib/DataContext";
 import { useTranslation } from "@/i18n";
-import DropZone from "./DropZone";
+import TitleBar from "./TitleBar";
+import FooterBar from "./FooterBar";
+import LandingPage from "./LandingPage";
 import KPICards from "./KPICards";
 import OverviewView from "./OverviewView";
 import KeyView from "./KeyView";
 import CacheView from "./CacheView";
 import TrendsView from "./TrendsView";
 import ErrorDisplay, { WarningBanner } from "./ErrorDisplay";
-import LanguageSwitcher from "./LanguageSwitcher";
-import ThemeSwitcher from "./ThemeSwitcher";
 
 type Tab = "overview" | "keys" | "cache" | "trends";
 
@@ -53,41 +53,9 @@ export default function Dashboard() {
     [loadFiles]
   );
 
-  // 上传前状态：仅展示拖拽区
+  // 上传前状态：展示 Landing 落地页
   if (!result) {
-    return (
-      <div
-        className="min-h-screen flex items-center justify-center p-8"
-        style={{ background: "var(--bg)" }}
-      >
-        <div className="w-full max-w-lg">
-          {/* 标题区 */}
-          <div className="text-center mb-10">
-            <h1
-              className="text-2xl font-bold mb-3 tracking-tight"
-              style={{ color: "var(--text-primary)", letterSpacing: "-0.03em" }}
-            >
-              {t.app.title}
-            </h1>
-            <p
-              className="text-sm leading-relaxed"
-              style={{ color: "var(--text-secondary)" }}
-            >
-              {t.app.subtitle}
-            </p>
-          </div>
-
-          <DropZone />
-          <ErrorDisplay />
-
-          {/* 底部操作栏 */}
-          <div className="flex justify-center gap-4 mt-8">
-            <LanguageSwitcher />
-            <ThemeSwitcher />
-          </div>
-        </div>
-      </div>
-    );
+    return <LandingPage />;
   }
 
   // 数据加载后：完整仪表盘
@@ -96,16 +64,12 @@ export default function Dashboard() {
       className="min-h-screen"
       style={{ background: "var(--bg)" }}
     >
+      <TitleBar />
+
       <div className="max-w-6xl mx-auto px-6 py-8">
-        {/* Header — 大留白 */}
-        <header className="flex items-start justify-between mb-10">
+        {/* Action bar — 文件信息 + 操作按钮 */}
+        <div className="flex items-start justify-between mb-10">
           <div>
-            <h1
-              className="text-xl font-bold tracking-tight mb-1"
-              style={{ color: "var(--text-primary)", letterSpacing: "-0.03em" }}
-            >
-              {t.app.title}
-            </h1>
             <p className="text-xs" style={{ color: "var(--text-tertiary)" }}>
               {fileName}
               {result.summary.dateRange && (
@@ -116,8 +80,6 @@ export default function Dashboard() {
             </p>
           </div>
           <div className="flex items-center gap-4">
-            <LanguageSwitcher />
-            <ThemeSwitcher />
             <input
               ref={reuploadRef}
               type="file"
@@ -153,7 +115,7 @@ export default function Dashboard() {
               {t.header.clear}
             </button>
           </div>
-        </header>
+        </div>
 
         <ErrorDisplay />
         <WarningBanner />
@@ -229,22 +191,9 @@ export default function Dashboard() {
           {tab === "cache" && <CacheView />}
           {tab === "trends" && <TrendsView />}
         </div>
-
-        {/* Footer */}
-        <footer className="mt-20 pt-6 text-center text-xs" style={{ color: "var(--text-tertiary)" }}>
-          <hr style={{ borderColor: "var(--border)", marginBottom: "1.5rem" }} />
-          {t.footer.text}
-          <a
-            href="https://github.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="transition-colors duration-200 ml-1"
-            style={{ color: "var(--text-secondary)" }}
-          >
-            GitHub
-          </a>
-        </footer>
       </div>
+
+      <FooterBar />
     </div>
   );
 }

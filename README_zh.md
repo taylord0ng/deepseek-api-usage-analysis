@@ -30,24 +30,24 @@ DeepSeek 平台标准导出格式：
 
 ### `amount-{年份}-{月份}.csv`
 
-| 列名 | 说明 |
-|---|---|
-| `utc_date` | 使用日期 |
-| `model` | 模型名称，如 `deepseek-chat`、`deepseek-reasoner` |
-| `api_key_name` | API Key 标签 |
-| `api_key` | Key（脱敏） |
-| `type` | `request_count`、`output_tokens`、`input_cache_hit_tokens`、`input_cache_miss_tokens` |
-| `price` | 单价（人民币） |
-| `amount` | Token 或请求数量 |
+| 列名             | 说明                                                                                 |
+| -------------- | ---------------------------------------------------------------------------------- |
+| `utc_date`     | 使用日期                                                                               |
+| `model`        | 模型名称，如 `deepseek-chat`、`deepseek-reasoner`                                         |
+| `api_key_name` | API Key 标签                                                                         |
+| `api_key`      | Key（脱敏）                                                                            |
+| `type`         | `request_count`、`output_tokens`、`input_cache_hit_tokens`、`input_cache_miss_tokens` |
+| `price`        | 单价（人民币）                                                                            |
+| `amount`       | Token 或请求数量                                                                        |
 
 ### `cost-{年份}-{月份}.csv`
 
-| 列名 | 说明 |
-|---|---|
-| `utc_date` | 扣费日期 |
-| `model` | 模型名称 |
-| `cost` | 金额（负数为扣费） |
-| `currency` | 币种（CNY） |
+| 列名         | 说明        |
+| ---------- | --------- |
+| `utc_date` | 扣费日期      |
+| `model`    | 模型名称      |
+| `cost`     | 金额（负数为扣费） |
+| `currency` | 币种（CNY）   |
 
 ## 本地开发
 
@@ -60,15 +60,15 @@ npm run lint       # ESLint
 
 ### 技术栈
 
-| 层级 | 技术 |
-|---|---|
-| 框架 | Next.js 16（App Router，静态导出） |
-| UI | React 19 |
-| 图表 | ECharts 6 + echarts-for-react |
-| CSV 解析 | Papa Parse 5 |
-| 样式 | Tailwind CSS v4 + CSS 自定义属性 |
-| 字体 | Geist Sans + Geist Mono（next/font） |
-| 语言 | TypeScript 5（strict 严格模式） |
+| 层级     | 技术                                 |
+| ------ | ---------------------------------- |
+| 框架     | Next.js 16（App Router，静态导出）        |
+| UI     | React 19                           |
+| 图表     | ECharts 6 + echarts-for-react      |
+| CSV 解析 | Papa Parse 5                       |
+| 样式     | Tailwind CSS v4 + CSS 自定义属性        |
+| 字体     | Geist Sans + Geist Mono（next/font） |
+| 语言     | TypeScript 5（strict 严格模式）          |
 
 ### 项目结构
 
@@ -80,16 +80,19 @@ src/
 │   ├── globals.css         # Tailwind v4 + 30+ CSS 变量 + 基础样式
 │   └── AppI18nShell.tsx    # i18n 外壳 + <html lang> 同步
 ├── components/
-│   ├── Dashboard.tsx       # 主布局、标签页、模型筛选、重新上传
-│   ├── DropZone.tsx        # 拖拽上传区（多文件）
-│   ├── KPICards.tsx        # 摘要指标卡片
-│   ├── OverviewView.tsx    # Hero 费用 + 日柱状图 + 环形图
-│   ├── KeyView.tsx         # Hero Key 数量 + 详细表格
-│   ├── CacheView.tsx       # Hero 命中率 + 趋势 + 堆叠图
-│   ├── TrendsView.tsx      # Hero 动态指标 + 折线图
-│   ├── ErrorDisplay.tsx    # 解析错误 & 警告横幅
+│   ├── TitleBar.tsx         # 共享顶部导航栏（应用名 + 语言 + 主题）
+│   ├── FooterBar.tsx        # 共享页脚（版权 + GitHub 链接）
+│   ├── LandingPage.tsx      # 落地页（Hero + 上传 + 使用说明 + 常见问题 + 关于）
+│   ├── Dashboard.tsx        # 路由：落地页 / 仪表盘视图切换
+│   ├── DropZone.tsx         # 拖拽上传区（多文件）
+│   ├── KPICards.tsx         # 摘要指标卡片
+│   ├── OverviewView.tsx     # Hero 费用 + 日柱状图 + 环形图
+│   ├── KeyView.tsx          # Hero Key 数量 + 详细表格
+│   ├── CacheView.tsx        # Hero 命中率 + 趋势 + 堆叠图
+│   ├── TrendsView.tsx       # Hero 动态指标 + 折线图
+│   ├── ErrorDisplay.tsx     # 解析错误 & 警告横幅
 │   ├── LanguageSwitcher.tsx # EN / 中文 切换
-│   └── ThemeSwitcher.tsx   # 浅色 / 深色 切换
+│   └── ThemeSwitcher.tsx    # 浅色 / 深色 切换
 ├── i18n/
 │   ├── index.ts            # 统一导出
 │   ├── I18nProvider.tsx    # React 上下文 + useTranslation Hook
@@ -127,19 +130,28 @@ npm run build
 
 ## 更新日志
 
+### v0.2.1
+
+**新增：**
+
+- 构建完整的上传前落地页，包含 Hero 区、上传区、使用说明、常见问题和关于等模块。
+
 ### v0.2.0
 
 **新增：**
+
 - 实现完整的明暗主题切换功能，重构全局 CSS 样式，使用 CSS 变量统一管理双主题配色。
 - 新增模型筛选功能，在 Dashboard 添加 Apple 风格分段胶囊过滤器，优化 UI 与数据展示。
 
 **改进：**
+
 - 优化整体 UI 交互与视觉样式。
 - 重构所有视图组件，改用过滤后的数据渲染，新增顶部 Hero 大数字汇总模块。
 
 ### v0.1.0
 
 **新增：**
+
 - 搭建 DeepSeek API 使用分析仪表盘，实现 CSV 解析、多月份文件合并与错误校验逻辑，所有数据处理均在浏览器端完成。
 - 开发拖拽上传组件、数据上下文与多维度可视化仪表盘页面。
 - 新增完整多语言支持与语言切换功能，并重构数值格式化工具函数，适配不同语言的单位展示规则。

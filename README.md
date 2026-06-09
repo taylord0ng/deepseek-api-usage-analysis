@@ -30,24 +30,24 @@ Standard DeepSeek platform export:
 
 ### `amount-{year}-{month}.csv`
 
-| Column | Description |
-|---|---|
-| `utc_date` | Usage date |
-| `model` | `deepseek-chat`, `deepseek-reasoner`, etc. |
-| `api_key_name` | Your key label |
-| `api_key` | Key (masked) |
-| `type` | `request_count`, `output_tokens`, `input_cache_hit_tokens`, `input_cache_miss_tokens` |
-| `price` | Unit price in CNY |
-| `amount` | Token or request count |
+| Column         | Description                                                                           |
+| -------------- | ------------------------------------------------------------------------------------- |
+| `utc_date`     | Usage date                                                                            |
+| `model`        | `deepseek-chat`, `deepseek-reasoner`, etc.                                            |
+| `api_key_name` | Your key label                                                                        |
+| `api_key`      | Key (masked)                                                                          |
+| `type`         | `request_count`, `output_tokens`, `input_cache_hit_tokens`, `input_cache_miss_tokens` |
+| `price`        | Unit price in CNY                                                                     |
+| `amount`       | Token or request count                                                                |
 
 ### `cost-{year}-{month}.csv`
 
-| Column | Description |
-|---|---|
-| `utc_date` | Charge date |
-| `model` | Model name |
-| `cost` | Amount (negative = charge) |
-| `currency` | CNY |
+| Column     | Description                |
+| ---------- | -------------------------- |
+| `utc_date` | Charge date                |
+| `model`    | Model name                 |
+| `cost`     | Amount (negative = charge) |
+| `currency` | CNY                        |
 
 ## Development
 
@@ -60,15 +60,15 @@ npm run lint       # ESLint
 
 ### Tech Stack
 
-| Layer | Technology |
-|---|---|
-| Framework | Next.js 16 (App Router, static export) |
-| UI | React 19 |
-| Charts | ECharts 6 + echarts-for-react |
-| CSV Parsing | Papa Parse 5 |
-| Styling | Tailwind CSS v4 + CSS custom properties |
-| Typography | Geist Sans + Geist Mono (next/font) |
-| Language | TypeScript 5 (strict mode) |
+| Layer       | Technology                              |
+| ----------- | --------------------------------------- |
+| Framework   | Next.js 16 (App Router, static export)  |
+| UI          | React 19                                |
+| Charts      | ECharts 6 + echarts-for-react           |
+| CSV Parsing | Papa Parse 5                            |
+| Styling     | Tailwind CSS v4 + CSS custom properties |
+| Typography  | Geist Sans + Geist Mono (next/font)     |
+| Language    | TypeScript 5 (strict mode)              |
 
 ### Project Structure
 
@@ -80,16 +80,19 @@ src/
 │   ├── globals.css         # Tailwind v4 + 30+ CSS variables + base styles
 │   └── AppI18nShell.tsx    # i18n shell + <html lang> sync
 ├── components/
-│   ├── Dashboard.tsx       # Main layout, tabs, model filter, re-upload
-│   ├── DropZone.tsx        # Drag-and-drop CSV upload (multi-file)
-│   ├── KPICards.tsx        # Summary stat cards
-│   ├── OverviewView.tsx    # Hero cost + daily bars + donut
-│   ├── KeyView.tsx         # Hero key count + detailed table
-│   ├── CacheView.tsx       # Hero hit rate + trends + stacked bars
-│   ├── TrendsView.tsx      # Hero dynamic metric + line chart
-│   ├── ErrorDisplay.tsx    # Parse error & warning banners
+│   ├── TitleBar.tsx         # Shared top nav bar (app name + language + theme)
+│   ├── FooterBar.tsx        # Shared footer (copyright + GitHub link)
+│   ├── LandingPage.tsx      # Landing page (Hero + Upload + HowItWorks + QA + About)
+│   ├── Dashboard.tsx        # Routes between LandingPage and dashboard view
+│   ├── DropZone.tsx         # Drag-and-drop CSV upload (multi-file)
+│   ├── KPICards.tsx         # Summary stat cards
+│   ├── OverviewView.tsx     # Hero cost + daily bars + donut
+│   ├── KeyView.tsx          # Hero key count + detailed table
+│   ├── CacheView.tsx        # Hero hit rate + trends + stacked bars
+│   ├── TrendsView.tsx       # Hero dynamic metric + line chart
+│   ├── ErrorDisplay.tsx     # Parse error & warning banners
 │   ├── LanguageSwitcher.tsx # EN / 中文 toggle
-│   └── ThemeSwitcher.tsx   # Light / Dark toggle
+│   └── ThemeSwitcher.tsx    # Light / Dark toggle
 ├── i18n/
 │   ├── index.ts            # Barrel export
 │   ├── I18nProvider.tsx    # React context + useTranslation hook
@@ -127,19 +130,28 @@ npm run build
 
 ## Changelog
 
+### v0.2.1
+
+**Added:**
+
+- Landing page — built a complete pre-upload landing page with Hero, upload area, How It Works steps, FAQ, and About sections.
+
 ### v0.2.0
 
 **Added:**
+
 - Full light/dark theme switching — refactored global CSS with custom properties for unified dual-theme color management.
 - Model filter — added Apple-style segmented capsule filter in Dashboard, optimized UI and data presentation.
 
 **Improved:**
+
 - Refined overall UI interactions and visual styling.
 - Refactored all view components to render from filtered data; added Hero big-number summary sections at the top of each view.
 
 ### v0.1.0
 
 **Added:**
+
 - Built the DeepSeek API usage analytics dashboard — implemented CSV parsing, multi-month file concatenation, and error validation logic; all data processing runs purely in the browser.
 - Developed drag-and-drop upload component, data context layer, and multi-dimensional visualization dashboard.
 - Added full i18n support with language switching, and refactored numeric formatting utilities to adapt unit display rules for different locales.

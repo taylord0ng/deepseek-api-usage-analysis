@@ -98,6 +98,30 @@ const translations = {
     modelFilter: {
       allModels: "All Models",
     },
+    landing: {
+      howItWorksTitle: "How It Works",
+      howItWorksStep1Title: "1. Export CSV",
+      howItWorksStep1Desc:
+        "Go to DeepSeek Platform → Usage → Export monthly CSVs. You'll get amount and cost files for each month.",
+      howItWorksStep2Title: "2. Drag & Drop",
+      howItWorksStep2Desc:
+        "Drag all your CSV files onto this page. Multiple months are automatically paired and merged.",
+      howItWorksStep3Title: "3. View Analytics",
+      howItWorksStep3Desc:
+        "Instantly see cost charts, per-key breakdowns, cache hit analysis, and usage trends — all processed locally in your browser.",
+      qaTitle: "Frequently Asked Questions",
+      qaQ1: "Is my data uploaded to any server?",
+      qaA1: "No. All CSV parsing and cost computation runs entirely in your browser. Your data never leaves your device.",
+      qaQ2: "What CSV files do I need?",
+      qaA2: "You need the amount-*.csv and cost-*.csv files exported from the DeepSeek Platform billing page. Drag at least one pair to get started.",
+      qaQ3: "Can I analyze multiple months at once?",
+      qaA3: "Yes. Drag all your monthly CSV files at once — they will be automatically paired by filename and concatenated.",
+      qaQ4: "What models are supported?",
+      qaA4: "Any model listed in your DeepSeek exports. The dashboard auto-detects all models and provides a filter to view them individually or combined.",
+      aboutTitle: "About",
+      aboutText:
+        "DeepSeek Usage Dashboard is a free, open-source tool for visualizing your DeepSeek API usage. Built with Next.js, ECharts, and Papa Parse. No tracking, no ads, no data collection — everything runs in your browser.",
+    },
   },
 
   zh: {
@@ -192,6 +216,30 @@ const translations = {
     },
     modelFilter: {
       allModels: "全部模型",
+    },
+    landing: {
+      howItWorksTitle: "使用方式",
+      howItWorksStep1Title: "1. 导出 CSV",
+      howItWorksStep1Desc:
+        "前往 DeepSeek 平台 → 用量 → 导出月度 CSV。每月会得到 amount 和 cost 两个文件。",
+      howItWorksStep2Title: "2. 拖拽上传",
+      howItWorksStep2Desc:
+        "将所有 CSV 文件拖拽到此页面。多个月份文件会自动按文件名配对并合并。",
+      howItWorksStep3Title: "3. 查看分析",
+      howItWorksStep3Desc:
+        "即刻查看费用图表、各 Key 用量明细、缓存命中分析和使用趋势 — 所有数据在浏览器本地处理。",
+      qaTitle: "常见问题",
+      qaQ1: "我的数据会上传到服务器吗？",
+      qaA1: "不会。所有 CSV 解析和费用计算均在您的浏览器中完成，数据不会离开您的设备。",
+      qaQ2: "我需要哪些 CSV 文件？",
+      qaA2: "需要从 DeepSeek 平台账单页面导出的 amount-*.csv 和 cost-*.csv 文件。至少拖入一对文件即可开始。",
+      qaQ3: "可以同时分析多个月份吗？",
+      qaA3: "可以。一次性拖入所有月份的 CSV 文件，它们会根据文件名自动配对并拼接。",
+      qaQ4: "支持哪些模型？",
+      qaA4: "DeepSeek 导出中的所有模型均支持。仪表盘会自动检测所有模型，并提供筛选器以便单独或合并查看。",
+      aboutTitle: "关于",
+      aboutText:
+        "DeepSeek 用量仪表盘是一款免费、开源的工具，用于可视化您的 DeepSeek API 使用情况。基于 Next.js、ECharts 和 Papa Parse 构建。无追踪、无广告、无数据收集 — 一切都在浏览器中运行。",
     },
   },
 } as const;
