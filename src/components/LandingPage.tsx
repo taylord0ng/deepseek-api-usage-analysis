@@ -87,7 +87,7 @@ export default function LandingPage() {
     <div className="min-h-screen" style={{ background: "var(--bg)" }}>
       <TitleBar />
 
-      <main className="max-w-3xl mx-auto px-6">
+      <main className="max-w-6xl mx-auto px-6">
         {/* ============================================================ */}
         {/* Hero — 短版，非全屏居中                                         */}
         {/* ============================================================ */}
@@ -259,7 +259,7 @@ export default function LandingPage() {
         </section>
       </main>
 
-      <FooterBar />
+      <FooterBar animate sectionRef={(el) => { sectionRefs.current[5] = el; }} />
     </div>
   );
 }

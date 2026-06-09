@@ -20,6 +20,7 @@ const translations = {
     },
     footer: {
       text: "DeepSeek Usage Dashboard · Data processed locally in your browser · ",
+      version: "Version",
     },
     dropzone: {
       processing: "Processing CSVs\u2026",
@@ -141,6 +142,7 @@ const translations = {
     },
     footer: {
       text: "DeepSeek 用量仪表盘 · 数据仅在浏览器本地处理 · ",
+      version: "版本",
     },
     dropzone: {
       processing: "正在处理 CSV\u2026",

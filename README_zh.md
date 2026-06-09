@@ -77,22 +77,22 @@ src/
 ├── app/                    # Next.js App Router
 │   ├── layout.tsx          # 根布局、元数据、Provider
 │   ├── page.tsx            # 入口 → <Dashboard />
-│   ├── globals.css         # Tailwind v4 + 30+ CSS 变量 + 基础样式
+│   ├── globals.css         # Tailwind v4 + Hubot Sans @font-face + CSS 变量 + 渐显/手风琴 + 基础样式
 │   └── AppI18nShell.tsx    # i18n 外壳 + <html lang> 同步
 ├── components/
-│   ├── TitleBar.tsx         # 共享顶部导航栏（应用名 + 语言 + 主题）
-│   ├── FooterBar.tsx        # 共享页脚（版权 + GitHub 链接）
-│   ├── LandingPage.tsx      # 落地页（Hero + 上传 + 使用说明 + 常见问题 + 关于）
+│   ├── TitleBar.tsx         # 共享顶部导航栏（Logo + 应用名 + GitHub + 语言 + 主题）
+│   ├── FooterBar.tsx        # 共享页脚（版权 + GitHub 链接 + 版本号）
+│   ├── LandingPage.tsx      # 落地页（Hero + 上传 + 使用说明 + 手风琴FAQ + 关于，滚动渐显）
 │   ├── Dashboard.tsx        # 路由：落地页 / 仪表盘视图切换
-│   ├── DropZone.tsx         # 拖拽上传区（多文件）
+│   ├── DropZone.tsx         # 拖拽或点击上传区（多文件）
 │   ├── KPICards.tsx         # 摘要指标卡片
 │   ├── OverviewView.tsx     # Hero 费用 + 日柱状图 + 环形图
 │   ├── KeyView.tsx          # Hero Key 数量 + 详细表格
 │   ├── CacheView.tsx        # Hero 命中率 + 趋势 + 堆叠图
 │   ├── TrendsView.tsx       # Hero 动态指标 + 折线图
 │   ├── ErrorDisplay.tsx     # 解析错误 & 警告横幅
-│   ├── LanguageSwitcher.tsx # EN / 中文 切换
-│   └── ThemeSwitcher.tsx    # 浅色 / 深色 切换
+│   ├── LanguageSwitcher.tsx # EN / 中文 切换（胶囊分段控件）
+│   └── ThemeSwitcher.tsx    # 浅色 / 深色 切换（SVG 图标按钮）
 ├── i18n/
 │   ├── index.ts            # 统一导出
 │   ├── I18nProvider.tsx    # React 上下文 + useTranslation Hook
@@ -116,8 +116,9 @@ src/
 - **字体**：Hubot Sans，正文 400 字重 / 标题 500–700 字重，紧凑字间距
 - **Hero 模式**：总览/Key/缓存/趋势视图中 `5rem` 粗体大数字 — 数据优先的视觉呈现
 - **无卡片布局**：通栏模块，以 `1px solid var(--border)` 细线分割
-- **微交互**：细腻的 hover 过渡（200ms）、淡入（300ms）和上滑（350ms）动画
+- **微交互**：细腻的 hover 过渡（200ms）、淡入/上滑动画、Intersection Observer 滚动渐显、手风琴折叠面板
 - **自定义滚动条**：6px 细条，透明轨道，主题色滑块
+- **无障碍**：遵循 `prefers-reduced-motion`、`color-scheme` 原生 UI、`focus-visible` 轮廓、`aria-expanded`/`aria-controls` 交互属性
 
 ## 部署
 
@@ -134,13 +135,22 @@ npm run build
 
 **新增：**
 
-- 新增 Logo 图标和 favicon.ico 文件。
-- 替换项目英文默认字体为本地Hubot Sans。
+- 新增 Logo 图标和 favicon.ico 文件 — 在 TitleBar 和浏览器标签页中展示品牌标识。
+- 替换项目英文默认字体为本地 Hubot Sans WOFF2 文件（3 个字重：400/500/700）。
 
 **改进：**
 
+- 重新设计语言切换器为 Apple 风格胶囊分段控件，支持 `role="radio"` 无障碍属性。
+- 重新设计主题切换器为 SVG 太阳/月亮图标按钮，hover 时显示圆形背景。
+- TitleBar 新增 GitHub 图标链接，方便快速访问代码仓库。
+- FooterBar 新增版本号显示，与版权信息和 GitHub 链接并列。
+- DropZone 拖拽区新增主题化背景色（`--dropzone-bg`），替换原先的透明背景。
+- Landing 页面内容容器从 `max-w-3xl` 扩宽至 `max-w-6xl`，视觉更平衡。
+- Landing 页面新增滚动渐显动画（Intersection Observer 驱动的淡入 + 上滑效果）。
+- 常见问题区域新增手风琴展开/折叠动画。
+- FooterBar 新增移动端友好的 flex-wrap 布局，小屏幕下文字自动换行。
 - 更新中英双语文案，完善上传区域的提示文本，修正省略号格式。
-- 添加全局无障碍样式、平滑滚动与减少动画的适配配置。
+- 添加全局无障碍样式：平滑滚动、`prefers-reduced-motion` 适配、`color-scheme` 原生 UI、`focus-visible` 焦点轮廓。
 
 ### v0.2.1
 

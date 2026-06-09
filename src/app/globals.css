@@ -59,6 +59,7 @@
   --danger-subtle:      #FEF2F2;
   --chart-grid:         #E5E5EA;
   --chart-text:         #86868B;
+  --dropzone-bg:        #EEF2F9;
   --dropzone-drag-bg:   #EDEEF0;
   --dropzone-drag-border: #86868B;
 
@@ -93,6 +94,7 @@
   --danger-subtle:      #3B1717;
   --chart-grid:         #38383A;
   --chart-text:         #98989D;
+  --dropzone-bg:        #11151D;
   --dropzone-drag-bg:   #2C2C2E;
   --dropzone-drag-border: #98989D;
 

@@ -10,7 +10,7 @@ A browser-side dashboard for DeepSeek API usage analytics. Users drag their mont
 
 Strictly follows an Apple-minimalist design language: cold gray paper-texture backgrounds, ample whitespace, "no-card" full-width modules with thin horizontal dividers, subtle rounded corners, and diffuse shadows. Full light/dark dual-theme support driven by CSS custom properties.
 
-**Version**: 0.2.1
+**Version**: 0.2.2
 
 ## Architecture
 
@@ -19,26 +19,27 @@ src/
 ├── app/            # Next.js App Router (static export)
 │   ├── layout.tsx           # Root layout, metadata, ThemeProvider + I18nProvider + DataProvider
 │   ├── page.tsx             # Entry → renders <Dashboard />
-│   ├── globals.css          # Tailwind v4 + CSS custom properties + @theme inline + base styles
+│   ├── globals.css          # Tailwind v4 + @font-face Hubot Sans + CSS variables + reveal/accordion + base styles
+│   ├── favicon.ico          # App icon (branded)
 │   └── AppI18nShell.tsx     # Client shell: I18nProvider + <html lang> sync
 ├── components/
-│   ├── TitleBar.tsx          # Shared top nav: app name + LanguageSwitcher + ThemeSwitcher (sticky)
-│   ├── FooterBar.tsx         # Shared footer: thin divider + copyright + GitHub link
-│   ├── LandingPage.tsx       # Pre-upload landing: Hero + Upload + HowItWorks + QA + About sections
+│   ├── TitleBar.tsx          # Shared sticky top nav: logo + app name + GitHub icon + LanguageSwitcher + ThemeSwitcher
+│   ├── FooterBar.tsx         # Shared footer: thin divider + copyright + GitHub link + version
+│   ├── LandingPage.tsx       # Pre-upload landing: Hero + Upload + HowItWorks + accordion QA + About (scroll-reveal)
 │   ├── Dashboard.tsx         # Main layout: routes between LandingPage (no data) and Dashboard view
-│   ├── DropZone.tsx          # Drag-and-drop CSV uploader (supports multi-file)
+│   ├── DropZone.tsx          # Drag-and-drop CSV uploader (supports multi-file, "or click to upload")
 │   ├── KPICards.tsx          # Summary stat cards (card-less big-number layout)
 │   ├── OverviewView.tsx      # Hero total cost + daily cost bars + cost-by-key donut (theme-aware)
 │   ├── KeyView.tsx           # Hero key count + per-key table with inline bars & cache-hit color coding
 │   ├── CacheView.tsx         # Hero hit rate + daily trend line + per-key hits-vs-misses stacked bars
 │   ├── TrendsView.tsx        # Hero dynamic metric + toggleable multi-metric line chart (theme-aware)
 │   ├── ErrorDisplay.tsx      # Parse error + warning banners with i18n titles
-│   ├── LanguageSwitcher.tsx  # EN / 中文 toggle (Apple-minimalist text buttons)
-│   └── ThemeSwitcher.tsx     # Light / Dark toggle (Apple-minimalist text button)
+│   ├── LanguageSwitcher.tsx  # EN / 中文 toggle (Apple pill segmented control with `role="radio"`)
+│   └── ThemeSwitcher.tsx     # Light / Dark toggle (Apple-minimalist SVG icon button)
 ├── i18n/
 │   ├── index.ts             # Barrel export
 │   ├── I18nProvider.tsx     # React context + useTranslation hook + localStorage persistence
-│   └── translations.ts      # All UI strings in en/zh (includes theme, modelFilter, meta keys)
+│   └── translations.ts      # All UI strings in en/zh (app, tabs, dropzone, kpi, landing, etc.)
 └── lib/
     ├── types.ts             # AmountRow, CostRow, DailyUsage, KeyStats, ParseResult, ParseError, ParseWarning
     ├── parser.ts            # Papa Parse CSV pipeline (parse → pivot → join → computeKeyStats)
@@ -46,6 +47,14 @@ src/
     ├── format.ts            # Locale-aware formatCost / formatTokens / formatPercent
     ├── DataContext.tsx       # Data state + model filter (selectedModel, filteredResult, filterResult)
     └── ThemeContext.tsx      # Light/dark theme context + useTheme hook + localStorage + system preference
+
+public/
+├── ds-usage-logo.ico        # Favicon / app icon
+├── ds-usage-logo.png        # App icon (PNG)
+└── fonts/
+    ├── HubotSans-Regular.woff2   # Body text (weight 400)
+    ├── HubotSans-Medium.woff2    # Medium weight (500)
+    └── HubotSans-Bold.woff2      # Headings weight (700)
 ```
 
 ## Key technical details
@@ -56,7 +65,8 @@ src/
 - **ECharts 6** via `echarts-for-react` for all visualizations (bar, line, pie/donut with theme-aware colors)
 - **Papa Parse** for CSV parsing (runs in browser)
 - **Tailwind CSS v4** with `@theme inline` extensions — CSS-first configuration, no `tailwind.config.ts`
-- **Geist** font family (Sans + Mono) from `next/font/google` — Apple-like typography
+- **Hubot Sans** as primary font (local WOFF2, 3 weights: 400/500/700), with Chinese fallback stack (`PingFang SC`, `Microsoft YaHei`) — Apple-like typography
+- **Geist Mono** (from `next/font/google`) for code — variable weight
 - **CSS custom properties** for theming — all colors are `var(--bg)`, `var(--text-primary)`, etc.; NO hardcoded colors in components
 - **TypeScript 5** with strict mode, path alias `@/*` → `./src/*`
 
@@ -102,6 +112,7 @@ All colors are defined as CSS custom properties on `:root, .light` and `.dark` s
 | `--warning-text` | `#92400E` | `#FDE68A` | Warning banner text + mid-range cache hit (20-40%) |
 | `--chart-grid` | `#E5E5EA` | `#38383A` | ECharts grid lines (available but not directly used — components use `useTheme()` instead) |
 | `--chart-text` | `#86868B` | `#98989D` | ECharts text (available but not directly used) |
+| `--dropzone-bg` | `#EEF2F9` | `#11151D` | Drop zone default background |
 | `--dropzone-drag-bg` | `#EDEEF0` | `#2C2C2E` | Drop zone background on drag-over |
 | `--dropzone-drag-border` | `#86868B` | `#98989D` | Drop zone border on drag-over |
 
@@ -124,8 +135,10 @@ The `@theme inline` block in `globals.css` maps CSS custom properties to Tailwin
   --color-border:      var(--border);
   --color-accent:      var(--accent);
   --color-muted:       var(--text-secondary);
-  --font-sans:         var(--font-geist-sans), -apple-system, ...;
-  --font-mono:         var(--font-geist-mono), "SF Mono", ...;
+  --font-sans:         "Hubot Sans", -apple-system, BlinkMacSystemFont,
+                       "SF Pro Text", "Helvetica Neue", "PingFang SC",
+                       "Microsoft YaHei", sans-serif;
+  --font-mono:         var(--font-geist-mono), "SF Mono", Menlo, monospace;
   --animate-fade-in:   fade-in 0.3s ease-out;
   --animate-slide-up:  slide-up 0.35s ease-out;
 }
@@ -135,19 +148,26 @@ This means `bg-background`, `text-foreground`, `border-border`, `animate-fade-in
 
 ### Utility classes
 
-Two utility classes are defined in `globals.css` for occasional card-like containers:
+The following utility classes are defined in `globals.css`:
 
 - `.shadow-diffuse` — applies `var(--shadow-sm)` (subtle diffuse shadow)
 - `.shadow-diffuse-md` — applies `var(--shadow-md)` (deeper diffuse shadow)
 - `.rounded-subtle` — `border-radius: 6px` (consistent micro-rounding)
+- `.reveal-section` — Initial state: `opacity: 0; transform: translateY(24px)`. Controlled by Intersection Observer in `LandingPage.tsx`
+- `.reveal-section.visible` — `opacity: 1; transform: translateY(0)` with 0.6s cubic-bezier transition
+- `.accordion-panel` — Collapsed state: `max-height: 0; opacity: 0`
+- `.accordion-panel.open` — Expanded state: `max-height: 12rem; opacity: 1` with 0.35s cubic-bezier transition
 
 ### Global base styles
 
-- **Font**: `Geist Sans` (variable weight, 350 body / 600 headings), `Geist Mono` for code
+- **Font**: `Hubot Sans` (local WOFF2, weight 400 body / 700 headings), `Geist Mono` for code. Chinese fallback: `PingFang SC`, `Microsoft YaHei`.
 - **Text rendering**: `antialiased`, `optimizeLegibility`, `-0.01em` letter-spacing on body
+- **Smooth scrolling**: `scroll-behavior: smooth` on `<html>`
+- **Color scheme**: `color-scheme: light` / `color-scheme: dark` set per theme for native browser UI (form controls, scrollbars)
 - **Selection**: Inverted colors (`var(--text-primary)` bg, `var(--accent-inverse)` text)
 - **Scrollbar**: 6px thin, transparent track, `var(--border-strong)` thumb, hover darkens
 - **Links**: `var(--text-secondary)` with hover → `var(--text-primary)` transition
+- **Reduced motion**: `@media (prefers-reduced-motion: reduce)` kills all animations (0.01ms duration) and disables smooth scroll — respects user OS preference
 
 ### ECharts theme integration
 
@@ -203,7 +223,7 @@ A segmented control (pill buttons) below the tab bar lets users filter all views
 | `app` | `title`, `subtitle` | `Dashboard.tsx` title area |
 | `tabs` | `overview`, `keys`, `cache`, `trends` | `Dashboard.tsx` tab bar |
 | `header` | `loadDifferent`, `clear` | `Dashboard.tsx` header actions |
-| `footer` | `text` | `Dashboard.tsx` footer |
+| `footer` | `text`, `version` | `FooterBar.tsx` |
 | `dropzone` | `processing`, `title`, `hint`, `privacy` | `DropZone.tsx` |
 | `kpi` | `totalCost`, `totalTokens`, `cacheHitRate`, `activeKeys`, `saved`, `models` | `KPICards.tsx`, various views |
 | `overview` | `dailyCost`, `costByKey` | `OverviewView.tsx` |
@@ -213,7 +233,7 @@ A segmented control (pill buttons) below the tab bar lets users filter all views
 | `error` | `missingColumns`, `malformedRow`, `emptyFile`, `incompleteUpload`, `row`, `column` | `ErrorDisplay.tsx` |
 | `warning` | (not directly used as keys — warning messages come from parser) | `ErrorDisplay.tsx` |
 | `meta` | `title`, `description` | `layout.tsx` metadata |
-| `langSwitcher` | `label` | `LanguageSwitcher.tsx` |
+| `langSwitcher` | `label` | (deprecated — component now uses hardcoded `aria-label`) |
 | `theme` | `light`, `dark`, `switchToDark`, `switchToLight` | `ThemeSwitcher.tsx` |
 | `modelFilter` | `allModels` | `Dashboard.tsx` model filter pill |
 | `landing` | `howItWorksTitle`, `howItWorksStep1Title`, `howItWorksStep1Desc`, `howItWorksStep2Title`, `howItWorksStep2Desc`, `howItWorksStep3Title`, `howItWorksStep3Desc`, `qaTitle`, `qaQ1`–`qaQ4`, `qaA1`–`qaA4`, `aboutTitle`, `aboutText` | `LandingPage.tsx` |
@@ -257,13 +277,15 @@ The app has two distinct page states managed by `Dashboard.tsx`:
 
 ### Landing page (pre-upload, `!result`)
 Rendered via `<LandingPage />` — a scrollable single-page layout with:
-1. **TitleBar** — sticky top bar with app name + LanguageSwitcher + ThemeSwitcher
-2. **Hero** — shorter section (`pt-16 pb-10`), centered title + subtitle
+1. **TitleBar** — sticky top bar with logo + app name + GitHub icon + LanguageSwitcher + ThemeSwitcher
+2. **Hero** — shorter section (`pt-16 pb-10`), centered title + subtitle, uses `translate="no"` on heading
 3. **Upload** — `<DropZone />` + `<ErrorDisplay />`
-4. **How It Works** — 3-step grid layout (Export CSV → Drag & Drop → View Analytics)
-5. **QA** — 4 Q&A pairs (privacy, file requirements, multi-month, model support)
+4. **How It Works** — 3-step grid layout, each step has a numbered circle (`w-10 h-10 rounded-full`), hover micro-interactions via `group` + `group-hover`
+5. **QA** — Accordion pattern: click on question toggles answer panel. Uses `openQa` state (number | null). Panels animated via `.accordion-panel` CSS class with `max-height` transition. Accessible: `aria-expanded`, `aria-controls`, keyboard support (Enter/Space). `focus-visible` outlines.
 6. **About** — project description
 7. **FooterBar** — shared footer
+
+Each `<section>` uses a `reveal-section` CSS class and is watched by an Intersection Observer: when 15% of a section enters the viewport, the `.visible` class is added, triggering a fade-in + slide-up animation. Once visible, the observer unobserves the element (runs once). Respects `prefers-reduced-motion` via global CSS.
 
 ### Dashboard view (post-upload, `result` exists)
 Rendered inline in `Dashboard.tsx` with:
@@ -276,13 +298,15 @@ Rendered inline in `Dashboard.tsx` with:
 
 **TitleBar** (`src/components/TitleBar.tsx`):
 - Sticky top bar with `z-10`, thin bottom border (`var(--border)`)
-- Left: app title (`t.app.title`) in bold
-- Right: `<LanguageSwitcher />` + `<ThemeSwitcher />`
+- Left: logo (`next/image`, 32×32) + app title (`t.app.title`) in bold
+- Right: GitHub icon link + `<LanguageSwitcher />` + `<ThemeSwitcher />`
 - Used by both `LandingPage` and `Dashboard`
 
 **FooterBar** (`src/components/FooterBar.tsx`):
-- Thin HR divider + centered muted text + GitHub link
-- Text from `t.footer.text`
+- Thin HR divider + centered muted text + GitHub link + version number
+- Text from `t.footer.text`, version from `t.footer.version`
+- Supports optional `animate` prop for reveal-section scroll animation on Landing page
+- Mobile-friendly with `flex-wrap` for small screens
 - Used by both `LandingPage` and `Dashboard`
 
 ## Component patterns
@@ -316,7 +340,7 @@ Apple-style underline tabs: `text-xs font-semibold uppercase tracking-wide`, 2px
 - **Adding a new CSS variable**: Define in both `:root, .light` AND `.dark` blocks in `src/app/globals.css`, then reference as `var(--your-token)` in components
 - **Changing the visual design**: Update CSS variables in `globals.css` — do NOT hardcode colors in individual components
 - **Adding a new view/tab**: Add to `TABS` array in `Dashboard.tsx`, add translation keys in both locales, create component with Hero + chart pattern using `filteredResult`
-- **Adding or modifying a landing page section**: Edit `LandingPage.tsx` — add a new `<section>` block with Apple-minimalist spacing (`pb-12` or `pb-16`), centered `text-[11px]` uppercase section title, and content using `var(--text-primary)` / `var(--text-secondary)` colors. Add translation keys under `landing.*` group.
+- **Adding or modifying a landing page section**: Edit `LandingPage.tsx` — add a new `<section>` block with `reveal-section` class and `ref` callback for Intersection Observer. Use Apple-minimalist spacing (`pb-12` or `pb-16`), centered `text-[11px]` uppercase section title, and content using `var(--text-primary)` / `var(--text-secondary)` colors. Add translation keys under `landing.*` group (flat 2-level keys).
 - **Supporting a new CSV column**: Add to types in `types.ts`, update parser validation in `parser.ts`, add to pivot/join logic if needed
-- **Changing the font**: Update `--font-sans` / `--font-mono` in the `@theme inline` block in `globals.css`
-- **Adding a new animation**: Define `@keyframes` in `globals.css`, add to `@theme inline` block as `--animate-*`
+- **Changing the font**: Replace WOFF2 files in `public/fonts/`, update `@font-face` declarations in `globals.css`, update `--font-sans` in the `@theme inline` block
+- **Adding a new animation**: Define `@keyframes` in `globals.css`, add to `@theme inline` block as `--animate-*`. Respect `prefers-reduced-motion` by including in the global media query.

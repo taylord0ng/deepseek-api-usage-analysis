@@ -1,33 +1,49 @@
 "use client";
 
-import { useTranslation } from"@/i18n";
+import { useTranslation } from "@/i18n";
 
 /**
  * 语言切换组件
  *
- * Apple 极简风格 — 纯文本按钮 + 选中下划线。
+ * Apple 风格 pill 分段控件 — 圆角胶囊切换。
  * 颜色通过 CSS 变量驱动，自动适配 light/dark 主题。
  */
 export default function LanguageSwitcher() {
- const { locale, setLocale, t } = useTranslation();
+  const { locale, setLocale } = useTranslation();
 
- return (
- <div className="flex items-center gap-2.5 text-xs">
-  <span style={{ color: "var(--text-tertiary)" }}>{t.langSwitcher.label}</span>
-  <button
-  onClick={() => setLocale("en")}
-  style={{ color: locale ==="en" ? "var(--text-primary)" : "var(--text-tertiary)" }}
-  className="pb-0.5 border-b border-transparent transition-all duration-200"
-  >
-  EN
-  </button>
-  <button
-  onClick={() => setLocale("zh")}
-  style={{ color: locale ==="zh" ? "var(--text-primary)" : "var(--text-tertiary)" }}
-  className="pb-0.5 border-b border-transparent transition-all duration-200"
-  >
-  中文
-  </button>
- </div>
- );
+  return (
+    <div
+      className="flex items-center rounded-full text-xs font-medium"
+      style={{ background: "var(--border)", padding: "2px" }}
+      role="radiogroup"
+      aria-label="Language"
+    >
+      <button
+        onClick={() => setLocale("en")}
+        role="radio"
+        aria-checked={locale === "en"}
+        className="px-3 py-1 rounded-full transition-all duration-200"
+        style={{
+          background: locale === "en" ? "var(--bg-surface)" : "transparent",
+          color: locale === "en" ? "var(--text-primary)" : "var(--text-tertiary)",
+          boxShadow: locale === "en" ? "var(--shadow-sm)" : "none",
+        }}
+      >
+        EN
+      </button>
+      <button
+        onClick={() => setLocale("zh")}
+        role="radio"
+        aria-checked={locale === "zh"}
+        className="px-3 py-1 rounded-full transition-all duration-200"
+        style={{
+          background: locale === "zh" ? "var(--bg-surface)" : "transparent",
+          color: locale === "zh" ? "var(--text-primary)" : "var(--text-tertiary)",
+          boxShadow: locale === "zh" ? "var(--shadow-sm)" : "none",
+        }}
+      >
+        中文
+      </button>
+    </div>
+  );
 }

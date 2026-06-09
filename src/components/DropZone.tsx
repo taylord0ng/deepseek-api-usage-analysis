@@ -81,7 +81,7 @@ export default function DropZone() {
   borderRadius: "6px",
   background: dragOver
    ? "var(--dropzone-drag-bg)"
-   : "transparent",
+   : "var(--dropzone-bg)",
   }}
  >
   <input

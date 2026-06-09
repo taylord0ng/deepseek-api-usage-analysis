@@ -77,22 +77,22 @@ src/
 ├── app/                    # Next.js App Router
 │   ├── layout.tsx          # Root layout, metadata, providers
 │   ├── page.tsx            # Entry → <Dashboard />
-│   ├── globals.css         # Tailwind v4 + 30+ CSS variables + base styles
+│   ├── globals.css         # Tailwind v4 + Hubot Sans @font-face + CSS variables + reveal/accordion + base styles
 │   └── AppI18nShell.tsx    # i18n shell + <html lang> sync
 ├── components/
-│   ├── TitleBar.tsx         # Shared top nav bar (app name + language + theme)
-│   ├── FooterBar.tsx        # Shared footer (copyright + GitHub link)
-│   ├── LandingPage.tsx      # Landing page (Hero + Upload + HowItWorks + QA + About)
+│   ├── TitleBar.tsx         # Shared top nav bar (logo + app name + GitHub + language + theme)
+│   ├── FooterBar.tsx        # Shared footer (copyright + GitHub link + version)
+│   ├── LandingPage.tsx      # Landing page (Hero + Upload + HowItWorks + accordion QA + About, scroll-reveal)
 │   ├── Dashboard.tsx        # Routes between LandingPage and dashboard view
-│   ├── DropZone.tsx         # Drag-and-drop CSV upload (multi-file)
+│   ├── DropZone.tsx         # Drag-and-drop or click-to-upload CSV (multi-file)
 │   ├── KPICards.tsx         # Summary stat cards
 │   ├── OverviewView.tsx     # Hero cost + daily bars + donut
 │   ├── KeyView.tsx          # Hero key count + detailed table
 │   ├── CacheView.tsx        # Hero hit rate + trends + stacked bars
 │   ├── TrendsView.tsx       # Hero dynamic metric + line chart
 │   ├── ErrorDisplay.tsx     # Parse error & warning banners
-│   ├── LanguageSwitcher.tsx # EN / 中文 toggle
-│   └── ThemeSwitcher.tsx    # Light / Dark toggle
+│   ├── LanguageSwitcher.tsx # EN / 中文 toggle (pill segmented control)
+│   └── ThemeSwitcher.tsx    # Light / Dark toggle (SVG icon button)
 ├── i18n/
 │   ├── index.ts            # Barrel export
 │   ├── I18nProvider.tsx    # React context + useTranslation hook
@@ -116,8 +116,9 @@ The dashboard follows an **Apple-minimalist** design language driven entirely by
 - **Typography**: Hubot Sans, weight 400 body / 500–700 headings, tight letter-spacing
 - **Hero pattern**: `5rem` bold numbers in Overview / Keys / Cache / Trends — prominent, data-first presentation
 - **No-card layout**: Full-width modules separated by `1px solid var(--border)` dividers
-- **Micro-interactions**: Subtle hover transitions (200ms), fade-in (300ms) and slide-up (350ms) animations
+- **Micro-interactions**: Subtle hover transitions (200ms), fade-in/slide-up animations, scroll-reveal sections with Intersection Observer, accordion QA panels
 - **Custom scrollbar**: 6px thin, transparent track, themed thumb
+- **Accessibility**: Respects `prefers-reduced-motion`, `color-scheme` for native UI, `focus-visible` outlines, `aria-expanded`/`aria-controls` on interactive elements
 
 ## Deploy
 
@@ -134,13 +135,22 @@ npm run build
 
 **Added:**
 
-- Logo icon and favicon.ico — added brand identity assets.
-- Replaced default English font with local Hubot Sans WOFF2 files.
+- Logo icon and favicon.ico — added brand identity assets to TitleBar and browser tab.
+- Replaced default English font with local Hubot Sans WOFF2 files (3 weights: 400/500/700).
 
 **Improved:**
 
+- Redesigned LanguageSwitcher as Apple-style pill segmented control with `role="radio"` accessibility.
+- Redesigned ThemeSwitcher as SVG sun/moon icon button with hover background.
+- Added GitHub icon link to TitleBar for quick repository access.
+- FooterBar now displays app version number alongside copyright and GitHub link.
+- DropZone now has a subtle themed background color (`--dropzone-bg`) instead of transparent.
+- Landing page content container widened from `max-w-3xl` to `max-w-6xl` for better visual balance.
+- Added scroll-reveal fade-in + slide-up animations on landing page sections via Intersection Observer.
+- Added accordion expand/collapse animation for the QA section.
+- Added mobile-friendly flex-wrap layout to FooterBar for small screen readability.
 - Updated bilingual copy — refined upload area hint text and corrected ellipsis formatting.
-- Added global accessibility styles, smooth scrolling, and reduced-motion media query support.
+- Added global accessibility styles: smooth scrolling, `prefers-reduced-motion` support, `color-scheme` for native UI, `focus-visible` outlines.
 
 ### v0.2.1
 
