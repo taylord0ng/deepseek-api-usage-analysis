@@ -179,7 +179,7 @@ export default function TrendsView() {
       </div>
 
       {/* 指标切换 — 纯文字标签 */}
-      <div className="flex gap-6 mb-6">
+      <div className="flex justify-center gap-6 mb-6">
         {METRICS.map((m) => (
           <button
             key={m.key}
