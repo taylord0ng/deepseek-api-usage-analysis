@@ -69,8 +69,38 @@ export default function LandingContent() {
       {/* 关于我们                                                       */}
       {/* ============================================================ */}
       <section>
-        <h2>{t.landing.aboutTitle}</h2>
-        <p>{t.landing.aboutText}</p>
+        <h2>{t.landing.aboutSectionTitle}</h2>
+
+        <div>
+          <h3>{t.landing.aboutWhyTitle}</h3>
+          <p>{t.landing.aboutWhyDesc}</p>
+        </div>
+
+        <div>
+          <h3>{t.landing.aboutPrivacyTitle}</h3>
+          <p>{t.landing.aboutPrivacyDesc}</p>
+        </div>
+
+        <div>
+          <h3>{t.landing.aboutMindRoseTitle}</h3>
+          <p>{t.landing.aboutMindRoseDesc}</p>
+        </div>
+
+        <div>
+          <h3>{t.landing.aboutContactTitle}</h3>
+          <p>{t.landing.aboutContactDesc}</p>
+          <p>{t.landing.aboutContactService}</p>
+          <p>
+            {t.landing.aboutContactCTA}{" "}
+            <a href="mailto:hello@mindrose.xyz">hello@mindrose.xyz</a>
+          </p>
+        </div>
+
+        <p>
+          <a href="https://github.com/GavinCnod/deepseek-api-usage-analysis">
+            {t.landing.aboutGitHubLabel}
+          </a>
+        </p>
       </section>
     </noscript>
   );

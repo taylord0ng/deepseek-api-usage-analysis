@@ -36,7 +36,7 @@ export default function TitleBar() {
 
   return (
     <header
-      className="sticky top-0 z-10"
+      className="sticky top-0 z-50"
       style={{ background: "var(--bg)" }}
     >
       <div

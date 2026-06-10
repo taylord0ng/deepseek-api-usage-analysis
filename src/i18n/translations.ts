@@ -119,9 +119,25 @@ const translations = {
       qaA3: "Yes. Drag all your monthly CSV files at once — they will be automatically paired by filename and concatenated.",
       qaQ4: "What models are supported?",
       qaA4: "Any model listed in your DeepSeek exports. The dashboard auto-detects all models and provides a filter to view them individually or combined.",
-      aboutTitle: "About",
-      aboutText:
-        "DeepSeek Usage Dashboard is a free, open-source tool for visualizing your DeepSeek API usage. Built with Next.js, ECharts, and Papa Parse. No tracking, no ads, no data collection — everything runs in your browser.",
+      aboutSectionTitle: "About",
+      aboutWhyTitle: "Why We Built This",
+      aboutWhyDesc:
+        "As our DeepSeek API calls surged, we found the official CSV billing exports nearly impossible to read at a glance. To answer questions like \"which project consumed the most tokens?\" and \"what is our real cache hit rate?\", we built our own simple, intuitive, and absolutely secure visualization dashboard.",
+      aboutPrivacyTitle: "Under the Hood: Privacy & Tech",
+      aboutPrivacyDesc:
+        "When handling billing data, privacy is non-negotiable. That's why we chose a pure frontend architecture. Built with Next.js 16 (App Router) and React 19, powered by Papa Parse and ECharts, all CSV parsing and chart rendering happens 100% locally in your browser. No backend server, no database — your data never leaves your device. With Apple-inspired minimalist design and CSS custom property-driven dual themes, we aim to deliver the most elegant data analytics experience.",
+      aboutMindRoseTitle: "About MindRose",
+      aboutMindRoseDesc:
+        "This project is open-sourced by Gavin Chen and the MindRose team. MindRose is a tech team focused on delivering lightweight digital solutions for small and medium manufacturers, logistics companies, and cross-border traders. We don't sell vague \"digital transformation\" concepts — we use AI and full-stack agile development (Next.js, React, Mendix, etc.) to deliver applications that solve real business pain points within weeks. From SEO-optimized independent e-commerce sites, to agile internal system builds, to AI agent workflow integration — we understand tech, and more importantly, we understand your business.",
+      aboutContactTitle: "Let's Work Together",
+      aboutContactDesc:
+        "Looking to build a custom data dashboard for your business? Need deep AI integration into your workflows? Want modern, elegant UI/UX? Need cross-department, multi-terminal business systems? Or interested in collaborating on this open-source project?",
+      aboutContactService:
+        "We offer professional bottleneck diagnosis, transformation analysis, tailored business solutions, and AI-powered development and operations.",
+      aboutContactCTA: "Get in touch:",
+      aboutGitHubLabel: "Project GitHub Repo",
+      aboutLinkedInLabel: "Gavin's LinkedIn",
+      aboutMindRoseLabel: "MindRose Team",
     },
   },
 
@@ -239,9 +255,25 @@ const translations = {
       qaA3: "可以。一次性拖入所有月份的 CSV 文件，它们会根据文件名自动配对并拼接。",
       qaQ4: "支持哪些模型？",
       qaA4: "DeepSeek 导出中的所有模型均支持。仪表盘会自动检测所有模型，并提供筛选器以便单独或合并查看。",
-      aboutTitle: "关于",
-      aboutText:
-        "DeepSeek 用量仪表盘是一款免费、开源的工具，用于可视化您的 DeepSeek API 使用情况。基于 Next.js、ECharts 和 Papa Parse 构建。无追踪、无广告、无数据收集 — 一切都在浏览器中运行。",
+      aboutSectionTitle: "关于我们",
+      aboutWhyTitle: "为什么开发这个工具？",
+      aboutWhyDesc:
+        "随着 DeepSeek API 调用的激增，我们发现官方后台导出的 CSV 账单数据难以直观阅读。\n为了搞清楚\u201C到底哪个项目消耗了最多的 Token\u201D以及\u201C缓存命中率如何\u201D，我们决定自己动手，打造一个简单、直观且绝对安全的可视化仪表盘。",
+      aboutPrivacyTitle: "极致的隐私与技术架构",
+      aboutPrivacyDesc:
+        "处理账单数据，隐私是不可妥协的底线。因此，我们采用了纯前端的架构设计。\n基于 Next.js 16 (App Router) 和 React 19，结合 Papa Parse 与 ECharts，所有的 CSV 数据解析和图表渲染 100% 在你的浏览器本地完成。\n没有数据库，你的数据绝不会离开你的设备半步。\n配合 Apple 风格的极简设计和 CSS 自定义属性驱动的双主题，我们希望为你提供最优雅的数据分析体验。",
+      aboutMindRoseTitle: "关于 MindRose",
+      aboutMindRoseDesc:
+        "本项目由 Gavin Chen 及 MindRose 团队开发并开源呈现。MindRose 是专注于为中小制造企业、物流公司及跨国贸易商提供轻量级数字化解决方案的科技团队。\n我们不卖虚无的\u201C数字化转型\u201D概念，而是通过 AI 技术与全栈敏捷开发（Next.js、React、Mendix 等），在几周内为你交付解决实际业务痛点的应用。\n从外贸独立站的 SEO 优化重构，到企业内部核心系统的敏捷搭建，再到 AI Agent 的业务流接入，我们懂技术，更懂你的商业场景。",
+      aboutContactTitle: "商业合作",
+      aboutContactDesc:
+        "想要为你的企业定制类似的数据看板？或者需要将 AI 深度集成到你的业务工作流中？\n或者需要现代优雅的用户交互界面？或者需要多终端的跨部门业务系统？\n或者是基于当前开源项目的进一步合作？",
+      aboutContactService:
+        "我们提供专业的瓶颈诊断、变革点分析、结合业务的定制化方案、和基于 AI 的开发及运维服务。",
+      aboutContactCTA: "联系我们：",
+      aboutGitHubLabel: "本项目的 GitHub 仓库",
+      aboutLinkedInLabel: "Gavin 的 LinkedIn 主页",
+      aboutMindRoseLabel: "MindRose 团队主页",
     },
   },
 } as const;

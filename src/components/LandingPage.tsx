@@ -52,6 +52,32 @@ export default function LandingPage() {
     setOpenQa((prev) => (prev === index ? null : index));
   }
 
+  // 邮箱复制状态
+  const [emailCopied, setEmailCopied] = useState(false);
+  // 反爬虫：运行时动态拼接邮箱
+  const emailAddress = "hello" + "@" + "mindrose.xyz";
+
+  /** 将邮箱复制到剪贴板 */
+  async function copyEmail() {
+    try {
+      await navigator.clipboard.writeText(emailAddress);
+      setEmailCopied(true);
+      setTimeout(() => setEmailCopied(false), 2000);
+    } catch {
+      // 降级：用传统的 textarea 兜底
+      const textarea = document.createElement("textarea");
+      textarea.value = emailAddress;
+      textarea.style.position = "fixed";
+      textarea.style.opacity = "0";
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand("copy");
+      document.body.removeChild(textarea);
+      setEmailCopied(true);
+      setTimeout(() => setEmailCopied(false), 2000);
+    }
+  }
+
   // 滚动渐显动画（Intersection Observer）
   const sectionRefs = useRef<(HTMLElement | null)[]>([]);
 
@@ -163,8 +189,9 @@ export default function LandingPage() {
         {/* ============================================================ */}
         {/* 使用说明                                                       */}
         {/* ============================================================ */}
+        <hr className="reveal-section" style={{ borderColor: "var(--border)" }} />
         <section
-          className="pb-12 reveal-section"
+          className="pt-10 pb-12 reveal-section"
           ref={(el) => {
             sectionRefs.current[2] = el;
           }}
@@ -212,8 +239,9 @@ export default function LandingPage() {
         {/* ============================================================ */}
         {/* 常见问题（手风琴）                                                */}
         {/* ============================================================ */}
+        <hr className="reveal-section" style={{ borderColor: "var(--border)" }} />
         <section
-          className="pb-12 reveal-section"
+          className="pt-10 pb-12 reveal-section"
           ref={(el) => {
             sectionRefs.current[3] = el;
           }}
@@ -224,7 +252,7 @@ export default function LandingPage() {
           >
             {t.landing.qaTitle}
           </h3>
-          <div className="space-y-1">
+          <div className="space-y-1 max-w-2xl mx-auto">
             {qaItems.map((item, i) => {
               const isOpen = openQa === i;
               return (
@@ -298,24 +326,220 @@ export default function LandingPage() {
         {/* ============================================================ */}
         {/* 关于我们                                                       */}
         {/* ============================================================ */}
+        <hr className="reveal-section" style={{ borderColor: "var(--border)" }} />
         <section
-          className="pb-16 reveal-section"
+          className="pt-10 pb-16 reveal-section"
           ref={(el) => {
             sectionRefs.current[4] = el;
           }}
         >
           <h3
-            className="text-[11px] font-semibold uppercase tracking-widest mb-4 text-center text-pretty"
+            className="text-[11px] font-semibold uppercase tracking-widest mb-12 text-center text-pretty"
             style={{ color: "var(--text-secondary)" }}
           >
-            {t.landing.aboutTitle}
+            {t.landing.aboutSectionTitle}
           </h3>
-          <p
-            className="text-sm leading-relaxed text-center max-w-xl mx-auto text-pretty"
-            style={{ color: "var(--text-secondary)" }}
-          >
-            {t.landing.aboutText}
-          </p>
+
+          <div className="max-w-2xl mx-auto space-y-6">
+            {/* 1. 为什么开发这个工具 */}
+            <div>
+              <h4
+                className="text-sm font-semibold mb-3 text-pretty"
+                style={{ color: "var(--text-primary)" }}
+              >
+                {t.landing.aboutWhyTitle}
+              </h4>
+              <p
+                className="text-sm leading-relaxed text-pretty"
+                style={{ color: "var(--text-secondary)", whiteSpace: "pre-line" }}
+              >
+                {t.landing.aboutWhyDesc}
+              </p>
+            </div>
+
+            {/* 分割线 */}
+            <hr style={{ borderColor: "var(--border)", borderStyle: "dashed" }} />
+
+            {/* 2. 极致的隐私与技术架构 */}
+            <div>
+              <h4
+                className="text-sm font-semibold mb-3 text-pretty"
+                style={{ color: "var(--text-primary)" }}
+              >
+                {t.landing.aboutPrivacyTitle}
+              </h4>
+              <p
+                className="text-sm leading-relaxed text-pretty"
+                style={{ color: "var(--text-secondary)", whiteSpace: "pre-line" }}
+              >
+                {t.landing.aboutPrivacyDesc}
+              </p>
+            </div>
+
+            {/* 分割线 */}
+            <hr style={{ borderColor: "var(--border)", borderStyle: "dashed" }} />
+
+            {/* 3. 关于 MindRose */}
+            <div>
+              <h4
+                className="text-sm font-semibold mb-3 text-pretty"
+                style={{ color: "var(--text-primary)" }}
+              >
+                {t.landing.aboutMindRoseTitle}
+              </h4>
+              <p
+                className="text-sm leading-relaxed text-pretty"
+                style={{ color: "var(--text-secondary)", whiteSpace: "pre-line" }}
+              >
+                {t.landing.aboutMindRoseDesc}
+              </p>
+            </div>
+
+            {/* 分割线 */}
+            <hr style={{ borderColor: "var(--border)", borderStyle: "dashed" }} />
+
+            {/* 4. 商业合作 */}
+            <div>
+              <h4
+                className="text-sm font-semibold mb-3 text-pretty"
+                style={{ color: "var(--text-primary)"}}
+              >
+                {t.landing.aboutContactTitle}
+              </h4>
+              <p
+                className="text-sm leading-relaxed mb-3 text-pretty"
+                style={{ color: "var(--text-secondary)", whiteSpace: "pre-line" }}
+              >
+                {t.landing.aboutContactDesc}
+              </p>
+              <p
+                className="text-sm leading-relaxed mb-5 text-pretty"
+                style={{ color: "var(--text-secondary)", whiteSpace: "pre-line" }}
+              >
+                {t.landing.aboutContactService}
+              </p>
+
+              {/* 联系方式 CTA */}
+              <div className="inline-flex items-center gap-3">
+                <a
+                  href={"mailto:" + emailAddress}
+                  className="text-sm font-medium transition-colors duration-200 hover:opacity-80"
+                  style={{ color: "var(--text-primary)" }}
+                >
+                  <span style={{ color: "var(--text-secondary)" }}>
+                    {t.landing.aboutContactCTA}
+                  </span>{" "}
+                  {emailAddress}
+                </a>
+                <button
+                  type="button"
+                  onClick={copyEmail}
+                  className="relative shrink-0 flex items-center justify-center w-7 h-7 rounded-subtle
+                             transition-all duration-200 hover:bg-[var(--bg-surface-hover)]"
+                  style={{ color: "var(--text-tertiary)" }}
+                  aria-label={emailCopied ? "Copied" : "Copy email"}
+                >
+                  {emailCopied ? (
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M20 6L9 17l-5-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  ) : (
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <rect x="9" y="9" width="13" height="13" rx="2" stroke="currentColor" strokeWidth="2"/>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" stroke="currentColor" strokeWidth="2"/>
+                    </svg>
+                  )}
+                </button>
+              </div>
+            </div>
+
+            {/* 分割线 */}
+            <hr style={{ borderColor: "var(--border)", borderStyle: "dashed" }} />
+
+            {/* 社交链接 */}
+            <div className="flex flex-wrap items-center justify-center gap-4">
+              {/* GitHub */}
+              <a
+                href="https://github.com/GavinCnod/deepseek-api-usage-analysis"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-sm transition-colors duration-200
+                           rounded-subtle px-3 py-1.5 hover:bg-[var(--bg-surface-hover)]"
+                style={{
+                  color: "var(--text-secondary)",
+                  border: "1px solid var(--border)",
+                }}
+              >
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.17 6.839 9.49.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.604-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.463-1.11-1.463-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0 1 12 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.167 22 16.418 22 12c0-5.523-4.477-10-10-10Z"
+                    fill="currentColor"
+                  />
+                </svg>
+                {t.landing.aboutGitHubLabel}
+              </a>
+
+              {/* LinkedIn */}
+              <a
+                href="https://www.linkedin.com/in/gavinchensongwen3188536a/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-sm transition-colors duration-200
+                           rounded-subtle px-3 py-1.5 hover:bg-[var(--bg-surface-hover)]"
+                style={{
+                  color: "var(--text-secondary)",
+                  border: "1px solid var(--border)",
+                }}
+              >
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"
+                    fill="currentColor"
+                  />
+                </svg>
+                {t.landing.aboutLinkedInLabel}
+              </a>
+
+              {/* MindRose 官网 */}
+              <a
+                href="https://www.mindrose.xyz"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-sm transition-colors duration-200
+                           rounded-subtle px-3 py-1.5 hover:bg-[var(--bg-surface-hover)]"
+                style={{
+                  color: "var(--text-secondary)",
+                  border: "1px solid var(--border)",
+                }}
+              >
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"
+                    fill="currentColor"
+                  />
+                </svg>
+                {t.landing.aboutMindRoseLabel}
+              </a>
+            </div>
+          </div>
         </section>
       </main>
 
