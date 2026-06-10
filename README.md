@@ -23,6 +23,8 @@ A browser-side analytics dashboard for DeepSeek API usage. Drag your monthly CSV
 - **Multi-month support** — Drag multiple months at once; files auto-pair by filename pattern and concatenate
 - **Apple-minimalist design** — Cold gray paper-texture background, generous whitespace, "no-card" full-width modules, thin horizontal dividers, 5rem hero numbers, diffuse shadows
 - **100% private** — All CSV parsing (Papa Parse) and cost computation runs client-side
+- **SEO optimized** — Server-rendered metadata (canonical URLs, OpenGraph, Twitter cards), JSON-LD structured data (SoftwareApplication + FAQPage, bilingual), robots.txt + sitemap.xml, `<noscript>` crawler fallback content
+- **Landing page** — Complete pre-upload landing with theme-aware background images, How It Works steps, accordion FAQ, About section, scroll-reveal animations
 
 ## CSV Format
 
@@ -75,15 +77,18 @@ npm run lint       # ESLint
 ```
 src/
 ├── app/                    # Next.js App Router
-│   ├── layout.tsx          # Root layout, metadata, providers
+│   ├── layout.tsx          # Root layout, generateMetadata() SEO, JSON-LD scripts, providers
 │   ├── page.tsx            # Entry → <Dashboard />
 │   ├── globals.css         # Tailwind v4 + Hubot Sans @font-face + CSS variables + reveal/accordion + base styles
-│   └── AppI18nShell.tsx    # i18n shell + <html lang> sync
+│   ├── AppI18nShell.tsx    # i18n shell + <html lang> sync
+│   ├── robots.ts           # Build-time robots.txt generation
+│   └── sitemap.ts          # Build-time sitemap.xml generation
 ├── components/
 │   ├── TitleBar.tsx         # Shared top nav bar (logo + app name + GitHub + language + theme)
-│   ├── FooterBar.tsx        # Shared footer (copyright + GitHub link + version)
-│   ├── LandingPage.tsx      # Landing page (Hero + Upload + HowItWorks + accordion QA + About, scroll-reveal)
-│   ├── Dashboard.tsx        # Routes between LandingPage and dashboard view
+│   ├── FooterBar.tsx        # Shared footer (copyright + GitHub link + version, optional animate/reveal)
+│   ├── LandingPage.tsx      # Landing page (Hero with theme images + Upload + HowItWorks + accordion QA + About, scroll-reveal)
+│   ├── LandingContent.tsx   # Server-rendered <noscript> fallback for SEO crawlers
+│   ├── Dashboard.tsx        # Routes between LandingPage and dashboard view (semantic hidden H1)
 │   ├── DropZone.tsx         # Drag-and-drop or click-to-upload CSV (multi-file)
 │   ├── KPICards.tsx         # Summary stat cards
 │   ├── OverviewView.tsx     # Hero cost + daily bars + donut
@@ -96,12 +101,13 @@ src/
 ├── i18n/
 │   ├── index.ts            # Barrel export
 │   ├── I18nProvider.tsx    # React context + useTranslation hook
-│   └── translations.ts     # All UI strings (en + zh)
+│   └── translations.ts     # All UI strings (en + zh, including warning group)
 └── lib/
     ├── types.ts            # TypeScript interfaces & types
     ├── parser.ts           # CSV parsing pipeline
     ├── concatFiles.ts      # Multi-month CSV pairing & concat
     ├── format.ts           # Locale-aware formatters
+    ├── schema.ts           # JSON-LD structured data (SoftwareApplication + FAQPage, bilingual)
     ├── DataContext.tsx      # Data state + model filter
     └── ThemeContext.tsx     # Theme state + useTheme hook
 ```
@@ -120,6 +126,16 @@ The dashboard follows an **Apple-minimalist** design language driven entirely by
 - **Custom scrollbar**: 6px thin, transparent track, themed thumb
 - **Accessibility**: Respects `prefers-reduced-motion`, `color-scheme` for native UI, `focus-visible` outlines, `aria-expanded`/`aria-controls` on interactive elements
 
+## SEO
+
+The app implements a multi-layered SEO strategy for a client-rendered static SPA:
+
+- **generateMetadata()** — Dynamic server-rendered metadata: canonical URL, OpenGraph (title, description, image), Twitter card, hreflang alternates (en/zh), robots directives
+- **JSON-LD structured data** — `SoftwareApplication` + `FAQPage` schemas in both English and Chinese, injected at build time via `<script type="application/ld+json">` in `layout.tsx`
+- **robots.txt + sitemap.xml** — Generated at build time via Next.js 16 `MetadataRoute` conventions; site URL from `NEXT_PUBLIC_SITE_URL` env var
+- **`<noscript>` fallback** — `LandingContent.tsx` outputs key landing page content (How It Works, FAQ, About) for crawlers that don't execute JavaScript
+- **Semantic HTML** — Visible `<h1>` on landing page, `<h1 className="sr-only">` on dashboard, proper section structure
+
 ## Deploy
 
 Static output — deploy to any static host:
@@ -129,20 +145,29 @@ npm run build
 # out/ → Vercel, Netlify, GitHub Pages, Cloudflare Pages, etc.
 ```
 
+Set `NEXT_PUBLIC_SITE_URL` to your production domain for correct canonical URLs, sitemap, and OpenGraph metadata.
+
 ## Changelog
 
 ### v0.2.3
 
 **Added:**
 
-- Added landing page light/dark theme image backgrounds for a touch of liveliness.
-- Added semantic hidden H1, canonical URL, and multilingual JSON-LD structured data, extracting server-side rendered landing page content.
-- Added robots.txt and sitemap.xml files for better search engine indexing and navigation.
+- Full-site SEO: `generateMetadata()` with canonical URLs, OpenGraph, Twitter cards, and hreflang alternates.
+- JSON-LD structured data: bilingual `SoftwareApplication` + `FAQPage` schemas (via `src/lib/schema.ts`).
+- `robots.txt` and `sitemap.xml` generation at build time (via `src/app/robots.ts` and `src/app/sitemap.ts`).
+- `<noscript>` crawler fallback content (`LandingContent.tsx`) for search engines that don't execute JavaScript.
+- Theme-aware landing page background images — CSV and chart sketches that swap with light/dark mode.
+- Semantic hidden H1 on dashboard view for screen readers and SEO.
 
 **Improved:**
 
+- `layout.tsx` upgraded to `generateMetadata()` for dynamic build-time SEO injection.
+- `LandingPage.tsx` now renders `LandingContent` for SEO and theme-aware background decoration.
+- `FooterBar.tsx` extracted as standalone component with `animate` and `sectionRef` props.
+- `TitleBar.tsx` extracted as standalone component with logo, GitHub icon, and unified layout.
+- Added `warning` translation group (date mismatch, no cost match, partial cache data, schema drift).
 - Updated DropZone component background styles for better drag-and-drop interaction.
-- Other SEO improvements.
 
 ### v0.2.2
 

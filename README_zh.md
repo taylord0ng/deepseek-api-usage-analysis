@@ -23,6 +23,8 @@
 - **多月支持** — 一次拖入多个月份文件；根据文件名模式自动配对并拼接
 - **Apple 极简设计** — 冷灰纸质感底、大量留白、「无卡片」通栏模块布局、细横线分割、5rem Hero 大数字、弥散阴影
 - **100% 隐私** — 所有 CSV 解析（Papa Parse）和费用计算均在浏览器客户端完成
+- **SEO 优化** — 服务端渲染元数据（规范 URL、OpenGraph、Twitter 卡片）、JSON-LD 结构化数据（SoftwareApplication + FAQPage，双语）、robots.txt + sitemap.xml、`<noscript>` 爬虫回退内容
+- **落地页** — 完整的上传前落地页，包含主题感知背景图片、使用说明步骤、手风琴常见问题、关于模块、滚动渐显动画
 
 ## CSV 格式
 
@@ -75,15 +77,18 @@ npm run lint       # ESLint
 ```
 src/
 ├── app/                    # Next.js App Router
-│   ├── layout.tsx          # 根布局、元数据、Provider
+│   ├── layout.tsx          # 根布局、generateMetadata() SEO、JSON-LD 脚本、Provider
 │   ├── page.tsx            # 入口 → <Dashboard />
 │   ├── globals.css         # Tailwind v4 + Hubot Sans @font-face + CSS 变量 + 渐显/手风琴 + 基础样式
-│   └── AppI18nShell.tsx    # i18n 外壳 + <html lang> 同步
+│   ├── AppI18nShell.tsx    # i18n 外壳 + <html lang> 同步
+│   ├── robots.ts           # 构建时 robots.txt 生成
+│   └── sitemap.ts          # 构建时 sitemap.xml 生成
 ├── components/
 │   ├── TitleBar.tsx         # 共享顶部导航栏（Logo + 应用名 + GitHub + 语言 + 主题）
-│   ├── FooterBar.tsx        # 共享页脚（版权 + GitHub 链接 + 版本号）
-│   ├── LandingPage.tsx      # 落地页（Hero + 上传 + 使用说明 + 手风琴FAQ + 关于，滚动渐显）
-│   ├── Dashboard.tsx        # 路由：落地页 / 仪表盘视图切换
+│   ├── FooterBar.tsx        # 共享页脚（版权 + GitHub 链接 + 版本号，可选渐显动画）
+│   ├── LandingPage.tsx      # 落地页（Hero 含主题背景图 + 上传 + 使用说明 + 手风琴FAQ + 关于，滚动渐显）
+│   ├── LandingContent.tsx   # 服务端渲染 <noscript> 回退内容，供搜索引擎爬虫抓取
+│   ├── Dashboard.tsx        # 路由：落地页 / 仪表盘视图切换（语义化隐藏 H1）
 │   ├── DropZone.tsx         # 拖拽或点击上传区（多文件）
 │   ├── KPICards.tsx         # 摘要指标卡片
 │   ├── OverviewView.tsx     # Hero 费用 + 日柱状图 + 环形图
@@ -96,12 +101,13 @@ src/
 ├── i18n/
 │   ├── index.ts            # 统一导出
 │   ├── I18nProvider.tsx    # React 上下文 + useTranslation Hook
-│   └── translations.ts     # 全部 UI 文案（en + zh）
+│   └── translations.ts     # 全部 UI 文案（en + zh，含 warning 分组）
 └── lib/
     ├── types.ts            # TypeScript 接口与类型定义
     ├── parser.ts           # CSV 解析管线
     ├── concatFiles.ts      # 多月 CSV 配对与拼接
     ├── format.ts           # 本地化格式函数
+    ├── schema.ts           # JSON-LD 结构化数据（SoftwareApplication + FAQPage，双语）
     ├── DataContext.tsx      # 数据状态 + 模型筛选
     └── ThemeContext.tsx     # 主题状态 + useTheme Hook
 ```
@@ -120,6 +126,16 @@ src/
 - **自定义滚动条**：6px 细条，透明轨道，主题色滑块
 - **无障碍**：遵循 `prefers-reduced-motion`、`color-scheme` 原生 UI、`focus-visible` 轮廓、`aria-expanded`/`aria-controls` 交互属性
 
+## SEO 架构
+
+本应用为客户端渲染的静态 SPA 实现了多层 SEO 策略：
+
+- **generateMetadata()** — 动态服务端渲染元数据：规范 URL、OpenGraph（标题、描述、图片）、Twitter 卡片、hreflang 语言标注（en/zh）、robots 指令
+- **JSON-LD 结构化数据** — `SoftwareApplication` + `FAQPage` 双语 Schema（英文和中文），构建时通过 `layout.tsx` 中的 `<script type="application/ld+json">` 注入
+- **robots.txt + sitemap.xml** — 构建时通过 Next.js 16 `MetadataRoute` 约定生成；站点域名从 `NEXT_PUBLIC_SITE_URL` 环境变量读取
+- **`<noscript>` 回退** — `LandingContent.tsx` 输出关键落地页内容（使用说明、常见问题、关于），供不执行 JavaScript 的爬虫抓取
+- **语义化 HTML** — 落地页包含可见的 `<h1>`，仪表盘视图包含 `<h1 className="sr-only">`，配合正确的 section 结构
+
 ## 部署
 
 静态输出，可部署到任何静态托管服务：
@@ -129,20 +145,29 @@ npm run build
 # out/ → Vercel, Netlify, GitHub Pages, Cloudflare Pages 等
 ```
 
+设置 `NEXT_PUBLIC_SITE_URL` 环境变量为你的生产环境域名，以确保正确的规范 URL、站点地图和 OpenGraph 元数据。
+
 ## 更新日志
 
 ### v0.2.3
 
 **新增：**
 
-- 新增落地页明暗主题图片背景，为页面提供一点灵动感。
-- 新增语义化隐藏 H1、规范 URL 和多语言 JSON-LD 结构化数据，抽离服务端渲染的落地页内容。
-- 添加 robots.txt 和 sitemap.xml 文件，优化搜索引擎索引和导航。
+- 全站 SEO 优化：`generateMetadata()` 动态元数据（规范 URL、OpenGraph、Twitter 卡片、hreflang 语言标注）。
+- JSON-LD 结构化数据：双语 `SoftwareApplication` + `FAQPage` Schema（通过 `src/lib/schema.ts` 生成）。
+- 构建时 `robots.txt` 和 `sitemap.xml` 生成（通过 `src/app/robots.ts` 和 `src/app/sitemap.ts`）。
+- `<noscript>` 爬虫回退内容（`LandingContent.tsx`），确保不执行 JavaScript 的搜索引擎也能抓取落地页文字。
+- 落地页主题感知背景图片 — CSV 和图表主题素描图，随浅色/深色模式切换。
+- 仪表盘视图新增语义化隐藏 H1，便于屏幕阅读器和搜索引擎读取。
 
 **改进：**
 
+- `layout.tsx` 升级为 `generateMetadata()`，实现构建时动态 SEO 注入。
+- `LandingPage.tsx` 新增 `LandingContent` SEO 回退渲染和主题感知背景装饰。
+- `FooterBar.tsx` 提取为独立组件，支持 `animate` 和 `sectionRef` 属性。
+- `TitleBar.tsx` 提取为独立组件，包含 Logo、GitHub 图标和统一布局。
+- 新增 `warning` 翻译分组（日期不匹配、缺少费用数据、缓存数据不完整、数据结构不一致）。
 - 更新 DropZone 组件背景样式，优化拖拽交互效果。
-- 其他 SEO 优化。
 
 ### v0.2.2
 

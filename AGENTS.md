@@ -17,16 +17,19 @@ Strictly follows an Apple-minimalist design language: cold gray paper-texture ba
 ```
 src/
 ├── app/            # Next.js App Router (static export)
-│   ├── layout.tsx           # Root layout, metadata, ThemeProvider + I18nProvider + DataProvider
+│   ├── layout.tsx           # Root layout, generateMetadata() for SEO, JSON-LD scripts, ThemeProvider + I18nProvider + DataProvider
 │   ├── page.tsx             # Entry → renders <Dashboard />
 │   ├── globals.css          # Tailwind v4 + @font-face Hubot Sans + CSS variables + reveal/accordion + base styles
 │   ├── favicon.ico          # App icon (branded)
-│   └── AppI18nShell.tsx     # Client shell: I18nProvider + <html lang> sync
+│   ├── AppI18nShell.tsx     # Client shell: I18nProvider + <html lang> sync
+│   ├── robots.ts            # Build-time robots.txt generation (Next.js 16 convention)
+│   └── sitemap.ts           # Build-time sitemap.xml generation (NEXT_PUBLIC_SITE_URL)
 ├── components/
 │   ├── TitleBar.tsx          # Shared sticky top nav: logo + app name + GitHub icon + LanguageSwitcher + ThemeSwitcher
-│   ├── FooterBar.tsx         # Shared footer: thin divider + copyright + GitHub link + version
-│   ├── LandingPage.tsx       # Pre-upload landing: Hero + Upload + HowItWorks + accordion QA + About (scroll-reveal)
-│   ├── Dashboard.tsx         # Main layout: routes between LandingPage (no data) and Dashboard view
+│   ├── FooterBar.tsx         # Shared footer: thin divider + copyright + GitHub link + version (props: animate, sectionRef)
+│   ├── LandingPage.tsx       # Pre-upload landing: Hero with theme-aware background images + Upload + HowItWorks + accordion QA + About (scroll-reveal)
+│   ├── LandingContent.tsx    # Server-rendered <noscript> fallback: HowItWorks + QA + About for SEO crawlers
+│   ├── Dashboard.tsx         # Main layout: routes between LandingPage (no data) and Dashboard view (semantic hidden H1 for SEO)
 │   ├── DropZone.tsx          # Drag-and-drop CSV uploader (supports multi-file, "or click to upload")
 │   ├── KPICards.tsx          # Summary stat cards (card-less big-number layout)
 │   ├── OverviewView.tsx      # Hero total cost + daily cost bars + cost-by-key donut (theme-aware)
@@ -39,22 +42,28 @@ src/
 ├── i18n/
 │   ├── index.ts             # Barrel export
 │   ├── I18nProvider.tsx     # React context + useTranslation hook + localStorage persistence
-│   └── translations.ts      # All UI strings in en/zh (app, tabs, dropzone, kpi, landing, etc.)
+│   └── translations.ts      # All UI strings in en/zh (app, tabs, dropzone, kpi, landing, warning, etc.)
 └── lib/
     ├── types.ts             # AmountRow, CostRow, DailyUsage, KeyStats, ParseResult, ParseError, ParseWarning
     ├── parser.ts            # Papa Parse CSV pipeline (parse → pivot → join → computeKeyStats)
     ├── concatFiles.ts       # Multi-month CSV pairing & concatenation (reads file names, strips headers)
     ├── format.ts            # Locale-aware formatCost / formatTokens / formatPercent
+    ├── schema.ts            # JSON-LD structured data: SoftwareApplication + FAQPage (bilingual en/zh)
     ├── DataContext.tsx       # Data state + model filter (selectedModel, filteredResult, filterResult)
     └── ThemeContext.tsx      # Light/dark theme context + useTheme hook + localStorage + system preference
 
 public/
 ├── ds-usage-logo.ico        # Favicon / app icon
-├── ds-usage-logo.png        # App icon (PNG)
+├── ds-usage-logo.png        # App icon (PNG, 512×512, used in OpenGraph/Twitter metadata)
 └── fonts/
-    ├── HubotSans-Regular.woff2   # Body text (weight 400)
-    ├── HubotSans-Medium.woff2    # Medium weight (500)
-    └── HubotSans-Bold.woff2      # Headings weight (700)
+│   ├── HubotSans-Regular.woff2   # Body text (weight 400)
+│   ├── HubotSans-Medium.woff2    # Medium weight (500)
+│   └── HubotSans-Bold.woff2      # Headings weight (700)
+└── landing/
+    ├── notion_sketch_csv_light.png    # Hero decoration — CSV theme (light, left side)
+    ├── notion_sketch_csv_dark.png     # Hero decoration — CSV theme (dark, left side)
+    ├── notion_sketch_chart_light.png  # Hero decoration — chart theme (light, right side)
+    └── notion_sketch_chart_dark.png   # Hero decoration — chart theme (dark, right side)
 ```
 
 ## Key technical details
@@ -69,6 +78,46 @@ public/
 - **Geist Mono** (from `next/font/google`) for code — variable weight
 - **CSS custom properties** for theming — all colors are `var(--bg)`, `var(--text-primary)`, etc.; NO hardcoded colors in components
 - **TypeScript 5** with strict mode, path alias `@/*` → `./src/*`
+- **SEO**: `generateMetadata()` in layout.tsx (canonical URL, OpenGraph, Twitter cards, hreflang alternates), JSON-LD structured data, robots.txt + sitemap.xml, `<noscript>` crawler fallback, semantic hidden H1
+
+## SEO architecture
+
+The app implements a multi-layered SEO strategy suitable for a client-rendered static SPA:
+
+### Build-time artifacts
+
+- **`robots.ts`** — Follows Next.js 16 `MetadataRoute.Robots` convention. Generates `/robots.txt` at build time: allows all crawlers, points to sitemap. Compatible with `output: "export"` via `export const dynamic = "force-static"`.
+- **`sitemap.ts`** — Follows Next.js 16 `MetadataRoute.Sitemap` convention. Generates `/sitemap.xml` at build time. Site URL reads from `NEXT_PUBLIC_SITE_URL` env var (defaults to `https://ds-usage.vercel.app`).
+
+### Server-side metadata (`layout.tsx`)
+
+`generateMetadata()` (replaces static `metadata` export) injects:
+- **Canonical URL** + **hreflang alternates** (`en` / `zh` pointing to same URL — the app uses client-side language detection, no URL-level routing)
+- **OpenGraph**: title, description, URL, site name, locale (`en_US`), 512×512 logo image
+- **Twitter card**: `summary` type with logo image
+- **Robots**: `index: true, follow: true`
+
+### JSON-LD structured data
+
+`src/lib/schema.ts` generates bilingual (en + zh) JSON-LD blocks injected as `<script type="application/ld+json">` in the root layout:
+- **`SoftwareApplication`** — name, description, OS, category, free offer
+- **`FAQPage`** — 4 Q&A pairs matching the landing page accordion content
+
+Both schemas exist in both languages (4 total script tags). They are server-rendered — no client JS needed for crawlers to see them.
+
+### Crawler fallback content
+
+`src/components/LandingContent.tsx` outputs the full How It Works, FAQ, and About content wrapped in `<noscript>`. Crawlers that don't execute JavaScript still see all landing page text. Browsers (with JS enabled) ignore the `<noscript>` block — the interactive `LandingPage.tsx` renders the visible content instead.
+
+### Client-side enhancements
+
+- **LandingPage** renders a visible `<h1>` (app title) — this is fully accessible and crawlable
+- **Dashboard** (post-upload) includes a semantically hidden `<h1 className="sr-only">` — visible to screen readers and search engines, visually hidden
+- **Theme-aware background images** in the hero area: `public/landing/notion_sketch_*_light.png` and `*_dark.png` — swapped based on `useTheme()` for visual liveliness
+
+### Environment variable
+
+- `NEXT_PUBLIC_SITE_URL` — injected at build time into `layout.tsx` (metadata), `robots.ts` (sitemap URL), and `sitemap.ts` (entry URL). Defaults to `https://ds-usage.vercel.app`.
 
 ## Theme system
 
@@ -80,6 +129,14 @@ The app supports full light/dark dual-theme switching, designed in Apple-minimal
 - Theme persisted to `localStorage["ds-theme"]`; falls back to `prefers-color-scheme` media query, then `"light"`
 - `<html>` gets a `class` of `"light"` or `"dark"` — this drives ALL CSS variables
 - `ThemeProvider` wraps the entire app in `layout.tsx`
+
+### Landing page theme-aware images
+
+The landing page hero area displays background decoration images that switch with the theme:
+- CSV-themed sketch on the left (`notion_sketch_csv_light.png` / `notion_sketch_csv_dark.png`)
+- Chart-themed sketch on the right (`notion_sketch_chart_light.png` / `notion_sketch_chart_dark.png`)
+- Images are positioned absolutely as non-interactive decoration (`pointer-events-none`, `aria-hidden="true"`)
+- Swapped via `useTheme()` → `isDark` branching in `LandingPage.tsx`
 
 ### CSS variable design
 
@@ -156,7 +213,7 @@ The following utility classes are defined in `globals.css`:
 - `.reveal-section` — Initial state: `opacity: 0; transform: translateY(24px)`. Controlled by Intersection Observer in `LandingPage.tsx`
 - `.reveal-section.visible` — `opacity: 1; transform: translateY(0)` with 0.6s cubic-bezier transition
 - `.accordion-panel` — Collapsed state: `max-height: 0; opacity: 0`
-- `.accordion-panel.open` — Expanded state: `max-height: 12rem; opacity: 1` with 0.35s cubic-bezier transition
+- `.accordion-panel.open` — Expanded state: `max-height: 12rem; opacity: 1` with 0.35s cubic-bezier transition (Note: LandingPage.tsx now uses inline styles for accordion animation instead of these classes, but the classes remain available)
 
 ### Global base styles
 
@@ -220,7 +277,7 @@ A segmented control (pill buttons) below the tab bar lets users filter all views
 
 | Group | Keys | Used in |
 |---|---|---|
-| `app` | `title`, `subtitle` | `Dashboard.tsx` title area |
+| `app` | `title`, `subtitle` | `Dashboard.tsx` title area, `LandingPage.tsx` hero |
 | `tabs` | `overview`, `keys`, `cache`, `trends` | `Dashboard.tsx` tab bar |
 | `header` | `loadDifferent`, `clear` | `Dashboard.tsx` header actions |
 | `footer` | `text`, `version` | `FooterBar.tsx` |
@@ -231,12 +288,12 @@ A segmented control (pill buttons) below the tab bar lets users filter all views
 | `cache` | `hitRateTitle`, `servedFromCache`, `dailyHitRate`, `hitsVsMisses`, `noCacheTitle`, `noCacheHint`, `hits`, `misses` | `CacheView.tsx` |
 | `keys` | `title`, `apiKeyName`, `tokens`, `cost`, `cacheHit`, `requests`, `heroSubtitle` | `KeyView.tsx` |
 | `error` | `missingColumns`, `malformedRow`, `emptyFile`, `incompleteUpload`, `row`, `column` | `ErrorDisplay.tsx` |
-| `warning` | (not directly used as keys — warning messages come from parser) | `ErrorDisplay.tsx` |
-| `meta` | `title`, `description` | `layout.tsx` metadata |
+| `warning` | `dateMismatch`, `noCostMatch`, `partialCacheData`, `schemaDrift` | `ErrorDisplay.tsx` warning banners |
+| `meta` | `title`, `description` | `layout.tsx` generateMetadata(), `schema.ts` JSON-LD |
 | `langSwitcher` | `label` | (deprecated — component now uses hardcoded `aria-label`) |
 | `theme` | `light`, `dark`, `switchToDark`, `switchToLight` | `ThemeSwitcher.tsx` |
 | `modelFilter` | `allModels` | `Dashboard.tsx` model filter pill |
-| `landing` | `howItWorksTitle`, `howItWorksStep1Title`, `howItWorksStep1Desc`, `howItWorksStep2Title`, `howItWorksStep2Desc`, `howItWorksStep3Title`, `howItWorksStep3Desc`, `qaTitle`, `qaQ1`–`qaQ4`, `qaA1`–`qaA4`, `aboutTitle`, `aboutText` | `LandingPage.tsx` |
+| `landing` | `howItWorksTitle`, `howItWorksStep1Title`, `howItWorksStep1Desc`, `howItWorksStep2Title`, `howItWorksStep2Desc`, `howItWorksStep3Title`, `howItWorksStep3Desc`, `qaTitle`, `qaQ1`–`qaQ4`, `qaA1`–`qaA4`, `aboutTitle`, `aboutText` | `LandingPage.tsx`, `LandingContent.tsx` (noscript), `schema.ts` (FAQPage JSON-LD) |
 
 ## Multi-month CSV support (concatFiles)
 
@@ -278,34 +335,37 @@ The app has two distinct page states managed by `Dashboard.tsx`:
 ### Landing page (pre-upload, `!result`)
 Rendered via `<LandingPage />` — a scrollable single-page layout with:
 1. **TitleBar** — sticky top bar with logo + app name + GitHub icon + LanguageSwitcher + ThemeSwitcher
-2. **Hero** — shorter section (`pt-16 pb-10`), centered title + subtitle, uses `translate="no"` on heading
+2. **Hero** — shorter section (`pt-16 pb-10`), centered title + subtitle, uses `translate="no"` on heading. Background features theme-aware decoration images (CSV sketch left, chart sketch right) positioned absolutely with `pointer-events-none`.
 3. **Upload** — `<DropZone />` + `<ErrorDisplay />`
-4. **How It Works** — 3-step grid layout, each step has a numbered circle (`w-10 h-10 rounded-full`), hover micro-interactions via `group` + `group-hover`
-5. **QA** — Accordion pattern: click on question toggles answer panel. Uses `openQa` state (number | null). Panels animated via `.accordion-panel` CSS class with `max-height` transition. Accessible: `aria-expanded`, `aria-controls`, keyboard support (Enter/Space). `focus-visible` outlines.
-6. **About** — project description
-7. **FooterBar** — shared footer
+4. **LandingContent** — `<noscript>` fallback (server-rendered, invisible when JS is enabled) containing How It Works + FAQ + About text for SEO crawlers
+5. **How It Works** — 3-step grid layout, each step has a numbered circle (`w-10 h-10 rounded-full`), hover micro-interactions via `group` + `group-hover`
+6. **QA** — Accordion pattern: click on question toggles answer panel. Uses `openQa` state (number | null). Panels animated via inline styles with `max-height`/`opacity` transition. Accessible: `aria-expanded`, `aria-controls`, keyboard support (Enter/Space). `focus-visible` outlines.
+7. **About** — project description
+8. **FooterBar** — shared footer with `animate` prop for reveal-section scroll animation
 
 Each `<section>` uses a `reveal-section` CSS class and is watched by an Intersection Observer: when 15% of a section enters the viewport, the `.visible` class is added, triggering a fade-in + slide-up animation. Once visible, the observer unobserves the element (runs once). Respects `prefers-reduced-motion` via global CSS.
 
 ### Dashboard view (post-upload, `result` exists)
 Rendered inline in `Dashboard.tsx` with:
 1. **TitleBar** — same shared component
-2. **Action bar** — file name + date range (left) + re-upload/clear buttons (right)
-3. **Content** — ErrorDisplay, KPICards, tabs, model filter, chart views
-4. **FooterBar** — same shared component
+2. **Semantic hidden H1** — `<h1 className="sr-only">` for screen readers and search engines
+3. **Action bar** — file name + date range (left) + re-upload/clear buttons (right)
+4. **Content** — ErrorDisplay + WarningBanner, KPICards, tabs, model filter, chart views
+5. **FooterBar** — same shared component
 
 ### Shared components
 
 **TitleBar** (`src/components/TitleBar.tsx`):
 - Sticky top bar with `z-10`, thin bottom border (`var(--border)`)
-- Left: logo (`next/image`, 32×32) + app title (`t.app.title`) in bold
-- Right: GitHub icon link + `<LanguageSwitcher />` + `<ThemeSwitcher />`
+- Left: logo (`next/image`, 32×32, unoptimized for static export) + app title (`t.app.title`) in bold
+- Right: GitHub icon link (SVG, `w-8 h-8` circle hover background) + `<LanguageSwitcher />` + `<ThemeSwitcher />`
 - Used by both `LandingPage` and `Dashboard`
 
 **FooterBar** (`src/components/FooterBar.tsx`):
 - Thin HR divider + centered muted text + GitHub link + version number
 - Text from `t.footer.text`, version from `t.footer.version`
-- Supports optional `animate` prop for reveal-section scroll animation on Landing page
+- Accepts optional `animate` prop: when true, wraps content in a `reveal-section` div and exposes `sectionRef` callback for IntersectionObserver registration (Landing page use)
+- Without `animate`, renders content directly (Dashboard use)
 - Mobile-friendly with `flex-wrap` for small screens
 - Used by both `LandingPage` and `Dashboard`
 
@@ -340,7 +400,10 @@ Apple-style underline tabs: `text-xs font-semibold uppercase tracking-wide`, 2px
 - **Adding a new CSS variable**: Define in both `:root, .light` AND `.dark` blocks in `src/app/globals.css`, then reference as `var(--your-token)` in components
 - **Changing the visual design**: Update CSS variables in `globals.css` — do NOT hardcode colors in individual components
 - **Adding a new view/tab**: Add to `TABS` array in `Dashboard.tsx`, add translation keys in both locales, create component with Hero + chart pattern using `filteredResult`
-- **Adding or modifying a landing page section**: Edit `LandingPage.tsx` — add a new `<section>` block with `reveal-section` class and `ref` callback for Intersection Observer. Use Apple-minimalist spacing (`pb-12` or `pb-16`), centered `text-[11px]` uppercase section title, and content using `var(--text-primary)` / `var(--text-secondary)` colors. Add translation keys under `landing.*` group (flat 2-level keys).
+- **Adding or modifying a landing page section**: Edit `LandingPage.tsx` — add a new `<section>` block with `reveal-section` class and `ref` callback for Intersection Observer. Use Apple-minimalist spacing (`pb-12` or `pb-16`), centered `text-[11px]` uppercase section title, and content using `var(--text-primary)` / `var(--text-secondary)` colors. Add translation keys under `landing.*` group (flat 2-level keys). If the content is important for SEO, also add it to `LandingContent.tsx` inside the `<noscript>` block.
 - **Supporting a new CSV column**: Add to types in `types.ts`, update parser validation in `parser.ts`, add to pivot/join logic if needed
 - **Changing the font**: Replace WOFF2 files in `public/fonts/`, update `@font-face` declarations in `globals.css`, update `--font-sans` in the `@theme inline` block
 - **Adding a new animation**: Define `@keyframes` in `globals.css`, add to `@theme inline` block as `--animate-*`. Respect `prefers-reduced-motion` by including in the global media query.
+- **Updating SEO metadata**: Edit `generateMetadata()` in `layout.tsx` for page-level meta tags (title, description, OG, Twitter). Edit `src/lib/schema.ts` for JSON-LD structured data. For new landing page sections visible to crawlers without JS, add content to `LandingContent.tsx`.
+- **Changing the site URL**: Set `NEXT_PUBLIC_SITE_URL` env var (in `.env` or deployment platform). It propagates to metadata canonical URL, `robots.ts` sitemap pointer, and `sitemap.ts` entry URL.
+- **Adding a new theme-aware landing image**: Add light and dark variants to `public/landing/`, then update the `isDark` branching in `LandingPage.tsx` to reference the correct paths.
