@@ -131,6 +131,19 @@ npm run build
 
 ## Changelog
 
+### v0.2.3
+
+**Added:**
+
+- Added landing page light/dark theme image backgrounds for a touch of liveliness.
+- Added semantic hidden H1, canonical URL, and multilingual JSON-LD structured data, extracting server-side rendered landing page content.
+- Added robots.txt and sitemap.xml files for better search engine indexing and navigation.
+
+**Improved:**
+
+- Updated DropZone component background styles for better drag-and-drop interaction.
+- Other SEO improvements.
+
 ### v0.2.2
 
 **Added:**

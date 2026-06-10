@@ -10,7 +10,7 @@ A browser-side dashboard for DeepSeek API usage analytics. Users drag their mont
 
 Strictly follows an Apple-minimalist design language: cold gray paper-texture backgrounds, ample whitespace, "no-card" full-width modules with thin horizontal dividers, subtle rounded corners, and diffuse shadows. Full light/dark dual-theme support driven by CSS custom properties.
 
-**Version**: 0.2.2
+**Version**: 0.2.3
 
 ## Architecture
 

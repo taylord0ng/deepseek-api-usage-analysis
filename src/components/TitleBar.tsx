@@ -53,12 +53,12 @@ export default function TitleBar() {
             unoptimized
             priority
           />
-          <h1
+          <span
             className="text-base font-bold tracking-tight"
             style={{ color: "var(--text-primary)", letterSpacing: "-0.03em" }}
           >
             {t.app.title}
-          </h1>
+          </span>
         </div>
         <div className="flex items-center gap-3">
           <a

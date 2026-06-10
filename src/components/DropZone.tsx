@@ -80,8 +80,8 @@ export default function DropZone() {
    : "2px dashed var(--border)",
   borderRadius: "6px",
   background: dragOver
-   ? "var(--dropzone-drag-bg)"
-   : "var(--dropzone-bg)",
+   ? "color-mix(in srgb, var(--dropzone-drag-bg) 45%, transparent)"
+   : "color-mix(in srgb, var(--dropzone-bg) 45%, transparent)",
   }}
  >
   <input

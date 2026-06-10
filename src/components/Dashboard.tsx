@@ -66,6 +66,9 @@ export default function Dashboard() {
     >
       <TitleBar />
 
+      {/* 语义化 H1：对屏幕阅读器和搜索引擎可见，视觉隐藏 */}
+      <h1 className="sr-only">{t.app.title}</h1>
+
       <div className="max-w-6xl mx-auto px-6 py-8">
         {/* Action bar — 文件信息 + 操作按钮 */}
         <div className="flex items-start justify-between mb-10">

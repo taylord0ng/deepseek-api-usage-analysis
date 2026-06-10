@@ -1,14 +1,16 @@
 "use client";
 
 import { useTranslation } from "@/i18n";
+import { useTheme } from "@/lib/ThemeContext";
 import { useState, useEffect, useRef } from "react";
 import TitleBar from "./TitleBar";
 import FooterBar from "./FooterBar";
 import DropZone from "./DropZone";
 import ErrorDisplay from "./ErrorDisplay";
+import LandingContent from "./LandingContent";
 
 /**
- * Landing 页面 — 上传前的完整落地页
+ * Landing 页面 - 上传前的完整落地页
  *
  * Apple 极简风格，包含以下区域：
  * - Hero（短版标题 + 副标题）
@@ -22,8 +24,27 @@ import ErrorDisplay from "./ErrorDisplay";
  */
 export default function LandingPage() {
   const { t } = useTranslation();
+  const { theme } = useTheme();
 
-  /* ── QA 手风琴状态 ── */
+  // 主题感知的背景装饰图
+  const isDark = theme === "dark";
+  const csvBg = isDark
+    ? "/landing/notion_sketch_csv_dark.png"
+    : "/landing/notion_sketch_csv_light.png";
+  const chartBg = isDark
+    ? "/landing/notion_sketch_chart_dark.png"
+    : "/landing/notion_sketch_chart_light.png";
+
+  // Hero + 上传区整体容器的背景装饰样式
+  // 左侧 CSV 主题图 + 右侧图表主题图，透明 PNG，不覆盖原背景色
+  const bgDecorationStyle: React.CSSProperties = {
+    backgroundImage: `url(${csvBg}), url(${chartBg})`,
+    backgroundRepeat: "no-repeat, no-repeat",
+    backgroundPosition: "left 50px top 70px, right 50px top 70px",
+    backgroundSize: "auto 60%, auto 60%",
+  };
+
+  // QA 手风琴状态
   const [openQa, setOpenQa] = useState<number | null>(null);
 
   /** 切换 QA 项的展开/折叠 */
@@ -31,7 +52,7 @@ export default function LandingPage() {
     setOpenQa((prev) => (prev === index ? null : index));
   }
 
-  /* ── 滚动渐显动画（Intersection Observer） ── */
+  // 滚动渐显动画（Intersection Observer）
   const sectionRefs = useRef<(HTMLElement | null)[]>([]);
 
   useEffect(() => {
@@ -40,7 +61,6 @@ export default function LandingPage() {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             entry.target.classList.add("visible");
-            // 元素进入视口后取消观察，保持可见状态
             observer.unobserve(entry.target);
           }
         });
@@ -56,7 +76,7 @@ export default function LandingPage() {
     };
   }, []);
 
-  /* ── 步骤数据 ── */
+  // 步骤数据
   const steps = [
     {
       num: "1",
@@ -75,7 +95,7 @@ export default function LandingPage() {
     },
   ];
 
-  /* ── QA 数据 ── */
+  // QA 数据
   const qaItems = [
     { q: t.landing.qaQ1, a: t.landing.qaA1 },
     { q: t.landing.qaQ2, a: t.landing.qaA2 },
@@ -87,38 +107,68 @@ export default function LandingPage() {
     <div className="min-h-screen" style={{ background: "var(--bg)" }}>
       <TitleBar />
 
-      <main className="max-w-6xl mx-auto px-6">
-        {/* ============================================================ */}
-        {/* Hero — 短版，非全屏居中                                         */}
-        {/* ============================================================ */}
-        <section className="pt-16 pb-10 text-center reveal-section" ref={(el) => { sectionRefs.current[0] = el; }}>
-          <h2
-            className="text-3xl font-bold tracking-tight mb-4 text-pretty"
-            style={{ color: "var(--text-primary)", letterSpacing: "-0.03em" }}
-            translate="no"
-          >
-            {t.app.title}
-          </h2>
-          <p
-            className="text-base leading-relaxed max-w-xl mx-auto text-pretty"
-            style={{ color: "var(--text-secondary)" }}
-          >
-            {t.app.subtitle}
-          </p>
-        </section>
+      {/* 服务端渲染的 <noscript> 内容：确保爬虫在不执行 JS 时也能抓取文字 */}
+      <LandingContent />
 
-        {/* ============================================================ */}
-        {/* 上传区                                                         */}
-        {/* ============================================================ */}
-        <section className="pb-12 reveal-section" ref={(el) => { sectionRefs.current[1] = el; }}>
-          <DropZone />
-          <ErrorDisplay />
-        </section>
+      <main className="max-w-6xl mx-auto px-6">
+        {/* Hero + 上传区整体容器（装饰图作为背景层） */}
+        <div className="relative overflow-hidden">
+          {/* 装饰背景层：CSV 主题图（左）+ 图表主题图（右） */}
+          <div
+            className="absolute inset-0 pointer-events-none select-none reveal-section"
+            style={bgDecorationStyle}
+            ref={(el) => {
+              sectionRefs.current[6] = el;
+            }}
+            aria-hidden="true"
+          />
+
+          {/* Hero - 短版，非全屏居中 */}
+          <section
+            className="relative z-10 pt-16 pb-10 text-center reveal-section"
+            ref={(el) => {
+              sectionRefs.current[0] = el;
+            }}
+          >
+            <h1
+              className="text-3xl font-bold tracking-tight mb-4 text-pretty"
+              style={{
+                color: "var(--text-primary)",
+                letterSpacing: "-0.03em",
+              }}
+              translate="no"
+            >
+              {t.app.title}
+            </h1>
+            <p
+              className="text-base leading-relaxed max-w-xl mx-auto text-pretty"
+              style={{ color: "var(--text-secondary)" }}
+            >
+              {t.app.subtitle}
+            </p>
+          </section>
+
+          {/* 上传区 */}
+          <section
+            className="relative z-10 pb-12 reveal-section"
+            ref={(el) => {
+              sectionRefs.current[1] = el;
+            }}
+          >
+            <DropZone />
+            <ErrorDisplay />
+          </section>
+        </div>
 
         {/* ============================================================ */}
         {/* 使用说明                                                       */}
         {/* ============================================================ */}
-        <section className="pb-12 reveal-section" ref={(el) => { sectionRefs.current[2] = el; }}>
+        <section
+          className="pb-12 reveal-section"
+          ref={(el) => {
+            sectionRefs.current[2] = el;
+          }}
+        >
           <h3
             className="text-[11px] font-semibold uppercase tracking-widest mb-8 text-center text-pretty"
             style={{ color: "var(--text-secondary)" }}
@@ -162,7 +212,12 @@ export default function LandingPage() {
         {/* ============================================================ */}
         {/* 常见问题（手风琴）                                                */}
         {/* ============================================================ */}
-        <section className="pb-12 reveal-section" ref={(el) => { sectionRefs.current[3] = el; }}>
+        <section
+          className="pb-12 reveal-section"
+          ref={(el) => {
+            sectionRefs.current[3] = el;
+          }}
+        >
           <h3
             className="text-[11px] font-semibold uppercase tracking-widest mb-8 text-center text-pretty"
             style={{ color: "var(--text-secondary)" }}
@@ -243,7 +298,12 @@ export default function LandingPage() {
         {/* ============================================================ */}
         {/* 关于我们                                                       */}
         {/* ============================================================ */}
-        <section className="pb-16 reveal-section" ref={(el) => { sectionRefs.current[4] = el; }}>
+        <section
+          className="pb-16 reveal-section"
+          ref={(el) => {
+            sectionRefs.current[4] = el;
+          }}
+        >
           <h3
             className="text-[11px] font-semibold uppercase tracking-widest mb-4 text-center text-pretty"
             style={{ color: "var(--text-secondary)" }}
@@ -259,7 +319,12 @@ export default function LandingPage() {
         </section>
       </main>
 
-      <FooterBar animate sectionRef={(el) => { sectionRefs.current[5] = el; }} />
+      <FooterBar
+        animate
+        sectionRef={(el) => {
+          sectionRefs.current[5] = el;
+        }}
+      />
     </div>
   );
 }
