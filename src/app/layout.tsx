@@ -28,7 +28,7 @@ const SITE_URL =
  * alternates.languages 指向同一 URL 以告知搜索引擎双语内容存在。
  */
 export function generateMetadata(): Metadata {
-  const title = "DeepSeek Usage Dashboard";
+  const title = "DeepSeek API Usage Analytics Dashboard by Gavin & Mindrose Team";
   const description =
     "Visualize your DeepSeek API usage — drop your monthly CSVs and get instant cost analytics, cache analysis, and per-key breakdowns. Free, open source, browser-side.";
 
@@ -47,14 +47,14 @@ export function generateMetadata(): Metadata {
       description,
       url: SITE_URL,
       type: "website",
-      siteName: "DeepSeek Usage Dashboard",
+      siteName: "DeepSeek API Usage Analytics Dashboard by Gavin & Mindrose Team",
       locale: "en_US",
       images: [
         {
           url: `${SITE_URL}/ds-usage-logo.png`,
           width: 512,
           height: 512,
-          alt: "DeepSeek Usage Dashboard logo",
+          alt: "DeepSeek API Usage Analytics Dashboard logo",
           type: "image/png",
         },
       ],

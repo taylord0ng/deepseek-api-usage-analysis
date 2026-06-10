@@ -196,12 +196,12 @@ export default function LandingPage() {
             sectionRefs.current[2] = el;
           }}
         >
-          <h3
+          <h2
             className="text-[11px] font-semibold uppercase tracking-widest mb-8 text-center text-pretty"
             style={{ color: "var(--text-secondary)" }}
           >
             {t.landing.howItWorksTitle}
-          </h3>
+          </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {steps.map((step) => (
               <div
@@ -246,12 +246,12 @@ export default function LandingPage() {
             sectionRefs.current[3] = el;
           }}
         >
-          <h3
+          <h2
             className="text-[11px] font-semibold uppercase tracking-widest mb-8 text-center text-pretty"
             style={{ color: "var(--text-secondary)" }}
           >
             {t.landing.qaTitle}
-          </h3>
+          </h2>
           <div className="space-y-1 max-w-2xl mx-auto">
             {qaItems.map((item, i) => {
               const isOpen = openQa === i;
@@ -333,22 +333,22 @@ export default function LandingPage() {
             sectionRefs.current[4] = el;
           }}
         >
-          <h3
+          <h2
             className="text-[11px] font-semibold uppercase tracking-widest mb-12 text-center text-pretty"
             style={{ color: "var(--text-secondary)" }}
           >
             {t.landing.aboutSectionTitle}
-          </h3>
+          </h2>
 
           <div className="max-w-2xl mx-auto space-y-6">
             {/* 1. 为什么开发这个工具 */}
             <div>
-              <h4
+              <h3
                 className="text-sm font-semibold mb-3 text-pretty"
                 style={{ color: "var(--text-primary)" }}
               >
                 {t.landing.aboutWhyTitle}
-              </h4>
+              </h3>
               <p
                 className="text-sm leading-relaxed text-pretty"
                 style={{ color: "var(--text-secondary)", whiteSpace: "pre-line" }}
@@ -362,12 +362,12 @@ export default function LandingPage() {
 
             {/* 2. 极致的隐私与技术架构 */}
             <div>
-              <h4
+              <h3
                 className="text-sm font-semibold mb-3 text-pretty"
                 style={{ color: "var(--text-primary)" }}
               >
                 {t.landing.aboutPrivacyTitle}
-              </h4>
+              </h3>
               <p
                 className="text-sm leading-relaxed text-pretty"
                 style={{ color: "var(--text-secondary)", whiteSpace: "pre-line" }}
@@ -381,12 +381,12 @@ export default function LandingPage() {
 
             {/* 3. 关于 MindRose */}
             <div>
-              <h4
+              <h3
                 className="text-sm font-semibold mb-3 text-pretty"
                 style={{ color: "var(--text-primary)" }}
               >
                 {t.landing.aboutMindRoseTitle}
-              </h4>
+              </h3>
               <p
                 className="text-sm leading-relaxed text-pretty"
                 style={{ color: "var(--text-secondary)", whiteSpace: "pre-line" }}
@@ -400,12 +400,12 @@ export default function LandingPage() {
 
             {/* 4. 商业合作 */}
             <div>
-              <h4
+              <h3
                 className="text-sm font-semibold mb-3 text-pretty"
                 style={{ color: "var(--text-primary)"}}
               >
                 {t.landing.aboutContactTitle}
-              </h4>
+              </h3>
               <p
                 className="text-sm leading-relaxed mb-3 text-pretty"
                 style={{ color: "var(--text-secondary)", whiteSpace: "pre-line" }}

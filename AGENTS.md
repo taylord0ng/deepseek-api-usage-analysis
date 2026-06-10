@@ -4,7 +4,7 @@
 This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` before writing any code. Heed deprecation notices.
 <!-- END:nextjs-agent-rules -->
 
-# Project: DeepSeek Usage Dashboard
+# Project: DeepSeek API Usage Analytics Dashboard by Gavin & Mindrose Team
 
 A browser-side dashboard for DeepSeek API usage analytics. Users drag their monthly DeepSeek platform CSV exports onto the page and get instant cost charts, per-key breakdowns, cache analysis, and usage trends. Everything runs client-side — no server, no upload, no database.
 
@@ -27,8 +27,8 @@ src/
 ├── components/
 │   ├── TitleBar.tsx          # Shared sticky top nav: logo + app name + GitHub icon + LanguageSwitcher + ThemeSwitcher
 │   ├── FooterBar.tsx         # Shared footer: thin divider + copyright + GitHub link + version (props: animate, sectionRef)
-│   ├── LandingPage.tsx       # Pre-upload landing: Hero with theme-aware background images + Upload + HowItWorks + accordion QA + About (scroll-reveal)
-│   ├── LandingContent.tsx    # Server-rendered <noscript> fallback: HowItWorks + QA + About for SEO crawlers
+│   ├── LandingPage.tsx       # Pre-upload landing: Hero with theme-aware bg images + Upload + HowItWorks + accordion QA + multi-section About (Why/Privacy/MindRose/Contact with email copy & social links, scroll-reveal)
+│   ├── LandingContent.tsx    # Server-rendered <noscript> fallback: HowItWorks + QA + expanded multi-section About for SEO crawlers
 │   ├── Dashboard.tsx         # Main layout: routes between LandingPage (no data) and Dashboard view (semantic hidden H1 for SEO)
 │   ├── DropZone.tsx          # Drag-and-drop CSV uploader (supports multi-file, "or click to upload")
 │   ├── KPICards.tsx          # Summary stat cards (card-less big-number layout)
@@ -293,7 +293,7 @@ A segmented control (pill buttons) below the tab bar lets users filter all views
 | `langSwitcher` | `label` | (deprecated — component now uses hardcoded `aria-label`) |
 | `theme` | `light`, `dark`, `switchToDark`, `switchToLight` | `ThemeSwitcher.tsx` |
 | `modelFilter` | `allModels` | `Dashboard.tsx` model filter pill |
-| `landing` | `howItWorksTitle`, `howItWorksStep1Title`, `howItWorksStep1Desc`, `howItWorksStep2Title`, `howItWorksStep2Desc`, `howItWorksStep3Title`, `howItWorksStep3Desc`, `qaTitle`, `qaQ1`–`qaQ4`, `qaA1`–`qaA4`, `aboutTitle`, `aboutText` | `LandingPage.tsx`, `LandingContent.tsx` (noscript), `schema.ts` (FAQPage JSON-LD) |
+| `landing` | `howItWorksTitle`, `howItWorksStep1Title`, `howItWorksStep1Desc`, `howItWorksStep2Title`, `howItWorksStep2Desc`, `howItWorksStep3Title`, `howItWorksStep3Desc`, `qaTitle`, `qaQ1`–`qaQ4`, `qaA1`–`qaA4`, `aboutSectionTitle`, `aboutWhyTitle`, `aboutWhyDesc`, `aboutPrivacyTitle`, `aboutPrivacyDesc`, `aboutMindRoseTitle`, `aboutMindRoseDesc`, `aboutContactTitle`, `aboutContactDesc`, `aboutContactService`, `aboutContactCTA`, `aboutGitHubLabel`, `aboutLinkedInLabel`, `aboutMindRoseLabel` | `LandingPage.tsx`, `LandingContent.tsx` (noscript), `schema.ts` (FAQPage JSON-LD) |
 
 ## Multi-month CSV support (concatFiles)
 
@@ -337,13 +337,17 @@ Rendered via `<LandingPage />` — a scrollable single-page layout with:
 1. **TitleBar** — sticky top bar with logo + app name + GitHub icon + LanguageSwitcher + ThemeSwitcher
 2. **Hero** — shorter section (`pt-16 pb-10`), centered title + subtitle, uses `translate="no"` on heading. Background features theme-aware decoration images (CSV sketch left, chart sketch right) positioned absolutely with `pointer-events-none`.
 3. **Upload** — `<DropZone />` + `<ErrorDisplay />`
-4. **LandingContent** — `<noscript>` fallback (server-rendered, invisible when JS is enabled) containing How It Works + FAQ + About text for SEO crawlers
+4. **LandingContent** — `<noscript>` fallback (server-rendered, invisible when JS is enabled) containing How It Works + FAQ + expanded multi-section About text for SEO crawlers
 5. **How It Works** — 3-step grid layout, each step has a numbered circle (`w-10 h-10 rounded-full`), hover micro-interactions via `group` + `group-hover`
-6. **QA** — Accordion pattern: click on question toggles answer panel. Uses `openQa` state (number | null). Panels animated via inline styles with `max-height`/`opacity` transition. Accessible: `aria-expanded`, `aria-controls`, keyboard support (Enter/Space). `focus-visible` outlines.
-7. **About** — project description
+6. **QA** — Accordion pattern: click on question toggles answer panel. Uses `openQa` state (number | null). Panels animated via inline styles with `max-height`/`opacity` transition. Accessible: `aria-expanded`, `aria-controls`, keyboard support (Enter/Space). `focus-visible` outlines. Centered with `max-w-2xl`.
+7. **About** — Multi-section layout (with `<h2>` section title + 4 subsections each headed by `<h3>`, separated by dashed `<hr>` dividers):
+   - **Why We Built This** — project origin story
+   - **Under the Hood: Privacy & Tech** — pure frontend architecture explanation
+   - **About MindRose** — team introduction
+   - **Let's Work Together** — business contact with email copy button (`navigator.clipboard.writeText`, copy SVG checkmark feedback, 2s toast) and social link pills (GitHub, LinkedIn, MindRose website with SVG icons)
 8. **FooterBar** — shared footer with `animate` prop for reveal-section scroll animation
 
-Each `<section>` uses a `reveal-section` CSS class and is watched by an Intersection Observer: when 15% of a section enters the viewport, the `.visible` class is added, triggering a fade-in + slide-up animation. Once visible, the observer unobserves the element (runs once). Respects `prefers-reduced-motion` via global CSS.
+Sections are separated by thin `<hr>` dividers (`var(--border)`). Each `<section>` uses a `reveal-section` CSS class and is watched by an Intersection Observer: when 15% of a section enters the viewport, the `.visible` class is added, triggering a fade-in + slide-up animation. Once visible, the observer unobserves the element (runs once). Respects `prefers-reduced-motion` via global CSS.
 
 ### Dashboard view (post-upload, `result` exists)
 Rendered inline in `Dashboard.tsx` with:
@@ -356,7 +360,7 @@ Rendered inline in `Dashboard.tsx` with:
 ### Shared components
 
 **TitleBar** (`src/components/TitleBar.tsx`):
-- Sticky top bar with `z-10`, thin bottom border (`var(--border)`)
+- Sticky top bar with `z-50`, thin bottom border (`var(--border)`)
 - Left: logo (`next/image`, 32×32, unoptimized for static export) + app title (`t.app.title`) in bold
 - Right: GitHub icon link (SVG, `w-8 h-8` circle hover background) + `<LanguageSwitcher />` + `<ThemeSwitcher />`
 - Used by both `LandingPage` and `Dashboard`
@@ -400,7 +404,8 @@ Apple-style underline tabs: `text-xs font-semibold uppercase tracking-wide`, 2px
 - **Adding a new CSS variable**: Define in both `:root, .light` AND `.dark` blocks in `src/app/globals.css`, then reference as `var(--your-token)` in components
 - **Changing the visual design**: Update CSS variables in `globals.css` — do NOT hardcode colors in individual components
 - **Adding a new view/tab**: Add to `TABS` array in `Dashboard.tsx`, add translation keys in both locales, create component with Hero + chart pattern using `filteredResult`
-- **Adding or modifying a landing page section**: Edit `LandingPage.tsx` — add a new `<section>` block with `reveal-section` class and `ref` callback for Intersection Observer. Use Apple-minimalist spacing (`pb-12` or `pb-16`), centered `text-[11px]` uppercase section title, and content using `var(--text-primary)` / `var(--text-secondary)` colors. Add translation keys under `landing.*` group (flat 2-level keys). If the content is important for SEO, also add it to `LandingContent.tsx` inside the `<noscript>` block.
+- **Adding or modifying a landing page section**: Edit `LandingPage.tsx` — add a new `<section>` block with `reveal-section` class and `ref` callback for Intersection Observer. Precede each section with a thin `<hr style={{ borderColor: "var(--border)" }} />` divider. Use Apple-minimalist spacing (`pt-10 pb-12` or `pb-16`), centered `<h2>` with `text-[11px]` uppercase section title styling, subsections headed by `<h3>`, and content using `var(--text-primary)` / `var(--text-secondary)` colors. Add translation keys under `landing.*` group (flat 2-level keys). If the content is important for SEO, also add it to `LandingContent.tsx` inside the `<noscript>` block.
+- **Adding email / clipboard interaction**: Use `navigator.clipboard.writeText()` with a `<textarea>` fallback for older browsers. Dynamically concatenate email addresses at runtime (`"hello" + "@" + "domain"`) to deter scraping. Provide immediate visual feedback (e.g., SVG checkmark + "Copied" tooltip, 2s timeout).
 - **Supporting a new CSV column**: Add to types in `types.ts`, update parser validation in `parser.ts`, add to pivot/join logic if needed
 - **Changing the font**: Replace WOFF2 files in `public/fonts/`, update `@font-face` declarations in `globals.css`, update `--font-sans` in the `@theme inline` block
 - **Adding a new animation**: Define `@keyframes` in `globals.css`, add to `@theme inline` block as `--animate-*`. Respect `prefers-reduced-motion` by including in the global media query.

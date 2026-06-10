@@ -1,4 +1,4 @@
-# DeepSeek Usage Dashboard
+# DeepSeek API Usage Analytics Dashboard by Gavin & Mindrose Team
 
 A browser-side analytics dashboard for DeepSeek API usage. Drag your monthly CSV exports onto the page and get instant cost charts, per-key breakdowns, cache analysis, and usage trends — all processed locally in your browser. No server, no upload, no signup.
 
@@ -24,7 +24,7 @@ A browser-side analytics dashboard for DeepSeek API usage. Drag your monthly CSV
 - **Apple-minimalist design** — Cold gray paper-texture background, generous whitespace, "no-card" full-width modules, thin horizontal dividers, 5rem hero numbers, diffuse shadows
 - **100% private** — All CSV parsing (Papa Parse) and cost computation runs client-side
 - **SEO optimized** — Server-rendered metadata (canonical URLs, OpenGraph, Twitter cards), JSON-LD structured data (SoftwareApplication + FAQPage, bilingual), robots.txt + sitemap.xml, `<noscript>` crawler fallback content
-- **Landing page** — Complete pre-upload landing with theme-aware background images, How It Works steps, accordion FAQ, About section, scroll-reveal animations
+- **Landing page** — Complete pre-upload landing with theme-aware background images, How It Works steps, accordion FAQ, expanded multi-section About (project origin, privacy & tech, team, contact with email copy & social links), scroll-reveal animations
 
 ## CSV Format
 
@@ -148,6 +148,24 @@ npm run build
 Set `NEXT_PUBLIC_SITE_URL` to your production domain for correct canonical URLs, sitemap, and OpenGraph metadata.
 
 ## Changelog
+
+### v0.3.0
+
+**Added:**
+
+- Rebuilt About section: expanded from a single paragraph into 4 themed subsections — Why We Built This, Under the Hood: Privacy & Tech, About MindRose, and Let's Work Together — each separated by dashed `<hr>` dividers.
+- Email copy button in the Contact area: one-click clipboard copy (`navigator.clipboard.writeText` with textarea fallback), anti-scraping dynamic address concatenation, and SVG checkmark copy feedback with 2s toast.
+- Social link pills: GitHub repository, Gavin's LinkedIn, and MindRose website — each with themed SVG icons, `rounded-subtle` borders, and hover background.
+
+**Improved:**
+
+- Landing page sections now separated by thin horizontal `<hr>` dividers for clearer visual hierarchy.
+- QA accordion section centered with `max-w-2xl` for better readability on wide viewports.
+- TitleBar `z-index` raised to `z-50` to guarantee it stays above all content.
+- Landing page sections use `pt-10` top padding (previously `pt-0`) for consistent spacing around dividers.
+- Added 14 new `landing.*` translation keys (en + zh) for all About sub-sections.
+- Rebranded site title to "DeepSeek API Usage Analytics Dashboard by Gavin & Mindrose Team" across metadata, JSON-LD schema, footer, and translations.
+- Fixed landing page heading hierarchy: section titles upgraded from `<h3>` to `<h2>`, sub-section titles from `<h4>` to `<h3>`.
 
 ### v0.2.3
 

@@ -19,7 +19,7 @@ const translations = {
       clear: "Clear",
     },
     footer: {
-      text: "DeepSeek Usage Dashboard · Data processed locally in your browser · ",
+      text: "DeepSeek API Usage Analytics Dashboard by Gavin & Mindrose Team · Data processed locally in your browser · ",
       version: "Version",
     },
     dropzone: {
@@ -83,7 +83,7 @@ const translations = {
       schemaDrift: "Schema drift",
     },
     meta: {
-      title: "DeepSeek Usage Dashboard",
+      title: "DeepSeek API Usage Analytics Dashboard by Gavin & Mindrose Team",
       description:
         "Visualize your DeepSeek API usage — drop your monthly CSVs and get instant cost analytics, cache analysis, and per-key breakdowns. Free, open source, browser-side.",
     },
@@ -157,7 +157,7 @@ const translations = {
       clear: "清除",
     },
     footer: {
-      text: "DeepSeek 用量仪表盘 · 数据仅在浏览器本地处理 · ",
+      text: "DeepSeek API 用量分析仪表盘 · 数据仅在浏览器本地处理 · ",
       version: "版本",
     },
     dropzone: {
@@ -219,7 +219,7 @@ const translations = {
       schemaDrift: "数据结构不一致",
     },
     meta: {
-      title: "DeepSeek 用量仪表盘",
+      title: "DeepSeek API 用量分析仪表盘",
       description:
         "可视化您的 DeepSeek API 使用情况 — 拖拽月度 CSV，即时获取费用分析、缓存分析和各 Key 用量明细。免费、开源、纯浏览器端。",
     },
