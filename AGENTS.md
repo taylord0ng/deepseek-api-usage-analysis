@@ -17,18 +17,21 @@ Strictly follows an Apple-minimalist design language: cold gray paper-texture ba
 ```
 src/
 ├── app/            # Next.js App Router (static export)
-│   ├── layout.tsx           # Root layout, generateMetadata() for SEO (canonical, OG, Twitter, hreflang, alternateLocale), 6 JSON-LD script tags (bilingual SoftwareApplication + FAQPage + BreadcrumbList), ThemeProvider + I18nProvider + DataProvider
+│   ├── layout.tsx           # Root layout, generateMetadata() for SEO (canonical, OG, Twitter, hreflang, alternateLocale), 6 JSON-LD script tags (bilingual SoftwareApplication + FAQPage + BreadcrumbList), Google Analytics (gtag.js via NEXT_PUBLIC_GA_ID), ThemeProvider + I18nProvider + DataProvider
 │   ├── page.tsx             # Entry → renders <Dashboard />
+│   ├── guideline/
+│   │   └── page.tsx          # /guideline route: generates independent SEO metadata (canonical, OG, Twitter), renders <GuidelinePage />
 │   ├── globals.css          # Tailwind v4 + @font-face Hubot Sans + CSS variables + reveal/accordion + base styles
 │   ├── favicon.ico          # App icon (branded)
 │   ├── AppI18nShell.tsx     # Client shell: I18nProvider + <html lang> sync
 │   ├── robots.ts            # Build-time robots.txt generation (Next.js 16 convention)
-│   └── sitemap.ts           # Build-time sitemap.xml generation (NEXT_PUBLIC_SITE_URL)
+│   └── sitemap.ts           # Build-time sitemap.xml generation (includes / and /guideline entries, NEXT_PUBLIC_SITE_URL)
 ├── components/
-│   ├── TitleBar.tsx          # Shared sticky top nav: logo + app name + GitHub icon + LanguageSwitcher + ThemeSwitcher
-│   ├── FooterBar.tsx         # Shared footer: thin divider + copyright + GitHub link + version (props: animate, sectionRef)
-│   ├── LandingPage.tsx       # Pre-upload landing: Hero with theme-aware bg images + Upload + HowItWorks + accordion QA + multi-section About (Why/Privacy/MindRose/Contact with email copy & social links, scroll-reveal)
-│   ├── LandingContent.tsx    # Server-rendered <noscript> fallback: HowItWorks + QA + expanded multi-section About for SEO crawlers
+│   ├── TitleBar.tsx          # Shared sticky top nav: logo + app name + GitHub icon + guideline book icon + LanguageSwitcher + ThemeSwitcher
+│   ├── FooterBar.tsx         # Shared footer: thin divider + copyright + guideline link + GitHub link + version (props: animate, sectionRef)
+│   ├── LandingPage.tsx       # Pre-upload landing: Hero with theme-aware bg images + Upload + HowItWorks (with "View Full Guide →" link) + accordion QA (7 items) + multi-section About (Why/Privacy/MindRose/Contact with email copy & social links, scroll-reveal)
+│   ├── LandingContent.tsx    # Server-rendered <noscript> fallback: HowItWorks + QA (7 items) + expanded multi-section About for SEO crawlers
+│   ├── GuidelinePage.tsx     # Full interactive user guide page: bilingual content blocks (h1–h6, p, blockquote, tables, ul/ol), screenshot embedding with locale-aware image switching, dynamic table-of-contents, scroll-reveal sections (1496 lines of structured guide content)
 │   ├── Dashboard.tsx         # Main layout: routes between LandingPage (no data) and Dashboard view (semantic hidden H1 for SEO)
 │   ├── DropZone.tsx          # Drag-and-drop CSV uploader (supports multi-file, "or click to upload")
 │   ├── KPICards.tsx          # Summary stat cards (card-less big-number layout)
@@ -55,15 +58,19 @@ src/
 public/
 ├── ds-usage-logo.ico        # Favicon / app icon
 ├── ds-usage-logo.png        # App icon (PNG, 512×512, used in OpenGraph/Twitter metadata)
-└── fonts/
+├── llms.txt                 # LLM-friendly site description (markdown): what the app does, how it works, privacy, links
+├── fonts/
 │   ├── HubotSans-Regular.woff2   # Body text (weight 400)
 │   ├── HubotSans-Medium.woff2    # Medium weight (500)
 │   └── HubotSans-Bold.woff2      # Headings weight (700)
-└── landing/
-    ├── notion_sketch_csv_light.png    # Hero decoration — CSV theme (light, left side)
-    ├── notion_sketch_csv_dark.png     # Hero decoration — CSV theme (dark, left side)
-    ├── notion_sketch_chart_light.png  # Hero decoration — chart theme (light, right side)
-    └── notion_sketch_chart_dark.png   # Hero decoration — chart theme (dark, right side)
+├── landing/
+│   ├── notion_sketch_csv_light.png    # Hero decoration — CSV theme (light, left side)
+│   ├── notion_sketch_csv_dark.png     # Hero decoration — CSV theme (dark, left side)
+│   ├── notion_sketch_chart_light.png  # Hero decoration — chart theme (light, right side)
+│   └── notion_sketch_chart_dark.png   # Hero decoration — chart theme (dark, right side)
+└── guideline/
+    ├── *-cn.png              # User guide screenshots — Chinese (12 annotated captures)
+    └── *-en.png              # User guide screenshots — English (12 annotated captures)
 ```
 
 ## Key technical details
@@ -78,7 +85,8 @@ public/
 - **Geist Mono** (from `next/font/google`) for code — variable weight
 - **CSS custom properties** for theming — all colors are `var(--bg)`, `var(--text-primary)`, etc.; NO hardcoded colors in components
 - **TypeScript 5** with strict mode, path alias `@/*` → `./src/*`
-- **SEO**: `generateMetadata()` in layout.tsx (canonical URL, OpenGraph, Twitter cards, hreflang alternates), JSON-LD structured data, robots.txt + sitemap.xml, `<noscript>` crawler fallback, semantic hidden H1
+- **SEO**: `generateMetadata()` in layout.tsx and guideline/page.tsx (canonical URL, OpenGraph, Twitter cards, hreflang alternates), JSON-LD structured data (7 FAQ Q&A pairs), robots.txt + sitemap.xml (includes /guideline), `<noscript>` crawler fallback, semantic hidden H1, `llms.txt` for LLM-friendly site description
+- **Analytics**: Google Analytics via `NEXT_PUBLIC_GA_ID` env var — gtag.js injected in `<head>` at build time, conditional (only when GA_ID is set)
 
 ## SEO architecture
 
@@ -101,7 +109,7 @@ The app implements a multi-layered SEO strategy suitable for a client-rendered s
 
 `src/lib/schema.ts` generates bilingual (en + zh) JSON-LD blocks injected as `<script type="application/ld+json">` in the root layout:
 - **`SoftwareApplication`** — name, description, version, OS, category, free offer
-- **`FAQPage`** — 4 Q&A pairs matching the landing page accordion content
+- **`FAQPage`** — 7 Q&A pairs matching the landing page accordion content (expanded from 4 in v0.3.2)
 - **`BreadcrumbList`** — single-item breadcrumb helping search engines understand the page's position in the site structure
 
 All three schemas exist in both languages (6 total script tags). They are server-rendered — no client JS needed for crawlers to see them.
@@ -116,9 +124,39 @@ All three schemas exist in both languages (6 total script tags). They are server
 - **Dashboard** (post-upload) includes a semantically hidden `<h1 className="sr-only">` — visible to screen readers and search engines, visually hidden
 - **Theme-aware background images** in the hero area: `public/landing/notion_sketch_*_light.png` and `*_dark.png` — swapped based on `useTheme()` for visual liveliness
 
-### Environment variable
+### Environment variables
 
-- `NEXT_PUBLIC_SITE_URL` — injected at build time into `layout.tsx` (metadata), `robots.ts` (sitemap URL), and `sitemap.ts` (entry URL). Defaults to `https://deepseek-usage.xyz`.
+- `NEXT_PUBLIC_SITE_URL` — injected at build time into `layout.tsx` (metadata), `guideline/page.tsx` (metadata), `robots.ts` (sitemap URL), and `sitemap.ts` (entry URLs). Defaults to `https://deepseek-usage.xyz`.
+- `NEXT_PUBLIC_GA_ID` — Google Analytics 4 measurement ID (e.g., `G-XXXXXXXXXX`). When unset, no GA script is injected. Set only in production deployment; leave unset for local development.
+
+## Google Analytics
+
+Google Analytics 4 (gtag.js) is integrated for production traffic monitoring. It is entirely opt-in and conditional:
+
+- Controlled by `NEXT_PUBLIC_GA_ID` env var — when unset, no GA script is injected (zero overhead)
+- Injected in `layout.tsx` `<head>` via `<Script async src="...googletagmanager.com/gtag/js?id=...">` + inline `gtag('config', ...)`
+- Uses `dangerouslySetInnerHTML` for the inline init script — appropriate for build-time-injected static content
+- Does NOT track CSV data or usage details — standard page-view analytics only
+- No impact on the privacy-first promise: CSV processing remains 100% client-side, no data leaves the browser
+
+## User guide page (`/guideline`)
+
+A comprehensive, bilingual user manual accessible at `/guideline`. Rendered via `<GuidelinePage />` (`src/components/GuidelinePage.tsx`):
+
+- **Route**: `src/app/guideline/page.tsx` — generates independent SEO metadata (canonical URL, OpenGraph, Twitter card, robots directives)
+- **Content structure**: Markdown-like content blocks (`h1`–`h6`, `p`, `blockquote`, `ul`/`ol`, `table`, `hr`) rendered as React components; 16+ bilingual screenshot captures in `public/guideline/`
+- **Screenshot system**: `SCREENSHOT_MAP` maps content block IDs to screenshot filenames; locale-aware (`-cn.png` / `-en.png`) switching via `useTranslation()`; uses `next/image` with `unoptimized` for static export
+- **Table of Contents**: Dynamic sidebar ToC generated from `h2` headings with active-section scroll tracking (Intersection Observer)
+- **Navigation**: Back-to-home link, scroll-to-section anchors, book icon in TitleBar, text link in FooterBar, "View Full Guide →" link below How It Works on LandingPage
+- **SEO**: Included in `sitemap.xml` (priority 0.8, monthly change frequency); crawled by search engines as a standalone content page
+
+## llms.txt
+
+`public/llms.txt` provides an LLM-friendly site description in markdown format, following the [llms.txt convention](https://llms.txt/):
+
+- Describes what the app does, who it's for, how it works, data format, privacy guarantees, languages, themes, and team links
+- Served as a static file at `https://deepseek-usage.xyz/llms.txt`
+- Helps AI tools and crawlers understand the site's purpose and structure without executing JavaScript
 
 ## Theme system
 
@@ -294,7 +332,8 @@ A segmented control (pill buttons) below the tab bar lets users filter all views
 | `langSwitcher` | `label` | (deprecated — component now uses hardcoded `aria-label`) |
 | `theme` | `light`, `dark`, `switchToDark`, `switchToLight` | `ThemeSwitcher.tsx` |
 | `modelFilter` | `allModels` | `Dashboard.tsx` model filter pill |
-| `landing` | `howItWorksTitle`, `howItWorksStep1Title`, `howItWorksStep1Desc`, `howItWorksStep2Title`, `howItWorksStep2Desc`, `howItWorksStep3Title`, `howItWorksStep3Desc`, `qaTitle`, `qaQ1`–`qaQ4`, `qaA1`–`qaA4`, `aboutSectionTitle`, `aboutWhyTitle`, `aboutWhyDesc`, `aboutPrivacyTitle`, `aboutPrivacyDesc`, `aboutMindRoseTitle`, `aboutMindRoseDesc`, `aboutContactTitle`, `aboutContactDesc`, `aboutContactService`, `aboutContactCTA`, `aboutGitHubLabel`, `aboutLinkedInLabel`, `aboutMindRoseLabel` | `LandingPage.tsx`, `LandingContent.tsx` (noscript), `schema.ts` (FAQPage JSON-LD) |
+| `guideline` | `pageTitle`, `backToHome`, `viewGuide`, `toc`, `footerNote` | `GuidelinePage.tsx`, `TitleBar.tsx`, `FooterBar.tsx`, `LandingPage.tsx` |
+| `landing` | `howItWorksTitle`, `howItWorksStep1Title`, `howItWorksStep1Desc`, `howItWorksStep2Title`, `howItWorksStep2Desc`, `howItWorksStep3Title`, `howItWorksStep3Desc`, `qaTitle`, `qaQ1`–`qaQ7`, `qaA1`–`qaA7`, `aboutSectionTitle`, `aboutWhyTitle`, `aboutWhyDesc`, `aboutPrivacyTitle`, `aboutPrivacyDesc`, `aboutMindRoseTitle`, `aboutMindRoseDesc`, `aboutContactTitle`, `aboutContactDesc`, `aboutContactService`, `aboutContactCTA`, `aboutGitHubLabel`, `aboutLinkedInLabel`, `aboutMindRoseLabel` | `LandingPage.tsx`, `LandingContent.tsx` (noscript), `schema.ts` (FAQPage JSON-LD) |
 
 ## Multi-month CSV support (concatFiles)
 
@@ -339,8 +378,8 @@ Rendered via `<LandingPage />` — a scrollable single-page layout with:
 2. **Hero** — shorter section (`pt-16 pb-10`), centered title + subtitle, uses `translate="no"` on heading. Background features theme-aware decoration images (CSV sketch left, chart sketch right) positioned absolutely with `pointer-events-none`.
 3. **Upload** — `<DropZone />` + `<ErrorDisplay />`
 4. **LandingContent** — `<noscript>` fallback (server-rendered, invisible when JS is enabled) containing How It Works + FAQ + expanded multi-section About text for SEO crawlers
-5. **How It Works** — 3-step grid layout, each step has a numbered circle (`w-10 h-10 rounded-full`), hover micro-interactions via `group` + `group-hover`. Section has `id="how-it-works"` for direct anchor linking. Uses `content-visibility: auto` for deferred rendering.
-6. **QA** — Accordion pattern: click on question toggles answer panel. Uses `openQa` state (number | null). Panels animated via inline styles with `max-height`/`opacity` transition. Accessible: `aria-expanded`, `aria-controls`, keyboard support (Enter/Space). `focus-visible` outlines. Centered with `max-w-2xl`. Section has `id="faq"` for direct anchor linking. Uses `content-visibility: auto` for deferred rendering.
+5. **How It Works** — 3-step grid layout, each step has a numbered circle (`w-10 h-10 rounded-full`), hover micro-interactions via `group` + `group-hover`. Section has `id="how-it-works"` for direct anchor linking. Below steps: "View Full Guide →" link (`t.guideline.viewGuide`) pointing to `/guideline`. Uses `content-visibility: auto` for deferred rendering.
+6. **QA** — Accordion pattern: click on question toggles answer panel. Now has 7 Q&A items (expanded from 4 in v0.3.2: Q5 covers cost showing $0, Q6 covers incomplete upload, Q7 points to the user guide). Uses `openQa` state (number | null). Panels animated via inline styles with `max-height`/`opacity` transition. Accessible: `aria-expanded`, `aria-controls`, keyboard support (Enter/Space). `focus-visible` outlines. Centered with `max-w-2xl`. Section has `id="faq"` for direct anchor linking. Uses `content-visibility: auto` for deferred rendering.
 7. **About** — Multi-section layout (with `<h2>` section title + 4 subsections each headed by `<h3>`, separated by dashed `<hr>` dividers):
    - **Why We Built This** — project origin story
    - **Under the Hood: Privacy & Tech** — pure frontend architecture explanation
@@ -368,8 +407,8 @@ Rendered inline in `Dashboard.tsx` with:
 - Used by both `LandingPage` and `Dashboard`
 
 **FooterBar** (`src/components/FooterBar.tsx`):
-- Thin HR divider + centered muted text + GitHub link + version number
-- Text from `t.footer.text`, version from `t.footer.version`
+- Thin HR divider + centered muted text + guideline link (`t.guideline.pageTitle`) + GitHub link + version number
+- Text from `t.footer.text`, version from `t.footer.version`, guideline label from `t.guideline.pageTitle`
 - Accepts optional `animate` prop: when true, wraps content in a `reveal-section` div and exposes `sectionRef` callback for IntersectionObserver registration (Landing page use)
 - Without `animate`, renders content directly (Dashboard use)
 - Mobile-friendly with `flex-wrap` for small screens
@@ -414,3 +453,5 @@ Apple-style underline tabs: `text-xs font-semibold uppercase tracking-wide`, 2px
 - **Updating SEO metadata**: Edit `generateMetadata()` in `layout.tsx` for page-level meta tags (title, description, OG, Twitter, alternateLocale). Edit `src/lib/schema.ts` for JSON-LD structured data (SoftwareApplication, FAQPage, BreadcrumbList). For new landing page sections visible to crawlers without JS, add content to `LandingContent.tsx`.
 - **Changing the site URL**: Set `NEXT_PUBLIC_SITE_URL` env var (in `.env` or deployment platform). It propagates to metadata canonical URL, `robots.ts` sitemap pointer, and `sitemap.ts` entry URL.
 - **Adding a new theme-aware landing image**: Add light and dark variants to `public/landing/`, then update the `isDark` branching in `LandingPage.tsx` to reference the correct paths.
+- **Adding a new page with independent SEO metadata**: Create a route directory under `src/app/` (e.g., `guideline/`), add `page.tsx` with its own `generateMetadata()` (canonical URL, OpenGraph, Twitter, robots), and add the URL to `src/app/sitemap.ts`. For content-heavy pages, consider adding JSON-LD structured data in the page component.
+- **Adding Google Analytics to a page**: GA is injected globally in `layout.tsx` — no per-page setup needed. To track page-views on client-side navigations, call `gtag('config', GA_ID, { page_path: ... })` in a `useEffect`. Set `NEXT_PUBLIC_GA_ID` in deployment environment; leave unset locally to disable tracking.

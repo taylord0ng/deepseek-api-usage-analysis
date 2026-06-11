@@ -29,8 +29,10 @@
 - **多月支持** — 一次拖入多个月份文件；根据文件名模式自动配对并拼接
 - **Apple 极简设计** — 冷灰纸质感底、大量留白、「无卡片」通栏模块布局、细横线分割、5rem Hero 大数字、弥散阴影
 - **100% 隐私** — 所有 CSV 解析（Papa Parse）和费用计算均在浏览器客户端完成
-- **SEO 优化** — 服务端渲染元数据（规范 URL、OpenGraph 含 alternateLocale、Twitter 卡片）、JSON-LD 结构化数据（SoftwareApplication + FAQPage + BreadcrumbList，双语）、robots.txt + sitemap.xml、`<noscript>` 爬虫回退内容、支持锚点链接的落地页板块
-- **落地页** — 完整的上传前落地页，包含主题感知背景图片、使用说明步骤、手风琴常见问题、多板块关于页面（项目起源、隐私与技术、团队介绍、商业合作含邮箱复制与社交链接）、滚动渐显动画、支持锚点链接的板块与延迟渲染性能优化
+- **SEO 优化** — 服务端渲染元数据（规范 URL、OpenGraph 含 alternateLocale、Twitter 卡片）、JSON-LD 结构化数据（SoftwareApplication + FAQPage + BreadcrumbList，双语）、robots.txt + sitemap.xml、`<noscript>` 爬虫回退内容、支持锚点链接的落地页板块、`llms.txt` 面向 LLM 的站点描述
+- **落地页** — 完整的上传前落地页，包含主题感知背景图片、使用说明步骤、手风琴常见问题（7 项）、多板块关于页面（项目起源、隐私与技术、团队介绍、商业合作含邮箱复制与社交链接）、滚动渐显动画、支持锚点链接的板块与延迟渲染性能优化
+- **用户操作手册** — 位于 `/guideline` 的完整双语使用指南，包含标注截图、交互式目录导航、分步仪表盘操作说明、CSV 导出指引、图表解读和故障排查章节
+- **数据分析** — 可选的 Google Analytics 4 集成，通过 `NEXT_PUBLIC_GA_ID` 环境变量控制；未设置时零开销，仅追踪标准页面浏览 — 绝不追踪任何 CSV 数据
 
 ## CSV 格式
 
@@ -83,17 +85,20 @@ npm run lint       # ESLint
 ```
 src/
 ├── app/                    # Next.js App Router
-│   ├── layout.tsx          # 根布局、generateMetadata() SEO、JSON-LD 脚本、Provider
+│   ├── layout.tsx          # 根布局、generateMetadata() SEO、JSON-LD 脚本、Google Analytics、Provider
 │   ├── page.tsx            # 入口 → <Dashboard />
+│   ├── guideline/
+│   │   └── page.tsx        # /guideline 路由，包含独立 SEO 元数据
 │   ├── globals.css         # Tailwind v4 + Hubot Sans @font-face + CSS 变量 + 渐显/手风琴 + 基础样式
 │   ├── AppI18nShell.tsx    # i18n 外壳 + <html lang> 同步
 │   ├── robots.ts           # 构建时 robots.txt 生成
-│   └── sitemap.ts          # 构建时 sitemap.xml 生成
+│   └── sitemap.ts          # 构建时 sitemap.xml 生成（含 / + /guideline 条目）
 ├── components/
-│   ├── TitleBar.tsx         # 共享顶部导航栏（Logo + 应用名 + GitHub + 语言 + 主题）
-│   ├── FooterBar.tsx        # 共享页脚（版权 + GitHub 链接 + 版本号，可选渐显动画）
-│   ├── LandingPage.tsx      # 落地页（Hero 含主题背景图 + 上传 + 使用说明 + 手风琴FAQ + 关于，滚动渐显）
+│   ├── TitleBar.tsx         # 共享顶部导航栏（Logo + 应用名 + GitHub + 操作手册图标 + 语言 + 主题）
+│   ├── FooterBar.tsx        # 共享页脚（版权 + 操作手册链接 + GitHub 链接 + 版本号，可选渐显动画）
+│   ├── LandingPage.tsx      # 落地页（Hero 含主题背景图 + 上传 + 使用说明含「查看完整指南」链接 + 手风琴FAQ + 关于，滚动渐显）
 │   ├── LandingContent.tsx   # 服务端渲染 <noscript> 回退内容，供搜索引擎爬虫抓取
+│   ├── GuidelinePage.tsx    # 完整交互式用户操作手册（双语、标注截图、目录导航、滚动渐显）
 │   ├── Dashboard.tsx        # 路由：落地页 / 仪表盘视图切换（语义化隐藏 H1）
 │   ├── DropZone.tsx         # 拖拽或点击上传区（多文件）
 │   ├── KPICards.tsx         # 摘要指标卡片
@@ -107,7 +112,7 @@ src/
 ├── i18n/
 │   ├── index.ts            # 统一导出
 │   ├── I18nProvider.tsx    # React 上下文 + useTranslation Hook
-│   └── translations.ts     # 全部 UI 文案（en + zh，含 warning 分组）
+│   └── translations.ts     # 全部 UI 文案（en + zh，含 guideline 和 warning 分组）
 └── lib/
     ├── types.ts            # TypeScript 接口与类型定义
     ├── parser.ts           # CSV 解析管线
@@ -138,9 +143,10 @@ src/
 
 - **generateMetadata()** — 动态服务端渲染元数据：规范 URL、OpenGraph（标题、描述、图片）、Twitter 卡片、hreflang 语言标注（en/zh）、robots 指令
 - **JSON-LD 结构化数据** — `SoftwareApplication` + `FAQPage` + `BreadcrumbList` 双语 Schema（英文和中文，共 6 个 script 标签），构建时通过 `layout.tsx` 中的 `<script type="application/ld+json">` 注入
-- **robots.txt + sitemap.xml** — 构建时通过 Next.js 16 `MetadataRoute` 约定生成；站点域名从 `NEXT_PUBLIC_SITE_URL` 环境变量读取
+- **robots.txt + sitemap.xml** — 构建时通过 Next.js 16 `MetadataRoute` 约定生成；sitemap 包含 `/` 和 `/guideline` 两个条目；站点域名从 `NEXT_PUBLIC_SITE_URL` 环境变量读取
 - **`<noscript>` 回退** — `LandingContent.tsx` 输出关键落地页内容（使用说明、常见问题、关于），供不执行 JavaScript 的爬虫抓取
-- **语义化 HTML** — 落地页包含可见的 `<h1>`，仪表盘视图包含 `<h1 className="sr-only">`，配合正确的 section 结构
+- **`llms.txt`** — 面向 LLM 的站点描述，位于 `/llms.txt`，总结应用功能、特性与结构，供 AI 工具使用
+- **语义化 HTML** — 落地页和操作手册页包含可见的 `<h1>`，仪表盘视图包含 `<h1 className="sr-only">`，配合正确的 section 结构
 
 ## 部署
 
@@ -151,7 +157,7 @@ npm run build
 # out/ → Vercel, Netlify, GitHub Pages, Cloudflare Pages 等
 ```
 
-设置 `NEXT_PUBLIC_SITE_URL` 环境变量为你的生产环境域名，以确保正确的规范 URL、站点地图和 OpenGraph 元数据。
+设置 `NEXT_PUBLIC_SITE_URL` 环境变量为你的生产环境域名，以确保正确的规范 URL、站点地图和 OpenGraph 元数据。可选择性设置 `NEXT_PUBLIC_GA_ID` 为 Google Analytics 4 测量 ID 以启用页面浏览追踪。
 
 ## 更新日志
 
