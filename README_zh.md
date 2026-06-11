@@ -149,6 +149,20 @@ npm run build
 
 ## 更新日志
 
+### v0.3.1
+
+**新增：**
+
+- JSON-LD BreadcrumbList 面包屑 Schema（中英文双语），帮助搜索引擎理解页面在站点中的位置。
+
+**改进：**
+
+- SEO：扩展中文 `meta.description`，融入隐私说明和团队信息（约 100 字符，原 37 字符）。
+- SEO：OpenGraph 元数据新增 `alternateLocale: ["zh_CN"]`，与 hreflang 语言标注相呼应。
+- SEO：为落地页板块添加 `id` 属性（`#how-it-works`、`#faq`、`#about`），支持页面内锚点链接。
+- JSON-LD：`SoftwareApplication` Schema 新增 `version` 字段（`0.3.1`）。
+- 性能：为折叠区域下方的落地页板块（使用说明、常见问题、关于）添加 `content-visibility: auto`，减少初始渲染开销。
+
 ### v0.3.0
 
 **新增：**

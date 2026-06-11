@@ -4,7 +4,7 @@ import "./globals.css";
 import { DataProvider } from "@/lib/DataContext";
 import { ThemeProvider } from "@/lib/ThemeContext";
 import { AppI18nShell } from "./AppI18nShell";
-import { buildSoftwareAppJsonLd, buildFaqJsonLd } from "@/lib/schema";
+import { buildSoftwareAppJsonLd, buildFaqJsonLd, buildBreadcrumbJsonLd } from "@/lib/schema";
 
 /** Hubot Sans 为本地 WOFF2 字体，通过 globals.css 中的 @font-face 加载 */
 
@@ -49,6 +49,7 @@ export function generateMetadata(): Metadata {
       type: "website",
       siteName: "DeepSeek API Usage Analytics Dashboard by Gavin & Mindrose Team",
       locale: "en_US",
+      alternateLocale: ["zh_CN"],
       images: [
         {
           url: `${SITE_URL}/ds-usage-logo.png`,
@@ -111,6 +112,18 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify(buildFaqJsonLd("zh")),
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(buildBreadcrumbJsonLd("en")),
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(buildBreadcrumbJsonLd("zh")),
           }}
         />
         <ThemeProvider>

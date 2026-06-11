@@ -10,20 +10,29 @@ import type { Locale } from "@/i18n/translations";
 /*  多语言翻译映射                                                       */
 /* ------------------------------------------------------------------ */
 
+/** 应用版本号，与 package.json 保持同步 */
+const APP_VERSION = "0.3.1";
+
+/** 站点公开 URL */
+const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL || "https://ds-usage.vercel.app";
+
 /** SoftwareApplication Schema 翻译 */
 const softwareAppSchema: Record<
   Locale,
-  { name: string; description: string }
+  { name: string; description: string; version: string }
 > = {
   en: {
     name: "DeepSeek API Usage Analytics Dashboard by Gavin & Mindrose Team",
     description:
       "Visualize your DeepSeek API usage — drop your monthly CSVs and get instant cost analytics, cache analysis, and per-key breakdowns. Free, open-source, browser-side.",
+    version: APP_VERSION,
   },
   zh: {
     name: "DeepSeek API 用量分析仪表盘 by Gavin & Mindrose Team",
     description:
       "可视化您的 DeepSeek API 使用情况 — 拖拽月度 CSV，即时获取费用分析、缓存分析和各 Key 用量明细。免费、开源、纯浏览器端。",
+    version: APP_VERSION,
   },
 };
 
@@ -82,6 +91,7 @@ export function buildSoftwareAppJsonLd(locale: Locale): Record<string, unknown> 
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
     name: t.name,
+    version: t.version,
     operatingSystem: "Any (web browser)",
     applicationCategory: "DeveloperApplication",
     description: t.description,
@@ -107,5 +117,37 @@ export function buildFaqJsonLd(locale: Locale): Record<string, unknown> {
         text: item.a,
       },
     })),
+  };
+}
+
+/**
+ * BreadcrumbList JSON-LD Schema 翻译
+ *
+ * 面包屑导航的多语言名称映射。
+ */
+const breadcrumbSchema: Record<Locale, { name: string }> = {
+  en: { name: "DeepSeek API Usage Analytics Dashboard" },
+  zh: { name: "DeepSeek API 用量分析仪表盘" },
+};
+
+/**
+ * 根据 locale 生成 BreadcrumbList JSON-LD
+ *
+ * 虽然目前是单页应用，但 BreadcrumbList 仍有助于搜索引擎理解页面
+ * 在站点中的位置。对于单页应用，最少需要一个根级别的 ListItem。
+ */
+export function buildBreadcrumbJsonLd(locale: Locale): Record<string, unknown> {
+  const t = breadcrumbSchema[locale];
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: t.name,
+        item: SITE_URL,
+      },
+    ],
   };
 }

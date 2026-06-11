@@ -191,7 +191,9 @@ export default function LandingPage() {
         {/* ============================================================ */}
         <hr className="reveal-section" style={{ borderColor: "var(--border)" }} />
         <section
+          id="how-it-works"
           className="pt-10 pb-12 reveal-section"
+          style={{ contentVisibility: "auto" }}
           ref={(el) => {
             sectionRefs.current[2] = el;
           }}
@@ -241,7 +243,9 @@ export default function LandingPage() {
         {/* ============================================================ */}
         <hr className="reveal-section" style={{ borderColor: "var(--border)" }} />
         <section
+          id="faq"
           className="pt-10 pb-12 reveal-section"
+          style={{ contentVisibility: "auto" }}
           ref={(el) => {
             sectionRefs.current[3] = el;
           }}
@@ -328,7 +332,9 @@ export default function LandingPage() {
         {/* ============================================================ */}
         <hr className="reveal-section" style={{ borderColor: "var(--border)" }} />
         <section
+          id="about"
           className="pt-10 pb-16 reveal-section"
+          style={{ contentVisibility: "auto" }}
           ref={(el) => {
             sectionRefs.current[4] = el;
           }}

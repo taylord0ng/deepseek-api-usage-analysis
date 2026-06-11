@@ -221,7 +221,7 @@ const translations = {
     meta: {
       title: "DeepSeek API 用量分析仪表盘",
       description:
-        "可视化您的 DeepSeek API 使用情况 — 拖拽月度 CSV，即时获取费用分析、缓存分析和各 Key 用量明细。免费、开源、纯浏览器端。",
+        "可视化您的 DeepSeek API 使用情况 — 拖拽月度 CSV，即时获取费用分析、缓存分析和各 Key 用量明细。数据 100% 本地处理，不上传任何服务器。免费、开源，由 Gavin Chen 和 MindRose 团队维护。",
     },
     langSwitcher: {
       label: "语言",

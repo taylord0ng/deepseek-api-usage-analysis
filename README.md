@@ -149,6 +149,20 @@ Set `NEXT_PUBLIC_SITE_URL` to your production domain for correct canonical URLs,
 
 ## Changelog
 
+### v0.3.1
+
+**Added:**
+
+- JSON-LD BreadcrumbList schema (bilingual en/zh) for better search engine understanding of site structure.
+
+**Improved:**
+
+- SEO: extended Chinese `meta.description` with privacy and team info (~100 characters, up from ~37).
+- SEO: added `alternateLocale: ["zh_CN"]` to OpenGraph metadata, complementing existing hreflang alternates.
+- SEO: added `id` attributes to landing page sections (`#how-it-works`, `#faq`, `#about`) for direct anchor linking.
+- JSON-LD: added `version` field to `SoftwareApplication` schema.
+- Performance: added `content-visibility: auto` to below-the-fold landing page sections (How It Works, FAQ, About) to reduce initial render cost.
+
 ### v0.3.0
 
 **Added:**
