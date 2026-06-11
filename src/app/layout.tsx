@@ -17,6 +17,9 @@ const geistMono = Geist_Mono({
 const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL || "https://deepseek-usage.xyz";
 
+/** Google Analytics 测量 ID（构建时从 .env 注入） */
+const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
+
 /**
  * 动态生成元数据（SEO）
  *
@@ -88,6 +91,27 @@ export default function RootLayout({
       className={`${geistMono.variable} h-full antialiased`}
       suppressHydrationWarning
     >
+      <head>
+        {/* Google Analytics (gtag.js) */}
+        {GA_ID && (
+          <>
+            <script
+              async
+              src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
+            />
+            <script
+              dangerouslySetInnerHTML={{
+                __html: `
+                  window.dataLayer = window.dataLayer || [];
+                  function gtag(){dataLayer.push(arguments);}
+                  gtag('js', new Date());
+                  gtag('config', '${GA_ID}');
+                `,
+              }}
+            />
+          </>
+        )}
+      </head>
       <body className="min-h-full flex flex-col">
         {/* JSON-LD 结构化数据：服务端输出，不依赖客户端 JS。同时提供 en / zh 双版本 */}
         <script
