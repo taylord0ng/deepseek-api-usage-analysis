@@ -1,9 +1,10 @@
 "use client";
 
+import Link from "next/link";
 import { useTranslation } from "@/i18n";
 
 /** 应用版本号，与 package.json 保持同步 */
-const APP_VERSION = "0.3.1";
+const APP_VERSION = "0.3.2";
 
 /** GitHub 仓库地址 */
 const GITHUB_URL = "https://github.com/GavinCnod/deepseek-api-usage-analysis";
@@ -39,6 +40,14 @@ export default function FooterBar({ animate = false, sectionRef }: FooterBarProp
       {/* 使用 flex-wrap 确保移动端文字换行时保持居中 */}
       <div className="flex flex-wrap items-center justify-center gap-x-1.5 text-xs">
         <span>{t.footer.text}</span>
+        <Link
+          href="/guideline"
+          className="transition-colors duration-200 hover:underline underline-offset-2"
+          style={{ color: "var(--text-secondary)" }}
+        >
+          {t.guideline.pageTitle}
+        </Link>
+        <span aria-hidden="true">·</span>
         <a
           href={GITHUB_URL}
           target="_blank"

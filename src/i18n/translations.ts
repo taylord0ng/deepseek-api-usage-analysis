@@ -99,6 +99,14 @@ const translations = {
     modelFilter: {
       allModels: "All Models",
     },
+    guideline: {
+      pageTitle: "User Guide",
+      backToHome: "Back to Home",
+      viewGuide: "View Full Guide →",
+      toc: "Table of Contents",
+      footerNote:
+        "This document is updated with app releases. For questions or suggestions, please reach out via {githubLink}.",
+    },
     landing: {
       howItWorksTitle: "How It Works",
       howItWorksStep1Title: "1. Export CSV",
@@ -119,6 +127,12 @@ const translations = {
       qaA3: "Yes. Drag all your monthly CSV files at once — they will be automatically paired by filename and concatenated.",
       qaQ4: "What models are supported?",
       qaA4: "Any model listed in your DeepSeek exports. The dashboard auto-detects all models and provides a filter to view them individually or combined.",
+      qaQ5: "Why does my cost show as $0?",
+      qaA5: "You need to upload both the amount CSV and the cost CSV for the same month. If either file is missing, cost data cannot be calculated.",
+      qaQ6: "What does \"Incomplete Upload\" mean?",
+      qaA6: "It means a month has only the amount file or only the cost file — not both. Add the missing file and re-upload to resolve this.",
+      qaQ7: "Where can I find more troubleshooting help?",
+      qaA7: "Check the Troubleshooting section in our full User Guide. It covers common issues like CSV format errors, cache configuration, file naming conventions, and more.",
       aboutSectionTitle: "About",
       aboutWhyTitle: "Why We Built This",
       aboutWhyDesc:
@@ -235,6 +249,14 @@ const translations = {
     modelFilter: {
       allModels: "全部模型",
     },
+    guideline: {
+      pageTitle: "用户操作手册",
+      backToHome: "返回首页",
+      viewGuide: "查看完整操作指南 →",
+      toc: "目录",
+      footerNote:
+        "文档随应用版本迭代更新。如有疑问或建议，欢迎通过 {githubLink} 反馈。",
+    },
     landing: {
       howItWorksTitle: "使用方式",
       howItWorksStep1Title: "1. 导出 CSV",
@@ -255,6 +277,12 @@ const translations = {
       qaA3: "可以。一次性拖入所有月份的 CSV 文件，它们会根据文件名自动配对并拼接。",
       qaQ4: "支持哪些模型？",
       qaA4: "DeepSeek 导出中的所有模型均支持。仪表盘会自动检测所有模型，并提供筛选器以便单独或合并查看。",
+      qaQ5: "为什么费用显示为 0？",
+      qaA5: "需要同时上传同一个月的 amount CSV 和 cost CSV 两个文件。如果缺少其中任何一个，费用数据将无法计算。",
+      qaQ6: "显示\u201C上传不完整\u201D是什么意思？",
+      qaA6: "表示某个月份只有 amount 文件或只有 cost 文件，缺少另一个。补充缺失的文件并重新上传即可解决。",
+      qaQ7: "哪里可以找到更多故障排查帮助？",
+      qaA7: "请查看完整操作指南中的\u201C常见问题排查\u201D章节，涵盖了 CSV 格式错误、缓存配置、文件命名规范等常见问题。",
       aboutSectionTitle: "关于我们",
       aboutWhyTitle: "为什么开发这个工具？",
       aboutWhyDesc:

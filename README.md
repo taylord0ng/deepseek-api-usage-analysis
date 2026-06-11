@@ -1,5 +1,9 @@
 # DeepSeek API Usage Analytics Dashboard by Gavin & Mindrose Team
 
+<p align="center">
+  <img src="public/ds-usage-logo.png" alt="Logo" width="128" />
+</p>
+
 A browser-side analytics dashboard for DeepSeek API usage. Drag your monthly CSV exports onto the page and get instant cost charts, per-key breakdowns, cache analysis, and usage trends — all processed locally in your browser. No server, no upload, no signup.
 
 > [中文版](README_zh.md)
@@ -10,6 +14,8 @@ A browser-side analytics dashboard for DeepSeek API usage. Drag your monthly CSV
 2. You get two files per month: `amount-{year}-{month}.csv` and `cost-{year}-{month}.csv`
 3. Drag all files onto the dashboard (one month or multiple — they auto-pair)
 4. Charts render instantly — nothing leaves your browser
+
+![Dashboard Overview](public/guideline/01-Ds-Api-Usage-Dashboard-Overview-en.png)
 
 ## Features
 
@@ -148,6 +154,22 @@ npm run build
 Set `NEXT_PUBLIC_SITE_URL` to your production domain for correct canonical URLs, sitemap, and OpenGraph metadata.
 
 ## Changelog
+
+### v0.3.2
+
+**Added:**
+
+- User Guide page (`/guideline`) — comprehensive usage documentation covering dashboard overview, CSV export, data upload, chart interpretation, and troubleshooting; bilingual (en/zh) with annotated screenshots.
+- Guideline navigation links in TitleBar (book icon), FooterBar (text link), and LandingPage (below How It Works section).
+- 3 new FAQ entries (Q5–Q7): "Why does my cost show as $0?", "What does Incomplete Upload mean?", and "Where can I find more troubleshooting help?".
+- Dashboard overview screenshot and logo in README files (en + zh).
+
+**Improved:**
+
+- SEO: added `/guideline` to sitemap.xml.
+- JSON-LD FAQPage schema expanded with Q5–Q7 entries (bilingual).
+- Added `/docs/` to `.gitignore`.
+- Version bumped to 0.3.2 across all source files.
 
 ### v0.3.1
 

@@ -1,5 +1,9 @@
 # DeepSeek API 用量分析仪表盘
 
+<p align="center">
+  <img src="public/ds-usage-logo.png" alt="Logo" width="128" />
+</p>
+
 一款纯浏览器端的 DeepSeek API 用量分析仪表盘。将月度 CSV 导出文件拖拽到页面，即刻获取费用图表、各 Key 用量明细、缓存分析和用量趋势 — 所有数据均在浏览器本地处理。无需服务器、无需上传、无需注册。
 
 > [English version](README.md)
@@ -10,6 +14,8 @@
 2. 每月会得到两个文件：`amount-{年份}-{月份}.csv` 和 `cost-{年份}-{月份}.csv`
 3. 将所有文件拖拽到仪表盘（单月或多月均可，自动配对）
 4. 图表即刻渲染 — 数据不会离开你的浏览器
+
+![仪表盘总览](public/guideline/01-Ds-Api-Usage-Dashboard-Overview-cn.png)
 
 ## 功能特性
 
@@ -148,6 +154,22 @@ npm run build
 设置 `NEXT_PUBLIC_SITE_URL` 环境变量为你的生产环境域名，以确保正确的规范 URL、站点地图和 OpenGraph 元数据。
 
 ## 更新日志
+
+### v0.3.2
+
+**新增：**
+
+- 用户操作手册页面（`/guideline`）— 涵盖仪表盘总览、CSV 导出、数据上传、图表解读、故障排查的全面使用文档，双语（中/英）配标注截图。
+- 操作手册导航入口：TitleBar（书籍图标）、FooterBar（文字链接）、LandingPage（使用说明区域下方）。
+- 3 个新增常见问题（Q5–Q7）：「为什么费用显示为 0？」「显示"上传不完整"是什么意思？」「哪里可以找到更多故障排查帮助？」
+- README 文件中添加仪表盘总览截图和 Logo（中英文版）。
+
+**改进：**
+
+- SEO：在 sitemap.xml 中新增 `/guideline` 条目。
+- JSON-LD FAQPage Schema 扩充 Q5–Q7 条目（双语）。
+- 在 `.gitignore` 中新增 `/docs/`。
+- 所有源文件中版本号升级至 0.3.2。
 
 ### v0.3.1
 

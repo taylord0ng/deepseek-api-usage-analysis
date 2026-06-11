@@ -11,7 +11,7 @@ import type { Locale } from "@/i18n/translations";
 /* ------------------------------------------------------------------ */
 
 /** 应用版本号，与 package.json 保持同步 */
-const APP_VERSION = "0.3.1";
+const APP_VERSION = "0.3.2";
 
 /** 站点公开 URL */
 const SITE_URL =
@@ -56,6 +56,18 @@ const faqSchema: Record<Locale, { questions: { q: string; a: string }[] }> = {
         q: "What models are supported?",
         a: "Any model listed in your DeepSeek exports. The dashboard auto-detects all models and provides a filter to view them individually or combined.",
       },
+      {
+        q: "Why does my cost show as $0?",
+        a: "You need to upload both the amount CSV and the cost CSV for the same month. If either file is missing, cost data cannot be calculated.",
+      },
+      {
+        q: "What does \"Incomplete Upload\" mean?",
+        a: "It means a month has only the amount file or only the cost file — not both. Add the missing file and re-upload to resolve this.",
+      },
+      {
+        q: "Where can I find more troubleshooting help?",
+        a: "Check the Troubleshooting section in our full User Guide. It covers common issues like CSV format errors, cache configuration, file naming conventions, and more.",
+      },
     ],
   },
   zh: {
@@ -75,6 +87,18 @@ const faqSchema: Record<Locale, { questions: { q: string; a: string }[] }> = {
       {
         q: "支持哪些模型？",
         a: "DeepSeek 导出中的所有模型均支持。仪表盘会自动检测所有模型，并提供筛选器以便单独或合并查看。",
+      },
+      {
+        q: "为什么费用显示为 0？",
+        a: "需要同时上传同一个月的 amount CSV 和 cost CSV 两个文件。如果缺少其中任何一个，费用数据将无法计算。",
+      },
+      {
+        q: "显示\u201C上传不完整\u201D是什么意思？",
+        a: "表示某个月份只有 amount 文件或只有 cost 文件，缺少另一个。补充缺失的文件并重新上传即可解决。",
+      },
+      {
+        q: "哪里可以找到更多故障排查帮助？",
+        a: "请查看完整操作指南中的\u201C常见问题排查\u201D章节，涵盖了 CSV 格式错误、缓存配置、文件命名规范等常见问题。",
       },
     ],
   },

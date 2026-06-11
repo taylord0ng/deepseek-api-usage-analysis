@@ -20,6 +20,7 @@ export default function LandingContent() {
       {/* 使用说明                                                       */}
       {/* ============================================================ */}
       <section>
+        <h1 className="sr-only">{t.meta.title}</h1>
         <h2>{t.landing.howItWorksTitle}</h2>
         <div>
           <div>
@@ -61,6 +62,18 @@ export default function LandingContent() {
           <div>
             <h3>{t.landing.qaQ4}</h3>
             <p>{t.landing.qaA4}</p>
+          </div>
+          <div>
+            <h3>{t.landing.qaQ5}</h3>
+            <p>{t.landing.qaA5}</p>
+          </div>
+          <div>
+            <h3>{t.landing.qaQ6}</h3>
+            <p>{t.landing.qaA6}</p>
+          </div>
+          <div>
+            <h3>{t.landing.qaQ7}</h3>
+            <p>{t.landing.qaA7}</p>
           </div>
         </div>
       </section>

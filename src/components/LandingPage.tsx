@@ -3,6 +3,7 @@
 import { useTranslation } from "@/i18n";
 import { useTheme } from "@/lib/ThemeContext";
 import { useState, useEffect, useRef } from "react";
+import Link from "next/link";
 import TitleBar from "./TitleBar";
 import FooterBar from "./FooterBar";
 import DropZone from "./DropZone";
@@ -127,6 +128,9 @@ export default function LandingPage() {
     { q: t.landing.qaQ2, a: t.landing.qaA2 },
     { q: t.landing.qaQ3, a: t.landing.qaA3 },
     { q: t.landing.qaQ4, a: t.landing.qaA4 },
+    { q: t.landing.qaQ5, a: t.landing.qaA5 },
+    { q: t.landing.qaQ6, a: t.landing.qaA6 },
+    { q: t.landing.qaQ7, a: t.landing.qaA7 },
   ];
 
   return (
@@ -235,6 +239,37 @@ export default function LandingPage() {
                 </p>
               </div>
             ))}
+          </div>
+
+          {/* 操作指南入口 — 步骤下方居中链接 */}
+          <div className="mt-8 text-center">
+            <Link
+              href="/guideline"
+              className="inline-flex items-center gap-1.5 text-xs font-medium transition-colors duration-200 hover:opacity-80"
+              style={{ color: "var(--text-secondary)" }}
+            >
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                />
+                <path
+                  d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinejoin="round"
+                />
+              </svg>
+              {t.guideline.viewGuide}
+            </Link>
           </div>
         </section>
 

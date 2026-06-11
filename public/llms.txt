@@ -1,0 +1,65 @@
+# DeepSeek API Usage Analytics Dashboard
+
+> Visualize your DeepSeek API usage — drop your monthly CSVs and get instant cost analytics, cache analysis, and per-key breakdowns. Free, open source, browser-side.
+
+## What is this?
+
+A free, privacy-first analytics tool for DeepSeek API users. Drag your monthly usage CSV files onto the page and instantly see where your API budget goes. No account, no upload, no database — everything runs in your browser. Your data never leaves your computer.
+
+## Who is this for?
+
+Anyone using the DeepSeek API platform who wants to understand their spending:
+- Developers monitoring API costs across multiple keys
+- Teams tracking cache hit rates to optimize token usage
+- Anyone curious about usage trends over time
+
+## What can you do with it?
+
+- **See your total spend at a glance** — big hero number with daily cost breakdown, no spreadsheet needed
+- **Understand your API keys** — sortable table showing which keys cost the most, their token usage, and cache hit efficiency
+- **Track cache performance** — see how much you save via cache hits vs. misses, with daily trend charts
+- **Follow multi-metric trends** — toggle between cost, tokens, hit rate, and request count over time on one chart
+- **Filter by model** — isolate a specific model to see its individual cost and usage patterns
+- **Compare months** — upload multiple months and see trends across time
+
+## How it works
+
+1. Go to DeepSeek Platform → Usage → download your monthly amount CSV and cost CSV
+2. Drag both files onto the dashboard (or click to browse)
+3. Instantly see charts, tables, and insights — no configuration needed
+
+Supports multiple months at once. Files are automatically paired by year-month.
+
+## What data does it read?
+
+DeepSeek platform exports two CSV files per month:
+
+**Amount CSV** — records every API call with date, model, key name, token type, and token counts (input cache hit, input cache miss, output tokens, request count).
+
+**Cost CSV** — daily cost per model.
+
+The tool combines them to show you cost per key, per model, and per day.
+
+## Privacy
+
+Your CSV files are processed entirely in your browser. They are never sent to any server. The app is a static website — it has no backend, no database, no analytics tracking. The source code is open and auditable.
+
+## Languages
+
+English and 中文 (Simplified Chinese). The app auto-detects your browser language on first visit, with a toggle to switch anytime.
+
+## Theme
+
+Light and dark mode, auto-matching your system preference at first visit, with a manual toggle. Designed in a clean, minimal Apple-inspired style.
+
+## Links
+
+- Website: https://deepseek-usage.xyz
+- GitHub: https://github.com/GavinCnod/deepseek-api-usage-analysis
+- DeepSeek Platform: https://platform.deepseek.com
+
+## About the team
+
+Built by Gavin Chen & the MindRose team. Open source under MIT license.
+- MindRose: https://www.mindrose.xyz
+- LinkedIn: https://www.linkedin.com/in/gavinchensongwen3188536a
