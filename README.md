@@ -23,8 +23,8 @@ A browser-side analytics dashboard for DeepSeek API usage. Drag your monthly CSV
 - **Multi-month support** — Drag multiple months at once; files auto-pair by filename pattern and concatenate
 - **Apple-minimalist design** — Cold gray paper-texture background, generous whitespace, "no-card" full-width modules, thin horizontal dividers, 5rem hero numbers, diffuse shadows
 - **100% private** — All CSV parsing (Papa Parse) and cost computation runs client-side
-- **SEO optimized** — Server-rendered metadata (canonical URLs, OpenGraph, Twitter cards), JSON-LD structured data (SoftwareApplication + FAQPage, bilingual), robots.txt + sitemap.xml, `<noscript>` crawler fallback content
-- **Landing page** — Complete pre-upload landing with theme-aware background images, How It Works steps, accordion FAQ, expanded multi-section About (project origin, privacy & tech, team, contact with email copy & social links), scroll-reveal animations
+- **SEO optimized** — Server-rendered metadata (canonical URLs, OpenGraph with alternateLocale, Twitter cards), JSON-LD structured data (SoftwareApplication + FAQPage + BreadcrumbList, bilingual), robots.txt + sitemap.xml, `<noscript>` crawler fallback content, anchor-linkable landing page sections
+- **Landing page** — Complete pre-upload landing with theme-aware background images, How It Works steps, accordion FAQ, expanded multi-section About (project origin, privacy & tech, team, contact with email copy & social links), scroll-reveal animations, anchor-linkable sections with deferred rendering for performance
 
 ## CSV Format
 
@@ -107,7 +107,7 @@ src/
     ├── parser.ts           # CSV parsing pipeline
     ├── concatFiles.ts      # Multi-month CSV pairing & concat
     ├── format.ts           # Locale-aware formatters
-    ├── schema.ts           # JSON-LD structured data (SoftwareApplication + FAQPage, bilingual)
+    ├── schema.ts           # JSON-LD structured data (SoftwareApplication + FAQPage + BreadcrumbList, bilingual, versioned)
     ├── DataContext.tsx      # Data state + model filter
     └── ThemeContext.tsx     # Theme state + useTheme hook
 ```
@@ -131,7 +131,7 @@ The dashboard follows an **Apple-minimalist** design language driven entirely by
 The app implements a multi-layered SEO strategy for a client-rendered static SPA:
 
 - **generateMetadata()** — Dynamic server-rendered metadata: canonical URL, OpenGraph (title, description, image), Twitter card, hreflang alternates (en/zh), robots directives
-- **JSON-LD structured data** — `SoftwareApplication` + `FAQPage` schemas in both English and Chinese, injected at build time via `<script type="application/ld+json">` in `layout.tsx`
+- **JSON-LD structured data** — `SoftwareApplication` + `FAQPage` + `BreadcrumbList` schemas in both English and Chinese (6 total script tags), injected at build time via `<script type="application/ld+json">` in `layout.tsx`
 - **robots.txt + sitemap.xml** — Generated at build time via Next.js 16 `MetadataRoute` conventions; site URL from `NEXT_PUBLIC_SITE_URL` env var
 - **`<noscript>` fallback** — `LandingContent.tsx` outputs key landing page content (How It Works, FAQ, About) for crawlers that don't execute JavaScript
 - **Semantic HTML** — Visible `<h1>` on landing page, `<h1 className="sr-only">` on dashboard, proper section structure

@@ -17,7 +17,7 @@ Strictly follows an Apple-minimalist design language: cold gray paper-texture ba
 ```
 src/
 ├── app/            # Next.js App Router (static export)
-│   ├── layout.tsx           # Root layout, generateMetadata() for SEO, JSON-LD scripts, ThemeProvider + I18nProvider + DataProvider
+│   ├── layout.tsx           # Root layout, generateMetadata() for SEO (canonical, OG, Twitter, hreflang, alternateLocale), 6 JSON-LD script tags (bilingual SoftwareApplication + FAQPage + BreadcrumbList), ThemeProvider + I18nProvider + DataProvider
 │   ├── page.tsx             # Entry → renders <Dashboard />
 │   ├── globals.css          # Tailwind v4 + @font-face Hubot Sans + CSS variables + reveal/accordion + base styles
 │   ├── favicon.ico          # App icon (branded)
@@ -48,7 +48,7 @@ src/
     ├── parser.ts            # Papa Parse CSV pipeline (parse → pivot → join → computeKeyStats)
     ├── concatFiles.ts       # Multi-month CSV pairing & concatenation (reads file names, strips headers)
     ├── format.ts            # Locale-aware formatCost / formatTokens / formatPercent
-    ├── schema.ts            # JSON-LD structured data: SoftwareApplication + FAQPage (bilingual en/zh)
+    ├── schema.ts            # JSON-LD structured data: SoftwareApplication + FAQPage + BreadcrumbList (bilingual en/zh, versioned)
     ├── DataContext.tsx       # Data state + model filter (selectedModel, filteredResult, filterResult)
     └── ThemeContext.tsx      # Light/dark theme context + useTheme hook + localStorage + system preference
 
@@ -93,17 +93,18 @@ The app implements a multi-layered SEO strategy suitable for a client-rendered s
 
 `generateMetadata()` (replaces static `metadata` export) injects:
 - **Canonical URL** + **hreflang alternates** (`en` / `zh` pointing to same URL — the app uses client-side language detection, no URL-level routing)
-- **OpenGraph**: title, description, URL, site name, locale (`en_US`), 512×512 logo image
+- **OpenGraph**: title, description, URL, site name, locale (`en_US`), `alternateLocale: ["zh_CN"]`, 512×512 logo image
 - **Twitter card**: `summary` type with logo image
 - **Robots**: `index: true, follow: true`
 
 ### JSON-LD structured data
 
 `src/lib/schema.ts` generates bilingual (en + zh) JSON-LD blocks injected as `<script type="application/ld+json">` in the root layout:
-- **`SoftwareApplication`** — name, description, OS, category, free offer
+- **`SoftwareApplication`** — name, description, version, OS, category, free offer
 - **`FAQPage`** — 4 Q&A pairs matching the landing page accordion content
+- **`BreadcrumbList`** — single-item breadcrumb helping search engines understand the page's position in the site structure
 
-Both schemas exist in both languages (4 total script tags). They are server-rendered — no client JS needed for crawlers to see them.
+All three schemas exist in both languages (6 total script tags). They are server-rendered — no client JS needed for crawlers to see them.
 
 ### Crawler fallback content
 
@@ -338,13 +339,14 @@ Rendered via `<LandingPage />` — a scrollable single-page layout with:
 2. **Hero** — shorter section (`pt-16 pb-10`), centered title + subtitle, uses `translate="no"` on heading. Background features theme-aware decoration images (CSV sketch left, chart sketch right) positioned absolutely with `pointer-events-none`.
 3. **Upload** — `<DropZone />` + `<ErrorDisplay />`
 4. **LandingContent** — `<noscript>` fallback (server-rendered, invisible when JS is enabled) containing How It Works + FAQ + expanded multi-section About text for SEO crawlers
-5. **How It Works** — 3-step grid layout, each step has a numbered circle (`w-10 h-10 rounded-full`), hover micro-interactions via `group` + `group-hover`
-6. **QA** — Accordion pattern: click on question toggles answer panel. Uses `openQa` state (number | null). Panels animated via inline styles with `max-height`/`opacity` transition. Accessible: `aria-expanded`, `aria-controls`, keyboard support (Enter/Space). `focus-visible` outlines. Centered with `max-w-2xl`.
+5. **How It Works** — 3-step grid layout, each step has a numbered circle (`w-10 h-10 rounded-full`), hover micro-interactions via `group` + `group-hover`. Section has `id="how-it-works"` for direct anchor linking. Uses `content-visibility: auto` for deferred rendering.
+6. **QA** — Accordion pattern: click on question toggles answer panel. Uses `openQa` state (number | null). Panels animated via inline styles with `max-height`/`opacity` transition. Accessible: `aria-expanded`, `aria-controls`, keyboard support (Enter/Space). `focus-visible` outlines. Centered with `max-w-2xl`. Section has `id="faq"` for direct anchor linking. Uses `content-visibility: auto` for deferred rendering.
 7. **About** — Multi-section layout (with `<h2>` section title + 4 subsections each headed by `<h3>`, separated by dashed `<hr>` dividers):
    - **Why We Built This** — project origin story
    - **Under the Hood: Privacy & Tech** — pure frontend architecture explanation
    - **About MindRose** — team introduction
    - **Let's Work Together** — business contact with email copy button (`navigator.clipboard.writeText`, copy SVG checkmark feedback, 2s toast) and social link pills (GitHub, LinkedIn, MindRose website with SVG icons)
+   Section has `id="about"` for direct anchor linking. Uses `content-visibility: auto` for deferred rendering.
 8. **FooterBar** — shared footer with `animate` prop for reveal-section scroll animation
 
 Sections are separated by thin `<hr>` dividers (`var(--border)`). Each `<section>` uses a `reveal-section` CSS class and is watched by an Intersection Observer: when 15% of a section enters the viewport, the `.visible` class is added, triggering a fade-in + slide-up animation. Once visible, the observer unobserves the element (runs once). Respects `prefers-reduced-motion` via global CSS.
@@ -404,11 +406,11 @@ Apple-style underline tabs: `text-xs font-semibold uppercase tracking-wide`, 2px
 - **Adding a new CSS variable**: Define in both `:root, .light` AND `.dark` blocks in `src/app/globals.css`, then reference as `var(--your-token)` in components
 - **Changing the visual design**: Update CSS variables in `globals.css` — do NOT hardcode colors in individual components
 - **Adding a new view/tab**: Add to `TABS` array in `Dashboard.tsx`, add translation keys in both locales, create component with Hero + chart pattern using `filteredResult`
-- **Adding or modifying a landing page section**: Edit `LandingPage.tsx` — add a new `<section>` block with `reveal-section` class and `ref` callback for Intersection Observer. Precede each section with a thin `<hr style={{ borderColor: "var(--border)" }} />` divider. Use Apple-minimalist spacing (`pt-10 pb-12` or `pb-16`), centered `<h2>` with `text-[11px]` uppercase section title styling, subsections headed by `<h3>`, and content using `var(--text-primary)` / `var(--text-secondary)` colors. Add translation keys under `landing.*` group (flat 2-level keys). If the content is important for SEO, also add it to `LandingContent.tsx` inside the `<noscript>` block.
+- **Adding or modifying a landing page section**: Edit `LandingPage.tsx` — add a new `<section>` block with `reveal-section` class and `ref` callback for Intersection Observer. Precede each section with a thin `<hr style={{ borderColor: "var(--border)" }} />` divider. Use Apple-minimalist spacing (`pt-10 pb-12` or `pb-16`), centered `<h2>` with `text-[11px]` uppercase section title styling, subsections headed by `<h3>`, and content using `var(--text-primary)` / `var(--text-secondary)` colors. Add an `id` attribute for direct anchor linking (e.g., `id="how-it-works"`). For below-the-fold sections, add `style={{ contentVisibility: "auto" }}` to defer rendering and reduce initial paint cost. Add translation keys under `landing.*` group (flat 2-level keys). If the content is important for SEO, also add it to `LandingContent.tsx` inside the `<noscript>` block.
 - **Adding email / clipboard interaction**: Use `navigator.clipboard.writeText()` with a `<textarea>` fallback for older browsers. Dynamically concatenate email addresses at runtime (`"hello" + "@" + "domain"`) to deter scraping. Provide immediate visual feedback (e.g., SVG checkmark + "Copied" tooltip, 2s timeout).
 - **Supporting a new CSV column**: Add to types in `types.ts`, update parser validation in `parser.ts`, add to pivot/join logic if needed
 - **Changing the font**: Replace WOFF2 files in `public/fonts/`, update `@font-face` declarations in `globals.css`, update `--font-sans` in the `@theme inline` block
 - **Adding a new animation**: Define `@keyframes` in `globals.css`, add to `@theme inline` block as `--animate-*`. Respect `prefers-reduced-motion` by including in the global media query.
-- **Updating SEO metadata**: Edit `generateMetadata()` in `layout.tsx` for page-level meta tags (title, description, OG, Twitter). Edit `src/lib/schema.ts` for JSON-LD structured data. For new landing page sections visible to crawlers without JS, add content to `LandingContent.tsx`.
+- **Updating SEO metadata**: Edit `generateMetadata()` in `layout.tsx` for page-level meta tags (title, description, OG, Twitter, alternateLocale). Edit `src/lib/schema.ts` for JSON-LD structured data (SoftwareApplication, FAQPage, BreadcrumbList). For new landing page sections visible to crawlers without JS, add content to `LandingContent.tsx`.
 - **Changing the site URL**: Set `NEXT_PUBLIC_SITE_URL` env var (in `.env` or deployment platform). It propagates to metadata canonical URL, `robots.ts` sitemap pointer, and `sitemap.ts` entry URL.
 - **Adding a new theme-aware landing image**: Add light and dark variants to `public/landing/`, then update the `isDark` branching in `LandingPage.tsx` to reference the correct paths.

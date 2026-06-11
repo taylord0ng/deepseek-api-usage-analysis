@@ -23,8 +23,8 @@
 - **多月支持** — 一次拖入多个月份文件；根据文件名模式自动配对并拼接
 - **Apple 极简设计** — 冷灰纸质感底、大量留白、「无卡片」通栏模块布局、细横线分割、5rem Hero 大数字、弥散阴影
 - **100% 隐私** — 所有 CSV 解析（Papa Parse）和费用计算均在浏览器客户端完成
-- **SEO 优化** — 服务端渲染元数据（规范 URL、OpenGraph、Twitter 卡片）、JSON-LD 结构化数据（SoftwareApplication + FAQPage，双语）、robots.txt + sitemap.xml、`<noscript>` 爬虫回退内容
-- **落地页** — 完整的上传前落地页，包含主题感知背景图片、使用说明步骤、手风琴常见问题、多板块关于页面（项目起源、隐私与技术、团队介绍、商业合作含邮箱复制与社交链接）、滚动渐显动画
+- **SEO 优化** — 服务端渲染元数据（规范 URL、OpenGraph 含 alternateLocale、Twitter 卡片）、JSON-LD 结构化数据（SoftwareApplication + FAQPage + BreadcrumbList，双语）、robots.txt + sitemap.xml、`<noscript>` 爬虫回退内容、支持锚点链接的落地页板块
+- **落地页** — 完整的上传前落地页，包含主题感知背景图片、使用说明步骤、手风琴常见问题、多板块关于页面（项目起源、隐私与技术、团队介绍、商业合作含邮箱复制与社交链接）、滚动渐显动画、支持锚点链接的板块与延迟渲染性能优化
 
 ## CSV 格式
 
@@ -107,7 +107,7 @@ src/
     ├── parser.ts           # CSV 解析管线
     ├── concatFiles.ts      # 多月 CSV 配对与拼接
     ├── format.ts           # 本地化格式函数
-    ├── schema.ts           # JSON-LD 结构化数据（SoftwareApplication + FAQPage，双语）
+    ├── schema.ts           # JSON-LD 结构化数据（SoftwareApplication + FAQPage + BreadcrumbList，双语，含版本号）
     ├── DataContext.tsx      # 数据状态 + 模型筛选
     └── ThemeContext.tsx     # 主题状态 + useTheme Hook
 ```
@@ -131,7 +131,7 @@ src/
 本应用为客户端渲染的静态 SPA 实现了多层 SEO 策略：
 
 - **generateMetadata()** — 动态服务端渲染元数据：规范 URL、OpenGraph（标题、描述、图片）、Twitter 卡片、hreflang 语言标注（en/zh）、robots 指令
-- **JSON-LD 结构化数据** — `SoftwareApplication` + `FAQPage` 双语 Schema（英文和中文），构建时通过 `layout.tsx` 中的 `<script type="application/ld+json">` 注入
+- **JSON-LD 结构化数据** — `SoftwareApplication` + `FAQPage` + `BreadcrumbList` 双语 Schema（英文和中文，共 6 个 script 标签），构建时通过 `layout.tsx` 中的 `<script type="application/ld+json">` 注入
 - **robots.txt + sitemap.xml** — 构建时通过 Next.js 16 `MetadataRoute` 约定生成；站点域名从 `NEXT_PUBLIC_SITE_URL` 环境变量读取
 - **`<noscript>` 回退** — `LandingContent.tsx` 输出关键落地页内容（使用说明、常见问题、关于），供不执行 JavaScript 的爬虫抓取
 - **语义化 HTML** — 落地页包含可见的 `<h1>`，仪表盘视图包含 `<h1 className="sr-only">`，配合正确的 section 结构
