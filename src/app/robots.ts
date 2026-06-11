@@ -11,7 +11,7 @@ export const dynamic = "force-static";
 
 /** 读取公开域名，构建时注入 */
 const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL || "https://ds-usage.vercel.app";
+  process.env.NEXT_PUBLIC_SITE_URL || "https://deepseek-usage.xyz";
 
 /** 构建时生成 robots.txt */
 export default function robots(): MetadataRoute.Robots {

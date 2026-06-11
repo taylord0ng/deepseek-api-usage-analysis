@@ -87,7 +87,7 @@ The app implements a multi-layered SEO strategy suitable for a client-rendered s
 ### Build-time artifacts
 
 - **`robots.ts`** — Follows Next.js 16 `MetadataRoute.Robots` convention. Generates `/robots.txt` at build time: allows all crawlers, points to sitemap. Compatible with `output: "export"` via `export const dynamic = "force-static"`.
-- **`sitemap.ts`** — Follows Next.js 16 `MetadataRoute.Sitemap` convention. Generates `/sitemap.xml` at build time. Site URL reads from `NEXT_PUBLIC_SITE_URL` env var (defaults to `https://ds-usage.vercel.app`).
+- **`sitemap.ts`** — Follows Next.js 16 `MetadataRoute.Sitemap` convention. Generates `/sitemap.xml` at build time. Site URL reads from `NEXT_PUBLIC_SITE_URL` env var (defaults to `https://deepseek-usage.xyz`).
 
 ### Server-side metadata (`layout.tsx`)
 
@@ -118,7 +118,7 @@ All three schemas exist in both languages (6 total script tags). They are server
 
 ### Environment variable
 
-- `NEXT_PUBLIC_SITE_URL` — injected at build time into `layout.tsx` (metadata), `robots.ts` (sitemap URL), and `sitemap.ts` (entry URL). Defaults to `https://ds-usage.vercel.app`.
+- `NEXT_PUBLIC_SITE_URL` — injected at build time into `layout.tsx` (metadata), `robots.ts` (sitemap URL), and `sitemap.ts` (entry URL). Defaults to `https://deepseek-usage.xyz`.
 
 ## Theme system
 

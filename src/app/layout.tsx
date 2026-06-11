@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 
 /** 站点公开 URL（构建时从 .env 注入） */
 const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL || "https://ds-usage.vercel.app";
+  process.env.NEXT_PUBLIC_SITE_URL || "https://deepseek-usage.xyz";
 
 /**
  * 动态生成元数据（SEO）

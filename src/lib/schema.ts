@@ -15,7 +15,7 @@ const APP_VERSION = "0.3.1";
 
 /** 站点公开 URL */
 const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL || "https://ds-usage.vercel.app";
+  process.env.NEXT_PUBLIC_SITE_URL || "https://deepseek-usage.xyz";
 
 /** SoftwareApplication Schema 翻译 */
 const softwareAppSchema: Record<
