@@ -32,6 +32,7 @@ A browser-side analytics dashboard for DeepSeek API usage. Drag your monthly CSV
 - **SEO optimized** — Server-rendered metadata (canonical URLs, OpenGraph with alternateLocale, Twitter cards), JSON-LD structured data (SoftwareApplication + FAQPage + BreadcrumbList, bilingual), robots.txt + sitemap.xml, `<noscript>` crawler fallback content, anchor-linkable landing page sections, `llms.txt` for LLM-friendly site description
 - **Landing page** — Complete pre-upload landing with theme-aware background images, How It Works steps, accordion FAQ (7 items), expanded multi-section About (project origin, privacy & tech, team, contact with email copy & social links), scroll-reveal animations, anchor-linkable sections with deferred rendering for performance
 - **User Guide** — Comprehensive bilingual user manual at `/guideline` with annotated screenshots, interactive table of contents, step-by-step dashboard navigation, CSV export instructions, chart interpretation guide, and troubleshooting section
+- **Privacy Policy & Terms** — `/privacy` and `/terms` pages with bilingual legal content, independent SEO metadata (canonical, OpenGraph, Twitter), JSON-LD WebPage schemas, and Apple-minimalist legal-text layout; linked from footer on every page
 - **Analytics** — Optional Google Analytics 4 integration via `NEXT_PUBLIC_GA_ID` env var; zero overhead when unset, standard page-view tracking only — no CSV data ever tracked
 
 ## CSV Format
@@ -89,16 +90,22 @@ src/
 │   ├── page.tsx            # Entry → <Dashboard />
 │   ├── guideline/
 │   │   └── page.tsx        # /guideline route with independent SEO metadata
+│   ├── privacy/
+│   │   └── page.tsx        # /privacy route with independent SEO metadata
+│   ├── terms/
+│   │   └── page.tsx        # /terms route with independent SEO metadata
 │   ├── globals.css         # Tailwind v4 + Hubot Sans @font-face + CSS variables + reveal/accordion + base styles
 │   ├── AppI18nShell.tsx    # i18n shell + <html lang> sync
 │   ├── robots.ts           # Build-time robots.txt generation
-│   └── sitemap.ts          # Build-time sitemap.xml generation (includes / + /guideline)
+│   └── sitemap.ts          # Build-time sitemap.xml generation (includes /, /guideline, /privacy, /terms)
 ├── components/
 │   ├── TitleBar.tsx         # Shared top nav bar (logo + app name + GitHub + guide book icon + language + theme)
-│   ├── FooterBar.tsx        # Shared footer (copyright + guideline link + GitHub link + version, optional animate/reveal)
+│   ├── FooterBar.tsx        # Shared footer (copyright + guideline link + privacy link + terms link + GitHub link + version, optional animate/reveal)
 │   ├── LandingPage.tsx      # Landing page (Hero with theme images + Upload + HowItWorks + "View Full Guide" link + accordion QA + About, scroll-reveal)
 │   ├── LandingContent.tsx   # Server-rendered <noscript> fallback for SEO crawlers
 │   ├── GuidelinePage.tsx    # Full interactive user guide (bilingual, annotated screenshots, table of contents, scroll-reveal)
+│   ├── PrivacyPage.tsx      # Privacy policy page (bilingual 7-section legal text, JSON-LD WebPage schema, GitHub source links)
+│   ├── TermsPage.tsx        # Terms of use page (bilingual 8-section legal text, JSON-LD WebPage schema, MIT License reference)
 │   ├── Dashboard.tsx        # Routes between LandingPage and dashboard view (semantic hidden H1)
 │   ├── DropZone.tsx         # Drag-and-drop or click-to-upload CSV (multi-file)
 │   ├── KPICards.tsx         # Summary stat cards
@@ -143,7 +150,7 @@ The app implements a multi-layered SEO strategy for a client-rendered static SPA
 
 - **generateMetadata()** — Dynamic server-rendered metadata: canonical URL, OpenGraph (title, description, image), Twitter card, hreflang alternates (en/zh), robots directives
 - **JSON-LD structured data** — `SoftwareApplication` + `FAQPage` + `BreadcrumbList` schemas in both English and Chinese (6 total script tags), injected at build time via `<script type="application/ld+json">` in `layout.tsx`
-- **robots.txt + sitemap.xml** — Generated at build time via Next.js 16 `MetadataRoute` conventions; sitemap includes both `/` and `/guideline` entries; site URL from `NEXT_PUBLIC_SITE_URL` env var
+- **robots.txt + sitemap.xml** — Generated at build time via Next.js 16 `MetadataRoute` conventions; sitemap includes `/`, `/guideline`, `/privacy`, and `/terms` entries; site URL from `NEXT_PUBLIC_SITE_URL` env var
 - **`<noscript>` fallback** — `LandingContent.tsx` outputs key landing page content (How It Works, FAQ, About) for crawlers that don't execute JavaScript
 - **`llms.txt`** — LLM-friendly site description served at `/llms.txt`, summarizing the app's purpose, features, and structure for AI tools
 - **Semantic HTML** — Visible `<h1>` on landing page and guideline page, `<h1 className="sr-only">` on dashboard, proper section structure
@@ -172,7 +179,16 @@ The repo includes `vercel.json` with pre-configured security headers and caching
 
 **Added:**
 
-- Privacy Policy & Terms of Use page and content.
+- Privacy Policy page (`/privacy`) — bilingual (en/zh) legal content covering 7 sections: no data collection, local processing, Google Analytics (opt-in), third-party services, security, policy changes, and contact. Independent SEO metadata (canonical URL, OpenGraph, Twitter card), JSON-LD WebPage schema, Apple-minimalist legal-text layout with GitHub source links for transparency verification.
+- Terms of Use page (`/terms`) — bilingual (en/zh) legal content covering 8 sections: as-is service, no warranty, not affiliated with DeepSeek, user data & responsibility, open source (MIT License), limitation of liability, changes to terms, and contact. Independent SEO metadata and JSON-LD WebPage schema.
+- MIT LICENSE file — added to the project root for open-source licensing clarity.
+- FooterBar now links to Privacy Policy and Terms of Use pages alongside Guideline, GitHub, and version.
+
+**Improved:**
+
+- Sitemap (`sitemap.xml`) expanded to include `/privacy` and `/terms` entries (priority 0.5, monthly change frequency).
+- Translation system extended with `privacy.*` (21 keys) and `terms.*` (22 keys) groups in both English and Chinese.
+- SEO metadata: `NEXT_PUBLIC_SITE_URL` now injected into privacy and terms page metadata generation.
 
 ### v0.3.3
 
