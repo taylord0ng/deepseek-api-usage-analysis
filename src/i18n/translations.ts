@@ -107,6 +107,73 @@ const translations = {
       footerNote:
         "This document is updated with app releases. For questions or suggestions, please reach out via {githubLink}.",
     },
+    privacy: {
+      pageTitle: "Privacy Policy",
+      effectiveDate: "Effective Date: June 13, 2026",
+      intro:
+        "Your privacy is critically important to us. This Privacy Policy explains how the DeepSeek API Usage Analytics Dashboard (\"the App\") handles your data.",
+      noCollectionTitle: "1. No Data Collection",
+      noCollectionDesc:
+        "The App is a pure client-side application. All CSV file parsing, cost computation, and chart rendering happen entirely within your browser. We do not collect, store, transmit, or have access to any of the CSV data you upload.",
+      localProcessingTitle: "2. Local Processing",
+      localProcessingDesc:
+        "Your DeepSeek CSV files (amount-*.csv, cost-*.csv) are read and processed exclusively by JavaScript running in your browser. No data is sent to any backend server, database, or third-party service. The App has no server-side component for data handling.",
+      analyticsTitle: "3. Google Analytics",
+      analyticsDesc:
+        "We use Google Analytics 4 (GA4) to collect anonymized page-view statistics. This helps us understand how the App is being used so we can improve it. GA4 may use cookies and collect information such as page URLs visited, browser type, and approximate geographic region. No CSV content or usage data from your uploaded files is tracked.",
+      analyticsOptOut:
+        "You can opt out of Google Analytics tracking by using a browser extension such as Google's opt-out addon, or by configuring your browser to block third-party cookies.",
+      gaIdNote:
+        "Google Analytics is only active when the environment variable NEXT_PUBLIC_GA_ID is configured. In local development environments, no analytics scripts are loaded.",
+      thirdPartyTitle: "4. Third-Party Services",
+      thirdPartyDesc:
+        "Aside from Google Analytics (when configured), the App does not integrate any other third-party services, SDKs, or tracking scripts. No advertising networks, data brokers, or analytics providers beyond GA4 are used.",
+      securityTitle: "5. Security",
+      securityDesc:
+        "Since all data processing occurs locally, your CSV files are inherently secure — they never leave your device. The App is served over HTTPS to ensure the application code is transmitted securely.",
+      changesTitle: "6. Changes to This Policy",
+      changesDesc:
+        "We may update this Privacy Policy from time to time. Changes will be posted on this page with an updated effective date. We encourage you to review this policy periodically.",
+      contactTitle: "7. Contact",
+      contactDesc:
+        "If you have questions or concerns about this Privacy Policy, please open an issue on our GitHub repository or reach out to the development team.",
+      githubLabel: "GitHub Repository",
+      reviewSourceCode: "Review source code \u2192",
+    },
+    terms: {
+      pageTitle: "Terms of Use",
+      effectiveDate: "Effective Date: June 13, 2026",
+      intro:
+        "By using the DeepSeek API Usage Analytics Dashboard (\"the App\"), you agree to these Terms of Use. If you do not agree, please do not use the App.",
+      asIsTitle: "1. As-Is Service",
+      asIsDesc:
+        "The App is provided \"as is\" and \"as available,\" without warranties of any kind, either express or implied. We do not guarantee that the App will be error-free, uninterrupted, or suitable for your specific needs.",
+      noWarrantyTitle: "2. No Warranty",
+      noWarrantyDesc:
+        "To the fullest extent permitted by law, we disclaim all warranties, including but not limited to implied warranties of merchantability, fitness for a particular purpose, and non-infringement. Use of the App is at your own risk.",
+      notAffiliatedTitle: "3. Not Affiliated with DeepSeek",
+      notAffiliatedDesc:
+        "This App is an independent, open-source project developed by Gavin Chen and the MindRose team. It is not affiliated with, endorsed by, or sponsored by DeepSeek (深度求索). All DeepSeek-related trademarks belong to their respective owners.",
+      userDataTitle: "4. User Data & Responsibility",
+      userDataDesc:
+        "The App processes CSV data entirely in your browser. You are solely responsible for the data you upload and any decisions made based on the analytics results. We do not store, transmit, or have access to your data, and we bear no responsibility for any inaccuracies in the displayed analytics.",
+      openSourceTitle: "5. Open Source",
+      openSourceDesc:
+        "The App is open source software released under the MIT License. You are free to review, modify, and distribute the source code in accordance with the license terms. The source code is available on GitHub.",
+      openSourceLicense:
+        "Full license text: MIT License \u2014 see the LICENSE file in the project repository.",
+      limitationTitle: "6. Limitation of Liability",
+      limitationDesc:
+        "In no event shall the developers or contributors be liable for any direct, indirect, incidental, special, consequential, or punitive damages arising out of or related to your use of or inability to use the App, even if advised of the possibility of such damages. This includes, but is not limited to, damages for errors, omissions, service interruptions, or financial losses.",
+      changesTitle: "7. Changes to These Terms",
+      changesDesc:
+        "We reserve the right to modify these Terms of Use at any time. Changes will be posted on this page with an updated effective date. Continued use of the App after changes constitutes acceptance of the revised terms.",
+      contactTitle: "8. Contact",
+      contactDesc:
+        "If you have questions about these Terms of Use, please open an issue on our GitHub repository or reach out to the development team.",
+      githubLabel: "GitHub Repository",
+      reviewSourceCode: "Review source code \u2192",
+    },
     landing: {
       howItWorksTitle: "How It Works",
       howItWorksStep1Title: "1. Export CSV",
@@ -256,6 +323,73 @@ const translations = {
       toc: "目录",
       footerNote:
         "文档随应用版本迭代更新。如有疑问或建议，欢迎通过 {githubLink} 反馈。",
+    },
+    privacy: {
+      pageTitle: "隐私政策",
+      effectiveDate: "生效日期：2026 年 6 月 13 日",
+      intro:
+        "您的隐私对我们至关重要。本隐私政策说明了 DeepSeek API 用量分析仪表盘（以下简称\u201C本应用\u201D）如何处理您的数据。",
+      noCollectionTitle: "1. 不收集数据",
+      noCollectionDesc:
+        "本应用是纯客户端应用。所有 CSV 文件解析、费用计算和图表渲染都在您的浏览器内完成。我们不会收集、存储、传输或访问您上传的任何 CSV 数据。",
+      localProcessingTitle: "2. 本地处理",
+      localProcessingDesc:
+        "您的 DeepSeek CSV 文件（amount-*.csv、cost-*.csv）仅由浏览器中运行的 JavaScript 读取和处理。任何数据都不会发送到后台服务器、数据库或第三方服务。本应用没有用于数据处理的服务器端组件。",
+      analyticsTitle: "3. Google Analytics（谷歌分析）",
+      analyticsDesc:
+        "我们使用 Google Analytics 4（GA4）收集匿名的页面访问统计数据，以了解应用的使用情况并持续改进。GA4 可能会使用 Cookie 并收集页面 URL、浏览器类型和大致地理位置等信息。您上传的 CSV 内容和使用数据不会被跟踪。",
+      analyticsOptOut:
+        "您可以通过安装浏览器的 Google 选择退出插件，或将浏览器配置为阻止第三方 Cookie，来选择退出 Google Analytics 跟踪。",
+      gaIdNote:
+        "Google Analytics 仅在环境变量 NEXT_PUBLIC_GA_ID 已配置时激活。在本地开发环境中，不会加载任何分析脚本。",
+      thirdPartyTitle: "4. 第三方服务",
+      thirdPartyDesc:
+        "除 Google Analytics（已配置时）外，本应用不集成任何其他第三方服务、SDK 或跟踪脚本。不使用广告网络、数据代理或 GA4 之外的任何分析服务。",
+      securityTitle: "5. 安全性",
+      securityDesc:
+        "由于所有数据处理均在本地进行，您的 CSV 文件本质上是安全的——它们永远不会离开您的设备。本应用通过 HTTPS 提供服务，确保应用代码安全传输。",
+      changesTitle: "6. 政策变更",
+      changesDesc:
+        "我们可能会不时更新本隐私政策。变更将在本页面发布，并附上更新后的生效日期。我们建议您定期查看本政策。",
+      contactTitle: "7. 联系我们",
+      contactDesc:
+        "如果您对本隐私政策有任何疑问或疑虑，请在我们的 GitHub 仓库提交 Issue，或联系开发团队。",
+      githubLabel: "GitHub 仓库",
+      reviewSourceCode: "查看源码验证 \u2192",
+    },
+    terms: {
+      pageTitle: "使用条款",
+      effectiveDate: "生效日期：2026 年 6 月 13 日",
+      intro:
+        "使用 DeepSeek API 用量分析仪表盘（以下简称\u201C本应用\u201D）即表示您同意本使用条款。如果您不同意，请勿使用本应用。",
+      asIsTitle: "1. 按现状提供",
+      asIsDesc:
+        "本应用按\u201C现状\u201D和\u201C可用\u201D状态提供，不作任何明示或暗示的保证。我们不保证本应用无错误、不中断或适用于您的特定需求。",
+      noWarrantyTitle: "2. 免责声明",
+      noWarrantyDesc:
+        "在法律允许的最大范围内，我们不承担所有保证，包括但不限于适销性、特定用途适用性和非侵权的默示保证。使用本应用的风险由您自行承担。",
+      notAffiliatedTitle: "3. 与 DeepSeek 无关",
+      notAffiliatedDesc:
+        "本应用是由 Gavin Chen 和 MindRose 团队开发的独立开源项目。与 DeepSeek（深度求索）无任何关联、认可或赞助关系。所有 DeepSeek 相关商标归其各自所有者所有。",
+      userDataTitle: "4. 用户数据与责任",
+      userDataDesc:
+        "本应用在您的浏览器中处理 CSV 数据。您对上传的数据以及基于分析结果做出的任何决策负全部责任。我们不存储、传输或访问您的数据，对于分析结果的任何不准确性不承担任何责任。",
+      openSourceTitle: "5. 开源许可",
+      openSourceDesc:
+        "本应用是基于 MIT License 发布的开源软件。您可以自由查看、修改和分发源代码，但需遵守许可协议条款。源代码可在 GitHub 上获取。",
+      openSourceLicense:
+        "完整许可文本：MIT License — 请查看项目仓库中的 LICENSE 文件。",
+      limitationTitle: "6. 责任限制",
+      limitationDesc:
+        "在任何情况下，开发者或贡献者均不对因使用或无法使用本应用而产生的任何直接、间接、附带、特殊、后果性或惩罚性损害承担责任，即使已被告知此类损害的可能性。这包括但不限于因错误、遗漏、服务中断或财务损失造成的损害。",
+      changesTitle: "7. 条款变更",
+      changesDesc:
+        "我们保留随时修改本使用条款的权利。变更将在本页面发布，并附上更新后的生效日期。变更后继续使用本应用即表示您接受修订后的条款。",
+      contactTitle: "8. 联系我们",
+      contactDesc:
+        "如果您对本使用条款有任何疑问，请在我们的 GitHub 仓库提交 Issue，或联系开发团队。",
+      githubLabel: "GitHub 仓库",
+      reviewSourceCode: "查看源码验证 \u2192",
     },
     landing: {
       howItWorksTitle: "使用方式",

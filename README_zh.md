@@ -168,6 +168,12 @@ npm run build
 
 ## 更新日志
 
+### v0.4.0
+
+**新增：**
+
+- 新增 Privacy Policy · Terms of Use 页面及其内容。
+
 ### v0.3.3
 
 **修复：**

@@ -168,6 +168,12 @@ The repo includes `vercel.json` with pre-configured security headers and caching
 
 ## Changelog
 
+### v0.4.0
+
+**Added:**
+
+- Privacy Policy & Terms of Use page and content.
+
 ### v0.3.3
 
 **Fixed:**
