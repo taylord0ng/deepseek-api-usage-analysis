@@ -168,6 +168,17 @@ The repo includes `vercel.json` with pre-configured security headers and caching
 
 ## Changelog
 
+### v0.3.3
+
+**Fixed:**
+
+- Cache hit rate chart accumulation bug in TrendsView: daily ratios were incorrectly summed instead of computing hit/(hit+miss) from raw token totals, causing values to potentially exceed 100%.
+
+**Added:**
+
+- Cache hit rate percentage display on the hits-vs-misses stacked bar chart in CacheView: hit rate shown in tooltip and as labels on top of each key's bar.
+- `vercel.json` with production security headers (CSP, HSTS, X-Frame-Options, etc.) and optimized static asset caching rules.
+
 ### v0.3.2
 
 **Added:**
@@ -182,17 +193,6 @@ The repo includes `vercel.json` with pre-configured security headers and caching
 - SEO: added `/guideline` to sitemap.xml.
 - JSON-LD FAQPage schema expanded with Q5–Q7 entries (bilingual).
 - Added `/docs/` to `.gitignore`.
-
-### v0.3.3
-
-**Fixed:**
-
-- Cache hit rate chart accumulation bug in TrendsView: daily ratios were incorrectly summed instead of computing hit/(hit+miss) from raw token totals, causing values to potentially exceed 100%.
-
-**Added:**
-
-- Cache hit rate percentage display on the hits-vs-misses stacked bar chart in CacheView: hit rate shown in tooltip and as labels on top of each key's bar.
-- `vercel.json` with production security headers (CSP, HSTS, X-Frame-Options, etc.) and optimized static asset caching rules.
 
 ### v0.3.1
 
