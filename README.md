@@ -21,7 +21,7 @@ A browser-side analytics dashboard for DeepSeek API usage. Drag your monthly CSV
 
 - **Overview** — KPI big numbers (cost, tokens, cache rate, active keys) + daily cost bar chart + cost-by-key donut chart
 - **By Key** — Detailed table with per-key tokens, cost, color-coded cache hit rate (green > 40% / amber 20–40% / red < 20%), request counts, and inline usage bars
-- **Cache** — Large-format hit rate display, daily cache hit rate trend line, stacked hits-vs-misses bar chart by key
+- **Cache** — Large-format hit rate display, daily cache hit rate trend line, stacked hits-vs-misses bar chart by key with hit% labels and tooltip
 - **Trends** — Toggleable multi-metric line chart (cost / tokens / cache hit rate / requests) with dynamic hero number
 - **Dark mode** — Full light/dark dual-theme with CSS custom properties; auto-detects system preference, manual toggle persisted to localStorage
 - **Multi-language** — English and 中文, auto-detected from browser language; manual switch with localStorage persistence
@@ -159,6 +159,13 @@ npm run build
 
 Set `NEXT_PUBLIC_SITE_URL` to your production domain for correct canonical URLs, sitemap, and OpenGraph metadata. Optionally set `NEXT_PUBLIC_GA_ID` to your Google Analytics 4 measurement ID for page-view tracking.
 
+### Vercel Deployment
+
+The repo includes `vercel.json` with pre-configured security headers and caching:
+
+- **Security**: `X-Content-Type-Options`, `X-Frame-Options`, `Strict-Transport-Security`, `Content-Security-Policy`, `Referrer-Policy`, `Permissions-Policy` — all set to production-safe values
+- **Caching**: immutable caching for `/_next/static` and `/fonts` (1 year), stale-while-revalidate for `/landing` and `/guideline` images (1 week)
+
 ## Changelog
 
 ### v0.3.2
@@ -185,6 +192,7 @@ Set `NEXT_PUBLIC_SITE_URL` to your production domain for correct canonical URLs,
 **Added:**
 
 - Cache hit rate percentage display on the hits-vs-misses stacked bar chart in CacheView: hit rate shown in tooltip and as labels on top of each key's bar.
+- `vercel.json` with production security headers (CSP, HSTS, X-Frame-Options, etc.) and optimized static asset caching rules.
 
 ### v0.3.1
 

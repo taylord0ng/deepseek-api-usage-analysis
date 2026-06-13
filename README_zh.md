@@ -21,7 +21,7 @@
 
 - **总览** — KPI 大数字展示（费用、Token 数、缓存命中率、活跃 Key）+ 每日费用柱状图 + 各 Key 费用环形图
 - **按 Key** — 详细表格，展示每个 Key 的 Token 数、费用、颜色标记的缓存命中率（绿色 > 40% / 琥珀色 20–40% / 红色 < 20%）、请求次数及内嵌用量条
-- **缓存** — 大字号命中率展示、每日缓存命中率趋势折线图、各 Key 缓存命中/未命中堆叠柱状图
+- **缓存** — 大字号命中率展示、每日缓存命中率趋势折线图、各 Key 缓存命中/未命中堆叠柱状图（含命中率标签和 tooltip）
 - **趋势** — 可切换多指标折线图（费用 / Token / 缓存命中率 / 请求次数），顶部大数字动态跟随指标切换
 - **深色模式** — 完整的浅色/深色双主题，基于 CSS 自定义属性；自动检测系统偏好，手动切换持久化至 localStorage
 - **多语言** — 英文和中文，根据浏览器语言自动检测；手动切换持久化至 localStorage
@@ -159,6 +159,13 @@ npm run build
 
 设置 `NEXT_PUBLIC_SITE_URL` 环境变量为你的生产环境域名，以确保正确的规范 URL、站点地图和 OpenGraph 元数据。可选择性设置 `NEXT_PUBLIC_GA_ID` 为 Google Analytics 4 测量 ID 以启用页面浏览追踪。
 
+### Vercel 部署
+
+仓库包含 `vercel.json`，预配置安全头与缓存规则：
+
+- **安全**：`X-Content-Type-Options`、`X-Frame-Options`、`Strict-Transport-Security`、`Content-Security-Policy`、`Referrer-Policy`、`Permissions-Policy` — 均设为生产环境安全值
+- **缓存**：`/_next/static` 和 `/fonts` 永久缓存（1 年），`/landing` 和 `/guideline` 图片 stale-while-revalidate 缓存（1 周）
+
 ## 更新日志
 
 ### v0.3.2
@@ -185,6 +192,7 @@ npm run build
 **新增：**
 
 - CacheView 的 hitsVsMisses 堆叠柱状图新增缓存命中率显示：tooltip 中展示百分比，柱状图顶部显示各 Key 的命中率标签。
+- 新增 `vercel.json`，配置生产环境安全头（CSP、HSTS、X-Frame-Options 等）和静态资源缓存优化规则。
 
 ### v0.3.1
 

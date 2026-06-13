@@ -37,8 +37,8 @@ src/
 │   ├── KPICards.tsx          # Summary stat cards (card-less big-number layout)
 │   ├── OverviewView.tsx      # Hero total cost + daily cost bars + cost-by-key donut (theme-aware)
 │   ├── KeyView.tsx           # Hero key count + per-key table with inline bars & cache-hit color coding
-│   ├── CacheView.tsx         # Hero hit rate + daily trend line + per-key hits-vs-misses stacked bars
-│   ├── TrendsView.tsx        # Hero dynamic metric + toggleable multi-metric line chart (theme-aware)
+│   ├── CacheView.tsx         # Hero hit rate + daily trend line + per-key hits-vs-misses stacked bars with hit% labels + tooltip
+│   ├── TrendsView.tsx        # Hero dynamic metric + toggleable multi-metric line chart (theme-aware; cacheHitRate computed from raw hit/miss tokens per-date, not accumulated ratios)
 │   ├── ErrorDisplay.tsx      # Parse error + warning banners with i18n titles
 │   ├── LanguageSwitcher.tsx  # EN / 中文 toggle (Apple pill segmented control with `role="radio"`)
 │   └── ThemeSwitcher.tsx     # Light / Dark toggle (Apple-minimalist SVG icon button)
@@ -138,6 +138,23 @@ Google Analytics 4 (gtag.js) is integrated for production traffic monitoring. It
 - Uses `dangerouslySetInnerHTML` for the inline init script — appropriate for build-time-injected static content
 - Does NOT track CSV data or usage details — standard page-view analytics only
 - No impact on the privacy-first promise: CSV processing remains 100% client-side, no data leaves the browser
+
+## Deployment & Security (`vercel.json`)
+
+Root-level `vercel.json` configures production deployment on Vercel with security headers and cache rules:
+
+- **Security headers** (applied to all routes `/(.*)`):
+  - `X-Content-Type-Options: nosniff` — prevents MIME type sniffing
+  - `X-Frame-Options: DENY` — blocks clickjacking
+  - `Referrer-Policy: strict-origin-when-cross-origin`
+  - `Permissions-Policy: camera=(), microphone=(), geolocation=(), interest-cohort=()`
+  - `Strict-Transport-Security: max-age=63072000; includeSubDomains; preload`
+  - `Content-Security-Policy`: `default-src 'self'` with allowances for Google Analytics/Tag Manager (`script-src`, `img-src`, `connect-src`)
+- **Static asset caching**:
+  - `/_next/static/*` and `/fonts/*` → `max-age=31536000, immutable` (1 year)
+  - `/landing/*` and `/guideline/*` → `max-age=604800, stale-while-revalidate=86400` (1 week)
+  - Favicon, `llms.txt`, `sitemap.xml`, `robots.txt` → `max-age=86400` (1 day)
+- **Compatible** with any static host (Vercel, Netlify, Cloudflare Pages, GitHub Pages) — only the `vercel.json` syntax is Vercel-specific; the security header values are universal
 
 ## User guide page (`/guideline`)
 
