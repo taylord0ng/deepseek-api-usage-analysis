@@ -81,6 +81,10 @@ export default function TrendsView() {
 
   const option = useMemo(() => {
     const byDate = new Map<string, number>();
+    // cacheHitRate 按日期分别累加 hit/miss token，再算比例，避免比例数值被错误累加
+    const hitByDate = metric === "cacheHitRate" ? new Map<string, number>() : null;
+    const missByDate = metric === "cacheHitRate" ? new Map<string, number>() : null;
+
     for (const d of daily) {
       let val: number;
       switch (metric) {
@@ -90,17 +94,24 @@ export default function TrendsView() {
         case "tokens":
           val = d.outputTokens + d.inputCacheHitTokens + d.inputCacheMissTokens;
           break;
-        case "cacheHitRate": {
-          const hit = d.inputCacheHitTokens;
-          const miss = d.inputCacheMissTokens;
-          val = hit + miss > 0 ? hit / (hit + miss) : 0;
-          break;
-        }
+        case "cacheHitRate":
+          hitByDate!.set(d.date, (hitByDate!.get(d.date) ?? 0) + d.inputCacheHitTokens);
+          missByDate!.set(d.date, (missByDate!.get(d.date) ?? 0) + d.inputCacheMissTokens);
+          continue; // 跳过后续 val 累加，cacheHitRate 在后面单独计算
         case "requests":
           val = d.requestCount;
           break;
       }
       byDate.set(d.date, (byDate.get(d.date) ?? 0) + val);
+    }
+
+    // cacheHitRate：从每日 hit/miss 累加值计算比例
+    if (metric === "cacheHitRate") {
+      for (const date of dates) {
+        const hit = hitByDate!.get(date) ?? 0;
+        const miss = missByDate!.get(date) ?? 0;
+        byDate.set(date, hit + miss > 0 ? hit / (hit + miss) : 0);
+      }
     }
 
     return {
@@ -131,9 +142,7 @@ export default function TrendsView() {
           type: "line",
           data: dates.map((d) => {
             const val = byDate.get(d) ?? 0;
-            return metric === "cost" || metric === "tokens" || metric === "requests"
-              ? +val.toFixed(4)
-              : +(val as number).toFixed(4);
+            return +val.toFixed(4);
           }),
           smooth: true,
           lineStyle: { color: lineColor, width: 2 },

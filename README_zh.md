@@ -175,7 +175,16 @@ npm run build
 - SEO：在 sitemap.xml 中新增 `/guideline` 条目。
 - JSON-LD FAQPage Schema 扩充 Q5–Q7 条目（双语）。
 - 在 `.gitignore` 中新增 `/docs/`。
-- 所有源文件中版本号升级至 0.3.2。
+
+### v0.3.3
+
+**修复：**
+
+- 修复 TrendsView 中缓存命中率图表数据累加错误：每日比例值被错误累加，现已改为按原始 token 数量先累加再计算 hit/(hit+miss)，避免数值超过 100%。
+
+**新增：**
+
+- CacheView 的 hitsVsMisses 堆叠柱状图新增缓存命中率显示：tooltip 中展示百分比，柱状图顶部显示各 Key 的命中率标签。
 
 ### v0.3.1
 

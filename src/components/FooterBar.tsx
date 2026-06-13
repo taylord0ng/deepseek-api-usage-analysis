@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useTranslation } from "@/i18n";
 
 /** 应用版本号，与 package.json 保持同步 */
-const APP_VERSION = "0.3.2";
+const APP_VERSION = "0.3.3";
 
 /** GitHub 仓库地址 */
 const GITHUB_URL = "https://github.com/GavinCnod/deepseek-api-usage-analysis";
