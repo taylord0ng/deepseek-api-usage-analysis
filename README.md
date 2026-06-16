@@ -175,6 +175,30 @@ The repo includes `vercel.json` with pre-configured security headers and caching
 
 ## Changelog
 
+### v0.5.0
+
+**Added:**
+
+- ZIP file upload support — users can now drag DeepSeek platform ZIP exports directly into the dashboard. ZIP archives containing CSV files are automatically extracted and processed in-browser. Huge thanks to [@taylord0ng](https://github.com/taylord0ng) for this contribution.
+- Custom project grouping for API keys — a new "By Project" tab lets you organize API keys into user-defined project groups via drag-and-drop, with per-project cost aggregation, token usage tracking, and cache hit rate analysis. Inspired by [@taylord0ng](https://github.com/taylord0ng).
+- Project configuration modal — drag-and-drop interface for assigning keys to custom projects, with local persistence via `localStorage`, reset-to-default, empty-state prompts, keyboard-friendly operation, and dropdown menus for unassigned keys.
+- Reusable CopyButton component — encapsulated clipboard copy logic with hover tooltip and i18n-aware success messages. All inline copy functionality (KeyView, ProjectView) now uses this shared component.
+- One-click cost copy — copy total cost from the Overview hero number with a single click.
+- 50MB per-file upload size limit — protects against accidental or malicious oversized file uploads (e.g., ZIP bombs) that could freeze the browser. Includes user-facing warning prompts and a dedicated FAQ entry.
+
+**Improved:**
+
+- Upload validation — file size check with clear error messaging, duplicate project name validation with inline hints, and unsaved-changes confirmation dialog when closing the project config modal.
+- Keyboard accessibility — full keyboard navigation support in the project configuration modal: Enter to confirm, Escape to close, arrow keys to navigate, plus on-screen keyboard shortcut hints.
+- UI polish — fixed drag highlight state glitch in project key lists, resolved React key warnings in config lists, adjusted modal layout for better visual balance.
+- i18n coverage — all new UI elements (project view, copy button, upload limits, config modal) fully translated in both English and Chinese.
+- Fixed CopyButton timer memory leak — timers now properly cleaned up on unmount, preventing stale state updates.
+- User guide and landing page — updated FAQ (new entries for file size limits and project grouping), usage guide screenshots and documentation, and landing page copy to reflect new features.
+
+**Dependencies:**
+
+- Added `jszip` for client-side ZIP extraction.
+
 ### v0.4.0
 
 **Added:**
