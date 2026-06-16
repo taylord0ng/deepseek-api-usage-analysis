@@ -5,10 +5,18 @@
  * Example: amount-2026-5.csv + cost-2026-5.csv → month key "2026-5"
  */
 
+import JSZip from "jszip";
+
+/** Unified interface for CSV-like sources (File objects or extracted ZIP entries). */
+export interface CsvLike {
+  name: string;
+  text: () => Promise<string>;
+}
+
 interface MonthPair {
   month: string;
-  amountFile: File;
-  costFile: File;
+  amountFile: CsvLike;
+  costFile: CsvLike;
 }
 
 interface ConcatResult {
@@ -48,8 +56,8 @@ function extractMonth(filename: string): string | null {
  * Group files into (amount, cost) pairs by month.
  * Files that don't match the naming pattern are ignored.
  */
-function pairFiles(files: File[]): MonthPair[] {
-  const byMonth = new Map<string, { amount?: File; cost?: File }>();
+function pairFiles(files: CsvLike[]): MonthPair[] {
+  const byMonth = new Map<string, { amount?: CsvLike; cost?: CsvLike }>();
 
   for (const f of files) {
     const month = extractMonth(f.name);
@@ -80,13 +88,13 @@ function pairFiles(files: File[]): MonthPair[] {
 }
 
 /**
- * Given a list of File objects (from drag-and-drop or file picker),
+ * Given a list of CSV-like sources (from drag-and-drop, file picker, or ZIP extraction),
  * pair them by month, read all files, and return concatenated CSV text.
  *
  * If only one month is found, behaves like the original single-month flow.
  * If no valid pairs are found, falls back to concatenating all CSVs as-is.
  */
-export async function concatMonthlyCSVs(files: File[]): Promise<ConcatResult> {
+export async function concatMonthlyCSVs(files: CsvLike[]): Promise<ConcatResult> {
   const pairs = pairFiles(files);
 
   // If we found paired months, use those
@@ -97,8 +105,8 @@ export async function concatMonthlyCSVs(files: File[]): Promise<ConcatResult> {
     for (let i = 0; i < pairs.length; i++) {
       const p = pairs[i];
       const [amountText, costText] = await Promise.all([
-        readFileAsText(p.amountFile),
-        readFileAsText(p.costFile),
+        p.amountFile.text(),
+        p.costFile.text(),
       ]);
 
       // First file keeps its header; subsequent files have headers stripped
@@ -128,9 +136,9 @@ export async function concatMonthlyCSVs(files: File[]): Promise<ConcatResult> {
     (f) => f.name.endsWith(".csv") && !f.name.startsWith("amount-") && !f.name.startsWith("cost-")
   );
 
-  const amountTexts = await Promise.all(amountFiles.map((f) => readFileAsText(f)));
-  const costTexts = await Promise.all(costFiles.map((f) => readFileAsText(f)));
-  const otherTexts = await Promise.all(otherCSVs.map((f) => readFileAsText(f)));
+  const amountTexts = await Promise.all(amountFiles.map((f) => f.text()));
+  const costTexts = await Promise.all(costFiles.map((f) => f.text()));
+  const otherTexts = await Promise.all(otherCSVs.map((f) => f.text()));
 
   const amountText = amountTexts
     .map((t, i) => (i === 0 ? t : stripHeader(t)))
@@ -150,10 +158,51 @@ export async function concatMonthlyCSVs(files: File[]): Promise<ConcatResult> {
   };
 }
 
-function readFileAsText(file: File): Promise<string> {
-  return new Promise((resolve) => {
-    const reader = new FileReader();
-    reader.onload = (e) => resolve((e.target?.result as string) ?? "");
-    reader.readAsText(file);
-  });
+/** Wrap a browser File object into the CsvLike interface. */
+function wrapFileAsCsvLike(file: File): CsvLike {
+  return {
+    name: file.name,
+    text: () => new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = (e) => resolve((e.target?.result as string) ?? "");
+      reader.readAsText(file);
+    }),
+  };
+}
+
+/**
+ * Extract CSV entries from ZIP files and wrap plain CSVs into CsvLike objects.
+ *
+ * For each file in the input:
+ * - If it ends in `.zip`: read as ZIP, extract all `.csv` files inside
+ * - If it ends in `.csv`: wrap directly as CsvLike
+ * - Otherwise: ignored
+ *
+ * Returns a flattened array of CsvLike entries ready for concatMonthlyCSVs.
+ */
+export async function extractZipCsvs(files: File[]): Promise<CsvLike[]> {
+  const result: CsvLike[] = [];
+
+  for (const file of files) {
+    if (file.name.toLowerCase().endsWith(".zip")) {
+      const zip = await JSZip.loadAsync(await file.arrayBuffer());
+      const csvNames = Object.keys(zip.files).filter(
+        (name) => !zip.files[name].dir && name.toLowerCase().endsWith(".csv")
+      );
+
+      for (const name of csvNames) {
+        const zipEntry = zip.files[name];
+        // Use the basename for pairing (strip any directory prefixes in the ZIP)
+        const baseName = name.split("/").pop()!;
+        result.push({
+          name: baseName,
+          text: () => zipEntry.async("string"),
+        });
+      }
+    } else if (file.name.endsWith(".csv")) {
+      result.push(wrapFileAsCsvLike(file));
+    }
+  }
+
+  return result;
 }

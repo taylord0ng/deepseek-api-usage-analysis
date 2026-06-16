@@ -25,7 +25,7 @@ const translations = {
     dropzone: {
       processing: "Processing CSVs\u2026",
       title: "Drop your DeepSeek CSVs here or click to upload",
-      hint: "Drop one or more months — amount-*.csv + cost-*.csv pairs",
+      hint: "Drop one or more months — amount-*.csv + cost-*.csv pairs, or a .zip archive",
       privacy:
         "Multiple months are auto-merged · Files stay in your browser — nothing is uploaded",
     },
@@ -244,7 +244,7 @@ const translations = {
     dropzone: {
       processing: "正在处理 CSV\u2026",
       title: "拖拽 DeepSeek CSV 文件到此处或点击上传",
-      hint: "拖拽一个或多个月份 — amount-*.csv + cost-*.csv 文件对",
+      hint: "拖拽一个或多个月份 — amount-*.csv + cost-*.csv 文件对，或 .zip 压缩包",
       privacy: "多月份自动合并 · 文件仅存储在浏览器中 — 不会上传",
     },
     kpi: {

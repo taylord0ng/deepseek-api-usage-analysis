@@ -22,13 +22,17 @@ export default function DropZone() {
  const handleFiles = useCallback(
   async (files: FileList) => {
   const fileArr = Array.from(files);
-  const csvs = fileArr.filter((f) => f.name.endsWith(".csv"));
-  if (csvs.length === 0) return;
+  const hasRelevant = fileArr.some(
+   (f) => f.name.endsWith(".csv") || f.name.toLowerCase().endsWith(".zip")
+  );
+  if (!hasRelevant) return;
 
   setReading(true);
   try {
-   const { concatMonthlyCSVs } = await import("@/lib/concatFiles");
-   const result = await concatMonthlyCSVs(csvs);
+   const { concatMonthlyCSVs, extractZipCsvs } = await import("@/lib/concatFiles");
+   const csvEntries = await extractZipCsvs(fileArr);
+   if (csvEntries.length === 0) return;
+   const result = await concatMonthlyCSVs(csvEntries);
    loadFiles(result.amountText, result.costText, result.label);
   } finally {
    setReading(false);
@@ -88,7 +92,7 @@ export default function DropZone() {
   ref={fileInputRef}
   type="file"
   multiple
-  accept=".csv"
+  accept=".csv,.zip"
   className="hidden"
   onChange={onChange}
   />

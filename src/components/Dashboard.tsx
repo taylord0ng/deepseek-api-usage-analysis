@@ -45,8 +45,10 @@ export default function Dashboard() {
       if (!files || files.length === 0) return;
       const fileArr = Array.from(files);
 
-      const { concatMonthlyCSVs } = await import("@/lib/concatFiles");
-      const result = await concatMonthlyCSVs(fileArr);
+      const { concatMonthlyCSVs, extractZipCsvs } = await import("@/lib/concatFiles");
+      const csvEntries = await extractZipCsvs(fileArr);
+      if (csvEntries.length === 0) return;
+      const result = await concatMonthlyCSVs(csvEntries);
       loadFiles(result.amountText, result.costText, result.label);
       e.target.value = "";
     },
@@ -87,7 +89,7 @@ export default function Dashboard() {
               ref={reuploadRef}
               type="file"
               multiple
-              accept=".csv"
+              accept=".csv,.zip"
               className="hidden"
               onChange={handleReupload}
             />
