@@ -35,3 +35,19 @@ export function formatTokens(n: number, locale?: Locale): string {
 export function formatPercent(n: number): string {
   return `${(n * 100).toFixed(1)}%`;
 }
+
+/**
+ * Format a cost as a full number with no suffix abbreviation.
+ * Always 2 decimals, comma-separated thousands.
+ */
+export function formatCostFull(yuan: number): string {
+  return `¥${yuan.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+}
+
+/**
+ * Format a token count as a full number with no suffix abbreviation.
+ * Comma-separated thousands.
+ */
+export function formatTokensFull(n: number): string {
+  return n.toLocaleString("en-US");
+}

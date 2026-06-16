@@ -11,9 +11,10 @@ import OverviewView from "./OverviewView";
 import KeyView from "./KeyView";
 import CacheView from "./CacheView";
 import TrendsView from "./TrendsView";
+import ProjectView from "./ProjectView";
 import ErrorDisplay, { WarningBanner } from "./ErrorDisplay";
 
-type Tab = "overview" | "keys" | "cache" | "trends";
+type Tab = "overview" | "projects" | "keys" | "cache" | "trends";
 
 /**
  * 主仪表盘组件
@@ -34,6 +35,7 @@ export default function Dashboard() {
 
   const TABS: { key: Tab; label: string }[] = [
     { key: "overview", label: t.tabs.overview },
+    { key: "projects", label: t.tabs.projects },
     { key: "keys", label: t.tabs.keys },
     { key: "cache", label: t.tabs.cache },
     { key: "trends", label: t.tabs.trends },
@@ -192,6 +194,7 @@ export default function Dashboard() {
         {/* Tab 内容区 */}
         <div className="animate-fade-in">
           {tab === "overview" && <OverviewView />}
+          {tab === "projects" && <ProjectView />}
           {tab === "keys" && <KeyView />}
           {tab === "cache" && <CacheView />}
           {tab === "trends" && <TrendsView />}

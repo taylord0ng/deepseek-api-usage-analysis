@@ -10,6 +10,7 @@ const translations = {
     },
     tabs: {
       overview: "Overview",
+      projects: "By Project",
       keys: "By Key",
       cache: "Cache",
       trends: "Trends",
@@ -229,6 +230,7 @@ const translations = {
     },
     tabs: {
       overview: "总览",
+      projects: "按项目",
       keys: "按 Key",
       cache: "缓存",
       trends: "趋势",
