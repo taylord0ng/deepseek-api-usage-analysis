@@ -5,6 +5,7 @@ import { useData } from "@/lib/DataContext";
 import { useTranslation } from "@/i18n";
 import { formatCost, formatTokens, formatPercent } from "@/lib/format";
 import { useTheme } from "@/lib/ThemeContext";
+import CopyButton from "@/components/CopyButton";
 
 /**
  * Key 详情表格视图
@@ -115,7 +116,13 @@ export default function KeyView() {
                   className="px-3 py-3 text-right font-semibold"
                   style={{ color: "var(--text-primary)" }}
                 >
-                  {formatCost(k.totalCost, locale)}
+                  <CopyButton
+                    value={k.totalCost}
+                    name={k.apiKeyName}
+                    className="cursor-pointer transition-opacity duration-150 hover:opacity-70"
+                  >
+                    {formatCost(k.totalCost, locale)}
+                  </CopyButton>
                 </td>
                 <td className="px-3 py-3 text-right">
                   <span

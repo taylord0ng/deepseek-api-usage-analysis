@@ -103,6 +103,9 @@ const translations = {
     modelFilter: {
       allModels: "All Models",
     },
+    copyToast: {
+      copied: "Copied {name} cost",
+    },
     guideline: {
       pageTitle: "User Guide",
       backToHome: "Back to Home",
@@ -325,6 +328,9 @@ const translations = {
     },
     modelFilter: {
       allModels: "全部模型",
+    },
+    copyToast: {
+      copied: "已复制 {name} 费用",
     },
     guideline: {
       pageTitle: "用户操作手册",

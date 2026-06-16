@@ -1,10 +1,11 @@
 "use client";
 
-import { useMemo, useState, useCallback } from "react";
+import { useMemo } from "react";
 import { useData } from "@/lib/DataContext";
 import { useTranslation } from "@/i18n";
 import { formatPercent, formatCostFull, formatTokensFull } from "@/lib/format";
 import { useTheme } from "@/lib/ThemeContext";
+import CopyButton from "@/components/CopyButton";
 
 /**
  * Project 详情表格视图
@@ -21,27 +22,10 @@ export default function ProjectView() {
   const { filteredResult: result } = useData();
   const { t } = useTranslation();
   const { theme } = useTheme();
-  const [copiedProject, setCopiedProject] = useState<string | null>(null);
   if (!result) return null;
 
   const { daily } = result;
   const isDark = theme === "dark";
-
-  const handleCopyCost = useCallback(async (name: string, cost: number) => {
-    try {
-      await navigator.clipboard.writeText(cost.toFixed(2));
-    } catch {
-      // Fallback for older browsers
-      const textarea = document.createElement("textarea");
-      textarea.value = cost.toFixed(2);
-      document.body.appendChild(textarea);
-      textarea.select();
-      document.execCommand("copy");
-      document.body.removeChild(textarea);
-    }
-    setCopiedProject(name);
-    setTimeout(() => setCopiedProject(null), 2000);
-  }, []);
 
   // Aggregate daily data by project — always include both trex and edgen
   const projects = useMemo(() => {
@@ -61,7 +45,7 @@ export default function ProjectView() {
 
     for (const d of daily) {
       const projectName = d.apiKeyName.toLowerCase().includes("trex") ? "trex" : "edgen";
-      let entry = map.get(projectName);
+      const entry = map.get(projectName);
       if (!entry) continue;
       const totalTok = d.outputTokens + d.inputCacheHitTokens + d.inputCacheMissTokens;
       entry.totalTokens += totalTok;
@@ -164,13 +148,13 @@ export default function ProjectView() {
                   className="px-3 py-3 text-right font-semibold"
                   style={{ color: "var(--text-primary)" }}
                 >
-                  <button
-                    onClick={() => handleCopyCost(p.name, p.totalCost)}
+                  <CopyButton
+                    value={p.totalCost}
+                    name={p.name}
                     className="cursor-pointer transition-opacity duration-150 hover:opacity-70"
-                    title="Click to copy cost"
                   >
                     {formatCostFull(p.totalCost)}
-                  </button>
+                  </CopyButton>
                 </td>
                 <td className="px-3 py-3 text-right">
                   <span
@@ -211,41 +195,6 @@ export default function ProjectView() {
             ))}
           </tbody>
         </table>
-      </div>
-
-      {/* Floating copy-success toast */}
-      <div
-        aria-live="polite"
-        style={{
-          position: "fixed",
-          top: "50%",
-          left: "50%",
-          transform: copiedProject ? "translate(-50%, -50%) scale(1)" : "translate(-50%, -50%) scale(0.9)",
-          opacity: copiedProject ? 1 : 0,
-          pointerEvents: "none",
-          transition: "transform 0.25s ease-out, opacity 0.25s ease-out",
-          display: "flex",
-          alignItems: "center",
-          gap: "0.5rem",
-          padding: "0.75rem 1.5rem",
-          borderRadius: "12px",
-          fontSize: "1rem",
-          fontWeight: 500,
-          color: "var(--positive)",
-          background: "var(--bg-surface)",
-          boxShadow: "var(--shadow-md)",
-          border: `1px solid var(--positive)`,
-          zIndex: 9999,
-        }}
-      >
-        {copiedProject && (
-          <span>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" style={{ display: "inline", verticalAlign: "middle", marginRight: "4px" }}>
-              <path d="M20 6L9 17l-5-5" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-            Copied {copiedProject} cost
-          </span>
-        )}
       </div>
     </div>
   );
