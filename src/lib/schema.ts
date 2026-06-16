@@ -68,6 +68,10 @@ const faqSchema: Record<Locale, { questions: { q: string; a: string }[] }> = {
         q: "Where can I find more troubleshooting help?",
         a: "Check the Troubleshooting section in our full User Guide. It covers common issues like CSV format errors, cache configuration, file naming conventions, and more.",
       },
+      {
+        q: "Is there a file size limit?",
+        a: "Yes, each file must be under 50 MB. This prevents malicious ZIP bombs from freezing your browser. DeepSeek monthly usage exports are typically under 1 MB, so this limit should never be an issue for normal use.",
+      },
     ],
   },
   zh: {
@@ -99,6 +103,10 @@ const faqSchema: Record<Locale, { questions: { q: string; a: string }[] }> = {
       {
         q: "哪里可以找到更多故障排查帮助？",
         a: "请查看完整操作指南中的\u201C常见问题排查\u201D章节，涵盖了 CSV 格式错误、缓存配置、文件命名规范等常见问题。",
+      },
+      {
+        q: "有文件大小限制吗？",
+        a: "有，单个文件不能超过 50 MB。这是为了防止恶意 ZIP 炸弹导致浏览器卡死。DeepSeek 月度用量导出文件通常小于 1 MB，正常使用不会触发此限制。",
       },
     ],
   },

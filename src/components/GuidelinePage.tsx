@@ -779,28 +779,28 @@ DeepSeek API 用量分析仪表盘是一款**纯浏览器端运行**的数据可
 
 ## 二、快速开始
 
-### 2.1 从 DeepSeek 平台导出 CSV
+### 2.1 从 DeepSeek 平台导出数据
 
 1. 登录 [DeepSeek 平台](https://platform.deepseek.com)
 2. 进入「用量（Usage）」页面
 3. 选择需要分析的月份，点击「导出（Export）」
-4. 每个月会导出 **两个 CSV 文件**：
+4. 每个月会下载一个 **ZIP 压缩包**，内含两个 CSV 文件：
    - \`amount-YYYY-M.csv\` — 用量明细文件（包含 Token 消耗、请求次数、缓存命中/未命中等数据）
    - \`cost-YYYY-M.csv\` — 费用明细文件（包含按日的费用数据）
 
-> **请注意**：两个文件缺一不可。如果缺少 cost 文件，费用相关的图表将无法生成。
+> **请注意**：ZIP 可以直接拖入上传区域，无需手动解压。两个 CSV 文件缺一不可——如果缺少 cost 文件，费用相关的图表将无法生成。
 
 > **[截图占位 - 02]**
 
-### 2.2 上传 CSV 文件
+### 2.2 上传文件
 
 1. 打开仪表盘页面（默认为落地页状态）
-2. 将下载的 CSV 文件（支持同时拖拽多个月份的文件）直接拖拽到页面中央的上传区域
-3. 也可以**点击上传区域**，通过系统文件选择器选择文件
+2. 将下载的 **ZIP 压缩包直接拖拽**到页面中央的上传区域（无需解压）
+3. 也可以拖拽解压后的 CSV 文件，或**点击上传区域**通过系统文件选择器选择文件
 4. 上传区域会显示「正在处理 CSV…」的加载状态
 5. 处理完成后，页面将自动切换到仪表盘视图
 
-> **支持同时上传多个月份**：一次性拖入所有月份的 amount 和 cost 文件，系统会自动按文件名配对（如 \`amount-2026-5.csv\` + \`cost-2026-5.csv\`）并进行合并。
+> **支持同时上传多个月份**：一次性拖入所有月份的 ZIP（或 CSV）文件，系统会自动解压 ZIP、按文件名配对（如 \`amount-2026-5.csv\` + \`cost-2026-5.csv\`）并进行合并。
 
 > **[截图占位 - 03]**
 
@@ -1056,11 +1056,11 @@ Apple 风格下划线标签，4 个标签页：
 
 ### 5.3 多月份合并
 
-支持同时上传多个月份的 CSV 文件，合并规则如下：
+支持同时上传多个月份的 ZIP 或 CSV 文件，合并规则如下：
 
-1. 系统读取每个文件名，提取年份-月份键
-2. 将同名月份下的 amount 和 cost 文件自动配对
-3. 只有同时包含 amount 和 cost 文件的月份才会被纳入分析
+1. 如果上传的是 ZIP，系统首先解压提取其中的 CSV 文件
+2. 系统读取每个文件名，提取年份-月份键
+3. 将同名月份下的 amount 和 cost 文件自动配对
 4. 配对成功后，所有月份数据合并为一个连续的 CSV 文本进行解析
 5. 文件标签自动更新为范围格式
 
@@ -1114,13 +1114,15 @@ Apple 风格下划线标签，4 个标签页：
 
 | 问题 | 可能原因 | 解决方法 |
 |------|----------|----------|
-| 上传后无反应 | 文件不是 CSV 格式 | 确认文件后缀为 .csv，不要上传 Excel 或 PDF |
-| 显示 CSV 格式无法识别 | 列名不匹配或文件损坏 | 确认从 DeepSeek 官方平台导出，不要修改文件内容 |
-| 费用数据显示为 0 | 缺少 cost CSV 文件 | 确保同月 amount 和 cost 两个文件一起上传 |
+| 上传后无反应 | 文件不是 CSV 或 ZIP 格式 | 确认文件后缀为 .csv 或 .zip，不要上传 Excel 或 PDF |
+| 显示「文件过大」警告 | 单个文件超过 50 MB | 正常 DeepSeek 月度导出通常小于 1 MB；如果文件异常大，请检查是否误选了其他文件 |
+| 显示 CSV 格式无法识别 | 列名不匹配或文件损坏 | 确认从 DeepSeek 官方平台导出，不要修改 ZIP 内的文件内容 |
+| 费用数据显示为 0 | 缺少 cost CSV 文件 | 确保 ZIP 包含当月完整的 amount 和 cost，或单独上传缺失文件 |
+| 上传 ZIP 无反应 | ZIP 内无 CSV 文件 | 确认 ZIP 包内包含 .csv 文件，不要上传仅有其他格式的压缩包 |
 | 图表中某一天无数据 | 当天没有 API 调用 | 正常现象，不影响其他天数据 |
 | 缓存视图显示未检测到缓存使用 | API 调用未启用 prompt caching | 在调用 DeepSeek API 时开启提示缓存功能 |
 | 显示上传不完整 | 某个月份只有 amount 或只有 cost | 补充缺失的文件重新上传 |
-| 多月份合并后数据异常 | 文件命名不规范 | 确保文件名为标准格式 |
+| 多月份合并后数据异常 | 文件命名不规范 | 确保 ZIP 内文件名或直接上传的 CSV 文件名为标准格式 |
 `;
 }
 
@@ -1149,28 +1151,28 @@ The DeepSeek API Usage Analytics Dashboard is a **purely browser-side** data vis
 
 ## 2. Quick Start
 
-### 2.1 Export CSV from DeepSeek Platform
+### 2.1 Export Data from DeepSeek Platform
 
 1. Log in to [DeepSeek Platform](https://platform.deepseek.com)
 2. Go to the "Usage" page
 3. Select the month you want to analyze, click "Export"
-4. Each month exports **two CSV files**:
+4. Each month downloads a **ZIP archive** containing two CSV files:
    - \`amount-YYYY-M.csv\` — Usage details (tokens consumed, request counts, cache hit/miss data)
    - \`cost-YYYY-M.csv\` — Cost details (daily cost data)
 
-> **Note**: Both files are required. Without the cost file, cost-related charts cannot be generated.
+> **Note**: The ZIP can be dragged directly into the upload area — no manual extraction needed. Both CSV files are required. Without the cost file, cost-related charts cannot be generated.
 
 > **[截图占位 - 02]**
 
-### 2.2 Upload CSV Files
+### 2.2 Upload Files
 
 1. Open the dashboard page (landing page by default)
-2. Drag the downloaded CSV files (multiple months supported) directly onto the upload area in the center of the page
-3. You can also **click the upload area** to select files via the system file picker
-4. The upload area will show a "Processing CSV…" loading state
+2. **Drag the downloaded ZIP archive directly** onto the upload area in the center of the page (no extraction needed)
+3. You can also drag extracted CSV files, or **click the upload area** to select files via the system file picker
+4. The upload area will show a "Processing CSV\u2026" loading state
 5. Once processing is complete, the page automatically switches to the dashboard view
 
-> **Multi-month support**: Drag in all monthly amount and cost files at once — the system auto-pairs them by filename (e.g., \`amount-2026-5.csv\` + \`cost-2026-5.csv\`) and merges them.
+> **Multi-month support**: Drag in all monthly ZIP (or CSV) files at once — the system auto-extracts ZIPs, pairs files by filename (e.g., \`amount-2026-5.csv\` + \`cost-2026-5.csv\`), and merges them.
 
 > **[截图占位 - 03]**
 
@@ -1426,11 +1428,11 @@ Theme preference is automatically saved to browser local storage, with system pr
 
 ### 5.3 Multi-Month Merge
 
-Supports uploading multiple months of CSV files simultaneously. Merge rules:
+Supports uploading multiple months of ZIP or CSV files simultaneously. Merge rules:
 
-1. The system reads each filename and extracts the year-month key
-2. Amount and cost files from the same month are automatically paired
-3. Only months with both amount and cost files are included in the analysis
+1. If ZIP files are uploaded, the system first extracts the CSV files inside
+2. The system reads each filename and extracts the year-month key
+3. Amount and cost files from the same month are automatically paired
 4. After pairing, all monthly data is merged into a single continuous CSV text for parsing
 5. The file label automatically updates to the range format
 
@@ -1484,13 +1486,15 @@ Supports uploading multiple months of CSV files simultaneously. Merge rules:
 
 | Issue | Possible Cause | Solution |
 |-------|---------------|----------|
-| No response after upload | File is not CSV format | Ensure file extension is .csv — do not upload Excel or PDF files |
-| "CSV Format Not Recognized" | Column names don't match or file is corrupted | Export from the official DeepSeek Platform; do not modify file contents |
-| Cost shows as 0 | Missing cost CSV file | Ensure both amount and cost files for the same month are uploaded together |
+| No response after upload | File is not CSV or ZIP format | Ensure file extension is .csv or .zip — do not upload Excel or PDF files |
+| "File too large" warning | A single file exceeds 50 MB | Normal DeepSeek monthly exports are typically under 1 MB; check if you selected the wrong file |
+| "CSV Format Not Recognized" | Column names don't match or file is corrupted | Export from the official DeepSeek Platform; do not modify ZIP contents |
+| Cost shows as 0 | Missing cost CSV file | Ensure the ZIP contains both amount and cost for the month, or upload the missing file separately |
+| ZIP upload has no effect | ZIP contains no CSV files | Ensure the ZIP archive contains .csv files — do not upload archives with only other formats |
 | Missing data for a specific day | No API calls on that day | Normal behavior — does not affect other days' data |
 | Cache view shows "No Cache Usage Detected" | Prompt caching not enabled in API calls | Enable prompt caching in your DeepSeek API calls |
 | "Incomplete Upload" shown | A month has only amount or only cost file | Add the missing file and re-upload |
-| Data anomalies after multi-month merge | Non-standard filename format | Ensure filenames follow the standard pattern |
+| Data anomalies after multi-month merge | Non-standard filename format | Ensure filenames inside ZIP or directly uploaded CSVs follow the standard pattern |
 `;
 }
 

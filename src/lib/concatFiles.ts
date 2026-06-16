@@ -1,11 +1,16 @@
 /**
- * Pair DeepSeek CSV files by month and concatenate them for multi-month analysis.
+ * 将 DeepSeek CSV 文件按月配对并拼接，支持多月份分析。
  *
- * Filename pattern: amount-{year}-{month}.csv / cost-{year}-{month}.csv
- * Example: amount-2026-5.csv + cost-2026-5.csv → month key "2026-5"
+ * 文件名格式：amount-{year}-{month}.csv / cost-{year}-{month}.csv
+ * 示例：amount-2026-5.csv + cost-2026-5.csv → 月份键 "2026-5"
+ *
+ * 同时包含 ZIP 炸弹防护：单文件超过 50MB 将被拒绝处理。
  */
 
 import JSZip from "jszip";
+
+/** 单个文件上传大小上限（50 MB），用于防止 ZIP 炸弹导致浏览器卡死。 */
+export const MAX_UPLOAD_SIZE_BYTES = 50 * 1024 * 1024;
 
 /** Unified interface for CSV-like sources (File objects or extracted ZIP entries). */
 export interface CsvLike {
@@ -171,19 +176,28 @@ function wrapFileAsCsvLike(file: File): CsvLike {
 }
 
 /**
- * Extract CSV entries from ZIP files and wrap plain CSVs into CsvLike objects.
+ * 从 ZIP 文件中提取 CSV 条目，并将普通 CSV 包装为 CsvLike 对象。
  *
- * For each file in the input:
- * - If it ends in `.zip`: read as ZIP, extract all `.csv` files inside
- * - If it ends in `.csv`: wrap directly as CsvLike
- * - Otherwise: ignored
+ * 对于输入中的每个文件：
+ * - 如果文件以 `.zip` 结尾：作为 ZIP 读取，提取其中的所有 `.csv` 文件
+ * - 如果文件以 `.csv` 结尾：直接包装为 CsvLike
+ * - 其他：忽略
+ * - 超过 MAX_UPLOAD_SIZE_BYTES 的文件将被跳过（防御性检查）
  *
- * Returns a flattened array of CsvLike entries ready for concatMonthlyCSVs.
+ * 返回扁平的 CsvLike 条目数组，可用于 concatMonthlyCSVs。
  */
 export async function extractZipCsvs(files: File[]): Promise<CsvLike[]> {
   const result: CsvLike[] = [];
 
   for (const file of files) {
+    // 防御性大小检查：跳过超大文件
+    if (file.size > MAX_UPLOAD_SIZE_BYTES) {
+      console.warn(
+        `[extractZipCsvs] 跳过超大文件 "${file.name}" (${(file.size / 1024 / 1024).toFixed(1)} MB > 50 MB 上限)`
+      );
+      continue;
+    }
+
     if (file.name.toLowerCase().endsWith(".zip")) {
       const zip = await JSZip.loadAsync(await file.arrayBuffer());
       const csvNames = Object.keys(zip.files).filter(
