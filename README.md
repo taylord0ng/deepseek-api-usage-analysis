@@ -10,9 +10,9 @@ A browser-side analytics dashboard for DeepSeek API usage. Drag your monthly CSV
 
 ## How it works
 
-1. Go to [DeepSeek Platform](https://platform.deepseek.com) → Usage → Export monthly CSVs
-2. You get two files per month: `amount-{year}-{month}.csv` and `cost-{year}-{month}.csv`
-3. Drag all files onto the dashboard (one month or multiple — they auto-pair)
+1. Go to [DeepSeek Platform](https://platform.deepseek.com) → Usage → Export monthly data
+2. Each month downloads as a ZIP archive containing `amount-{year}-{month}.csv` and `cost-{year}-{month}.csv`
+3. Drag ZIP files (or extracted CSVs) onto the dashboard — multiple months auto-pair
 4. Charts render instantly — nothing leaves your browser
 
 ![Dashboard Overview](public/guideline/01-Ds-Api-Usage-Dashboard-Overview-en.png)
@@ -25,12 +25,15 @@ A browser-side analytics dashboard for DeepSeek API usage. Drag your monthly CSV
 - **Trends** — Toggleable multi-metric line chart (cost / tokens / cache hit rate / requests) with dynamic hero number
 - **Dark mode** — Full light/dark dual-theme with CSS custom properties; auto-detects system preference, manual toggle persisted to localStorage
 - **Multi-language** — English and 中文, auto-detected from browser language; manual switch with localStorage persistence
+- **By Project** — Custom project grouping tab: drag-and-drop API keys into user-defined projects, per-project cost/token/cache aggregation, config persisted to localStorage; gear icon opens drag-and-drop config modal with keyboard-accessible dropdowns
 - **Model filter** — Segmented control (pill buttons) to filter all views by model; only shown when ≥2 models detected
-- **Multi-month support** — Drag multiple months at once; files auto-pair by filename pattern and concatenate
+- **One-click copy** — Reusable CopyButton component for clipboard copy of cost values across KeyView, ProjectView, and OverviewView; hover tooltip with i18n-aware toast
+- **Upload safety** — 50MB per-file size limit to prevent ZIP bomb attacks; user-facing error messages and dedicated FAQ entry
+- **Multi-month support** — Drag multiple months at once; files auto-pair by filename pattern and concatenate. Also supports ZIP archives directly — no extraction needed; drag DeepSeek platform ZIP exports straight onto the page.
 - **Apple-minimalist design** — Cold gray paper-texture background, generous whitespace, "no-card" full-width modules, thin horizontal dividers, 5rem hero numbers, diffuse shadows
-- **100% private** — All CSV parsing (Papa Parse) and cost computation runs client-side
+- **100% private** — All CSV parsing (Papa Parse), ZIP extraction (JSZip), and cost computation runs client-side; project configuration stored in your browser's localStorage only
 - **SEO optimized** — Server-rendered metadata (canonical URLs, OpenGraph with alternateLocale, Twitter cards), JSON-LD structured data (SoftwareApplication + FAQPage + BreadcrumbList, bilingual), robots.txt + sitemap.xml, `<noscript>` crawler fallback content, anchor-linkable landing page sections, `llms.txt` for LLM-friendly site description
-- **Landing page** — Complete pre-upload landing with theme-aware background images, How It Works steps, accordion FAQ (7 items), expanded multi-section About (project origin, privacy & tech, team, contact with email copy & social links), scroll-reveal animations, anchor-linkable sections with deferred rendering for performance
+- **Landing page** — Complete pre-upload landing with theme-aware background images, How It Works steps, accordion FAQ (9 items, including file size limits and project grouping), expanded multi-section About (project origin, privacy & tech, team, contact with email copy & social links), scroll-reveal animations, anchor-linkable sections with deferred rendering for performance
 - **User Guide** — Comprehensive bilingual user manual at `/guideline` with annotated screenshots, interactive table of contents, step-by-step dashboard navigation, CSV export instructions, chart interpretation guide, and troubleshooting section
 - **Privacy Policy & Terms** — `/privacy` and `/terms` pages with bilingual legal content, independent SEO metadata (canonical, OpenGraph, Twitter), JSON-LD WebPage schemas, and Apple-minimalist legal-text layout; linked from footer on every page
 - **Analytics** — Optional Google Analytics 4 integration via `NEXT_PUBLIC_GA_ID` env var; zero overhead when unset, standard page-view tracking only — no CSV data ever tracked
@@ -77,6 +80,7 @@ npm run lint       # ESLint
 | UI          | React 19                                |
 | Charts      | ECharts 6 + echarts-for-react           |
 | CSV Parsing | Papa Parse 5                            |
+| ZIP Handling| JSZip                                    |
 | Styling     | Tailwind CSS v4 + CSS custom properties |
 | Typography  | Hubot Sans (local WOFF2) + Geist Mono (next/font/google) |
 | Language    | TypeScript 5 (strict mode)              |
@@ -106,8 +110,10 @@ src/
 │   ├── GuidelinePage.tsx    # Full interactive user guide (bilingual, annotated screenshots, table of contents, scroll-reveal)
 │   ├── PrivacyPage.tsx      # Privacy policy page (bilingual 7-section legal text, JSON-LD WebPage schema, GitHub source links)
 │   ├── TermsPage.tsx        # Terms of use page (bilingual 8-section legal text, JSON-LD WebPage schema, MIT License reference)
-│   ├── Dashboard.tsx        # Routes between LandingPage and dashboard view (semantic hidden H1)
-│   ├── DropZone.tsx         # Drag-and-drop or click-to-upload CSV (multi-file)
+│   ├── CopyButton.tsx       # Reusable clipboard copy button (hover tooltip, i18n toast, timer cleanup)
+│   ├── Dashboard.tsx        # Routes between LandingPage and 5-tab dashboard view (semantic hidden H1)
+│   ├── DropZone.tsx         # Drag-and-drop or click-to-upload CSV/ZIP (multi-file, 50MB limit)
+│   ├── ProjectView.tsx      # By Project tab: drag-and-drop custom project groups, per-project cost/token/cache table
 │   ├── KPICards.tsx         # Summary stat cards
 │   ├── OverviewView.tsx     # Hero cost + daily bars + donut
 │   ├── KeyView.tsx          # Hero key count + detailed table
@@ -119,14 +125,15 @@ src/
 ├── i18n/
 │   ├── index.ts            # Barrel export
 │   ├── I18nProvider.tsx    # React context + useTranslation hook
-│   └── translations.ts     # All UI strings (en + zh, including guideline and warning groups)
+│   └── translations.ts     # All UI strings (en + zh, including projects and guideline groups)
 └── lib/
     ├── types.ts            # TypeScript interfaces & types
     ├── parser.ts           # CSV parsing pipeline
-    ├── concatFiles.ts      # Multi-month CSV pairing & concat
+    ├── concatFiles.ts      # Multi-month CSV/ZIP pairing, extraction & concat + 50MB size limit
     ├── format.ts           # Locale-aware formatters
     ├── schema.ts           # JSON-LD structured data (SoftwareApplication + FAQPage + BreadcrumbList, bilingual, versioned)
     ├── DataContext.tsx      # Data state + model filter
+    ├── ProjectConfigContext.tsx # Custom project grouping config (drag-and-drop, localStorage persistence)
     └── ThemeContext.tsx     # Theme state + useTheme hook
 ```
 

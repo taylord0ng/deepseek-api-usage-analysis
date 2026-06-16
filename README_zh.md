@@ -10,9 +10,9 @@
 
 ## 使用方式
 
-1. 前往 [DeepSeek 平台](https://platform.deepseek.com) → 用量 → 导出月度 CSV
-2. 每月会得到两个文件：`amount-{年份}-{月份}.csv` 和 `cost-{年份}-{月份}.csv`
-3. 将所有文件拖拽到仪表盘（单月或多月均可，自动配对）
+1. 前往 [DeepSeek 平台](https://platform.deepseek.com) → 用量 → 导出月度数据
+2. 每月下载一个 ZIP 压缩包，内含 `amount-{年份}-{月份}.csv` 和 `cost-{年份}-{月份}.csv`
+3. 将 ZIP 文件（或解压后的 CSV）拖拽到仪表盘 — 多个月份自动配对
 4. 图表即刻渲染 — 数据不会离开你的浏览器
 
 ![仪表盘总览](public/guideline/01-Ds-Api-Usage-Dashboard-Overview-cn.png)
@@ -25,12 +25,15 @@
 - **趋势** — 可切换多指标折线图（费用 / Token / 缓存命中率 / 请求次数），顶部大数字动态跟随指标切换
 - **深色模式** — 完整的浅色/深色双主题，基于 CSS 自定义属性；自动检测系统偏好，手动切换持久化至 localStorage
 - **多语言** — 英文和中文，根据浏览器语言自动检测；手动切换持久化至 localStorage
+- **按项目** — 自定义项目分组标签页：拖拽 API Key 到用户自定义项目中，按项目汇总费用/Token/缓存数据，配置持久化至 localStorage；齿轮图标打开拖拽式配置弹窗，支持键盘操作下拉菜单
 - **模型筛选** — 分段控件胶囊按钮，按模型过滤所有视图；仅在检测到 ≥2 个模型时显示
-- **多月支持** — 一次拖入多个月份文件；根据文件名模式自动配对并拼接
+- **一键复制** — 可复用的 CopyButton 组件，在 KeyView、ProjectView 和 OverviewView 中一键复制费用数值；悬浮提示含国际化成功消息
+- **上传安全** — 单文件 50MB 大小限制，防止 ZIP 炸弹攻击；用户可见的错误提示及专属 FAQ 条目
+- **多月支持** — 一次拖入多个月份文件；根据文件名模式自动配对并拼接。同时支持 ZIP 压缩包直接上传 — 无需解压，直接将 DeepSeek 平台导出的 ZIP 文件拖入页面即可。
 - **Apple 极简设计** — 冷灰纸质感底、大量留白、「无卡片」通栏模块布局、细横线分割、5rem Hero 大数字、弥散阴影
-- **100% 隐私** — 所有 CSV 解析（Papa Parse）和费用计算均在浏览器客户端完成
+- **100% 隐私** — 所有 CSV 解析（Papa Parse）、ZIP 解压（JSZip）和费用计算均在浏览器客户端完成；项目配置仅存储于浏览器的 localStorage 中
 - **SEO 优化** — 服务端渲染元数据（规范 URL、OpenGraph 含 alternateLocale、Twitter 卡片）、JSON-LD 结构化数据（SoftwareApplication + FAQPage + BreadcrumbList，双语）、robots.txt + sitemap.xml、`<noscript>` 爬虫回退内容、支持锚点链接的落地页板块、`llms.txt` 面向 LLM 的站点描述
-- **落地页** — 完整的上传前落地页，包含主题感知背景图片、使用说明步骤、手风琴常见问题（7 项）、多板块关于页面（项目起源、隐私与技术、团队介绍、商业合作含邮箱复制与社交链接）、滚动渐显动画、支持锚点链接的板块与延迟渲染性能优化
+- **落地页** — 完整的上传前落地页，包含主题感知背景图片、使用说明步骤、手风琴常见问题（9 项，含文件大小限制和项目分组）、多板块关于页面（项目起源、隐私与技术、团队介绍、商业合作含邮箱复制与社交链接）、滚动渐显动画、支持锚点链接的板块与延迟渲染性能优化
 - **用户操作手册** — 位于 `/guideline` 的完整双语使用指南，包含标注截图、交互式目录导航、分步仪表盘操作说明、CSV 导出指引、图表解读和故障排查章节
 - **隐私政策与使用条款** — `/privacy` 和 `/terms` 页面，包含双语法务内容、独立 SEO 元数据（规范 URL、OpenGraph、Twitter 卡片）、JSON-LD WebPage Schema 以及 Apple 极简风格的法律文本布局；每页页脚均有导航链接
 - **数据分析** — 可选的 Google Analytics 4 集成，通过 `NEXT_PUBLIC_GA_ID` 环境变量控制；未设置时零开销，仅追踪标准页面浏览 — 绝不追踪任何 CSV 数据
@@ -77,6 +80,7 @@ npm run lint       # ESLint
 | UI     | React 19                           |
 | 图表     | ECharts 6 + echarts-for-react      |
 | CSV 解析 | Papa Parse 5                       |
+| ZIP 处理 | JSZip                                    |
 | 样式     | Tailwind CSS v4 + CSS 自定义属性        |
 | 字体     | Hubot Sans（本地 WOFF2）+ Geist Mono（next/font/google） |
 | 语言     | TypeScript 5（strict 严格模式）          |
@@ -106,8 +110,10 @@ src/
 │   ├── GuidelinePage.tsx    # 完整交互式用户操作手册（双语、标注截图、目录导航、滚动渐显）
 │   ├── PrivacyPage.tsx      # 隐私政策页（双语 7 章节法律文本，JSON-LD WebPage Schema，GitHub 源码链接）
 │   ├── TermsPage.tsx        # 使用条款页（双语 8 章节法律文本，JSON-LD WebPage Schema，MIT 许可证引用）
-│   ├── Dashboard.tsx        # 路由：落地页 / 仪表盘视图切换（语义化隐藏 H1）
-│   ├── DropZone.tsx         # 拖拽或点击上传区（多文件）
+│   ├── CopyButton.tsx       # 可复用剪贴板复制按钮（悬浮提示、国际化 Toast、定时器清理）
+│   ├── Dashboard.tsx        # 路由：落地页 / 5 标签页仪表盘视图切换（语义化隐藏 H1）
+│   ├── DropZone.tsx         # 拖拽或点击上传 CSV/ZIP（多文件，50MB 限制）
+│   ├── ProjectView.tsx      # 按项目标签页：拖拽自定义项目分组，按项目汇总费用/Token/缓存表格
 │   ├── KPICards.tsx         # 摘要指标卡片
 │   ├── OverviewView.tsx     # Hero 费用 + 日柱状图 + 环形图
 │   ├── KeyView.tsx          # Hero Key 数量 + 详细表格
@@ -119,14 +125,15 @@ src/
 ├── i18n/
 │   ├── index.ts            # 统一导出
 │   ├── I18nProvider.tsx    # React 上下文 + useTranslation Hook
-│   └── translations.ts     # 全部 UI 文案（en + zh，含 guideline 和 warning 分组）
+│   └── translations.ts     # 全部 UI 文案（en + zh，含 projects 和 guideline 分组）
 └── lib/
     ├── types.ts            # TypeScript 接口与类型定义
     ├── parser.ts           # CSV 解析管线
-    ├── concatFiles.ts      # 多月 CSV 配对与拼接
+    ├── concatFiles.ts      # 多月 CSV/ZIP 配对、解压与拼接 + 50MB 大小限制
     ├── format.ts           # 本地化格式函数
     ├── schema.ts           # JSON-LD 结构化数据（SoftwareApplication + FAQPage + BreadcrumbList，双语，含版本号）
     ├── DataContext.tsx      # 数据状态 + 模型筛选
+    ├── ProjectConfigContext.tsx # 自定义项目分组配置（拖拽分配，localStorage 持久化）
     └── ThemeContext.tsx     # 主题状态 + useTheme Hook
 ```
 

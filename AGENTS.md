@@ -17,7 +17,7 @@ Strictly follows an Apple-minimalist design language: cold gray paper-texture ba
 ```
 src/
 ├── app/            # Next.js App Router (static export)
-│   ├── layout.tsx           # Root layout, generateMetadata() for SEO (canonical, OG, Twitter, hreflang, alternateLocale), 6 JSON-LD script tags (bilingual SoftwareApplication + FAQPage + BreadcrumbList), Google Analytics (gtag.js via NEXT_PUBLIC_GA_ID), ThemeProvider + I18nProvider + DataProvider
+│   ├── layout.tsx           # Root layout, generateMetadata() for SEO (canonical, OG, Twitter, hreflang, alternateLocale), 6 JSON-LD script tags (bilingual SoftwareApplication + FAQPage + BreadcrumbList), Google Analytics (gtag.js via NEXT_PUBLIC_GA_ID), ThemeProvider + I18nProvider + DataProvider + ProjectConfigProvider
 │   ├── page.tsx             # Entry → renders <Dashboard />
 │   ├── guideline/
 │   │   └── page.tsx          # /guideline route: generates independent SEO metadata (canonical, OG, Twitter), renders <GuidelinePage />
@@ -33,13 +33,15 @@ src/
 ├── components/
 │   ├── TitleBar.tsx          # Shared sticky top nav: logo + app name + GitHub icon + guideline book icon + LanguageSwitcher + ThemeSwitcher
 │   ├── FooterBar.tsx         # Shared footer: thin divider + copyright + guideline link + privacy link + terms link + GitHub link + version (props: animate, sectionRef)
-│   ├── LandingPage.tsx       # Pre-upload landing: Hero with theme-aware bg images + Upload + HowItWorks (with "View Full Guide →" link) + accordion QA (7 items) + multi-section About (Why/Privacy/MindRose/Contact with email copy & social links, scroll-reveal)
+│   ├── LandingPage.tsx       # Pre-upload landing: Hero with theme-aware bg images + Upload + HowItWorks (with "View Full Guide →" link) + accordion QA (9 items) + multi-section About (Why/Privacy/MindRose/Contact with email copy & social links, scroll-reveal)
 │   ├── LandingContent.tsx    # Server-rendered <noscript> fallback: HowItWorks + QA (7 items) + expanded multi-section About for SEO crawlers
 │   ├── GuidelinePage.tsx     # Full interactive user guide page: bilingual content blocks (h1–h6, p, blockquote, tables, ul/ol), screenshot embedding with locale-aware image switching, dynamic table-of-contents, scroll-reveal sections (1496 lines of structured guide content)
 │   ├── PrivacyPage.tsx        # Privacy policy page: bilingual content (7 sections), JSON-LD WebPage schema, Apple-minimalist legal-text layout, back-to-home link + FooterBar, GitHub source link for transparency verification
 │   ├── TermsPage.tsx          # Terms of use page: bilingual content (8 sections), JSON-LD WebPage schema, Apple-minimalist legal-text layout, back-to-home link + FooterBar, open-source license reference
-│   ├── Dashboard.tsx         # Main layout: routes between LandingPage (no data) and Dashboard view (semantic hidden H1 for SEO)
-│   ├── DropZone.tsx          # Drag-and-drop CSV uploader (supports multi-file, "or click to upload")
+│   ├── CopyButton.tsx        # Reusable clipboard copy button with hover tooltip, i18n-aware toast, and timer cleanup (used by KeyView, ProjectView, OverviewView)
+│   ├── Dashboard.tsx         # Main layout: routes between LandingPage (no data) and Dashboard view with 5 tabs (Overview / By Project / By Key / Cache / Trends); semantic hidden H1 for SEO
+│   ├── DropZone.tsx          # Drag-and-drop CSV/ZIP uploader (supports multi-file, ZIP auto-extraction, 50MB file size limit, "or click to upload")
+│   ├── ProjectView.tsx       # "By Project" tab: aggregates API keys into custom project groups (drag-and-drop config), per-project cost/token/cache stats with inline bars, CopyButton integration
 │   ├── KPICards.tsx          # Summary stat cards (card-less big-number layout)
 │   ├── OverviewView.tsx      # Hero total cost + daily cost bars + cost-by-key donut (theme-aware)
 │   ├── KeyView.tsx           # Hero key count + per-key table with inline bars & cache-hit color coding
@@ -51,14 +53,15 @@ src/
 ├── i18n/
 │   ├── index.ts             # Barrel export
 │   ├── I18nProvider.tsx     # React context + useTranslation hook + localStorage persistence
-│   └── translations.ts      # All UI strings in en/zh (app, tabs, dropzone, kpi, landing, warning, privacy, terms, etc.)
+│   └── translations.ts      # All UI strings in en/zh (app, tabs, dropzone, kpi, landing, warning, privacy, terms, projects, etc.)
 └── lib/
     ├── types.ts             # AmountRow, CostRow, DailyUsage, KeyStats, ParseResult, ParseError, ParseWarning
     ├── parser.ts            # Papa Parse CSV pipeline (parse → pivot → join → computeKeyStats)
-    ├── concatFiles.ts       # Multi-month CSV pairing & concatenation (reads file names, strips headers)
-    ├── format.ts            # Locale-aware formatCost / formatTokens / formatPercent
+    ├── concatFiles.ts       # Multi-month CSV pairing & concatenation + ZIP extraction (JSZip) + 50MB upload size limit
+    ├── format.ts            # Locale-aware formatCost / formatTokens / formatPercent / formatCostFull / formatTokensFull
     ├── schema.ts            # JSON-LD structured data: SoftwareApplication + FAQPage + BreadcrumbList (bilingual en/zh, versioned)
     ├── DataContext.tsx       # Data state + model filter (selectedModel, filteredResult, filterResult)
+    ├── ProjectConfigContext.tsx  # Custom project grouping config: drag-and-drop key assignment, localStorage persistence, uncategorized fallback, reset-to-default
     └── ThemeContext.tsx      # Light/dark theme context + useTheme hook + localStorage + system preference
 
 public/
@@ -86,66 +89,31 @@ public/
 - **Next.js 16** with React 19 — App Router, `"use client"` directives, static export
 - **ECharts 6** via `echarts-for-react` for all visualizations (bar, line, pie/donut with theme-aware colors)
 - **Papa Parse** for CSV parsing (runs in browser)
+- **JSZip** for client-side ZIP extraction (DeepSeek platform ZIP exports)
 - **Tailwind CSS v4** with `@theme inline` extensions — CSS-first configuration, no `tailwind.config.ts`
 - **Hubot Sans** as primary font (local WOFF2, 3 weights: 400/500/700), with Chinese fallback stack (`PingFang SC`, `Microsoft YaHei`) — Apple-like typography
 - **Geist Mono** (from `next/font/google`) for code — variable weight
 - **CSS custom properties** for theming — all colors are `var(--bg)`, `var(--text-primary)`, etc.; NO hardcoded colors in components
 - **TypeScript 5** with strict mode, path alias `@/*` → `./src/*`
-- **SEO**: `generateMetadata()` in layout.tsx, guideline/page.tsx, privacy/page.tsx, and terms/page.tsx (canonical URL, OpenGraph, Twitter cards, hreflang alternates), JSON-LD structured data (SoftwareApplication + FAQPage [7 Q&A pairs] + BreadcrumbList + WebPage schemas for privacy/terms), robots.txt + sitemap.xml (includes /, /guideline, /privacy, /terms), `<noscript>` crawler fallback, semantic hidden H1, `llms.txt` for LLM-friendly site description
+- **SEO**: `generateMetadata()` in layout.tsx, guideline/page.tsx, privacy/page.tsx, and terms/page.tsx (canonical URL, OpenGraph, Twitter cards, hreflang alternates), JSON-LD structured data (SoftwareApplication + FAQPage [9 Q&A pairs] + BreadcrumbList + WebPage schemas for privacy/terms), robots.txt + sitemap.xml (includes /, /guideline, /privacy, /terms), `<noscript>` crawler fallback, semantic hidden H1, `llms.txt` for LLM-friendly site description
 - **Analytics**: Google Analytics via `NEXT_PUBLIC_GA_ID` env var — gtag.js injected in `<head>` at build time, conditional (only when GA_ID is set)
 
-## SEO architecture
+## SEO, Analytics & Deployment
 
-The app implements a multi-layered SEO strategy suitable for a client-rendered static SPA:
+### SEO architecture
 
-### Build-time artifacts
+Multi-layered SEO for a client-rendered static SPA:
+- **Build-time**: `robots.ts` + `sitemap.ts` (Next.js 16 `MetadataRoute` conventions) generate `/robots.txt` and `/sitemap.xml` (includes `/`, `/guideline`, `/privacy`, `/terms`). Site URL from `NEXT_PUBLIC_SITE_URL` env var (default: `https://deepseek-usage.xyz`).
+- **`generateMetadata()`**: `layout.tsx`, `guideline/page.tsx`, `privacy/page.tsx`, `terms/page.tsx` each generate canonical URL, OpenGraph (with `alternateLocale: ["zh_CN"]`), Twitter card, hreflang alternates, and robots directives.
+- **JSON-LD**: `src/lib/schema.ts` generates bilingual `SoftwareApplication` + `FAQPage` (9 Q&A) + `BreadcrumbList` — 6 `<script type="application/ld+json">` tags injected at build time. Privacy/terms pages each have client-rendered `WebPage` schema.
+- **`<noscript>` fallback**: `LandingContent.tsx` outputs How It Works, FAQ, About for crawlers that don't execute JS.
+- **Client enhancements**: Visible `<h1>` on landing, `sr-only` `<h1>` on dashboard, theme-aware hero images, `llms.txt` for LLM-friendly site description.
 
-- **`robots.ts`** — Follows Next.js 16 `MetadataRoute.Robots` convention. Generates `/robots.txt` at build time: allows all crawlers, points to sitemap. Compatible with `output: "export"` via `export const dynamic = "force-static"`.
-- **`sitemap.ts`** — Follows Next.js 16 `MetadataRoute.Sitemap` convention. Generates `/sitemap.xml` at build time. Site URL reads from `NEXT_PUBLIC_SITE_URL` env var (defaults to `https://deepseek-usage.xyz`).
+### Google Analytics
 
-### Server-side metadata (`layout.tsx`)
+Opt-in GA4 via `NEXT_PUBLIC_GA_ID` env var. When set, gtag.js injected in `<head>` at build time. Tracks standard page-views only — zero CSV data tracking. When unset, zero overhead. Configure in deployment env only.
 
-`generateMetadata()` (replaces static `metadata` export) injects:
-- **Canonical URL** + **hreflang alternates** (`en` / `zh` pointing to same URL — the app uses client-side language detection, no URL-level routing)
-- **OpenGraph**: title, description, URL, site name, locale (`en_US`), `alternateLocale: ["zh_CN"]`, 512×512 logo image
-- **Twitter card**: `summary` type with logo image
-- **Robots**: `index: true, follow: true`
-
-### JSON-LD structured data
-
-`src/lib/schema.ts` generates bilingual (en + zh) JSON-LD blocks injected as `<script type="application/ld+json">` in the root layout:
-- **`SoftwareApplication`** — name, description, version, OS, category, free offer
-- **`FAQPage`** — 7 Q&A pairs matching the landing page accordion content (expanded from 4 in v0.3.2)
-- **`BreadcrumbList`** — single-item breadcrumb helping search engines understand the page's position in the site structure
-
-All three schemas exist in both languages (6 total script tags). They are server-rendered — no client JS needed for crawlers to see them.
-
-### Crawler fallback content
-
-`src/components/LandingContent.tsx` outputs the full How It Works, FAQ, and About content wrapped in `<noscript>`. Crawlers that don't execute JavaScript still see all landing page text. Browsers (with JS enabled) ignore the `<noscript>` block — the interactive `LandingPage.tsx` renders the visible content instead.
-
-### Client-side enhancements
-
-- **LandingPage** renders a visible `<h1>` (app title) — this is fully accessible and crawlable
-- **Dashboard** (post-upload) includes a semantically hidden `<h1 className="sr-only">` — visible to screen readers and search engines, visually hidden
-- **Theme-aware background images** in the hero area: `public/landing/notion_sketch_*_light.png` and `*_dark.png` — swapped based on `useTheme()` for visual liveliness
-
-### Environment variables
-
-- `NEXT_PUBLIC_SITE_URL` — injected at build time into `layout.tsx` (metadata), `guideline/page.tsx` (metadata), `privacy/page.tsx` (metadata), `terms/page.tsx` (metadata), `robots.ts` (sitemap URL), and `sitemap.ts` (entry URLs). Defaults to `https://deepseek-usage.xyz`.
-- `NEXT_PUBLIC_GA_ID` — Google Analytics 4 measurement ID (e.g., `G-XXXXXXXXXX`). When unset, no GA script is injected. Set only in production deployment; leave unset for local development.
-
-## Google Analytics
-
-Google Analytics 4 (gtag.js) is integrated for production traffic monitoring. It is entirely opt-in and conditional:
-
-- Controlled by `NEXT_PUBLIC_GA_ID` env var — when unset, no GA script is injected (zero overhead)
-- Injected in `layout.tsx` `<head>` via `<Script async src="...googletagmanager.com/gtag/js?id=...">` + inline `gtag('config', ...)`
-- Uses `dangerouslySetInnerHTML` for the inline init script — appropriate for build-time-injected static content
-- Does NOT track CSV data or usage details — standard page-view analytics only
-- No impact on the privacy-first promise: CSV processing remains 100% client-side, no data leaves the browser
-
-## Deployment & Security (`vercel.json`)
+### Deployment & Security (`vercel.json`)
 
 Root-level `vercel.json` configures production deployment on Vercel with security headers and cache rules:
 
@@ -162,46 +130,14 @@ Root-level `vercel.json` configures production deployment on Vercel with securit
   - Favicon, `llms.txt`, `sitemap.xml`, `robots.txt` → `max-age=86400` (1 day)
 - **Compatible** with any static host (Vercel, Netlify, Cloudflare Pages, GitHub Pages) — only the `vercel.json` syntax is Vercel-specific; the security header values are universal
 
-## User guide page (`/guideline`)
+## Sub-pages
 
-A comprehensive, bilingual user manual accessible at `/guideline`. Rendered via `<GuidelinePage />` (`src/components/GuidelinePage.tsx`):
+All sub-pages follow the same pattern: route directory under `src/app/` with `page.tsx` generating independent SEO metadata (canonical URL, OpenGraph, Twitter card), component in `src/components/`, URL in `sitemap.xml`, and navigation links in `FooterBar.tsx`.
 
-- **Route**: `src/app/guideline/page.tsx` — generates independent SEO metadata (canonical URL, OpenGraph, Twitter card, robots directives)
-- **Content structure**: Markdown-like content blocks (`h1`–`h6`, `p`, `blockquote`, `ul`/`ol`, `table`, `hr`) rendered as React components; 16+ bilingual screenshot captures in `public/guideline/`
-- **Screenshot system**: `SCREENSHOT_MAP` maps content block IDs to screenshot filenames; locale-aware (`-cn.png` / `-en.png`) switching via `useTranslation()`; uses `next/image` with `unoptimized` for static export
-- **Table of Contents**: Dynamic sidebar ToC generated from `h2` headings with active-section scroll tracking (Intersection Observer)
-- **Navigation**: Back-to-home link, scroll-to-section anchors, book icon in TitleBar, text link in FooterBar, "View Full Guide →" link below How It Works on LandingPage
-- **SEO**: Included in `sitemap.xml` (priority 0.8, monthly change frequency); crawled by search engines as a standalone content page
-
-## Privacy Policy page (`/privacy`)
-
-A bilingual privacy policy page accessible at `/privacy`. Rendered via `<PrivacyPage />` (`src/components/PrivacyPage.tsx`):
-
-- **Route**: `src/app/privacy/page.tsx` — generates independent SEO metadata (canonical URL, OpenGraph, Twitter card, robots directives)
-- **Content**: 7 sections covering data collection (none), local processing, Google Analytics (opt-in, GA ID conditional), third-party services (none beyond GA), security, policy changes, and contact
-- **JSON-LD**: Client-rendered `WebPage` schema with bilingual name/description, `isPartOf` pointing to the main site
-- **Design**: Apple-minimalist legal-text layout — TitleBar + back-to-home link + centered content (`max-w-3xl`) + chapter-style sections + FooterBar
-- **Transparency**: "Review source code →" links point to the GitHub repository, reinforcing the privacy-first promise
-- **SEO**: Included in `sitemap.xml` (priority 0.5, monthly change frequency); independent canonical URL + OpenGraph + Twitter card
-
-## Terms of Use page (`/terms`)
-
-A bilingual terms of use page accessible at `/terms`. Rendered via `<TermsPage />` (`src/components/TermsPage.tsx`):
-
-- **Route**: `src/app/terms/page.tsx` — generates independent SEO metadata (canonical URL, OpenGraph, Twitter card, robots directives)
-- **Content**: 8 sections covering as-is service, no warranty, not affiliated with DeepSeek, user data & responsibility, open source (MIT License), limitation of liability, changes to terms, and contact
-- **JSON-LD**: Client-rendered `WebPage` schema with bilingual name/description, `isPartOf` pointing to the main site
-- **License reference**: Links to the MIT LICENSE file in the GitHub repository; includes full license text summary
-- **Design**: Same Apple-minimalist legal-text layout as Privacy Policy (`max-w-2xl`)
-- **SEO**: Included in `sitemap.xml` (priority 0.5, monthly change frequency); independent canonical URL + OpenGraph + Twitter card
-
-## llms.txt
-
-`public/llms.txt` provides an LLM-friendly site description in markdown format, following the [llms.txt convention](https://llms.txt/):
-
-- Describes what the app does, who it's for, how it works, data format, privacy guarantees, languages, themes, and team links
-- Served as a static file at `https://deepseek-usage.xyz/llms.txt`
-- Helps AI tools and crawlers understand the site's purpose and structure without executing JavaScript
+- **`/guideline`** (`GuidelinePage.tsx`): Bilingual user manual — markdown-like content blocks, 16+ annotated screenshots (locale-aware `-cn.png`/`-en.png`), dynamic sidebar ToC with Intersection Observer scroll tracking. Priority 0.8 in sitemap.
+- **`/privacy`** (`PrivacyPage.tsx`): 7-section bilingual legal text, JSON-LD WebPage schema, `max-w-3xl` centered layout, GitHub source links for transparency. Priority 0.5 in sitemap.
+- **`/terms`** (`TermsPage.tsx`): 8-section bilingual legal text, MIT License reference, JSON-LD WebPage schema, `max-w-2xl` layout. Priority 0.5 in sitemap.
+- **`/llms.txt`**: Static markdown file in `public/` — LLM-friendly site description (purpose, features, data format, privacy, team).
 
 ## Theme system
 
@@ -224,91 +160,11 @@ The landing page hero area displays background decoration images that switch wit
 
 ### CSS variable design
 
-All colors are defined as CSS custom properties on `:root, .light` and `.dark` selectors in `globals.css`. Components NEVER use hardcoded color values — always reference `var(--...)`.
+All colors are defined as CSS custom properties on `:root, .light` and `.dark` selectors in `globals.css`. Components NEVER use hardcoded color values — always reference `var(--...)`. For full token reference, read `src/app/globals.css` (30+ tokens for bg, text, border, accent, semantic colors, shadows, dropzone states).
 
-**Full color token reference:**
+Tailwind v4 `@theme inline` in `globals.css` maps key CSS variables to Tailwind utility classes (`bg-background`, `text-foreground`, `border-border`, `animate-fade-in`, etc.). Key utility classes: `.shadow-diffuse`, `.shadow-diffuse-md`, `.rounded-subtle`, `.reveal-section` / `.reveal-section.visible` (Intersection Observer scroll-reveal), `.accordion-panel` / `.accordion-panel.open`.
 
-| Variable | Light | Dark | Usage |
-|---|---|---|---|
-| `--bg` | `#F5F5F7` | `#000000` | Page background |
-| `--bg-surface` | `#FFFFFF` | `#1C1C1E` | Elevated surface |
-| `--bg-surface-hover` | `#FAFAFA` | `#2C2C2E` | Surface hover state |
-| `--text-primary` | `#1D1D1F` | `#F5F5F7` | Body text, headings |
-| `--text-secondary` | `#86868B` | `#98989D` | Labels, captions, table values |
-| `--text-tertiary` | `#98989D` | `#636366` | Muted hints, metadata |
-| `--border` | `#E5E5EA` | `#38383A` | Dividers, table borders, pill track |
-| `--border-strong` | `#D2D2D7` | `#48484A` | Scrollbar thumb |
-| `--accent` | `#1D1D1F` | `#F5F5F7` | Emphasis, chart series, selected tab underline |
-| `--accent-hover` | `#3A3A3C` | `#D2D2D7` | Accent hover state |
-| `--accent-inverse` | `#F5F5F7` | `#1D1D1F` | Text on accent background (e.g., selected pill) |
-| `--positive` | `#059669` | `#34D399` | Cache hit green (>40% in KeyView) |
-| `--positive-subtle` | `#ECFDF5` | `#064E3B` | Positive background highlight |
-| `--danger` | `#DC2626` | `#F87171` | Error / clear button red (<20% in KeyView) |
-| `--danger-subtle` | `#FEF2F2` | `#3B1717` | Danger background highlight |
-| `--error-bg` | `#FDF2F2` | `#3B1717` | Error banner background |
-| `--error-border` | `#FECACA` | `#7F1D1D` | Error banner border |
-| `--error-text` | `#991B1B` | `#FCA5A5` | Error banner text |
-| `--warning-bg` | `#FFFBEB` | `#3B2F0E` | Warning banner background |
-| `--warning-border` | `#FDE68A` | `#78350F` | Warning banner border |
-| `--warning-text` | `#92400E` | `#FDE68A` | Warning banner text + mid-range cache hit (20-40%) |
-| `--chart-grid` | `#E5E5EA` | `#38383A` | ECharts grid lines (available but not directly used — components use `useTheme()` instead) |
-| `--chart-text` | `#86868B` | `#98989D` | ECharts text (available but not directly used) |
-| `--dropzone-bg` | `#EEF2F9` | `#11151D` | Drop zone default background |
-| `--dropzone-drag-bg` | `#EDEEF0` | `#2C2C2E` | Drop zone background on drag-over |
-| `--dropzone-drag-border` | `#86868B` | `#98989D` | Drop zone border on drag-over |
-
-**Shadow tokens:**
-
-| Variable | Light | Dark |
-|---|---|---|
-| `--shadow-sm` | `0 2px 16px rgba(0, 0, 0, 0.03)` | `0 2px 16px rgba(0, 0, 0, 0.3)` |
-| `--shadow-md` | `0 4px 32px rgba(0, 0, 0, 0.04)` | `0 4px 32px rgba(0, 0, 0, 0.5)` |
-
-### Tailwind v4 @theme inline integration
-
-The `@theme inline` block in `globals.css` maps CSS custom properties to Tailwind v4 theme tokens, allowing components to use both `var(--...)` and Tailwind utility classes interchangeably:
-
-```css
-@theme inline {
-  --color-background:  var(--bg);
-  --color-foreground:  var(--text-primary);
-  --color-surface:     var(--bg-surface);
-  --color-border:      var(--border);
-  --color-accent:      var(--accent);
-  --color-muted:       var(--text-secondary);
-  --font-sans:         "Hubot Sans", -apple-system, BlinkMacSystemFont,
-                       "SF Pro Text", "Helvetica Neue", "PingFang SC",
-                       "Microsoft YaHei", sans-serif;
-  --font-mono:         var(--font-geist-mono), "SF Mono", Menlo, monospace;
-  --animate-fade-in:   fade-in 0.3s ease-out;
-  --animate-slide-up:  slide-up 0.35s ease-out;
-}
-```
-
-This means `bg-background`, `text-foreground`, `border-border`, `animate-fade-in` etc. all work as Tailwind classes.
-
-### Utility classes
-
-The following utility classes are defined in `globals.css`:
-
-- `.shadow-diffuse` — applies `var(--shadow-sm)` (subtle diffuse shadow)
-- `.shadow-diffuse-md` — applies `var(--shadow-md)` (deeper diffuse shadow)
-- `.rounded-subtle` — `border-radius: 6px` (consistent micro-rounding)
-- `.reveal-section` — Initial state: `opacity: 0; transform: translateY(24px)`. Controlled by Intersection Observer in `LandingPage.tsx`
-- `.reveal-section.visible` — `opacity: 1; transform: translateY(0)` with 0.6s cubic-bezier transition
-- `.accordion-panel` — Collapsed state: `max-height: 0; opacity: 0`
-- `.accordion-panel.open` — Expanded state: `max-height: 12rem; opacity: 1` with 0.35s cubic-bezier transition (Note: LandingPage.tsx now uses inline styles for accordion animation instead of these classes, but the classes remain available)
-
-### Global base styles
-
-- **Font**: `Hubot Sans` (local WOFF2, weight 400 body / 700 headings), `Geist Mono` for code. Chinese fallback: `PingFang SC`, `Microsoft YaHei`.
-- **Text rendering**: `antialiased`, `optimizeLegibility`, `-0.01em` letter-spacing on body
-- **Smooth scrolling**: `scroll-behavior: smooth` on `<html>`
-- **Color scheme**: `color-scheme: light` / `color-scheme: dark` set per theme for native browser UI (form controls, scrollbars)
-- **Selection**: Inverted colors (`var(--text-primary)` bg, `var(--accent-inverse)` text)
-- **Scrollbar**: 6px thin, transparent track, `var(--border-strong)` thumb, hover darkens
-- **Links**: `var(--text-secondary)` with hover → `var(--text-primary)` transition
-- **Reduced motion**: `@media (prefers-reduced-motion: reduce)` kills all animations (0.01ms duration) and disables smooth scroll — respects user OS preference
+Global base styles: smooth scrolling, `color-scheme` per theme, inverted selection, 6px themed scrollbar, `prefers-reduced-motion` support.
 
 ### ECharts theme integration
 
@@ -322,13 +178,6 @@ const gridColor = isDark ? "#2C2C2E" : "#E5E5EA";
 ```
 
 Chart series colors switch between dark-on-light (matte black `#1D1D1F`) and light-on-dark (white `#F5F5F7`). Cache-related charts use green (`#059669` / `#34D399`) for hits and gray (`#D2D2D7` / `#636366`) for misses.
-
-### Adding a new themed component
-
-1. Reference CSS variables directly for non-chart elements: `style={{ color: "var(--text-primary)" }}`
-2. For ECharts options, use `useTheme()` and branch on `isDark`
-3. To add a new CSS variable: define it in both `:root, .light` AND `.dark` blocks in `globals.css`
-4. To add a new Tailwind utility: add to the `@theme inline` block
 
 ## Model filter
 
@@ -359,41 +208,64 @@ A segmented control (pill buttons) below the tab bar lets users filter all views
 
 ### Translation key groups
 
-| Group | Keys | Used in |
-|---|---|---|
-| `app` | `title`, `subtitle` | `Dashboard.tsx` title area, `LandingPage.tsx` hero |
-| `tabs` | `overview`, `keys`, `cache`, `trends` | `Dashboard.tsx` tab bar |
-| `header` | `loadDifferent`, `clear` | `Dashboard.tsx` header actions |
-| `footer` | `text`, `version` | `FooterBar.tsx` |
-| `dropzone` | `processing`, `title`, `hint`, `privacy` | `DropZone.tsx` |
-| `kpi` | `totalCost`, `totalTokens`, `cacheHitRate`, `activeKeys`, `saved`, `models` | `KPICards.tsx`, various views |
-| `overview` | `dailyCost`, `costByKey` | `OverviewView.tsx` |
-| `trends` | `dailyCost`, `dailyTokens`, `cacheHitRate`, `requestCount`, `heroSubtitle` | `TrendsView.tsx` |
-| `cache` | `hitRateTitle`, `servedFromCache`, `dailyHitRate`, `hitsVsMisses`, `noCacheTitle`, `noCacheHint`, `hits`, `misses` | `CacheView.tsx` |
-| `keys` | `title`, `apiKeyName`, `tokens`, `cost`, `cacheHit`, `requests`, `heroSubtitle` | `KeyView.tsx` |
-| `error` | `missingColumns`, `malformedRow`, `emptyFile`, `incompleteUpload`, `row`, `column` | `ErrorDisplay.tsx` |
-| `warning` | `dateMismatch`, `noCostMatch`, `partialCacheData`, `schemaDrift` | `ErrorDisplay.tsx` warning banners |
-| `meta` | `title`, `description` | `layout.tsx` generateMetadata(), `schema.ts` JSON-LD |
-| `langSwitcher` | `label` | (deprecated — component now uses hardcoded `aria-label`) |
-| `theme` | `light`, `dark`, `switchToDark`, `switchToLight` | `ThemeSwitcher.tsx` |
-| `modelFilter` | `allModels` | `Dashboard.tsx` model filter pill |
-| `guideline` | `pageTitle`, `backToHome`, `viewGuide`, `toc`, `footerNote` | `GuidelinePage.tsx`, `TitleBar.tsx`, `FooterBar.tsx`, `LandingPage.tsx` |
-| `landing` | `howItWorksTitle`, `howItWorksStep1Title`, `howItWorksStep1Desc`, `howItWorksStep2Title`, `howItWorksStep2Desc`, `howItWorksStep3Title`, `howItWorksStep3Desc`, `qaTitle`, `qaQ1`–`qaQ7`, `qaA1`–`qaA7`, `aboutSectionTitle`, `aboutWhyTitle`, `aboutWhyDesc`, `aboutPrivacyTitle`, `aboutPrivacyDesc`, `aboutMindRoseTitle`, `aboutMindRoseDesc`, `aboutContactTitle`, `aboutContactDesc`, `aboutContactService`, `aboutContactCTA`, `aboutGitHubLabel`, `aboutLinkedInLabel`, `aboutMindRoseLabel` | `LandingPage.tsx`, `LandingContent.tsx` (noscript), `schema.ts` (FAQPage JSON-LD) |
-| `privacy` | `pageTitle`, `effectiveDate`, `intro`, `noCollectionTitle`, `noCollectionDesc`, `localProcessingTitle`, `localProcessingDesc`, `analyticsTitle`, `analyticsDesc`, `analyticsOptOut`, `gaIdNote`, `thirdPartyTitle`, `thirdPartyDesc`, `securityTitle`, `securityDesc`, `changesTitle`, `changesDesc`, `contactTitle`, `contactDesc`, `githubLabel`, `reviewSourceCode` | `PrivacyPage.tsx`, `FooterBar.tsx` |
-| `terms` | `pageTitle`, `effectiveDate`, `intro`, `asIsTitle`, `asIsDesc`, `noWarrantyTitle`, `noWarrantyDesc`, `notAffiliatedTitle`, `notAffiliatedDesc`, `userDataTitle`, `userDataDesc`, `openSourceTitle`, `openSourceDesc`, `openSourceLicense`, `limitationTitle`, `limitationDesc`, `changesTitle`, `changesDesc`, `contactTitle`, `contactDesc`, `githubLabel`, `reviewSourceCode` | `TermsPage.tsx`, `FooterBar.tsx` |
+Keys are flat 2-level (`group.keyName`) in `src/i18n/translations.ts`. Do NOT nest deeper — the type system flattens leaf keys to `string`. To find specific keys, grep `translations.ts` for the group prefix (e.g., `projects:`). Primary groups and their consumers:
 
-## Multi-month CSV support (concatFiles)
+| Group | Consumers |
+|---|---|
+| `app`, `tabs` (overview/projects/keys/cache/trends), `header`, `footer`, `modelFilter` | `Dashboard.tsx`, `TitleBar.tsx`, `FooterBar.tsx` |
+| `dropzone`, `error`, `warning` | `DropZone.tsx`, `ErrorDisplay.tsx` |
+| `kpi`, `overview`, `trends`, `cache`, `keys` | `KPICards.tsx`, `OverviewView.tsx`, `TrendsView.tsx`, `CacheView.tsx`, `KeyView.tsx` |
+| `projects` (22 keys: modal, drag-and-drop, validation) | `ProjectView.tsx` config modal |
+| `landing` (howItWorks, qaQ1–qaQ9, about*) | `LandingPage.tsx`, `LandingContent.tsx`, `schema.ts` |
+| `guideline`, `privacy` (21 keys), `terms` (22 keys), `meta`, `theme` | `GuidelinePage.tsx`, `PrivacyPage.tsx`, `TermsPage.tsx`, `layout.tsx`, `ThemeSwitcher.tsx` |
 
-`src/lib/concatFiles.ts` handles multi-month CSV pairing and concatenation:
+## Multi-month CSV & ZIP support (concatFiles)
 
-1. **File name pattern**: `amount-{year}-{month}.csv` / `cost-{year}-{month}.csv` (e.g., `amount-2026-5.csv` + `cost-2026-5.csv`)
-2. **Pairing**: Groups files by extracted `{year}-{month}` key — only months with BOTH amount and cost files are paired
-3. **Concatenation**: First file keeps its header; subsequent files have headers stripped before joining
-4. **Fallback**: If no named pairs are found, falls back to grouping by prefix (`amount-*`, `cost-*`)
-5. **Label**: Single month → `"2026-5"`, multiple months → `"2026-5 ~ 2026-6"`
-6. **Result**: Returns concatenated `amountText`, `costText`, human-readable `label`, and `monthCount`
+`src/lib/concatFiles.ts` — pairs files by `amount-{year}-{month}.csv` / `cost-{year}-{month}.csv` pattern. Only months with BOTH files are paired. First file keeps headers; subsequent headers stripped. Label: `"2026-5 ~ 2026-6"`. ZIP archives auto-detected and extracted via JSZip. `MAX_UPLOAD_SIZE_BYTES = 50 * 1024 * 1024` (50 MB) prevents ZIP bombs. Used by `DropZone.tsx` and `Dashboard.tsx`.
 
-Both `DropZone.tsx` (initial upload) and `Dashboard.tsx` (re-upload) use `concatMonthlyCSVs()` with `File[]` from drag-and-drop or file picker.
+## Custom Project Grouping (By Project tab)
+
+A "By Custom Projects" tab in the dashboard lets users organize API keys into user-defined project groups. This is the second tab (between Overview and By Key).
+
+### Architecture
+
+- **`ProjectConfigContext`** (`src/lib/ProjectConfigContext.tsx`): React context managing project definitions — `ProjectDef[]` (name + keyNames array). Persisted to `localStorage["ds-project-config"]`. Provides `config`, `setConfig`, `matchProject(keyName)` lookup, `resetConfig()`.
+- **`ProjectView`** (`src/components/ProjectView.tsx`): Main view component. Aggregates daily data by project groups, computes per-project stats (tokens, cost, cache hit rate, request count), renders a table with inline usage bars and CopyButton integration for cost values. Unassigned keys fall into "Uncategorized" bucket.
+- **Config modal**: Drag-and-drop interface for assigning keys to projects. Unassigned keys pool on the left, project drop zones on the right. Each unassigned key also has a dropdown (`<select>`) for keyboard-only assignment. Modal features: duplicate project name validation, unsaved-changes confirmation dialog, reset-to-default, keyboard shortcut hints.
+
+### Data flow
+
+1. `ProjectView` reads `daily` from `filteredResult` and extracts all unique key names
+2. `matchProject(keyName)` from `ProjectConfigContext` maps each key to its project (case-insensitive)
+3. Stats are aggregated per project using `useMemo`
+4. Unmatched keys group into "Uncategorized" (sentinel: `UNCATEGORIZED = "__uncategorized__"`)
+5. Project config is entirely local — stored in `localStorage`, never transmitted
+
+### Styling
+
+- Same table layout as KeyView with inline usage bars
+- Gear icon button opens the config modal
+- Cost values wrapped in `<CopyButton>` for one-click copy
+- Cache hit rate color coding matches KeyView (green > 40% / amber 20–40% / red < 20%)
+
+## CopyButton component
+
+`src/components/CopyButton.tsx` is a reusable clipboard copy button used across the app:
+
+- **Props**: `value` (number to copy), `name` (display name for toast), `children` (button content), `className` (optional)
+- **Copy logic**: `navigator.clipboard.writeText()` with `<textarea>` fallback for older browsers
+- **Toast**: i18n-aware "Copied" message displayed for 1.5s above the button
+- **Timer cleanup**: `useEffect` cleanup cancels timeout on unmount to prevent stale state updates
+- **Used in**: `KeyView` (per-key cost copy), `ProjectView` (per-project cost copy), `OverviewView` (hero total cost copy)
+
+## Upload security
+
+The app implements client-side upload safety measures:
+
+- **50MB per-file limit**: `MAX_UPLOAD_SIZE_BYTES = 50 * 1024 * 1024` in `concatFiles.ts`. Files exceeding this limit are rejected with a user-facing error message before any parsing occurs. This is a ZIP bomb protection measure — legitimate DeepSeek monthly exports are typically under 1 MB.
+- **Error display**: `DropZone.tsx` checks file sizes during upload processing and surfaces oversized-file errors through `<ErrorDisplay />` with i18n titles.
+- **FAQ coverage**: Landing page FAQ includes Q8 ("Is there a file size limit?") explaining the 50MB cap.
+- **Privacy**: All validation happens client-side — no file content is sent anywhere.
 
 ## CSV format (DeepSeek platform)
 
@@ -420,29 +292,24 @@ Both `DropZone.tsx` (initial upload) and `Dashboard.tsx` (re-upload) use `concat
 The app has two distinct page states managed by `Dashboard.tsx`:
 
 ### Landing page (pre-upload, `!result`)
-Rendered via `<LandingPage />` — a scrollable single-page layout with:
-1. **TitleBar** — sticky top bar with logo + app name + GitHub icon + LanguageSwitcher + ThemeSwitcher
-2. **Hero** — shorter section (`pt-16 pb-10`), centered title + subtitle, uses `translate="no"` on heading. Background features theme-aware decoration images (CSV sketch left, chart sketch right) positioned absolutely with `pointer-events-none`.
+Rendered via `<LandingPage />` — scrollable single-page with:
+1. **TitleBar** — sticky top nav: logo + app name + GitHub + LanguageSwitcher + ThemeSwitcher
+2. **Hero** — centered title/subtitle (`pt-16 pb-10`), theme-aware bg decoration images (CSV sketch left, chart sketch right), `pointer-events-none`
 3. **Upload** — `<DropZone />` + `<ErrorDisplay />`
-4. **LandingContent** — `<noscript>` fallback (server-rendered, invisible when JS is enabled) containing How It Works + FAQ + expanded multi-section About text for SEO crawlers
-5. **How It Works** — 3-step grid layout, each step has a numbered circle (`w-10 h-10 rounded-full`), hover micro-interactions via `group` + `group-hover`. Section has `id="how-it-works"` for direct anchor linking. Below steps: "View Full Guide →" link (`t.guideline.viewGuide`) pointing to `/guideline`. Uses `content-visibility: auto` for deferred rendering.
-6. **QA** — Accordion pattern: click on question toggles answer panel. Now has 7 Q&A items (expanded from 4 in v0.3.2: Q5 covers cost showing $0, Q6 covers incomplete upload, Q7 points to the user guide). Uses `openQa` state (number | null). Panels animated via inline styles with `max-height`/`opacity` transition. Accessible: `aria-expanded`, `aria-controls`, keyboard support (Enter/Space). `focus-visible` outlines. Centered with `max-w-2xl`. Section has `id="faq"` for direct anchor linking. Uses `content-visibility: auto` for deferred rendering.
-7. **About** — Multi-section layout (with `<h2>` section title + 4 subsections each headed by `<h3>`, separated by dashed `<hr>` dividers):
-   - **Why We Built This** — project origin story
-   - **Under the Hood: Privacy & Tech** — pure frontend architecture explanation
-   - **About MindRose** — team introduction
-   - **Let's Work Together** — business contact with email copy button (`navigator.clipboard.writeText`, copy SVG checkmark feedback, 2s toast) and social link pills (GitHub, LinkedIn, MindRose website with SVG icons)
-   Section has `id="about"` for direct anchor linking. Uses `content-visibility: auto` for deferred rendering.
-8. **FooterBar** — shared footer with `animate` prop for reveal-section scroll animation
+4. **`<noscript>` fallback** — `LandingContent.tsx` for SEO crawlers (How It Works + FAQ + About)
+5. **How It Works** — 3-step grid with numbered circles, `id="how-it-works"`, "View Full Guide →" link, `content-visibility: auto`
+6. **QA** — 9-item accordion (`id="faq"`, `max-w-2xl`): Q5=$0 cost, Q6=incomplete upload, Q7=user guide, Q8=file size limit, Q9=project grouping. Accessible: `aria-expanded`/`aria-controls`, keyboard Enter/Space, inline `max-height`/`opacity` transition
+7. **About** — `id="about"`, 4 subsections (Why/Privacy/MindRose/Contact) with email copy + social link pills, `content-visibility: auto`
+8. **FooterBar** — with `animate` prop for scroll-reveal
 
-Sections are separated by thin `<hr>` dividers (`var(--border)`). Each `<section>` uses a `reveal-section` CSS class and is watched by an Intersection Observer: when 15% of a section enters the viewport, the `.visible` class is added, triggering a fade-in + slide-up animation. Once visible, the observer unobserves the element (runs once). Respects `prefers-reduced-motion` via global CSS.
+Sections separated by thin `<hr>` (`var(--border)`). `.reveal-section` + Intersection Observer (15% threshold, one-shot, fade-in + slide-up). Respects `prefers-reduced-motion`.
 
 ### Dashboard view (post-upload, `result` exists)
 Rendered inline in `Dashboard.tsx` with:
 1. **TitleBar** — same shared component
 2. **Semantic hidden H1** — `<h1 className="sr-only">` for screen readers and search engines
 3. **Action bar** — file name + date range (left) + re-upload/clear buttons (right)
-4. **Content** — ErrorDisplay + WarningBanner, KPICards, tabs, model filter, chart views
+4. **Content** — ErrorDisplay + WarningBanner, KPICards, tabs (Overview / By Project / By Key / Cache / Trends), model filter, chart views
 5. **FooterBar** — same shared component
 
 ### Shared components
@@ -466,8 +333,9 @@ Rendered inline in `Dashboard.tsx` with:
 
 ### Hero + chart layout
 
-Three views use a consistent "Hero big number + chart" pattern:
+Four views use a consistent "Hero big number + chart" pattern:
 - **OverviewView**: Hero shows total cost (formatted), then daily bar chart + donut chart side by side
+- **ProjectView**: Hero shows active project count, then full-width table with inline bars per project (similar layout to KeyView)
 - **KeyView**: Hero shows active key count, then full-width table with inline bars
 - **CacheView**: Hero shows cache hit % (large), then trend line + stacked bar charts
 - **TrendsView**: Hero dynamically shows current metric's aggregate, then toggleable line chart
@@ -492,7 +360,11 @@ Apple-style underline tabs: `text-xs font-semibold uppercase tracking-wide`, 2px
 - **Modifying the parser**: Types in `src/lib/types.ts`, logic in `src/lib/parser.ts`
 - **Adding a new CSS variable**: Define in both `:root, .light` AND `.dark` blocks in `src/app/globals.css`, then reference as `var(--your-token)` in components
 - **Changing the visual design**: Update CSS variables in `globals.css` — do NOT hardcode colors in individual components
-- **Adding a new view/tab**: Add to `TABS` array in `Dashboard.tsx`, add translation keys in both locales, create component with Hero + chart pattern using `filteredResult`
+- **Adding a new view/tab**: Add to `TABS` array in `Dashboard.tsx`, add translation keys under `tabs.*` in both locales, create component with Hero + chart pattern using `filteredResult`
+- **Adding clipboard copy to a value**: Import `<CopyButton>` from `@/components/CopyButton`, wrap the display value as its child, pass `value` (numeric) and `name` (display label for toast). The component handles clipboard API, fallback, toast, and timer cleanup.
+- **Adding a new custom project config feature**: Project definitions live in `ProjectConfigContext` with localStorage persistence. Edit `ProjectDef` type and `ProjectConfigContext` for schema changes, `ProjectView` for display changes, and `translations.ts` under `projects.*` for UI strings. Config modal uses drag-and-drop + keyboard-accessible dropdowns.
+- **Managing ZIP uploads**: ZIP extraction logic lives in `concatFiles.ts` via JSZip. The `concatMonthlyCSVs()` function auto-detects `.zip` files and extracts CSV content before pairing. To change the file size limit, update `MAX_UPLOAD_SIZE_BYTES` in `concatFiles.ts`.
+- **Adding a new upload validation**: Add check logic in `DropZone.tsx`, error key in `translations.ts` under `error.*` or `dropzone.*`, and display via `ErrorDisplay.tsx`.
 - **Adding or modifying a landing page section**: Edit `LandingPage.tsx` — add a new `<section>` block with `reveal-section` class and `ref` callback for Intersection Observer. Precede each section with a thin `<hr style={{ borderColor: "var(--border)" }} />` divider. Use Apple-minimalist spacing (`pt-10 pb-12` or `pb-16`), centered `<h2>` with `text-[11px]` uppercase section title styling, subsections headed by `<h3>`, and content using `var(--text-primary)` / `var(--text-secondary)` colors. Add an `id` attribute for direct anchor linking (e.g., `id="how-it-works"`). For below-the-fold sections, add `style={{ contentVisibility: "auto" }}` to defer rendering and reduce initial paint cost. Add translation keys under `landing.*` group (flat 2-level keys). If the content is important for SEO, also add it to `LandingContent.tsx` inside the `<noscript>` block.
 - **Adding email / clipboard interaction**: Use `navigator.clipboard.writeText()` with a `<textarea>` fallback for older browsers. Dynamically concatenate email addresses at runtime (`"hello" + "@" + "domain"`) to deter scraping. Provide immediate visual feedback (e.g., SVG checkmark + "Copied" tooltip, 2s timeout).
 - **Supporting a new CSV column**: Add to types in `types.ts`, update parser validation in `parser.ts`, add to pivot/join logic if needed
