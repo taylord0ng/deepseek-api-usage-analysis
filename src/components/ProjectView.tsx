@@ -10,7 +10,7 @@
  * 花费数字可通过 CopyButton 一键复制。
  */
 
-import { useMemo, useState, useCallback, type DragEvent } from "react";
+import { useMemo, useState, useRef, useCallback, type DragEvent } from "react";
 import { useData } from "@/lib/DataContext";
 import { useTranslation } from "@/i18n";
 import { formatPercent, formatCostFull, formatTokensFull } from "@/lib/format";
@@ -128,6 +128,11 @@ export default function ProjectView() {
             .replace("{keys}", String(allKeys.length))
             .replace("{models}", String(modelCount))}
         </p>
+        {activeCount === 0 && allKeys.length > 0 && (
+          <p className="text-xs mt-2" style={{ color: "var(--text-tertiary)" }}>
+            {t.projects.emptyHint}
+          </p>
+        )}
       </div>
 
       {/* 标题 + 配置按钮 */}
@@ -244,10 +249,17 @@ interface ConfigModalProps {
   t: ReturnType<typeof useTranslation>["t"];
 }
 
+/** 内部编辑态项目（带稳定 _id） */
+interface DraftProject extends ProjectDef {
+  _id: number;
+}
+
 function ConfigModal({ config, allKeys, onSave, onClose, t }: ConfigModalProps) {
-  // 深拷贝编辑态
-  const [draft, setDraft] = useState<ProjectDef[]>(() =>
-    config.map((p) => ({ name: p.name, keyNames: [...p.keyNames] }))
+  // 稳定 ID 计数器
+  const idRef = useRef(config.length);
+  // 深拷贝编辑态，附带 _id
+  const [draft, setDraft] = useState<DraftProject[]>(() =>
+    config.map((p, i) => ({ ...p, name: p.name, keyNames: [...p.keyNames], _id: i }))
   );
 
   // 拖拽高亮状态
@@ -291,7 +303,8 @@ function ConfigModal({ config, allKeys, onSave, onClose, t }: ConfigModalProps) 
   }, []);
 
   const addProject = useCallback(() => {
-    setDraft((prev) => [...prev, { name: "", keyNames: [] }]);
+    const newId = idRef.current++;
+    setDraft((prev) => [...prev, { name: "", keyNames: [], _id: newId }]);
     setHasChanges(true);
   }, []);
 
@@ -394,6 +407,24 @@ function ConfigModal({ config, allKeys, onSave, onClose, t }: ConfigModalProps) 
   // 保存
   // ====================================================================
 
+  /** 通过下拉菜单分配 key 到项目（键盘可访问性） */
+  const assignKeyToProject = useCallback((keyName: string, projectIndex: number) => {
+    setHasChanges(true);
+    setDraft((prev) => {
+      // 先从所有项目中移除该 key
+      const cleaned = prev.map((p) => ({
+        ...p,
+        keyNames: p.keyNames.filter((k) => k !== keyName),
+      }));
+      // 添加到目标项目
+      cleaned[projectIndex] = {
+        ...cleaned[projectIndex],
+        keyNames: [...cleaned[projectIndex].keyNames, keyName],
+      };
+      return cleaned;
+    });
+  }, []);
+
   const handleSave = useCallback(() => {
     const valid = draft.filter((p) => p.name.trim().length > 0);
 
@@ -450,8 +481,11 @@ function ConfigModal({ config, allKeys, onSave, onClose, t }: ConfigModalProps) 
         <h2 className="text-base font-bold mb-1" style={{ color: "var(--text-primary)" }}>
           {t.projects.modalTitle}
         </h2>
-        <p className="text-xs mb-5" style={{ color: "var(--text-tertiary)" }}>
+        <p className="text-xs mb-4" style={{ color: "var(--text-tertiary)" }}>
           {t.projects.dragHint}
+        </p>
+        <p className="text-[11px] mb-5" style={{ color: "var(--text-tertiary)" }}>
+          {t.projects.keyboardHint}
         </p>
 
         {/* 重复名称错误提示 */}
@@ -474,7 +508,7 @@ function ConfigModal({ config, allKeys, onSave, onClose, t }: ConfigModalProps) 
             const isDragOver = dragOverIdx === i;
             return (
               <div
-                key={i}
+                key={proj._id}
                 className="p-3 rounded-subtle transition-all duration-150"
                 style={{
                   border: isDragOver
@@ -594,34 +628,56 @@ function ConfigModal({ config, allKeys, onSave, onClose, t }: ConfigModalProps) 
               </span>
             )}
             {unassignedKeys.map((kn) => (
-              <KeyPill
-                key={kn}
-                name={kn}
-                draggable
-                onDragStart={(e) => onDragStart(e, kn)}
-              />
+              <span key={kn} className="inline-flex items-center gap-0.5">
+                <KeyPill
+                  name={kn}
+                  draggable
+                  onDragStart={(e) => onDragStart(e, kn)}
+                />
+                {draft.length > 0 && (
+                  <SelectProject
+                    projects={draft}
+                    onChange={(idx) => assignKeyToProject(kn, idx)}
+                    t={t}
+                  />
+                )}
+              </span>
             ))}
           </div>
         </div>
 
         {/* 操作按钮 */}
-        <div className="flex justify-end gap-3">
-          <button onClick={handleClose}
-            className="px-4 py-2 text-xs font-medium rounded-subtle transition-colors duration-150"
-            style={{ color: "var(--text-secondary)", background: "transparent" }}
-            onMouseEnter={(e) => { e.currentTarget.style.color = "var(--text-primary)"; }}
-            onMouseLeave={(e) => { e.currentTarget.style.color = "var(--text-secondary)"; }}
+        <div className="flex justify-between items-center gap-3">
+          <button onClick={() => {
+            setDraft([]);
+            setHasChanges(true);
+            setDupError(null);
+          }}
+            className="text-xs font-medium transition-colors duration-150"
+            style={{ color: "var(--text-tertiary)" }}
+            onMouseEnter={(e) => { e.currentTarget.style.color = "var(--danger)"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.color = "var(--text-tertiary)"; }}
           >
-            {t.projects.cancel}
+            {t.projects.resetConfig}
           </button>
-          <button onClick={handleSave}
-            className="px-4 py-2 text-xs font-semibold rounded-subtle transition-colors duration-150"
-            style={{ color: "var(--accent-inverse)", background: "var(--text-primary)" }}
-            onMouseEnter={(e) => { e.currentTarget.style.opacity = "0.85"; }}
-            onMouseLeave={(e) => { e.currentTarget.style.opacity = "1"; }}
-          >
-            {t.projects.save}
-          </button>
+          <div className="flex gap-3">
+            <button onClick={handleClose}
+              className="px-4 py-2 text-xs font-medium rounded-subtle transition-colors duration-150"
+              style={{ color: "var(--text-secondary)", background: "transparent" }}
+              onMouseEnter={(e) => { e.currentTarget.style.color = "var(--text-primary)"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.color = "var(--text-secondary)"; }}
+            >
+              {t.projects.cancel}
+            </button>
+            <button onClick={handleSave}
+              className="px-4 py-2 text-xs font-semibold rounded-subtle transition-colors duration-150"
+              style={{ color: "var(--accent-inverse)", background: "var(--text-primary)" }}
+              onMouseEnter={(e) => { e.currentTarget.style.opacity = "0.85"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.opacity = "1"; }}
+            >
+              {t.projects.save}
+            </button>
+          </div>
         </div>
 
         {/* 关闭确认对话框 */}
@@ -659,6 +715,50 @@ function ConfigModal({ config, allKeys, onSave, onClose, t }: ConfigModalProps) 
         )}
       </div>
     </div>
+  );
+}
+
+// ============================================================================
+// Key 名称小药丸组件
+// ============================================================================
+
+interface SelectProjectProps {
+  projects: { name: string }[];
+  onChange: (index: number) => void;
+  t: ReturnType<typeof useTranslation>["t"];
+}
+
+/** 迷你下拉菜单：用于未分配 Key 的键盘可访问分配 */
+function SelectProject({ projects, onChange, t }: SelectProjectProps) {
+  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const idx = parseInt(e.target.value, 10);
+    if (!isNaN(idx) && idx >= 0) {
+      onChange(idx);
+      e.target.value = ""; // 重置为占位符
+    }
+  };
+
+  return (
+    <select
+      onChange={handleChange}
+      defaultValue=""
+      className="text-[10px] rounded-full px-1.5 py-0.5 cursor-pointer outline-none appearance-none"
+      style={{
+        color: "var(--text-tertiary)",
+        background: "var(--bg-surface)",
+        border: `1px solid var(--border)`,
+      }}
+      aria-label={t.projects.assignTo}
+    >
+      <option value="" disabled>
+        {t.projects.assignTo}
+      </option>
+      {projects.map((p, i) => (
+        <option key={i} value={i}>
+          {p.name || `(${t.projects.projectName})`}
+        </option>
+      ))}
+    </select>
   );
 }
 

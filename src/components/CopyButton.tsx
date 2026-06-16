@@ -6,7 +6,7 @@
  */
 "use client";
 
-import { useState, useCallback, type ReactNode, type CSSProperties } from "react";
+import { useState, useRef, useCallback, useEffect, type ReactNode, type CSSProperties } from "react";
 import { useTranslation } from "@/i18n";
 
 interface CopyButtonProps {
@@ -23,6 +23,7 @@ interface CopyButtonProps {
 export default function CopyButton({ value, name, children, className }: CopyButtonProps) {
   const { t } = useTranslation();
   const [showToast, setShowToast] = useState(false);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const handleCopy = useCallback(async () => {
     const text = value.toFixed(2);
@@ -39,8 +40,17 @@ export default function CopyButton({ value, name, children, className }: CopyBut
       document.body.removeChild(textarea);
     }
     setShowToast(true);
-    setTimeout(() => setShowToast(false), 1500);
+    // 清除之前的定时器，防止多次点击积累
+    if (timerRef.current) clearTimeout(timerRef.current);
+    timerRef.current = setTimeout(() => setShowToast(false), 1500);
   }, [value]);
+
+  // 组件卸载时清理定时器
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+    };
+  }, []);
 
   const toastStyle: CSSProperties = {
     position: "absolute",
@@ -73,7 +83,7 @@ export default function CopyButton({ value, name, children, className }: CopyBut
       <button
         onClick={handleCopy}
         className={className}
-        title="Click to copy cost"
+        title={t.copyToast.clickToCopy}
         style={{ display: "inline-flex", alignItems: "center", gap: "0.25rem" }}
       >
         {children}

@@ -105,6 +105,7 @@ const translations = {
     },
     copyToast: {
       copied: "Copied {name} cost",
+      clickToCopy: "Click to copy cost",
     },
     projects: {
       configure: "Configure",
@@ -125,6 +126,10 @@ const translations = {
       duplicateName: "Project name already exists",
       unsavedChanges: "Discard unsaved changes?",
       discard: "Discard",
+      keyboardHint: "Tip: Drag keys to assign, or select a project from the dropdown on each unassigned key (keyboard: Tab to select → Enter to confirm)",
+      resetConfig: "Reset All",
+      emptyHint: "Click the gear icon to configure custom project groups",
+      assignTo: "Assign to\u2026",
     },
     guideline: {
       pageTitle: "User Guide",
@@ -353,6 +358,7 @@ const translations = {
     },
     copyToast: {
       copied: "已复制 {name} 费用",
+      clickToCopy: "点击复制费用",
     },
     projects: {
       configure: "配置",
@@ -373,6 +379,10 @@ const translations = {
       duplicateName: "项目名称已存在",
       unsavedChanges: "放弃未保存的修改？",
       discard: "放弃",
+      keyboardHint: "提示：拖拽 Key 分配项目，或使用未分配 Key 旁的下拉菜单通过键盘操作（Tab 选择 → Enter 确认）",
+      resetConfig: "全部重置",
+      emptyHint: "点击齿轮图标配置自定义项目分组",
+      assignTo: "分配到\u2026",
     },
     guideline: {
       pageTitle: "用户操作手册",
