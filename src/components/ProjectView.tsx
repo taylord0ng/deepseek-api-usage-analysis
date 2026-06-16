@@ -254,6 +254,13 @@ function ConfigModal({ config, allKeys, onSave, onClose, t }: ConfigModalProps) 
   const [dragOverIdx, setDragOverIdx] = useState<number | null>(null);
   const [dragOverUncat, setDragOverUncat] = useState(false);
 
+  // 是否已修改（用于关闭时确认）
+  const [hasChanges, setHasChanges] = useState(false);
+  // 重复名称错误
+  const [dupError, setDupError] = useState<string | null>(null);
+  // 关闭确认对话框
+  const [showCloseConfirm, setShowCloseConfirm] = useState(false);
+
   // 计算每个项目已分配的 key 和全局未分配 key
   const assignedSet = useMemo(() => {
     const s = new Set<string>();
@@ -274,14 +281,18 @@ function ConfigModal({ config, allKeys, onSave, onClose, t }: ConfigModalProps) 
 
   const updateName = useCallback((index: number, name: string) => {
     setDraft((prev) => { const n = [...prev]; n[index] = { ...n[index], name }; return n; });
+    setHasChanges(true);
+    setDupError(null);
   }, []);
 
   const removeProject = useCallback((index: number) => {
     setDraft((prev) => prev.filter((_, i) => i !== index));
+    setHasChanges(true);
   }, []);
 
   const addProject = useCallback(() => {
     setDraft((prev) => [...prev, { name: "", keyNames: [] }]);
+    setHasChanges(true);
   }, []);
 
   /** 将某个 key 从项目中移除（回到未分配池） */
@@ -291,6 +302,7 @@ function ConfigModal({ config, allKeys, onSave, onClose, t }: ConfigModalProps) 
       n[projIdx] = { ...n[projIdx], keyNames: n[projIdx].keyNames.filter((k) => k !== keyName) };
       return n;
     });
+    setHasChanges(true);
   }, []);
 
   // ====================================================================
@@ -317,7 +329,11 @@ function ConfigModal({ config, allKeys, onSave, onClose, t }: ConfigModalProps) 
 
   const onDragLeaveProject = useCallback((e: DragEvent) => {
     e.preventDefault();
-    setDragOverIdx(null);
+    // 仅当真正离开容器时才清除高亮（排除移到子元素内的情况）
+    const container = e.currentTarget as HTMLElement;
+    if (!container.contains(e.relatedTarget as Node)) {
+      setDragOverIdx(null);
+    }
   }, []);
 
   /** 放置到某个项目 */
@@ -327,6 +343,7 @@ function ConfigModal({ config, allKeys, onSave, onClose, t }: ConfigModalProps) 
     const keyName = e.dataTransfer.getData("text/plain");
     if (!keyName) return;
 
+    setHasChanges(true);
     setDraft((prev) => {
       // 先从所有项目中移除该 key
       const cleaned = prev.map((p) => ({
@@ -350,7 +367,11 @@ function ConfigModal({ config, allKeys, onSave, onClose, t }: ConfigModalProps) 
 
   const onDragLeaveUncat = useCallback((e: DragEvent) => {
     e.preventDefault();
-    setDragOverUncat(false);
+    // 仅当真正离开容器时才清除高亮
+    const container = e.currentTarget as HTMLElement;
+    if (!container.contains(e.relatedTarget as Node)) {
+      setDragOverUncat(false);
+    }
   }, []);
 
   /** 放置到未分配区域（从项目中移除） */
@@ -360,6 +381,7 @@ function ConfigModal({ config, allKeys, onSave, onClose, t }: ConfigModalProps) 
     const keyName = e.dataTransfer.getData("text/plain");
     if (!keyName) return;
 
+    setHasChanges(true);
     setDraft((prev) =>
       prev.map((p) => ({
         ...p,
@@ -374,8 +396,40 @@ function ConfigModal({ config, allKeys, onSave, onClose, t }: ConfigModalProps) 
 
   const handleSave = useCallback(() => {
     const valid = draft.filter((p) => p.name.trim().length > 0);
+
+    // 检查重复项目名称（大小写不敏感）
+    const seen = new Set<string>();
+    for (const p of valid) {
+      const key = p.name.trim().toLowerCase();
+      if (seen.has(key)) {
+        setDupError(p.name.trim());
+        return;
+      }
+      seen.add(key);
+    }
+
     onSave(valid);
   }, [draft, onSave]);
+
+  /** 尝试关闭：如有未保存修改先弹出确认 */
+  const handleClose = useCallback(() => {
+    if (hasChanges) {
+      setShowCloseConfirm(true);
+    } else {
+      onClose();
+    }
+  }, [hasChanges, onClose]);
+
+  /** 确认放弃修改并关闭 */
+  const confirmClose = useCallback(() => {
+    setShowCloseConfirm(false);
+    onClose();
+  }, [onClose]);
+
+  /** 取消关闭确认（回到编辑） */
+  const cancelCloseConfirm = useCallback(() => {
+    setShowCloseConfirm(false);
+  }, []);
 
   // ====================================================================
   // 渲染
@@ -385,7 +439,7 @@ function ConfigModal({ config, allKeys, onSave, onClose, t }: ConfigModalProps) 
     <div
       className="fixed inset-0 z-[100] flex items-center justify-center"
       style={{ background: "rgba(0,0,0,0.35)" }}
-      onClick={onClose}
+      onClick={handleClose}
     >
       <div
         className="w-full max-w-xl mx-4 p-6 rounded-subtle shadow-diffuse-md"
@@ -399,6 +453,20 @@ function ConfigModal({ config, allKeys, onSave, onClose, t }: ConfigModalProps) 
         <p className="text-xs mb-5" style={{ color: "var(--text-tertiary)" }}>
           {t.projects.dragHint}
         </p>
+
+        {/* 重复名称错误提示 */}
+        {dupError && (
+          <div
+            className="mb-4 p-2.5 rounded-subtle text-xs"
+            style={{
+              background: "var(--error-bg)",
+              border: "1px solid var(--error-border)",
+              color: "var(--error-text)",
+            }}
+          >
+            {t.projects.duplicateName}: "{dupError}"
+          </div>
+        )}
 
         {/* 项目列表 */}
         <div className="space-y-3 max-h-[35vh] overflow-y-auto pr-1 mb-4">
@@ -538,7 +606,7 @@ function ConfigModal({ config, allKeys, onSave, onClose, t }: ConfigModalProps) 
 
         {/* 操作按钮 */}
         <div className="flex justify-end gap-3">
-          <button onClick={onClose}
+          <button onClick={handleClose}
             className="px-4 py-2 text-xs font-medium rounded-subtle transition-colors duration-150"
             style={{ color: "var(--text-secondary)", background: "transparent" }}
             onMouseEnter={(e) => { e.currentTarget.style.color = "var(--text-primary)"; }}
@@ -555,6 +623,40 @@ function ConfigModal({ config, allKeys, onSave, onClose, t }: ConfigModalProps) 
             {t.projects.save}
           </button>
         </div>
+
+        {/* 关闭确认对话框 */}
+        {showCloseConfirm && (
+          <div
+            className="absolute inset-0 flex items-center justify-center rounded-subtle"
+            style={{ background: "rgba(0,0,0,0.15)" }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div
+              className="p-5 rounded-subtle shadow-diffuse-md text-center mx-6"
+              style={{ background: "var(--bg-surface)", border: `1px solid var(--border)` }}
+            >
+              <p className="text-sm font-medium mb-4" style={{ color: "var(--text-primary)" }}>
+                {t.projects.unsavedChanges}
+              </p>
+              <div className="flex justify-center gap-3">
+                <button
+                  onClick={cancelCloseConfirm}
+                  className="px-3 py-1.5 text-xs font-medium rounded-subtle transition-colors duration-150"
+                  style={{ color: "var(--text-secondary)", background: "transparent" }}
+                >
+                  {t.projects.cancel}
+                </button>
+                <button
+                  onClick={confirmClose}
+                  className="px-3 py-1.5 text-xs font-semibold rounded-subtle transition-colors duration-150"
+                  style={{ color: "var(--accent-inverse)", background: "var(--danger)" }}
+                >
+                  {t.projects.discard}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

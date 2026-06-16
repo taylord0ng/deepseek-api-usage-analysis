@@ -3,6 +3,7 @@
 import { useState, useRef, useCallback } from "react";
 import { useData, ALL_MODELS } from "@/lib/DataContext";
 import { useTranslation } from "@/i18n";
+import { MAX_UPLOAD_SIZE_BYTES } from "@/lib/concatFiles";
 import TitleBar from "./TitleBar";
 import FooterBar from "./FooterBar";
 import LandingPage from "./LandingPage";
@@ -32,6 +33,8 @@ export default function Dashboard() {
   const { t } = useTranslation();
   const [tab, setTab] = useState<Tab>("overview");
   const reuploadRef = useRef<HTMLInputElement>(null);
+  /** 重新上传时的文件过大警告 */
+  const [reuploadSizeError, setReuploadSizeError] = useState<{ name: string; sizeMB: string } | null>(null);
 
   const TABS: { key: Tab; label: string }[] = [
     { key: "overview", label: t.tabs.overview },
@@ -46,6 +49,18 @@ export default function Dashboard() {
       const files = e.target.files;
       if (!files || files.length === 0) return;
       const fileArr = Array.from(files);
+
+      // 检查文件大小，防止 ZIP 炸弹/超大文件导致浏览器卡死
+      const oversized = fileArr.find((f) => f.size > MAX_UPLOAD_SIZE_BYTES);
+      if (oversized) {
+        setReuploadSizeError({
+          name: oversized.name,
+          sizeMB: (oversized.size / 1024 / 1024).toFixed(1),
+        });
+        e.target.value = "";
+        return;
+      }
+      setReuploadSizeError(null);
 
       const { concatMonthlyCSVs, extractZipCsvs } = await import("@/lib/concatFiles");
       const csvEntries = await extractZipCsvs(fileArr);
@@ -96,7 +111,10 @@ export default function Dashboard() {
               onChange={handleReupload}
             />
             <button
-              onClick={() => reuploadRef.current?.click()}
+              onClick={() => {
+                setReuploadSizeError(null);
+                reuploadRef.current?.click();
+              }}
               className="text-xs font-medium transition-colors duration-200"
               style={{ color: "var(--text-secondary)" }}
               onMouseEnter={(e) => {
@@ -126,6 +144,35 @@ export default function Dashboard() {
 
         <ErrorDisplay />
         <WarningBanner />
+
+        {/* 重新上传文件过大警告 */}
+        {reuploadSizeError && (
+          <div
+            className="mb-6 p-4 rounded-subtle text-sm flex items-start gap-3"
+            style={{
+              background: "var(--error-bg)",
+              border: "1px solid var(--error-border)",
+            }}
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+              className="shrink-0 mt-0.5" style={{ color: "var(--error-text)" }}>
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="8" x2="12" y2="12" />
+              <line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg>
+            <div>
+              <p className="font-semibold mb-1" style={{ color: "var(--error-text)" }}>
+                {t.dropzone.oversizedTitle}
+              </p>
+              <p style={{ color: "var(--error-text)", opacity: 0.85 }}>
+                {t.dropzone.oversizedHint
+                  .replace("{name}", reuploadSizeError.name)
+                  .replace("{size}", reuploadSizeError.sizeMB)}
+              </p>
+            </div>
+          </div>
+        )}
 
         {/* KPI 指标 */}
         <KPICards />

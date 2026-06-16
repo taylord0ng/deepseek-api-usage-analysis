@@ -122,6 +122,9 @@ const translations = {
       unassignedKeys: "Unassigned Keys",
       projectKeys: "Project Keys",
       dropHere: "Drop keys here",
+      duplicateName: "Project name already exists",
+      unsavedChanges: "Discard unsaved changes?",
+      discard: "Discard",
     },
     guideline: {
       pageTitle: "User Guide",
@@ -367,6 +370,9 @@ const translations = {
       unassignedKeys: "未分配 Key",
       projectKeys: "项目 Key",
       dropHere: "拖拽 Key 到此处",
+      duplicateName: "项目名称已存在",
+      unsavedChanges: "放弃未保存的修改？",
+      discard: "放弃",
     },
     guideline: {
       pageTitle: "用户操作手册",
