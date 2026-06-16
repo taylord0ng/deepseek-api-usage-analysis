@@ -897,11 +897,12 @@ DeepSeek API 用量分析仪表盘是一款**纯浏览器端运行**的数据可
 
 #### 标签导航
 
-Apple 风格下划线标签，4 个标签页：
+Apple 风格下划线标签，5 个标签页：
 
 | 中文 | English |
 |------|---------|
 | 总览 | Overview |
+| 按自定义项目 | By Custom Projects |
 | 按 Key | By Key |
 | 缓存 | Cache |
 | 趋势 | Trends |
@@ -1027,6 +1028,59 @@ Apple 风格下划线标签，4 个标签页：
 > **[截图占位 - 28]**
 
 > **[截图占位 - 29]**
+
+---
+
+### 4.9 按自定义项目视图
+
+将 API Key 按自定义项目分组汇总分析，适合多项目团队按业务线查看用量。
+
+> **[截图占位 - 30]**
+
+#### Hero 数字
+
+- **大数字**：当前配置的项目总数量
+- **标签**：\`个项目\`
+- **副标题**：\`{n} 个 Key · {m} 个模型\`，与按 Key 视图风格一致
+
+#### 配置按钮
+
+- 位置：\`按项目\` 标题行右侧
+- 图标：齿轮图标 + \`配置\` 文字按钮
+- 点击弹出配置浮窗
+
+#### 配置浮窗
+
+- **项目列表**：每个项目卡片包含：
+  - 项目名称输入框（可编辑）
+  - 已分配的 Key 小药丸（可拖拽、可点击 × 移除）
+  - 移除项目按钮（垃圾桶图标）
+- **添加项目**：虚线边框按钮，点击新增空白项目卡片
+- **未分配 Key 区域**：底部独立区域，显示所有未分配到任何项目的 Key
+- **拖拽操作**：
+  - 将 Key 从未分配区域拖拽到某个项目卡片 → 分配 Key 至该项目
+  - 将 Key 从项目卡片拖拽到未分配区域 → 移除 Key 的分配
+  - 将 Key 在不同项目之间拖拽 → 重新分配
+  - 拖入时目标区域高亮（accent 色边框 + 浅色背景）
+- **保存 / 取消**：保存时过滤空名称项目，写入浏览器本地存储
+
+#### 数据表格
+
+布局与按 Key 视图一致：
+
+| 列 | 说明 |
+|----|------|
+| Project | 项目名称（已配置项目为主色文字，未分类为三级文字） |
+| Tokens | 完整 Token 数（逗号分隔，无缩写后缀） |
+| Cost | 完整费用金额（¥ 符号 + 两位小数，可点击复制） |
+| Cache Hit | 缓存命中率百分比（绿色 > 40%，琥珀色 20-40%，红色 < 20%） |
+| Requests | 请求次数 |
+| 占比条 | 费用横向占比条（未分类项半透明） |
+
+- **未分类项**：只在实际有数据时才显示，始终排在表格末尾
+- **排序**：按费用从高到低排列，未分类项始终在最后
+
+> 项目配置保存在浏览器本地存储（localStorage），跨标签页自动同步。
 
 ---
 
@@ -1269,11 +1323,12 @@ Visual style: light amber background + amber border + amber text.
 
 #### Tab Navigation
 
-Apple-style underline tabs, 4 tabs:
+Apple-style underline tabs, 5 tabs:
 
 | English | 中文 |
 |---------|------|
 | Overview | 总览 |
+| By Custom Projects | 按自定义项目 |
 | By Key | 按 Key |
 | Cache | 缓存 |
 | Trends | 趋势 |
@@ -1399,6 +1454,59 @@ Table rows have a subtle background color change on hover.
 > **[截图占位 - 28]**
 
 > **[截图占位 - 29]**
+
+---
+
+### 4.9 By Custom Projects View
+
+Group API keys by custom project categories for team-level usage analysis across business lines.
+
+> **[截图占位 - 30]**
+
+#### Hero Number
+
+- **Large number**: Total count of configured projects
+- **Label**: \`Projects\`
+- **Subtitle**: \`{n} key(s) · {m} model(s)\`, consistent with the By Key view
+
+#### Configure Button
+
+- Location: Right side of the \`By Project\` section title
+- Icon: Gear icon + \`Configure\` text button
+- Click opens the configuration modal
+
+#### Configuration Modal
+
+- **Project list**: Each project card contains:
+  - Project name input (editable)
+  - Assigned Key pills (draggable, click × to remove)
+  - Remove project button (trash icon)
+- **Add Project**: Dashed border button, click to add a blank project card
+- **Unassigned Keys area**: Bottom section showing all keys not assigned to any project
+- **Drag and drop**:
+  - Drag a key from the unassigned area to a project card → assign key to that project
+  - Drag a key from a project card to the unassigned area → remove assignment
+  - Drag a key between project cards → reassign
+  - Drop target highlights on drag-over (accent border + light background)
+- **Save / Cancel**: Save filters out empty-name projects and writes to browser local storage
+
+#### Data Table
+
+Layout matches the By Key view:
+
+| Column | Description |
+|--------|-------------|
+| Project | Project name (configured projects = primary color, uncategorized = tertiary) |
+| Tokens | Full token count (comma-separated, no abbreviation suffix) |
+| Cost | Full cost amount (¥ symbol + 2 decimals, clickable to copy) |
+| Cache Hit | Cache hit rate percentage (green > 40%, amber 20-40%, red < 20%) |
+| Requests | Request count |
+| Bar | Cost proportion bar (semi-transparent for uncategorized items) |
+
+- **Uncategorized row**: Only shown when it has data, always at the bottom
+- **Sorting**: By cost descending, uncategorized always last
+
+> Project configuration is saved in browser local storage with cross-tab auto-sync.
 
 ---
 

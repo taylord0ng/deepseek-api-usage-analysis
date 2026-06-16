@@ -79,6 +79,10 @@ export default function LandingContent() {
             <h3>{t.landing.qaQ8}</h3>
             <p>{t.landing.qaA8}</p>
           </div>
+          <div>
+            <h3>{t.landing.qaQ9}</h3>
+            <p>{t.landing.qaA9}</p>
+          </div>
         </div>
       </section>
 

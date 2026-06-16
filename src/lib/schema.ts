@@ -72,6 +72,10 @@ const faqSchema: Record<Locale, { questions: { q: string; a: string }[] }> = {
         q: "Is there a file size limit?",
         a: "Yes, each file must be under 50 MB. This prevents malicious ZIP bombs from freezing your browser. DeepSeek monthly usage exports are typically under 1 MB, so this limit should never be an issue for normal use.",
       },
+      {
+        q: "Can I group API keys by custom projects?",
+        a: "Yes. Switch to the 'By Custom Projects' tab and click the gear icon to open the configuration panel. Drag API key names from the unassigned pool into your custom project groups. Your project configuration is saved in your browser's local storage.",
+      },
     ],
   },
   zh: {
@@ -107,6 +111,10 @@ const faqSchema: Record<Locale, { questions: { q: string; a: string }[] }> = {
       {
         q: "有文件大小限制吗？",
         a: "有，单个文件不能超过 50 MB。这是为了防止恶意 ZIP 炸弹导致浏览器卡死。DeepSeek 月度用量导出文件通常小于 1 MB，正常使用不会触发此限制。",
+      },
+      {
+        q: "可以按自定义项目分组 API Key 吗？",
+        a: "可以。切换到「按自定义项目」标签页，点击齿轮图标打开配置面板。将 API Key 从「未分配 Key」区域拖拽到对应的自定义项目分组中即可。项目配置保存在浏览器本地存储中。",
       },
     ],
   },

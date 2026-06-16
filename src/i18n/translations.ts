@@ -10,7 +10,7 @@ const translations = {
     },
     tabs: {
       overview: "Overview",
-      projects: "By Project",
+      projects: "By Custom Projects",
       keys: "By Key",
       cache: "Cache",
       trends: "Trends",
@@ -106,6 +106,23 @@ const translations = {
     copyToast: {
       copied: "Copied {name} cost",
     },
+    projects: {
+      configure: "Configure",
+      modalTitle: "Custom Project Configuration",
+      projectName: "Project Name",
+      addProject: "Add Project",
+      removeProject: "Remove",
+      save: "Save",
+      cancel: "Cancel",
+      uncategorized: "Uncategorized",
+      heroProjects: "Projects",
+      sectionTitle: "By Project",
+      columnProject: "Project",
+      dragHint: "Drag keys to assign them to projects",
+      unassignedKeys: "Unassigned Keys",
+      projectKeys: "Project Keys",
+      dropHere: "Drop keys here",
+    },
     guideline: {
       pageTitle: "User Guide",
       backToHome: "Back to Home",
@@ -124,7 +141,7 @@ const translations = {
         "The App is a pure client-side application. All CSV file parsing, cost computation, and chart rendering happen entirely within your browser. We do not collect, store, transmit, or have access to any of the CSV data you upload.",
       localProcessingTitle: "2. Local Processing",
       localProcessingDesc:
-        "Your DeepSeek CSV files (amount-*.csv, cost-*.csv) are read and processed exclusively by JavaScript running in your browser. No data is sent to any backend server, database, or third-party service. The App has no server-side component for data handling.",
+        "Your DeepSeek CSV files (amount-*.csv, cost-*.csv) are read and processed exclusively by JavaScript running in your browser. No data is sent to any backend server, database, or third-party service. The App has no server-side component for data handling. Application preferences you configure, such as custom project groupings, are stored only in your browser's local storage and are never transmitted.",
       analyticsTitle: "3. Google Analytics",
       analyticsDesc:
         "We use Google Analytics 4 (GA4) to collect anonymized page-view statistics. This helps us understand how the App is being used so we can improve it. GA4 may use cookies and collect information such as page URLs visited, browser type, and approximate geographic region. No CSV content or usage data from your uploaded files is tracked.",
@@ -191,7 +208,7 @@ const translations = {
         "Drag your ZIP files (or extracted CSVs) onto this page. Multiple months are automatically paired and merged.",
       howItWorksStep3Title: "3. View Analytics",
       howItWorksStep3Desc:
-        "Instantly see cost charts, per-key breakdowns, cache hit analysis, and usage trends — all processed locally in your browser.",
+        "Instantly see cost charts, per-key breakdowns, cache hit analysis, usage trends, and custom project groupings — all processed locally in your browser.",
       qaTitle: "Frequently Asked Questions",
       qaQ1: "Is my data uploaded to any server?",
       qaA1: "No. All CSV parsing and cost computation runs entirely in your browser. Your data never leaves your device.",
@@ -209,6 +226,8 @@ const translations = {
       qaA7: "Check the Troubleshooting section in our full User Guide. It covers common issues like CSV format errors, cache configuration, file naming conventions, and more.",
       qaQ8: "Is there a file size limit?",
       qaA8: "Yes, each file must be under 50 MB. This prevents malicious ZIP bombs from freezing your browser. DeepSeek monthly usage exports are typically under 1 MB, so this limit should never be an issue for normal use.",
+      qaQ9: "Can I group API keys by custom projects?",
+      qaA9: "Yes. Switch to the 'By Custom Projects' tab and click the gear icon to open the configuration panel. Drag API key names from the unassigned pool into your custom project groups. Your project configuration is saved in your browser's local storage.",
       aboutSectionTitle: "About",
       aboutWhyTitle: "Why We Built This",
       aboutWhyDesc:
@@ -238,7 +257,7 @@ const translations = {
     },
     tabs: {
       overview: "总览",
-      projects: "按项目",
+      projects: "按自定义项目",
       keys: "按 Key",
       cache: "缓存",
       trends: "趋势",
@@ -332,6 +351,23 @@ const translations = {
     copyToast: {
       copied: "已复制 {name} 费用",
     },
+    projects: {
+      configure: "配置",
+      modalTitle: "自定义项目配置",
+      projectName: "项目名称",
+      addProject: "添加项目",
+      removeProject: "移除",
+      save: "保存",
+      cancel: "取消",
+      uncategorized: "未分类",
+      heroProjects: "个项目",
+      sectionTitle: "按项目",
+      columnProject: "项目",
+      dragHint: "拖拽 Key 分配到对应项目",
+      unassignedKeys: "未分配 Key",
+      projectKeys: "项目 Key",
+      dropHere: "拖拽 Key 到此处",
+    },
     guideline: {
       pageTitle: "用户操作手册",
       backToHome: "返回首页",
@@ -350,7 +386,7 @@ const translations = {
         "本应用是纯客户端应用。所有 CSV 文件解析、费用计算和图表渲染都在您的浏览器内完成。我们不会收集、存储、传输或访问您上传的任何 CSV 数据。",
       localProcessingTitle: "2. 本地处理",
       localProcessingDesc:
-        "您的 DeepSeek CSV 文件（amount-*.csv、cost-*.csv）仅由浏览器中运行的 JavaScript 读取和处理。任何数据都不会发送到后台服务器、数据库或第三方服务。本应用没有用于数据处理的服务器端组件。",
+        "您的 DeepSeek CSV 文件（amount-*.csv、cost-*.csv）仅由浏览器中运行的 JavaScript 读取和处理。任何数据都不会发送到后台服务器、数据库或第三方服务。本应用没有用于数据处理的服务器端组件。您配置的应用程序偏好设置（如自定义项目分组）仅保存在浏览器的本地存储中，不会向外传输。",
       analyticsTitle: "3. Google Analytics（谷歌分析）",
       analyticsDesc:
         "我们使用 Google Analytics 4（GA4）收集匿名的页面访问统计数据，以了解应用的使用情况并持续改进。GA4 可能会使用 Cookie 并收集页面 URL、浏览器类型和大致地理位置等信息。您上传的 CSV 内容和使用数据不会被跟踪。",
@@ -417,7 +453,7 @@ const translations = {
         "将 ZIP 文件（或解压后的 CSV）拖拽到此页面。多个月份文件会自动按文件名配对并合并。",
       howItWorksStep3Title: "3. 查看分析",
       howItWorksStep3Desc:
-        "即刻查看费用图表、各 Key 用量明细、缓存命中分析和使用趋势 — 所有数据在浏览器本地处理。",
+        "即刻查看费用图表、各 Key 用量明细、缓存命中分析、使用趋势和自定义项目分组 — 所有数据在浏览器本地处理。",
       qaTitle: "常见问题",
       qaQ1: "我的数据会上传到服务器吗？",
       qaA1: "不会。所有 CSV 解析和费用计算均在您的浏览器中完成，数据不会离开您的设备。",
@@ -435,6 +471,8 @@ const translations = {
       qaA7: "请查看完整操作指南中的\u201C常见问题排查\u201D章节，涵盖了 CSV 格式错误、缓存配置、文件命名规范等常见问题。",
       qaQ8: "有文件大小限制吗？",
       qaA8: "有，单个文件不能超过 50 MB。这是为了防止恶意 ZIP 炸弹导致浏览器卡死。DeepSeek 月度用量导出文件通常小于 1 MB，正常使用不会触发此限制。",
+      qaQ9: "可以按自定义项目分组 API Key 吗？",
+      qaA9: "可以。切换到「按自定义项目」标签页，点击齿轮图标打开配置面板。将 API Key 从「未分配 Key」区域拖拽到对应的自定义项目分组中即可。项目配置保存在浏览器本地存储中。",
       aboutSectionTitle: "关于我们",
       aboutWhyTitle: "为什么开发这个工具？",
       aboutWhyDesc:

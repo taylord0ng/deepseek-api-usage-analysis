@@ -107,7 +107,7 @@ export function TermsPage() {
       />
       <TitleBar />
 
-      <div className="max-w-2xl mx-auto px-6 py-8">
+      <div className="max-w-3xl mx-auto px-6 py-8">
         {/* 返回首页 */}
         <Link
           href="/"

@@ -3,6 +3,7 @@ import { Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { DataProvider } from "@/lib/DataContext";
 import { ThemeProvider } from "@/lib/ThemeContext";
+import { ProjectConfigProvider } from "@/lib/ProjectConfigContext";
 import { AppI18nShell } from "./AppI18nShell";
 import { buildSoftwareAppJsonLd, buildFaqJsonLd, buildBreadcrumbJsonLd } from "@/lib/schema";
 
@@ -152,7 +153,9 @@ export default function RootLayout({
         />
         <ThemeProvider>
           <AppI18nShell>
-            <DataProvider>{children}</DataProvider>
+            <DataProvider>
+              <ProjectConfigProvider>{children}</ProjectConfigProvider>
+            </DataProvider>
           </AppI18nShell>
         </ThemeProvider>
       </body>

@@ -35,10 +35,10 @@ export default function Dashboard() {
 
   const TABS: { key: Tab; label: string }[] = [
     { key: "overview", label: t.tabs.overview },
-    { key: "projects", label: t.tabs.projects },
     { key: "keys", label: t.tabs.keys },
     { key: "cache", label: t.tabs.cache },
     { key: "trends", label: t.tabs.trends },
+    { key: "projects", label: t.tabs.projects },
   ];
 
   const handleReupload = useCallback(
