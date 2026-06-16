@@ -1,10 +1,10 @@
 # DeepSeek API Usage Analytics Dashboard
 
-> Visualize your DeepSeek API usage — drop your monthly CSVs and get instant cost analytics, cache analysis, and per-key breakdowns. Free, open source, browser-side.
+> Visualize your DeepSeek API usage — drop your monthly ZIP exports or CSV files and get instant cost analytics, cache analysis, and per-key breakdowns. Free, open source, browser-side.
 
 ## What is this?
 
-A free, privacy-first analytics tool for DeepSeek API users. Drag your monthly usage CSV files onto the page and instantly see where your API budget goes. No account, no upload, no database — everything runs in your browser. Your data never leaves your computer.
+A free, privacy-first analytics tool for DeepSeek API users. Drag your monthly usage ZIP exports (or CSV files) onto the page and instantly see where your API budget goes. No account, no upload, no database — everything runs in your browser. Your data never leaves your computer.
 
 ## Who is this for?
 
@@ -15,8 +15,9 @@ Anyone using the DeepSeek API platform who wants to understand their spending:
 
 ## What can you do with it?
 
-- **See your total spend at a glance** — big hero number with daily cost breakdown, no spreadsheet needed
+- **See your total spend at a glance** — big hero number with daily cost breakdown, no spreadsheet needed. One-click copy to clipboard.
 - **Understand your API keys** — sortable table showing which keys cost the most, their token usage, and cache hit efficiency
+- **Group keys into custom projects** — drag API keys into custom project groups to analyze cost and usage per project
 - **Track cache performance** — see how much you save via cache hits vs. misses, with daily trend charts
 - **Follow multi-metric trends** — toggle between cost, tokens, hit rate, and request count over time on one chart
 - **Filter by model** — isolate a specific model to see its individual cost and usage patterns
@@ -24,21 +25,25 @@ Anyone using the DeepSeek API platform who wants to understand their spending:
 
 ## How it works
 
-1. Go to DeepSeek Platform → Usage → download your monthly amount CSV and cost CSV
-2. Drag both files onto the dashboard (or click to browse)
+1. Go to DeepSeek Platform → Usage → download your monthly export (ZIP file containing amount and cost CSVs)
+2. Drag the ZIP file (or extracted CSVs) onto the dashboard — no unzipping needed
 3. Instantly see charts, tables, and insights — no configuration needed
 
-Supports multiple months at once. Files are automatically paired by year-month.
+Supports multiple months at once. ZIP archives are extracted automatically in-browser. Individual CSV files are paired by year-month.
+
+## File size & limits
+
+Each individual file (CSV or ZIP entry) must be under 50 MB. This prevents malicious ZIP bombs from freezing the browser. DeepSeek monthly usage exports are typically under 1 MB — this limit should never be an issue for normal use.
 
 ## What data does it read?
 
-DeepSeek platform exports two CSV files per month:
+DeepSeek platform exports two CSV files per month (either as standalone files or inside a ZIP):
 
 **Amount CSV** — records every API call with date, model, key name, token type, and token counts (input cache hit, input cache miss, output tokens, request count).
 
 **Cost CSV** — daily cost per model.
 
-The tool combines them to show you cost per key, per model, and per day.
+The tool combines them to show you cost per key, per model, per project, and per day.
 
 ## Privacy
 
