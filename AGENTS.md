@@ -42,7 +42,10 @@ src/
 │   ├── TermsPage.tsx          # Terms of use page: bilingual content (8 sections), JSON-LD WebPage schema, Apple-minimalist legal-text layout, back-to-home link + FooterBar, open-source license reference
 │   ├── ChangelogPage.tsx      # Changelog page: complete version history (v0.1.0–v0.5.2), entries by category (Added/Improved/Fixed/Dependencies) with color-coded dots, JSON-LD WebPage schema, bilingual, Apple-minimalist legal-text layout matching privacy/terms pages
 │   ├── CopyButton.tsx        # Reusable clipboard copy button with hover tooltip, i18n-aware toast, and timer cleanup (used by KeyView, ProjectView, OverviewView)
-│   ├── Dashboard.tsx         # Main layout: routes between LandingPage (no data) and Dashboard view with 5 tabs (Overview / By Project / By Key / Cache / Trends); semantic hidden H1 for SEO
+│   ├── ShareButton.tsx       # Share icon button in tab navigation bar → opens ShareModal for the current tab
+│   ├── ShareCard.tsx         # 1200×630 social media infographic card component: per-tab designs (Overview/Projects/Keys/Cache/Trends) with KPI hero, ECharts mini-chart, QR code, and app logo watermark
+│   ├── ShareModal.tsx        # Share dialog: live preview, "From XXX" name input (localStorage persisted), custom message, clipboard copy (WeChat/Feishu/DingTalk compatible), PNG download
+│   ├── Dashboard.tsx         # Main layout: routes between LandingPage (no data) and Dashboard view with 5 tabs (Overview / By Project / By Key / Cache / Trends); semantic hidden H1 for SEO; ShareButton integrated in tab nav bar
 │   ├── DropZone.tsx          # Drag-and-drop CSV/ZIP uploader (supports multi-file, ZIP auto-extraction, 50MB file size limit, "or click to upload")
 │   ├── ProjectView.tsx       # "By Project" tab: aggregates API keys into custom project groups (drag-and-drop config), per-project cost/token/cache stats with inline bars, CopyButton integration
 │   ├── KPICards.tsx          # Summary stat cards (card-less big-number layout)
@@ -65,6 +68,7 @@ src/
     ├── schema.ts            # JSON-LD structured data: SoftwareApplication + FAQPage + BreadcrumbList (bilingual en/zh, versioned)
     ├── DataContext.tsx       # Data state + model filter (selectedModel, filteredResult, filterResult)
     ├── ProjectConfigContext.tsx  # Custom project grouping config: drag-and-drop key assignment, localStorage persistence, uncategorized fallback, reset-to-default
+    ├── shareCardData.ts     # Share card data extraction: extracts per-tab summary data (OverviewShareData, ProjectShareData, KeyShareData, CacheShareData, TrendsShareData) from ParseResult
     └── ThemeContext.tsx      # Light/dark theme context + useTheme hook + localStorage + system preference
 
 public/
@@ -220,6 +224,7 @@ Keys are flat 2-level (`group.keyName`) in `src/i18n/translations.ts`. Do NOT ne
 | `dropzone`, `error`, `warning` | `DropZone.tsx`, `ErrorDisplay.tsx` |
 | `kpi`, `overview`, `trends`, `cache`, `keys` | `KPICards.tsx`, `OverviewView.tsx`, `TrendsView.tsx`, `CacheView.tsx`, `KeyView.tsx` |
 | `projects` (22 keys: modal, drag-and-drop, validation) | `ProjectView.tsx` config modal |
+| `share` (18 keys: modal, inputs, toast, labels) | `ShareButton.tsx`, `ShareModal.tsx`, `ShareCard.tsx` |
 | `landing` (howItWorks, qaQ1–qaQ9, about*) | `LandingPage.tsx`, `LandingContent.tsx`, `schema.ts` |
 | `guideline`, `privacy` (21 keys), `terms` (22 keys), `changelog` (10 keys), `meta`, `theme` | `GuidelinePage.tsx`, `PrivacyPage.tsx`, `TermsPage.tsx`, `ChangelogPage.tsx`, `layout.tsx`, `ThemeSwitcher.tsx` |
 
@@ -251,6 +256,48 @@ A "By Custom Projects" tab in the dashboard lets users organize API keys into us
 - Gear icon button opens the config modal
 - Cost values wrapped in `<CopyButton>` for one-click copy
 - Cache hit rate color coding matches KeyView (green > 40% / amber 20–40% / red < 20%)
+
+## Social Media Share Cards (v0.5.2)
+
+Each dashboard tab (Overview / Projects / Keys / Cache / Trends) supports generating a 1200×630 social media infographic share card. The feature is implemented across three new components and a data extraction module:
+
+### Architecture
+
+- **`ShareButton`** (`src/components/ShareButton.tsx`): Minimal share icon (SVG share icon + "Share" label) in the tab navigation bar. Opens the ShareModal for the current active tab.
+- **`ShareModal`** (`src/components/ShareModal.tsx`): Full-featured share dialog with:
+  - Live preview: scaled ShareCard thumbnail that updates in real-time as user types
+  - "From XXX" name/team name input — large signature on the card, persisted to `localStorage["ds-share-name"]`
+  - Optional custom message — displayed as a quote-style annotation on the card
+  - Clipboard copy: captures the card as PNG via `html2canvas`, copies to clipboard (paste directly into WeChat / Feishu / DingTalk)
+  - PNG download: exports the card as a `.png` file
+  - QR code: points to `https://deepseek-usage.xyz`, generated client-side via `qrcode`
+  - App logo watermark on the card for brand identification
+- **`ShareCard`** (`src/components/ShareCard.tsx`): Pure rendering component of the 1200×630 infographic card. Per-tab designs with:
+  - Top-left KPI summary rows + right-aligned tab label badge
+  - Left side: hero big-number (cost/cache rate/peak/etc.) + metric details
+  - Right side: ECharts mini-chart (pie/bar/line) relevant to the tab
+  - Bottom: date range + app logo + QR code + "Generated by" watermark
+  - Theme-aware (light/dark), locale-aware labels
+- **`shareCardData.ts`** (`src/lib/shareCardData.ts`): Data extraction layer. Defines `ShareTab` type, per-tab data interfaces (`OverviewShareData`, `ProjectShareData`, `KeyShareData`, `CacheShareData`, `TrendsShareData`), and `extractShareCardData()` function that computes tab-specific aggregates from `ParseResult` (with optional `ProjectConfig` for the projects tab).
+
+### Integration
+
+- `ShareButton` is rendered in `Dashboard.tsx`'s tab navigation bar via `ml-auto` push-right positioning
+- `ShareModal` reads data from `useData()` (current filtered data), `useProjectConfig()` (project grouping), `useTheme()`, and `useTranslation()`
+- The share card capture uses `html2canvas` to snapshot the rendered `<ShareCard>` DOM node at native 1200×630 resolution
+- QR code is generated as a `data:` URL via the `qrcode` library
+- Clipboard copy uses `navigator.clipboard.write([new ClipboardItem(...)])` with PNG blob; falls back to download-only on unsupported browsers
+
+### Dependencies
+
+- `html2canvas` — DOM-to-canvas screenshot for card capture
+- `qrcode` — client-side QR code generation (no server needed)
+
+### Styling
+
+- `ShareButton`: `text-xs font-medium` with `var(--text-tertiary)` color, hover → `var(--text-primary)`. SVG share icon (15×15) + "Share" label (hidden on small screens via `hidden sm:inline`)
+- `ShareModal`: Apple-minimalist sheet/overlay — `fixed inset-0 z-[100]` with centered `max-w-[520px]` dialog, thin border (`var(--border)`), `var(--bg)` background, `shadow-diffuse-md`. Input fields: `rounded-subtle` with `var(--border)` border, `var(--text-primary)` text on `var(--bg-surface)` background
+- `ShareCard`: Rendered at 1200×630 with `pointer-events-none` (non-interactive). Typography: 600–700 weight headings, 400–500 body, tight `tracking-tighter` hero numbers. Theme colors: `#F5F5F7` / `#000000` (bg), `#1D1D1F` / `#F5F5F7` (text). Per-tab color accents: blue (Overview), purple (Projects), green (Keys), orange (Cache), teal (Trends)
 
 ## CopyButton component
 
@@ -366,6 +413,8 @@ Apple-style underline tabs: `text-xs font-semibold uppercase tracking-wide`, 2px
 - **Changing the visual design**: Update CSS variables in `globals.css` — do NOT hardcode colors in individual components
 - **Adding a new view/tab**: Add to `TABS` array in `Dashboard.tsx`, add translation keys under `tabs.*` in both locales, create component with Hero + chart pattern using `filteredResult`
 - **Adding clipboard copy to a value**: Import `<CopyButton>` from `@/components/CopyButton`, wrap the display value as its child, pass `value` (numeric) and `name` (display label for toast). The component handles clipboard API, fallback, toast, and timer cleanup.
+- **Adding social media share card support for a new tab**: If a new dashboard tab is added, update `ShareTab` in `src/lib/shareCardData.ts`, add the corresponding data interface and extraction logic, add a `ShareCard` render branch for the tab's infographic layout (KPI + mini-chart), and add translations under `share.*` in both locales.
+- **Modifying share card design**: Edit `ShareCard.tsx` to change the infographic layout, colors, or chart type for any tab. Card dimensions are constants `CARD_W` (1200) / `CARD_H` (630). Chart options are computed with `useMemo` using theme-aware colors. QR code URL is hardcoded in `ShareModal.tsx` (`useEffect` → `QRCode.toDataURL`).
 - **Adding a new custom project config feature**: Project definitions live in `ProjectConfigContext` with localStorage persistence. Edit `ProjectDef` type and `ProjectConfigContext` for schema changes, `ProjectView` for display changes, and `translations.ts` under `projects.*` for UI strings. Config modal uses drag-and-drop + keyboard-accessible dropdowns.
 - **Managing ZIP uploads**: ZIP extraction logic lives in `concatFiles.ts` via JSZip. The `concatMonthlyCSVs()` function auto-detects `.zip` files and extracts CSV content before pairing. To change the file size limit, update `MAX_UPLOAD_SIZE_BYTES` in `concatFiles.ts`.
 - **Adding a new upload validation**: Add check logic in `DropZone.tsx`, error key in `translations.ts` under `error.*` or `dropzone.*`, and display via `ErrorDisplay.tsx`.

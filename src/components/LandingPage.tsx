@@ -227,12 +227,12 @@ export default function LandingPage() {
                 >
                   {step.num}
                 </div>
-                <p
+                <h3
                   className="text-sm font-semibold mb-2 transition-colors duration-200"
                   style={{ color: "var(--text-primary)" }}
                 >
                   {step.title}
-                </p>
+                </h3>
                 <p
                   className="text-xs leading-relaxed transition-colors duration-200 text-pretty"
                   style={{ color: "var(--text-secondary)" }}
@@ -318,12 +318,12 @@ export default function LandingPage() {
                                focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2
                                rounded-subtle focus-visible:outline-[var(--accent)]"
                   >
-                    <span
+                    <h3
                       className="text-sm font-semibold text-pretty"
                       style={{ color: "var(--text-primary)" }}
                     >
                       {item.q}
-                    </span>
+                    </h3>
                     {/* 折叠箭头 */}
                     <span
                       className="shrink-0 text-base transition-transform duration-300 ease-out"

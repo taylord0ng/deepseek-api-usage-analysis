@@ -28,6 +28,7 @@ A browser-side analytics dashboard for DeepSeek API usage. Drag your monthly CSV
 - **By Project** — Custom project grouping tab: drag-and-drop API keys into user-defined projects, per-project cost/token/cache aggregation, config persisted to localStorage; gear icon opens drag-and-drop config modal with keyboard-accessible dropdowns
 - **Model filter** — Segmented control (pill buttons) to filter all views by model; only shown when ≥2 models detected
 - **One-click copy** — Reusable CopyButton component for clipboard copy of cost values across KeyView, ProjectView, and OverviewView; hover tooltip with i18n-aware toast
+- **Social share cards** — Generate 1200×630 infographic share images for each dashboard tab (Overview / Projects / Keys / Cache / Trends). Customizable "From XXX" signature, optional quote message, per-tab ECharts mini-charts, QR code to deepseek-usage.xyz, app logo watermark, one-click copy to clipboard (paste directly to WeChat / Feishu / DingTalk), and PNG download.
 - **Upload safety** — 50MB per-file size limit to prevent ZIP bomb attacks; user-facing error messages and dedicated FAQ entry
 - **Multi-month support** — Drag multiple months at once; files auto-pair by filename pattern and concatenate. Also supports ZIP archives directly — no extraction needed; drag DeepSeek platform ZIP exports straight onto the page.
 - **Apple-minimalist design** — Cold gray paper-texture background, generous whitespace, "no-card" full-width modules, thin horizontal dividers, 5rem hero numbers, diffuse shadows
@@ -35,7 +36,7 @@ A browser-side analytics dashboard for DeepSeek API usage. Drag your monthly CSV
 - **SEO optimized** — Server-rendered metadata (canonical URLs, OpenGraph with alternateLocale, Twitter cards), JSON-LD structured data (SoftwareApplication + FAQPage + BreadcrumbList, bilingual), robots.txt + sitemap.xml, `<noscript>` crawler fallback content, anchor-linkable landing page sections, `llms.txt` for LLM-friendly site description
 - **Landing page** — Complete pre-upload landing with theme-aware background images, How It Works steps, accordion FAQ (9 items, including file size limits and project grouping), expanded multi-section About (project origin, privacy & tech, team, contact with email copy & social links + "View Changelog →" link), scroll-reveal animations, anchor-linkable sections with deferred rendering for performance
 - **User Guide** — Comprehensive bilingual user manual at `/guideline` with annotated screenshots, interactive table of contents, step-by-step dashboard navigation, CSV export instructions, chart interpretation guide, and troubleshooting section
-- **Changelog** — Dedicated `/changelog` page with complete version history (v0.1.0–v0.5.1) organized by category (Added/Improved/Fixed/Dependencies) with color-coded dots; Apple-minimalist bilingual design matching privacy/terms pages, JSON-LD WebPage schema, independent SEO metadata, linked from TitleBar, FooterBar, and LandingPage
+- **Changelog** — Dedicated `/changelog` page with complete version history (v0.1.0–v0.5.2) organized by category (Added/Improved/Fixed/Dependencies) with color-coded dots; Apple-minimalist bilingual design matching privacy/terms pages, JSON-LD WebPage schema, independent SEO metadata, linked from TitleBar, FooterBar, and LandingPage
 - **Privacy Policy & Terms** — `/privacy` and `/terms` pages with bilingual legal content, independent SEO metadata (canonical, OpenGraph, Twitter), JSON-LD WebPage schemas, and Apple-minimalist legal-text layout; linked from footer on every page
 - **Analytics** — Optional Google Analytics 4 integration via `NEXT_PUBLIC_GA_ID` env var; zero overhead when unset, standard page-view tracking only — no CSV data ever tracked
 
@@ -82,6 +83,8 @@ npm run lint       # ESLint
 | Charts      | ECharts 6 + echarts-for-react           |
 | CSV Parsing | Papa Parse 5                            |
 | ZIP Handling| JSZip                                    |
+| Screenshot  | html2canvas                             |
+| QR Code     | qrcode                                   |
 | Styling     | Tailwind CSS v4 + CSS custom properties |
 | Typography  | Hubot Sans (local WOFF2) + Geist Mono (next/font/google) |
 | Language    | TypeScript 5 (strict mode)              |
@@ -115,6 +118,9 @@ src/
 │   ├── TermsPage.tsx        # Terms of use page (bilingual 8-section legal text, JSON-LD WebPage schema, MIT License reference)
 │   ├── ChangelogPage.tsx     # Changelog page (complete version history v0.1.0–v0.5.2, entries by category with colored dots, JSON-LD WebPage schema, bilingual)
 │   ├── CopyButton.tsx       # Reusable clipboard copy button (hover tooltip, i18n toast, timer cleanup)
+│   ├── ShareButton.tsx      # Share icon button in tab nav → opens ShareModal
+│   ├── ShareCard.tsx         # 1200×630 social media infographic card (per-tab KPI + mini-chart + QR + watermark)
+│   ├── ShareModal.tsx        # Share dialog (live preview, inputs, copy to clipboard, PNG download)
 │   ├── Dashboard.tsx        # Routes between LandingPage and 5-tab dashboard view (semantic hidden H1)
 │   ├── DropZone.tsx         # Drag-and-drop or click-to-upload CSV/ZIP (multi-file, 50MB limit)
 │   ├── ProjectView.tsx      # By Project tab: drag-and-drop custom project groups, per-project cost/token/cache table
@@ -138,6 +144,7 @@ src/
     ├── schema.ts           # JSON-LD structured data (SoftwareApplication + FAQPage + BreadcrumbList, bilingual, versioned)
     ├── DataContext.tsx      # Data state + model filter
     ├── ProjectConfigContext.tsx # Custom project grouping config (drag-and-drop, localStorage persistence)
+    ├── shareCardData.ts     # Share card data extraction (per-tab summary data from ParseResult)
     └── ThemeContext.tsx     # Theme state + useTheme hook
 ```
 
@@ -186,11 +193,21 @@ The repo includes `vercel.json` with pre-configured security headers and caching
 
 ## Changelog
 
+### v0.5.2
+
+**Added:**
+
+- Social media share cards — each dashboard tab (Overview / Projects / Keys / Cache / Trends) can now generate a 1200×630 infographic share image. Supports customizable "From XXX" signature, optional quote message, per-tab ECharts mini-charts, QR code pointing to deepseek-usage.xyz, app logo watermark, one-click copy to clipboard (paste directly to WeChat / Feishu / DingTalk), and PNG download.
+
+**Dependencies:**
+
+- Added `html2canvas` (DOM-to-canvas screenshot) and `qrcode` (client-side QR code generation).
+
 ### v0.5.1
 
 **Added:**
 
-- Changelog page (`/changelog`) — a dedicated page showcasing the complete version history from v0.1.0 to v0.5.1, in Apple-minimalist bilingual design matching privacy/terms pages. Includes JSON-LD WebPage schema, independent SEO metadata (canonical, OpenGraph, Twitter), and version entries organized by category (Added/Improved/Fixed/Dependencies) with color-coded dots.
+- Changelog page (`/changelog`) — a dedicated page showcasing the complete version history from v0.1.0 to v0.5.2, in Apple-minimalist bilingual design matching privacy/terms pages. Includes JSON-LD WebPage schema, independent SEO metadata (canonical, OpenGraph, Twitter), and version entries organized by category (Added/Improved/Fixed/Dependencies) with color-coded dots.
 - TitleBar clock icon linking to the changelog page, alongside the existing guideline book icon.
 - LandingPage About section "View Changelog →" link below the social link pills.
 

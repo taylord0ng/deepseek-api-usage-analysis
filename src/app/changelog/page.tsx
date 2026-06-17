@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { ChangelogPage } from "@/components/ChangelogPage";
+import ChangelogContent from "@/components/ChangelogContent";
 
 /** 站点公开 URL（构建时从 .env 注入） */
 const SITE_URL =

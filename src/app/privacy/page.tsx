@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { PrivacyPage } from "@/components/PrivacyPage";
+import PrivacyContent from "@/components/PrivacyContent";
 
 /** 站点公开 URL（构建时从 .env 注入） */
 const SITE_URL =
@@ -64,5 +65,10 @@ export function generateMetadata(): Metadata {
  * - SEO metadata + OpenGraph + Twitter Card
  */
 export default function PrivacyRoute() {
-  return <PrivacyPage />;
+  return (
+    <>
+      <PrivacyPage />
+      <PrivacyContent />
+    </>
+  );
 }

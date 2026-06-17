@@ -770,6 +770,7 @@ DeepSeek API 用量分析仪表盘是一款**纯浏览器端运行**的数据可
 - **用量分析**：总 Token 数、各 Key 用量明细、请求次数
 - **缓存分析**：缓存命中率、每日命中率趋势、各 Key 命中/未命中对比
 - **趋势分析**：在费用 / Token / 命中率 / 请求数四个维度间自由切换查看
+- **社交媒体分享**：每个标签页可生成信息图分享图片，一键复制到微信/飞书/钉钉
 
 **核心特点**：所有数据解析和图表渲染均在您的浏览器本地完成，CSV 文件不会上传到任何服务器，保障您的账单数据隐私。
 
@@ -1122,6 +1123,31 @@ Apple 风格下划线标签，5 个标签页：
 
 ---
 
+### 5.4 社交媒体分享
+
+每个标签页均可生成一张 1200×630 的信息图分享图片，方便在微信、飞书、钉钉、Twitter 等社交平台传播。
+
+**使用步骤：**
+
+1. 在任意标签页的导航栏右侧，点击 **分享图标**（节点连线图标）
+2. 在弹出窗口中填写：
+   - **你的名字 / 团队名字**：显示为图片上大号 "From XXX" 署名（必填，自动记忆）
+   - **自定义文案**：可选，以引文样式显示在卡片右上角（带示例占位文字）
+3. 下方预览区实时显示卡片效果
+4. 点击 **「生成并复制」**，图片自动复制到剪贴板，可直接粘贴到微信/飞书/钉钉
+5. 也可点击 **「PNG」** 按钮下载图片文件
+
+**卡片内容：**
+
+- 顶部：应用名称 + 当前标签页名称 + "From XXX" 署名 + 自定义文案（如有）
+- 左侧：标签页核心指标（总览=总费用 / 项目=项目数 / Key=Key数 / 缓存=命中率 / 趋势=总费用）+ KPI 数值
+- 右侧：对应标签页的迷你 ECharts 图表（柱状图/折线图/横向柱状图）
+- 底部：数据日期范围 + 应用 Logo + 二维码（指向 deepseek-usage.xyz）+ 品牌水印
+
+> **提示**：复制到剪贴板后，在微信/飞书/钉钉的输入框中直接 \`Ctrl+V\`（或右键粘贴）即可发送图片。支持浅色/深色双主题。
+
+---
+
 ## 六、CSV 文件格式说明
 
 ### amount CSV 格式
@@ -1196,6 +1222,7 @@ The DeepSeek API Usage Analytics Dashboard is a **purely browser-side** data vis
 - **Usage Analysis**: Total tokens, per-key usage details, request counts
 - **Cache Analysis**: Cache hit rate, daily hit rate trends, per-key hits vs. misses comparison
 - **Trend Analysis**: Freely switch between four metrics — cost / tokens / hit rate / requests
+- **Social Media Sharing**: Generate infographic share images from each tab, one-click copy to WeChat/Feishu/DingTalk
 
 **Key Feature**: All data parsing and chart rendering happens locally in your browser. CSV files are never uploaded to any server, ensuring your billing data privacy.
 
@@ -1545,6 +1572,31 @@ Supports uploading multiple months of ZIP or CSV files simultaneously. Merge rul
 5. The file label automatically updates to the range format
 
 > **Tip**: If filenames don't follow the standard pattern, the system falls back to prefix-based grouping.
+
+---
+
+### 5.4 Social Media Sharing
+
+Each dashboard tab can generate a 1200×630 infographic share image, ideal for sharing on WeChat, Feishu, DingTalk, Twitter, and other social platforms.
+
+**Usage Steps:**
+
+1. In any tab's navigation bar, click the **Share icon** (node-connection icon) on the right side
+2. In the popup window, fill in:
+   - **Your / Team Name**: displayed as a large "From XXX" signature on the image (required, auto-saved)
+   - **Message**: optional, shown as a quote in the top-right corner of the card (with example placeholder text)
+3. The preview area below shows the card in real time
+4. Click **"Generate & Copy"** — the image is copied to clipboard, ready to paste directly into WeChat/Feishu/DingTalk
+5. Alternatively, click **"PNG"** to download the image file
+
+**Card Contents:**
+
+- Top: App name + current tab label + "From XXX" signature + custom message (if any)
+- Left: Tab-specific core metric (Overview=Total Cost / Projects=Project Count / Keys=Key Count / Cache=Hit Rate / Trends=Total Cost) + KPI values
+- Right: Mini ECharts chart corresponding to the current tab (bar/line/horizontal bar)
+- Bottom: Date range + App Logo + QR code (pointing to deepseek-usage.xyz) + brand watermark
+
+> **Tip**: After copying, press \`Ctrl+V\` (or right-click paste) directly in a WeChat/Feishu/DingTalk input box to send the image. Supports both light and dark themes.
 
 ---
 

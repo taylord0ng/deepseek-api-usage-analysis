@@ -28,6 +28,7 @@
 - **按项目** — 自定义项目分组标签页：拖拽 API Key 到用户自定义项目中，按项目汇总费用/Token/缓存数据，配置持久化至 localStorage；齿轮图标打开拖拽式配置弹窗，支持键盘操作下拉菜单
 - **模型筛选** — 分段控件胶囊按钮，按模型过滤所有视图；仅在检测到 ≥2 个模型时显示
 - **一键复制** — 可复用的 CopyButton 组件，在 KeyView、ProjectView 和 OverviewView 中一键复制费用数值；悬浮提示含国际化成功消息
+- **社交媒体分享卡片** — 为每个仪表盘标签页（总览 / 项目 / Key / 缓存 / 趋势）生成 1200×630 信息图分享图片。支持自定义「From XXX」署名、可选引用文案、各标签页专属 ECharts 迷你图表、deepseek-usage.xyz 二维码、应用 Logo 水印、一键复制到剪贴板（直接粘贴至微信 / 飞书 / 钉钉）以及 PNG 下载。
 - **上传安全** — 单文件 50MB 大小限制，防止 ZIP 炸弹攻击；用户可见的错误提示及专属 FAQ 条目
 - **多月支持** — 一次拖入多个月份文件；根据文件名模式自动配对并拼接。同时支持 ZIP 压缩包直接上传 — 无需解压，直接将 DeepSeek 平台导出的 ZIP 文件拖入页面即可。
 - **Apple 极简设计** — 冷灰纸质感底、大量留白、「无卡片」通栏模块布局、细横线分割、5rem Hero 大数字、弥散阴影
@@ -35,7 +36,7 @@
 - **SEO 优化** — 服务端渲染元数据（规范 URL、OpenGraph 含 alternateLocale、Twitter 卡片）、JSON-LD 结构化数据（SoftwareApplication + FAQPage + BreadcrumbList，双语）、robots.txt + sitemap.xml、`<noscript>` 爬虫回退内容、支持锚点链接的落地页板块、`llms.txt` 面向 LLM 的站点描述
 - **落地页** — 完整的上传前落地页，包含主题感知背景图片、使用说明步骤、手风琴常见问题（9 项，含文件大小限制和项目分组）、多板块关于页面（项目起源、隐私与技术、团队介绍、商业合作含邮箱复制与社交链接 +「查看更新日志 →」链接）、滚动渐显动画、支持锚点链接的板块与延迟渲染性能优化
 - **用户操作手册** — 位于 `/guideline` 的完整双语使用指南，包含标注截图、交互式目录导航、分步仪表盘操作说明、CSV 导出指引、图表解读和故障排查章节
-- **更新日志** — 位于 `/changelog` 的专属页面，展示 v0.1.0 至 v0.5.1 的完整版本历史，按类别（新增/改进/修复/依赖变更）以彩色圆点分组；Apple 极简双语设计，与隐私政策/使用条款风格一致，含 JSON-LD WebPage 结构化数据、独立 SEO 元数据，可从 TitleBar、FooterBar 和落地页访问
+- **更新日志** — 位于 `/changelog` 的专属页面，展示 v0.1.0 至 v0.5.2 的完整版本历史，按类别（新增/改进/修复/依赖变更）以彩色圆点分组；Apple 极简双语设计，与隐私政策/使用条款风格一致，含 JSON-LD WebPage 结构化数据、独立 SEO 元数据，可从 TitleBar、FooterBar 和落地页访问
 - **隐私政策与使用条款** — `/privacy` 和 `/terms` 页面，包含双语法务内容、独立 SEO 元数据（规范 URL、OpenGraph、Twitter 卡片）、JSON-LD WebPage Schema 以及 Apple 极简风格的法律文本布局；每页页脚均有导航链接
 - **数据分析** — 可选的 Google Analytics 4 集成，通过 `NEXT_PUBLIC_GA_ID` 环境变量控制；未设置时零开销，仅追踪标准页面浏览 — 绝不追踪任何 CSV 数据
 
@@ -82,6 +83,8 @@ npm run lint       # ESLint
 | 图表     | ECharts 6 + echarts-for-react      |
 | CSV 解析 | Papa Parse 5                       |
 | ZIP 处理 | JSZip                                    |
+| 截图     | html2canvas                             |
+| QR 码    | qrcode                                   |
 | 样式     | Tailwind CSS v4 + CSS 自定义属性        |
 | 字体     | Hubot Sans（本地 WOFF2）+ Geist Mono（next/font/google） |
 | 语言     | TypeScript 5（strict 严格模式）          |
@@ -115,6 +118,9 @@ src/
 │   ├── TermsPage.tsx        # 使用条款页（双语 8 章节法律文本，JSON-LD WebPage Schema，MIT 许可证引用）
 │   ├── ChangelogPage.tsx     # 更新日志页（v0.1.0–v0.5.2 完整版本历史，按类别以彩色圆点分组，JSON-LD WebPage Schema，双语）
 │   ├── CopyButton.tsx       # 可复用剪贴板复制按钮（悬浮提示、国际化 Toast、定时器清理）
+│   ├── ShareButton.tsx      # 标签导航栏分享图标按钮 → 打开 ShareModal
+│   ├── ShareCard.tsx         # 1200×630 社交媒体信息图卡片（各标签页 KPI + 迷你图表 + QR 码 + 水印）
+│   ├── ShareModal.tsx        # 分享弹窗（实时预览、输入表单、复制到剪贴板、PNG 下载）
 │   ├── Dashboard.tsx        # 路由：落地页 / 5 标签页仪表盘视图切换（语义化隐藏 H1）
 │   ├── DropZone.tsx         # 拖拽或点击上传 CSV/ZIP（多文件，50MB 限制）
 │   ├── ProjectView.tsx      # 按项目标签页：拖拽自定义项目分组，按项目汇总费用/Token/缓存表格
@@ -138,6 +144,7 @@ src/
     ├── schema.ts           # JSON-LD 结构化数据（SoftwareApplication + FAQPage + BreadcrumbList，双语，含版本号）
     ├── DataContext.tsx      # 数据状态 + 模型筛选
     ├── ProjectConfigContext.tsx # 自定义项目分组配置（拖拽分配，localStorage 持久化）
+    ├── shareCardData.ts     # 分享卡片数据提取（从 ParseResult 提取各标签页汇总数据）
     └── ThemeContext.tsx     # 主题状态 + useTheme Hook
 ```
 
