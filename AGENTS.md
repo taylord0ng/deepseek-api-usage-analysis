@@ -10,7 +10,7 @@ A browser-side dashboard for DeepSeek API usage analytics. Users drag their mont
 
 Strictly follows an Apple-minimalist design language: cold gray paper-texture backgrounds, ample whitespace, "no-card" full-width modules with thin horizontal dividers, subtle rounded corners, and diffuse shadows. Full light/dark dual-theme support driven by CSS custom properties.
 
-**Version**: 0.5.1
+**Version**: 0.5.2
 
 ## Architecture
 
@@ -40,7 +40,7 @@ src/
 │   ├── GuidelinePage.tsx     # Full interactive user guide page: bilingual content blocks (h1–h6, p, blockquote, tables, ul/ol), screenshot embedding with locale-aware image switching, dynamic table-of-contents, scroll-reveal sections (1496 lines of structured guide content)
 │   ├── PrivacyPage.tsx        # Privacy policy page: bilingual content (7 sections), JSON-LD WebPage schema, Apple-minimalist legal-text layout, back-to-home link + FooterBar, GitHub source link for transparency verification
 │   ├── TermsPage.tsx          # Terms of use page: bilingual content (8 sections), JSON-LD WebPage schema, Apple-minimalist legal-text layout, back-to-home link + FooterBar, open-source license reference
-│   ├── ChangelogPage.tsx      # Changelog page: complete version history (v0.1.0–v0.5.1), entries by category (Added/Improved/Fixed/Dependencies) with color-coded dots, JSON-LD WebPage schema, bilingual, Apple-minimalist legal-text layout matching privacy/terms pages
+│   ├── ChangelogPage.tsx      # Changelog page: complete version history (v0.1.0–v0.5.2), entries by category (Added/Improved/Fixed/Dependencies) with color-coded dots, JSON-LD WebPage schema, bilingual, Apple-minimalist legal-text layout matching privacy/terms pages
 │   ├── CopyButton.tsx        # Reusable clipboard copy button with hover tooltip, i18n-aware toast, and timer cleanup (used by KeyView, ProjectView, OverviewView)
 │   ├── Dashboard.tsx         # Main layout: routes between LandingPage (no data) and Dashboard view with 5 tabs (Overview / By Project / By Key / Cache / Trends); semantic hidden H1 for SEO
 │   ├── DropZone.tsx          # Drag-and-drop CSV/ZIP uploader (supports multi-file, ZIP auto-extraction, 50MB file size limit, "or click to upload")
@@ -140,7 +140,7 @@ All sub-pages follow the same pattern: route directory under `src/app/` with `pa
 - **`/guideline`** (`GuidelinePage.tsx`): Bilingual user manual — markdown-like content blocks, 16+ annotated screenshots (locale-aware `-cn.png`/`-en.png`), dynamic sidebar ToC with Intersection Observer scroll tracking. Priority 0.8 in sitemap.
 - **`/privacy`** (`PrivacyPage.tsx`): 7-section bilingual legal text, JSON-LD WebPage schema, `max-w-3xl` centered layout, GitHub source links for transparency. Priority 0.5 in sitemap.
 - **`/terms`** (`TermsPage.tsx`): 8-section bilingual legal text, MIT License reference, JSON-LD WebPage schema, `max-w-2xl` layout. Priority 0.5 in sitemap.
-- **`/changelog`** (`ChangelogPage.tsx`): Complete version history from v0.1.0 to v0.5.1, entries organized by category (Added/Improved/Fixed/Dependencies) with color-coded dots, JSON-LD WebPage schema, bilingual, Apple-minimalist legal-text layout matching privacy/terms pages. Priority 0.5 in sitemap.
+- **`/changelog`** (`ChangelogPage.tsx`): Complete version history from v0.1.0 to v0.5.2, entries organized by category (Added/Improved/Fixed/Dependencies) with color-coded dots, JSON-LD WebPage schema, bilingual, Apple-minimalist legal-text layout matching privacy/terms pages. Priority 0.5 in sitemap.
 - **`/llms.txt`**: Static markdown file in `public/` — LLM-friendly site description (purpose, features, data format, privacy, links).
 
 ## Theme system

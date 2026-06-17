@@ -113,7 +113,7 @@ src/
 │   ├── GuidelinePage.tsx    # 完整交互式用户操作手册（双语、标注截图、目录导航、滚动渐显）
 │   ├── PrivacyPage.tsx      # 隐私政策页（双语 7 章节法律文本，JSON-LD WebPage Schema，GitHub 源码链接）
 │   ├── TermsPage.tsx        # 使用条款页（双语 8 章节法律文本，JSON-LD WebPage Schema，MIT 许可证引用）
-│   ├── ChangelogPage.tsx     # 更新日志页（v0.1.0–v0.5.1 完整版本历史，按类别以彩色圆点分组，JSON-LD WebPage Schema，双语）
+│   ├── ChangelogPage.tsx     # 更新日志页（v0.1.0–v0.5.2 完整版本历史，按类别以彩色圆点分组，JSON-LD WebPage Schema，双语）
 │   ├── CopyButton.tsx       # 可复用剪贴板复制按钮（悬浮提示、国际化 Toast、定时器清理）
 │   ├── Dashboard.tsx        # 路由：落地页 / 5 标签页仪表盘视图切换（语义化隐藏 H1）
 │   ├── DropZone.tsx         # 拖拽或点击上传 CSV/ZIP（多文件，50MB 限制）
@@ -186,11 +186,21 @@ npm run build
 
 ## 更新日志
 
+### v0.5.2
+
+**新增：**
+
+- 社交媒体分享卡片 — 每个仪表盘标签页（总览 / 项目 / Key / 缓存 / 趋势）现可生成 1200×630 信息图分享图片。支持自定义「From XXX」署名、可选引用文案、各标签页专属 ECharts 迷你图表、deepseek-usage.xyz 二维码、应用 Logo 水印、一键复制到剪贴板（直接粘贴至微信/飞书/钉钉）以及 PNG 下载。
+
+**依赖变更：**
+
+- 新增 `html2canvas`（DOM 转 Canvas 截图）和 `qrcode`（客户端二维码生成）依赖包。
+
 ### v0.5.1
 
 **新增：**
 
-- 更新日志页面（`/changelog`）— 专属页面展示 v0.1.0 至 v0.5.1 的完整版本历史，采用与隐私政策/使用条款一致的 Apple 极简双语设计。包含 JSON-LD WebPage 结构化数据、独立 SEO 元数据（canonical、OpenGraph、Twitter），版本条目按类别（新增/改进/修复/依赖）以彩色圆点分组展示。
+- 更新日志页面（`/changelog`）— 专属页面展示 v0.1.0 至 v0.5.2 的完整版本历史，采用与隐私政策/使用条款一致的 Apple 极简双语设计。包含 JSON-LD WebPage 结构化数据、独立 SEO 元数据（canonical、OpenGraph、Twitter），版本条目按类别（新增/改进/修复/依赖）以彩色圆点分组展示。
 - TitleBar 时钟图标链接至更新日志页面，与现有操作手册书籍图标并列。
 - 落地页关于区域社交链接胶囊下方新增「查看更新日志 →」链接。
 

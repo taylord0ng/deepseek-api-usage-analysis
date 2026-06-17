@@ -1,6 +1,6 @@
 {
   "name": "ds-usage-analysis",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "private": true,
   "license": "MIT",
   "scripts": {
@@ -12,9 +12,11 @@
   "dependencies": {
     "echarts": "^6.1.0",
     "echarts-for-react": "^3.0.6",
+    "html2canvas": "^1.4.1",
     "jszip": "^3.10.1",
     "next": "16.2.7",
     "papaparse": "^5.5.3",
+    "qrcode": "^1.5.4",
     "react": "19.2.4",
     "react-dom": "19.2.4"
   },
@@ -22,6 +24,7 @@
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/papaparse": "^5.5.2",
+    "@types/qrcode": "^1.5.6",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",

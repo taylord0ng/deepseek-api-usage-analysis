@@ -113,7 +113,7 @@ src/
 │   ├── GuidelinePage.tsx    # Full interactive user guide (bilingual, annotated screenshots, table of contents, scroll-reveal)
 │   ├── PrivacyPage.tsx      # Privacy policy page (bilingual 7-section legal text, JSON-LD WebPage schema, GitHub source links)
 │   ├── TermsPage.tsx        # Terms of use page (bilingual 8-section legal text, JSON-LD WebPage schema, MIT License reference)
-│   ├── ChangelogPage.tsx     # Changelog page (complete version history v0.1.0–v0.5.1, entries by category with colored dots, JSON-LD WebPage schema, bilingual)
+│   ├── ChangelogPage.tsx     # Changelog page (complete version history v0.1.0–v0.5.2, entries by category with colored dots, JSON-LD WebPage schema, bilingual)
 │   ├── CopyButton.tsx       # Reusable clipboard copy button (hover tooltip, i18n toast, timer cleanup)
 │   ├── Dashboard.tsx        # Routes between LandingPage and 5-tab dashboard view (semantic hidden H1)
 │   ├── DropZone.tsx         # Drag-and-drop or click-to-upload CSV/ZIP (multi-file, 50MB limit)

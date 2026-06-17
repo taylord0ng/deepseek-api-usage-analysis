@@ -49,11 +49,27 @@ interface VersionEntry {
 /** 所有版本的更新日志，按版本倒序排列 */
 const CHANGELOG_DATA: VersionEntry[] = [
   {
+    version: "v0.5.2",
+    date: "2026-06-17",
+    added: [
+      {
+        en: "Social media share card — each dashboard tab (Overview / Projects / Keys / Cache / Trends) can now generate a 1200×630 infographic for sharing. Features customizable \"From XXX\" signature, optional quote message, per-tab ECharts mini charts, QR code pointing to deepseek-usage.xyz, app logo watermark, one-click copy to clipboard (paste directly into WeChat/Feishu/DingTalk), and PNG download.",
+        zh: "社交媒体分享卡片 — 每个仪表盘标签页（总览 / 项目 / Key / 缓存 / 趋势）现可生成 1200×630 信息图分享图片。支持自定义「From XXX」署名、可选引用文案、各标签页专属 ECharts 迷你图表、deepseek-usage.xyz 二维码、应用 Logo 水印、一键复制到剪贴板（直接粘贴至微信/飞书/钉钉）以及 PNG 下载。",
+      },
+    ],
+    dependencies: [
+      {
+        en: "Added `html2canvas` (DOM-to-canvas screenshot capture) and `qrcode` (client-side QR code generation) packages.",
+        zh: "新增 `html2canvas`（DOM 转 Canvas 截图）和 `qrcode`（客户端二维码生成）依赖包。",
+      },
+    ],
+  },
+  {
     version: "v0.5.1",
     added: [
       {
-        en: "Changelog page (/changelog) — a dedicated page showcasing the complete version history from v0.1.0 to v0.5.1, in Apple-minimalist bilingual design matching privacy/terms pages. Includes JSON-LD WebPage schema, independent SEO metadata (canonical, OpenGraph, Twitter), and version entries organized by category (Added/Improved/Fixed/Dependencies) with color-coded dots.",
-        zh: "更新日志页面（/changelog）— 专属页面展示 v0.1.0 至 v0.5.1 的完整版本历史，采用与隐私政策/使用条款一致的 Apple 极简双语设计。包含 JSON-LD WebPage 结构化数据、独立 SEO 元数据（canonical、OpenGraph、Twitter），版本条目按类别（新增/改进/修复/依赖）以彩色圆点分组展示。",
+        en: "Changelog page (/changelog) — a dedicated page showcasing the complete version history from v0.1.0 to v0.5.2, in Apple-minimalist bilingual design matching privacy/terms pages. Includes JSON-LD WebPage schema, independent SEO metadata (canonical, OpenGraph, Twitter), and version entries organized by category (Added/Improved/Fixed/Dependencies) with color-coded dots.",
+        zh: "更新日志页面（/changelog）— 专属页面展示 v0.1.0 至 v0.5.2 的完整版本历史，采用与隐私政策/使用条款一致的 Apple 极简双语设计。包含 JSON-LD WebPage 结构化数据、独立 SEO 元数据（canonical、OpenGraph、Twitter），版本条目按类别（新增/改进/修复/依赖）以彩色圆点分组展示。",
       },
       {
         en: "TitleBar clock icon linking to the changelog page, alongside the existing guideline book icon.",

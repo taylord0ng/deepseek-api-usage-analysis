@@ -14,6 +14,8 @@ import CacheView from "./CacheView";
 import TrendsView from "./TrendsView";
 import ProjectView from "./ProjectView";
 import ErrorDisplay, { WarningBanner } from "./ErrorDisplay";
+import ShareButton from "./ShareButton";
+import type { ShareTab } from "@/lib/shareCardData";
 
 type Tab = "overview" | "projects" | "keys" | "cache" | "trends";
 
@@ -178,25 +180,31 @@ export default function Dashboard() {
         <KPICards />
 
         {/* Tab 导航 — Apple 风格下划线 */}
-        <nav className="flex gap-8 mb-10" style={{ borderBottom: "1px solid var(--border)" }}>
-          {TABS.map((tabItem) => (
-            <button
-              key={tabItem.key}
-              onClick={() => setTab(tabItem.key)}
-              className={`pb-3 text-xs font-semibold tracking-wide uppercase transition-all duration-200 border-b-2 -mb-px ${
-                tab === tabItem.key
-                  ? "border-accent"
-                  : "border-transparent"
-              }`}
-              style={{
-                color: tab === tabItem.key
-                  ? "var(--text-primary)"
-                  : "var(--text-tertiary)",
-              }}
-            >
-              {tabItem.label}
-            </button>
-          ))}
+        <nav className="flex items-center gap-8 mb-10" style={{ borderBottom: "1px solid var(--border)" }}>
+          <div className="flex gap-8">
+            {TABS.map((tabItem) => (
+              <button
+                key={tabItem.key}
+                onClick={() => setTab(tabItem.key)}
+                className={`pb-3 text-xs font-semibold tracking-wide uppercase transition-all duration-200 border-b-2 -mb-px ${
+                  tab === tabItem.key
+                    ? "border-accent"
+                    : "border-transparent"
+                }`}
+                style={{
+                  color: tab === tabItem.key
+                    ? "var(--text-primary)"
+                    : "var(--text-tertiary)",
+                }}
+              >
+                {tabItem.label}
+              </button>
+            ))}
+          </div>
+          {/* 分享按钮 */}
+          <div className="pb-3 -mb-px ml-auto">
+            <ShareButton tab={tab as ShareTab} label={t.share?.share ?? "Share"} />
+          </div>
         </nav>
 
         {/* 模型筛选 — Apple 风格分段控件 / 胶囊按钮 */}

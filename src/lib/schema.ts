@@ -11,7 +11,7 @@ import type { Locale } from "@/i18n/translations";
 /* ------------------------------------------------------------------ */
 
 /** 应用版本号，与 package.json 保持同步 */
-const APP_VERSION = "0.5.1";
+const APP_VERSION = "0.5.2";
 
 /** 站点公开 URL */
 const SITE_URL =
