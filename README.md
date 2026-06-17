@@ -117,6 +117,9 @@ src/
 │   ├── PrivacyPage.tsx      # Privacy policy page (bilingual 7-section legal text, JSON-LD WebPage schema, GitHub source links)
 │   ├── TermsPage.tsx        # Terms of use page (bilingual 8-section legal text, JSON-LD WebPage schema, MIT License reference)
 │   ├── ChangelogPage.tsx     # Changelog page (complete version history v0.1.0–v0.5.2, entries by category with colored dots, JSON-LD WebPage schema, bilingual)
+│   ├── PrivacyContent.tsx    # <noscript> SEO fallback: bilingual privacy policy for crawlers
+│   ├── TermsContent.tsx      # <noscript> SEO fallback: bilingual terms of use for crawlers
+│   ├── ChangelogContent.tsx  # <noscript> SEO fallback: bilingual changelog version summary for crawlers
 │   ├── CopyButton.tsx       # Reusable clipboard copy button (hover tooltip, i18n toast, timer cleanup)
 │   ├── ShareButton.tsx      # Share icon button in tab nav → opens ShareModal
 │   ├── ShareCard.tsx         # 1200×630 social media infographic card (per-tab KPI + mini-chart + QR + watermark)
@@ -169,7 +172,7 @@ The app implements a multi-layered SEO strategy for a client-rendered static SPA
 - **generateMetadata()** — Dynamic server-rendered metadata: canonical URL, OpenGraph (title, description, image), Twitter card, hreflang alternates (en/zh), robots directives
 - **JSON-LD structured data** — `SoftwareApplication` + `FAQPage` + `BreadcrumbList` schemas in both English and Chinese (6 total script tags), injected at build time via `<script type="application/ld+json">` in `layout.tsx`
 - **robots.txt + sitemap.xml** — Generated at build time via Next.js 16 `MetadataRoute` conventions; sitemap includes `/`, `/guideline`, `/privacy`, `/terms`, and `/changelog` entries; site URL from `NEXT_PUBLIC_SITE_URL` env var
-- **`<noscript>` fallback** — `LandingContent.tsx` outputs key landing page content (How It Works, FAQ, About) for crawlers that don't execute JavaScript
+- **`<noscript>` fallback** — `LandingContent.tsx` outputs key landing page content (How It Works, FAQ, About) for crawlers that don't execute JavaScript; `PrivacyContent.tsx`, `TermsContent.tsx`, and `ChangelogContent.tsx` provide bilingual `<noscript>` fallbacks for the privacy, terms, and changelog pages (EEAT trust signals)
 - **`llms.txt`** — LLM-friendly site description served at `/llms.txt`, summarizing the app's purpose, features, and structure for AI tools
 - **Semantic HTML** — Visible `<h1>` on landing page and guideline page, `<h1 className="sr-only">` on dashboard, proper section structure
 
