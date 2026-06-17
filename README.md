@@ -33,8 +33,9 @@ A browser-side analytics dashboard for DeepSeek API usage. Drag your monthly CSV
 - **Apple-minimalist design** — Cold gray paper-texture background, generous whitespace, "no-card" full-width modules, thin horizontal dividers, 5rem hero numbers, diffuse shadows
 - **100% private** — All CSV parsing (Papa Parse), ZIP extraction (JSZip), and cost computation runs client-side; project configuration stored in your browser's localStorage only
 - **SEO optimized** — Server-rendered metadata (canonical URLs, OpenGraph with alternateLocale, Twitter cards), JSON-LD structured data (SoftwareApplication + FAQPage + BreadcrumbList, bilingual), robots.txt + sitemap.xml, `<noscript>` crawler fallback content, anchor-linkable landing page sections, `llms.txt` for LLM-friendly site description
-- **Landing page** — Complete pre-upload landing with theme-aware background images, How It Works steps, accordion FAQ (9 items, including file size limits and project grouping), expanded multi-section About (project origin, privacy & tech, team, contact with email copy & social links), scroll-reveal animations, anchor-linkable sections with deferred rendering for performance
+- **Landing page** — Complete pre-upload landing with theme-aware background images, How It Works steps, accordion FAQ (9 items, including file size limits and project grouping), expanded multi-section About (project origin, privacy & tech, team, contact with email copy & social links + "View Changelog →" link), scroll-reveal animations, anchor-linkable sections with deferred rendering for performance
 - **User Guide** — Comprehensive bilingual user manual at `/guideline` with annotated screenshots, interactive table of contents, step-by-step dashboard navigation, CSV export instructions, chart interpretation guide, and troubleshooting section
+- **Changelog** — Dedicated `/changelog` page with complete version history (v0.1.0–v0.5.1) organized by category (Added/Improved/Fixed/Dependencies) with color-coded dots; Apple-minimalist bilingual design matching privacy/terms pages, JSON-LD WebPage schema, independent SEO metadata, linked from TitleBar, FooterBar, and LandingPage
 - **Privacy Policy & Terms** — `/privacy` and `/terms` pages with bilingual legal content, independent SEO metadata (canonical, OpenGraph, Twitter), JSON-LD WebPage schemas, and Apple-minimalist legal-text layout; linked from footer on every page
 - **Analytics** — Optional Google Analytics 4 integration via `NEXT_PUBLIC_GA_ID` env var; zero overhead when unset, standard page-view tracking only — no CSV data ever tracked
 
@@ -98,18 +99,21 @@ src/
 │   │   └── page.tsx        # /privacy route with independent SEO metadata
 │   ├── terms/
 │   │   └── page.tsx        # /terms route with independent SEO metadata
+│   ├── changelog/
+│   │   └── page.tsx        # /changelog route with independent SEO metadata
 │   ├── globals.css         # Tailwind v4 + Hubot Sans @font-face + CSS variables + reveal/accordion + base styles
 │   ├── AppI18nShell.tsx    # i18n shell + <html lang> sync
 │   ├── robots.ts           # Build-time robots.txt generation
-│   └── sitemap.ts          # Build-time sitemap.xml generation (includes /, /guideline, /privacy, /terms)
+│   └── sitemap.ts          # Build-time sitemap.xml generation (includes /, /guideline, /privacy, /terms, /changelog)
 ├── components/
-│   ├── TitleBar.tsx         # Shared top nav bar (logo + app name + GitHub + guide book icon + language + theme)
-│   ├── FooterBar.tsx        # Shared footer (copyright + guideline link + privacy link + terms link + GitHub link + version, optional animate/reveal)
+│   ├── TitleBar.tsx         # Shared top nav bar (logo + app name + GitHub + guide book icon + changelog clock icon + language + theme)
+│   ├── FooterBar.tsx        # Shared footer (copyright + guideline link + privacy link + terms link + changelog link + GitHub link + version, optional animate/reveal)
 │   ├── LandingPage.tsx      # Landing page (Hero with theme images + Upload + HowItWorks + "View Full Guide" link + accordion QA + About, scroll-reveal)
 │   ├── LandingContent.tsx   # Server-rendered <noscript> fallback for SEO crawlers
 │   ├── GuidelinePage.tsx    # Full interactive user guide (bilingual, annotated screenshots, table of contents, scroll-reveal)
 │   ├── PrivacyPage.tsx      # Privacy policy page (bilingual 7-section legal text, JSON-LD WebPage schema, GitHub source links)
 │   ├── TermsPage.tsx        # Terms of use page (bilingual 8-section legal text, JSON-LD WebPage schema, MIT License reference)
+│   ├── ChangelogPage.tsx     # Changelog page (complete version history v0.1.0–v0.5.1, entries by category with colored dots, JSON-LD WebPage schema, bilingual)
 │   ├── CopyButton.tsx       # Reusable clipboard copy button (hover tooltip, i18n toast, timer cleanup)
 │   ├── Dashboard.tsx        # Routes between LandingPage and 5-tab dashboard view (semantic hidden H1)
 │   ├── DropZone.tsx         # Drag-and-drop or click-to-upload CSV/ZIP (multi-file, 50MB limit)
@@ -125,7 +129,7 @@ src/
 ├── i18n/
 │   ├── index.ts            # Barrel export
 │   ├── I18nProvider.tsx    # React context + useTranslation hook
-│   └── translations.ts     # All UI strings (en + zh, including projects and guideline groups)
+│   └── translations.ts     # All UI strings (en + zh, including projects, changelog, and guideline groups)
 └── lib/
     ├── types.ts            # TypeScript interfaces & types
     ├── parser.ts           # CSV parsing pipeline
@@ -157,7 +161,7 @@ The app implements a multi-layered SEO strategy for a client-rendered static SPA
 
 - **generateMetadata()** — Dynamic server-rendered metadata: canonical URL, OpenGraph (title, description, image), Twitter card, hreflang alternates (en/zh), robots directives
 - **JSON-LD structured data** — `SoftwareApplication` + `FAQPage` + `BreadcrumbList` schemas in both English and Chinese (6 total script tags), injected at build time via `<script type="application/ld+json">` in `layout.tsx`
-- **robots.txt + sitemap.xml** — Generated at build time via Next.js 16 `MetadataRoute` conventions; sitemap includes `/`, `/guideline`, `/privacy`, and `/terms` entries; site URL from `NEXT_PUBLIC_SITE_URL` env var
+- **robots.txt + sitemap.xml** — Generated at build time via Next.js 16 `MetadataRoute` conventions; sitemap includes `/`, `/guideline`, `/privacy`, `/terms`, and `/changelog` entries; site URL from `NEXT_PUBLIC_SITE_URL` env var
 - **`<noscript>` fallback** — `LandingContent.tsx` outputs key landing page content (How It Works, FAQ, About) for crawlers that don't execute JavaScript
 - **`llms.txt`** — LLM-friendly site description served at `/llms.txt`, summarizing the app's purpose, features, and structure for AI tools
 - **Semantic HTML** — Visible `<h1>` on landing page and guideline page, `<h1 className="sr-only">` on dashboard, proper section structure

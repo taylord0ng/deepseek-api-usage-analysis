@@ -25,19 +25,22 @@ src/
 │   │   └── page.tsx          # /privacy route: generates independent SEO metadata (canonical, OG, Twitter), renders <PrivacyPage />
 │   ├── terms/
 │   │   └── page.tsx          # /terms route: generates independent SEO metadata (canonical, OG, Twitter), renders <TermsPage />
+│   ├── changelog/
+│   │   └── page.tsx          # /changelog route: generates independent SEO metadata (canonical, OG, Twitter), renders <ChangelogPage />
 │   ├── globals.css          # Tailwind v4 + @font-face Hubot Sans + CSS variables + reveal/accordion + base styles
 │   ├── favicon.ico          # App icon (branded)
 │   ├── AppI18nShell.tsx     # Client shell: I18nProvider + <html lang> sync
 │   ├── robots.ts            # Build-time robots.txt generation (Next.js 16 convention)
-│   └── sitemap.ts           # Build-time sitemap.xml generation (includes /, /guideline, /privacy, /terms entries, NEXT_PUBLIC_SITE_URL)
+│   └── sitemap.ts           # Build-time sitemap.xml generation (includes /, /guideline, /privacy, /terms, /changelog entries, NEXT_PUBLIC_SITE_URL)
 ├── components/
-│   ├── TitleBar.tsx          # Shared sticky top nav: logo + app name + GitHub icon + guideline book icon + LanguageSwitcher + ThemeSwitcher
-│   ├── FooterBar.tsx         # Shared footer: thin divider + copyright + guideline link + privacy link + terms link + GitHub link + version (props: animate, sectionRef)
-│   ├── LandingPage.tsx       # Pre-upload landing: Hero with theme-aware bg images + Upload + HowItWorks (with "View Full Guide →" link) + accordion QA (9 items) + multi-section About (Why/Privacy/MindRose/Contact with email copy & social links, scroll-reveal)
+│   ├── TitleBar.tsx          # Shared sticky top nav: logo + app name + GitHub icon + guideline book icon + changelog clock icon + LanguageSwitcher + ThemeSwitcher (all icon tooltips use i18n)
+│   ├── FooterBar.tsx         # Shared footer: thin divider + copyright + guideline link + privacy link + terms link + changelog link + GitHub link + version (props: animate, sectionRef)
+│   ├── LandingPage.tsx       # Pre-upload landing: Hero with theme-aware bg images + Upload + HowItWorks (with "View Full Guide →" link) + accordion QA (9 items) + multi-section About (Why/Privacy/MindRose/Contact with email copy & social links + "View Changelog →" link, scroll-reveal)
 │   ├── LandingContent.tsx    # Server-rendered <noscript> fallback: HowItWorks + QA (7 items) + expanded multi-section About for SEO crawlers
 │   ├── GuidelinePage.tsx     # Full interactive user guide page: bilingual content blocks (h1–h6, p, blockquote, tables, ul/ol), screenshot embedding with locale-aware image switching, dynamic table-of-contents, scroll-reveal sections (1496 lines of structured guide content)
 │   ├── PrivacyPage.tsx        # Privacy policy page: bilingual content (7 sections), JSON-LD WebPage schema, Apple-minimalist legal-text layout, back-to-home link + FooterBar, GitHub source link for transparency verification
 │   ├── TermsPage.tsx          # Terms of use page: bilingual content (8 sections), JSON-LD WebPage schema, Apple-minimalist legal-text layout, back-to-home link + FooterBar, open-source license reference
+│   ├── ChangelogPage.tsx      # Changelog page: complete version history (v0.1.0–v0.5.1), entries by category (Added/Improved/Fixed/Dependencies) with color-coded dots, JSON-LD WebPage schema, bilingual, Apple-minimalist legal-text layout matching privacy/terms pages
 │   ├── CopyButton.tsx        # Reusable clipboard copy button with hover tooltip, i18n-aware toast, and timer cleanup (used by KeyView, ProjectView, OverviewView)
 │   ├── Dashboard.tsx         # Main layout: routes between LandingPage (no data) and Dashboard view with 5 tabs (Overview / By Project / By Key / Cache / Trends); semantic hidden H1 for SEO
 │   ├── DropZone.tsx          # Drag-and-drop CSV/ZIP uploader (supports multi-file, ZIP auto-extraction, 50MB file size limit, "or click to upload")
@@ -95,7 +98,7 @@ public/
 - **Geist Mono** (from `next/font/google`) for code — variable weight
 - **CSS custom properties** for theming — all colors are `var(--bg)`, `var(--text-primary)`, etc.; NO hardcoded colors in components
 - **TypeScript 5** with strict mode, path alias `@/*` → `./src/*`
-- **SEO**: `generateMetadata()` in layout.tsx, guideline/page.tsx, privacy/page.tsx, and terms/page.tsx (canonical URL, OpenGraph, Twitter cards, hreflang alternates), JSON-LD structured data (SoftwareApplication + FAQPage [9 Q&A pairs] + BreadcrumbList + WebPage schemas for privacy/terms), robots.txt + sitemap.xml (includes /, /guideline, /privacy, /terms), `<noscript>` crawler fallback, semantic hidden H1, `llms.txt` for LLM-friendly site description
+- **SEO**: `generateMetadata()` in layout.tsx, guideline/page.tsx, privacy/page.tsx, terms/page.tsx, and changelog/page.tsx (canonical URL, OpenGraph, Twitter cards, hreflang alternates), JSON-LD structured data (SoftwareApplication + FAQPage [9 Q&A pairs] + BreadcrumbList + WebPage schemas for privacy/terms/changelog), robots.txt + sitemap.xml (includes /, /guideline, /privacy, /terms, /changelog), `<noscript>` crawler fallback, semantic hidden H1, `llms.txt` for LLM-friendly site description
 - **Analytics**: Google Analytics via `NEXT_PUBLIC_GA_ID` env var — gtag.js injected in `<head>` at build time, conditional (only when GA_ID is set)
 
 ## SEO, Analytics & Deployment
@@ -103,8 +106,8 @@ public/
 ### SEO architecture
 
 Multi-layered SEO for a client-rendered static SPA:
-- **Build-time**: `robots.ts` + `sitemap.ts` (Next.js 16 `MetadataRoute` conventions) generate `/robots.txt` and `/sitemap.xml` (includes `/`, `/guideline`, `/privacy`, `/terms`). Site URL from `NEXT_PUBLIC_SITE_URL` env var (default: `https://deepseek-usage.xyz`).
-- **`generateMetadata()`**: `layout.tsx`, `guideline/page.tsx`, `privacy/page.tsx`, `terms/page.tsx` each generate canonical URL, OpenGraph (with `alternateLocale: ["zh_CN"]`), Twitter card, hreflang alternates, and robots directives.
+- **Build-time**: `robots.ts` + `sitemap.ts` (Next.js 16 `MetadataRoute` conventions) generate `/robots.txt` and `/sitemap.xml` (includes `/`, `/guideline`, `/privacy`, `/terms`, `/changelog`). Site URL from `NEXT_PUBLIC_SITE_URL` env var (default: `https://deepseek-usage.xyz`).
+- **`generateMetadata()`**: `layout.tsx`, `guideline/page.tsx`, `privacy/page.tsx`, `terms/page.tsx`, `changelog/page.tsx` each generate canonical URL, OpenGraph (with `alternateLocale: ["zh_CN"]`), Twitter card, hreflang alternates, and robots directives.
 - **JSON-LD**: `src/lib/schema.ts` generates bilingual `SoftwareApplication` + `FAQPage` (9 Q&A) + `BreadcrumbList` — 6 `<script type="application/ld+json">` tags injected at build time. Privacy/terms pages each have client-rendered `WebPage` schema.
 - **`<noscript>` fallback**: `LandingContent.tsx` outputs How It Works, FAQ, About for crawlers that don't execute JS.
 - **Client enhancements**: Visible `<h1>` on landing, `sr-only` `<h1>` on dashboard, theme-aware hero images, `llms.txt` for LLM-friendly site description.
@@ -137,7 +140,8 @@ All sub-pages follow the same pattern: route directory under `src/app/` with `pa
 - **`/guideline`** (`GuidelinePage.tsx`): Bilingual user manual — markdown-like content blocks, 16+ annotated screenshots (locale-aware `-cn.png`/`-en.png`), dynamic sidebar ToC with Intersection Observer scroll tracking. Priority 0.8 in sitemap.
 - **`/privacy`** (`PrivacyPage.tsx`): 7-section bilingual legal text, JSON-LD WebPage schema, `max-w-3xl` centered layout, GitHub source links for transparency. Priority 0.5 in sitemap.
 - **`/terms`** (`TermsPage.tsx`): 8-section bilingual legal text, MIT License reference, JSON-LD WebPage schema, `max-w-2xl` layout. Priority 0.5 in sitemap.
-- **`/llms.txt`**: Static markdown file in `public/` — LLM-friendly site description (purpose, features, data format, privacy, team).
+- **`/changelog`** (`ChangelogPage.tsx`): Complete version history from v0.1.0 to v0.5.1, entries organized by category (Added/Improved/Fixed/Dependencies) with color-coded dots, JSON-LD WebPage schema, bilingual, Apple-minimalist legal-text layout matching privacy/terms pages. Priority 0.5 in sitemap.
+- **`/llms.txt`**: Static markdown file in `public/` — LLM-friendly site description (purpose, features, data format, privacy, links).
 
 ## Theme system
 
@@ -217,7 +221,7 @@ Keys are flat 2-level (`group.keyName`) in `src/i18n/translations.ts`. Do NOT ne
 | `kpi`, `overview`, `trends`, `cache`, `keys` | `KPICards.tsx`, `OverviewView.tsx`, `TrendsView.tsx`, `CacheView.tsx`, `KeyView.tsx` |
 | `projects` (22 keys: modal, drag-and-drop, validation) | `ProjectView.tsx` config modal |
 | `landing` (howItWorks, qaQ1–qaQ9, about*) | `LandingPage.tsx`, `LandingContent.tsx`, `schema.ts` |
-| `guideline`, `privacy` (21 keys), `terms` (22 keys), `meta`, `theme` | `GuidelinePage.tsx`, `PrivacyPage.tsx`, `TermsPage.tsx`, `layout.tsx`, `ThemeSwitcher.tsx` |
+| `guideline`, `privacy` (21 keys), `terms` (22 keys), `changelog` (10 keys), `meta`, `theme` | `GuidelinePage.tsx`, `PrivacyPage.tsx`, `TermsPage.tsx`, `ChangelogPage.tsx`, `layout.tsx`, `ThemeSwitcher.tsx` |
 
 ## Multi-month CSV & ZIP support (concatFiles)
 
@@ -299,7 +303,7 @@ Rendered via `<LandingPage />` — scrollable single-page with:
 4. **`<noscript>` fallback** — `LandingContent.tsx` for SEO crawlers (How It Works + FAQ + About)
 5. **How It Works** — 3-step grid with numbered circles, `id="how-it-works"`, "View Full Guide →" link, `content-visibility: auto`
 6. **QA** — 9-item accordion (`id="faq"`, `max-w-2xl`): Q5=$0 cost, Q6=incomplete upload, Q7=user guide, Q8=file size limit, Q9=project grouping. Accessible: `aria-expanded`/`aria-controls`, keyboard Enter/Space, inline `max-height`/`opacity` transition
-7. **About** — `id="about"`, 4 subsections (Why/Privacy/MindRose/Contact) with email copy + social link pills, `content-visibility: auto`
+7. **About** — `id="about"`, 4 subsections (Why/Privacy/MindRose/Contact) with email copy + social link pills + "View Changelog →" link, `content-visibility: auto`
 8. **FooterBar** — with `animate` prop for scroll-reveal
 
 Sections separated by thin `<hr>` (`var(--border)`). `.reveal-section` + Intersection Observer (15% threshold, one-shot, fade-in + slide-up). Respects `prefers-reduced-motion`.
@@ -317,11 +321,11 @@ Rendered inline in `Dashboard.tsx` with:
 **TitleBar** (`src/components/TitleBar.tsx`):
 - Sticky top bar with `z-50`, thin bottom border (`var(--border)`)
 - Left: logo (`next/image`, 32×32, unoptimized for static export) + app title (`t.app.title`) in bold
-- Right: GitHub icon link (SVG, `w-8 h-8` circle hover background) + `<LanguageSwitcher />` + `<ThemeSwitcher />`
+- Right: GitHub icon link (SVG, `w-8 h-8` circle hover background) + guideline book icon (Link to `/guideline`, i18n `aria-label`/`title`) + changelog clock icon (Link to `/changelog`, i18n `aria-label`/`title`) + `<LanguageSwitcher />` + `<ThemeSwitcher />`
 - Used by both `LandingPage` and `Dashboard`
 
 **FooterBar** (`src/components/FooterBar.tsx`):
-- Thin HR divider + centered muted text + guideline link (`t.guideline.pageTitle`) + privacy link (`t.privacy.pageTitle`) + terms link (`t.terms.pageTitle`) + GitHub link + version number
+- Thin HR divider + centered muted text + guideline link (`t.guideline.pageTitle`) + privacy link (`t.privacy.pageTitle`) + terms link (`t.terms.pageTitle`) + changelog link (`t.changelog.pageTitle`) + GitHub link + version number
 - Text from `t.footer.text`, version from `t.footer.version`
 - Links separated by `·` dividers; privacy and terms links point to `/privacy` and `/terms` respectively
 - Accepts optional `animate` prop: when true, wraps content in a `reveal-section` div and exposes `sectionRef` callback for IntersectionObserver registration (Landing page use)
@@ -370,7 +374,7 @@ Apple-style underline tabs: `text-xs font-semibold uppercase tracking-wide`, 2px
 - **Supporting a new CSV column**: Add to types in `types.ts`, update parser validation in `parser.ts`, add to pivot/join logic if needed
 - **Changing the font**: Replace WOFF2 files in `public/fonts/`, update `@font-face` declarations in `globals.css`, update `--font-sans` in the `@theme inline` block
 - **Adding a new animation**: Define `@keyframes` in `globals.css`, add to `@theme inline` block as `--animate-*`. Respect `prefers-reduced-motion` by including in the global media query.
-- **Updating SEO metadata**: Edit `generateMetadata()` in `layout.tsx` for page-level meta tags (title, description, OG, Twitter, alternateLocale). Edit `src/lib/schema.ts` for JSON-LD structured data (SoftwareApplication, FAQPage, BreadcrumbList). For new landing page sections visible to crawlers without JS, add content to `LandingContent.tsx`. For sub-pages with independent SEO (guideline, privacy, terms), each has its own `page.tsx` with dedicated `generateMetadata()`.
+- **Updating SEO metadata**: Edit `generateMetadata()` in `layout.tsx` for page-level meta tags (title, description, OG, Twitter, alternateLocale). Edit `src/lib/schema.ts` for JSON-LD structured data (SoftwareApplication, FAQPage, BreadcrumbList). For new landing page sections visible to crawlers without JS, add content to `LandingContent.tsx`. For sub-pages with independent SEO (guideline, privacy, terms, changelog), each has its own `page.tsx` with dedicated `generateMetadata()`.
 - **Changing the site URL**: Set `NEXT_PUBLIC_SITE_URL` env var (in `.env` or deployment platform). It propagates to metadata canonical URL, `robots.ts` sitemap pointer, and `sitemap.ts` entry URL.
 - **Adding a new theme-aware landing image**: Add light and dark variants to `public/landing/`, then update the `isDark` branching in `LandingPage.tsx` to reference the correct paths.
 - **Adding a new page with independent SEO metadata**: Create a route directory under `src/app/` (e.g., `privacy/`), add `page.tsx` with its own `generateMetadata()` (canonical URL, OpenGraph, Twitter, robots), create the page component in `src/components/`, add the URL to `src/app/sitemap.ts`, and add translation keys to the `translations.ts` file. For structured content pages, consider adding JSON-LD schema (e.g., `WebPage`) in the client component. Add navigation links to `FooterBar.tsx`.
