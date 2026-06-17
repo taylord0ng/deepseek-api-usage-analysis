@@ -620,30 +620,6 @@ export function GuidelinePage() {
       <TitleBar />
 
       <div className="max-w-6xl mx-auto px-6 py-8">
-        {/* 返回首页 */}
-        <Link
-          href="/"
-          className="inline-flex items-center gap-1.5 text-xs font-medium transition-colors duration-200 mb-8 hover:opacity-80"
-          style={{ color: "var(--text-secondary)" }}
-        >
-          <svg
-            width="12"
-            height="12"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M19 12H5M12 19l-7-7 7-7"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-          {t.guideline.backToHome}
-        </Link>
-
         {/* 语义化 H1 */}
         {/* <h1 className="sr-only">{t.guideline.pageTitle}</h1> */}
 
@@ -654,6 +630,30 @@ export function GuidelinePage() {
               className="sticky top-24"
               style={{ maxHeight: "calc(100vh - 6rem)", overflowY: "auto" }}
             >
+              {/* 返回首页 — 固定在侧边栏顶部 */}
+              <Link
+                href="/"
+                className="inline-flex items-center gap-1.5 text-xs font-medium transition-colors duration-200 mb-5 hover:opacity-80"
+                style={{ color: "var(--text-secondary)" }}
+              >
+                <svg
+                  width="12"
+                  height="12"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M19 12H5M12 19l-7-7 7-7"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+                {t.guideline.backToHome}
+              </Link>
+
               <p
                 className="text-[10px] font-semibold uppercase tracking-widest mb-4"
                 style={{ color: "var(--text-tertiary)" }}
@@ -758,7 +758,7 @@ function getManualContent(locale: string): string {
 function getManualContentZh(): string {
   return `# DeepSeek API 用量分析仪表盘 — 用户操作手册
 
-> 版本：v0.5.0 | 适用语言：中文 / English | 最后更新：2026-06-13
+> 版本：v0.5.1 | 适用语言：中文 / English | 最后更新：2026-06-13
 
 ---
 
@@ -1184,7 +1184,7 @@ Apple 风格下划线标签，5 个标签页：
 function getManualContentEn(): string {
   return `# DeepSeek API Usage Analytics Dashboard — User Guide
 
-> Version: v0.5.0 | Language: English / 中文 | Last Updated: 2026-06-13
+> Version: v0.5.1 | Language: English / 中文 | Last Updated: 2026-06-13
 
 ---
 

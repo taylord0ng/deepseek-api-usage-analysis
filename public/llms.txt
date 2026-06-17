@@ -63,6 +63,13 @@ Light and dark mode, auto-matching your system preference at first visit, with a
 - GitHub: https://github.com/GavinCnod/deepseek-api-usage-analysis
 - DeepSeek Platform: https://platform.deepseek.com
 
+### App pages
+
+- User Guide: https://deepseek-usage.xyz/guideline — step-by-step usage documentation with screenshots
+- Changelog: https://deepseek-usage.xyz/changelog — complete version history from v0.1.0 to v0.5.1
+- Privacy Policy: https://deepseek-usage.xyz/privacy — how your data is handled
+- Terms of Use: https://deepseek-usage.xyz/terms — legal terms and disclaimers
+
 ## About the team
 
 Built by Gavin Chen & the MindRose team. Open source under MIT license.

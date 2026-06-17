@@ -182,6 +182,20 @@ The repo includes `vercel.json` with pre-configured security headers and caching
 
 ## Changelog
 
+### v0.5.1
+
+**Added:**
+
+- Changelog page (`/changelog`) — a dedicated page showcasing the complete version history from v0.1.0 to v0.5.1, in Apple-minimalist bilingual design matching privacy/terms pages. Includes JSON-LD WebPage schema, independent SEO metadata (canonical, OpenGraph, Twitter), and version entries organized by category (Added/Improved/Fixed/Dependencies) with color-coded dots.
+- TitleBar clock icon linking to the changelog page, alongside the existing guideline book icon.
+- LandingPage About section "View Changelog →" link below the social link pills.
+
+**Improved:**
+
+- TitleBar tooltips (User Guide, Changelog) now properly support i18n, displaying localized text in both English and Chinese.
+- Sitemap (`sitemap.xml`) expanded with `/changelog` entry (priority 0.5, monthly change frequency).
+- Translation system extended with `changelog.*` group (en + zh).
+
 ### v0.5.0
 
 **Added:**

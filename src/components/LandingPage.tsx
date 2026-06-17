@@ -582,6 +582,39 @@ export default function LandingPage() {
                 {t.landing.aboutMindRoseLabel}
               </a>
             </div>
+
+            {/* 更新日志入口 */}
+            <div className="text-center mt-8">
+              <Link
+                href="/changelog"
+                className="inline-flex items-center gap-1.5 text-xs font-medium transition-colors duration-200 hover:opacity-80"
+                style={{ color: "var(--text-secondary)" }}
+              >
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <circle
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  />
+                  <polyline
+                    points="12,6 12,12 16,14"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+                {t.changelog.viewChangelog}
+              </Link>
+            </div>
           </div>
         </section>
       </main>

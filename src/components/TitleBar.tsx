@@ -76,8 +76,8 @@ export default function TitleBar() {
             href="/guideline"
             className="flex items-center justify-center w-8 h-8 rounded-full transition-all duration-200 hover:bg-[var(--border)]"
             style={{ color: "var(--text-secondary)" }}
-            aria-label="User Guide"
-            title="User Guide"
+            aria-label={t.guideline.pageTitle}
+            title={t.guideline.pageTitle}
           >
             <svg
               width="16"
@@ -103,6 +103,36 @@ export default function TitleBar() {
                 stroke="currentColor"
                 strokeWidth="1.5"
                 strokeLinecap="round"
+              />
+            </svg>
+          </Link>
+          <Link
+            href="/changelog"
+            className="flex items-center justify-center w-8 h-8 rounded-full transition-all duration-200 hover:bg-[var(--border)]"
+            style={{ color: "var(--text-secondary)" }}
+            aria-label={t.changelog.pageTitle}
+            title={t.changelog.pageTitle}
+          >
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <circle
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                strokeWidth="2"
+              />
+              <polyline
+                points="12,6 12,12 16,14"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               />
             </svg>
           </Link>

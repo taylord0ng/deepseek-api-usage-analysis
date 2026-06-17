@@ -139,6 +139,20 @@ const translations = {
       footerNote:
         "This document is updated with app releases. For questions or suggestions, please reach out via {githubLink}.",
     },
+    changelog: {
+      pageTitle: "Changelog",
+      backToHome: "Back to Home",
+      intro:
+        "Track the evolution of the DeepSeek API Usage Analytics Dashboard. Every version is documented below, covering new features, improvements, bug fixes, and dependency changes since the initial v0.1.0 release.",
+      added: "Added",
+      improved: "Improved",
+      fixed: "Fixed",
+      dependencies: "Dependencies",
+      githubLabel: "GitHub Repository",
+      reviewSourceCode: "Review source code →",
+      lastUpdated: "Last updated: June 17, 2026",
+      viewChangelog: "View Changelog →",
+    },
     privacy: {
       pageTitle: "Privacy Policy",
       effectiveDate: "Effective Date: June 13, 2026",
@@ -391,6 +405,20 @@ const translations = {
       toc: "目录",
       footerNote:
         "文档随应用版本迭代更新。如有疑问或建议，欢迎通过 {githubLink} 反馈。",
+    },
+    changelog: {
+      pageTitle: "更新日志",
+      backToHome: "返回首页",
+      intro:
+        "追踪 DeepSeek API 用量分析仪表盘的演进历程。自 v0.1.0 初始版本以来，每个版本的新增功能、改进优化、问题修复和依赖变更均记录如下。",
+      added: "新增",
+      improved: "改进",
+      fixed: "修复",
+      dependencies: "依赖变更",
+      githubLabel: "GitHub 仓库",
+      reviewSourceCode: "查看源码验证 →",
+      lastUpdated: "最后更新：2026 年 6 月 17 日",
+      viewChangelog: "查看更新日志 →",
     },
     privacy: {
       pageTitle: "隐私政策",

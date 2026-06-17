@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useTranslation } from "@/i18n";
 
 /** 应用版本号，与 package.json 保持同步 */
-const APP_VERSION = "0.5.0";
+const APP_VERSION = "0.5.1";
 
 /** GitHub 仓库地址 */
 const GITHUB_URL = "https://github.com/GavinCnod/deepseek-api-usage-analysis";
@@ -62,6 +62,14 @@ export default function FooterBar({ animate = false, sectionRef }: FooterBarProp
           style={{ color: "var(--text-secondary)" }}
         >
           {t.terms.pageTitle}
+        </Link>
+        <span aria-hidden="true">·</span>
+        <Link
+          href="/changelog"
+          className="transition-colors duration-200 hover:underline underline-offset-2"
+          style={{ color: "var(--text-secondary)" }}
+        >
+          {t.changelog.pageTitle}
         </Link>
         <span aria-hidden="true">·</span>
         <a
