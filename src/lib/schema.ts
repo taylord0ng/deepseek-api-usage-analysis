@@ -11,7 +11,7 @@ import type { Locale } from "@/i18n/translations";
 /* ------------------------------------------------------------------ */
 
 /** 应用版本号，与 package.json 保持同步 */
-const APP_VERSION = "0.5.2";
+const APP_VERSION = "0.5.3";
 
 /** 站点公开 URL */
 const SITE_URL =
@@ -165,16 +165,28 @@ export function buildFaqJsonLd(locale: Locale): Record<string, unknown> {
  *
  * 面包屑导航的多语言名称映射。
  */
-const breadcrumbSchema: Record<Locale, { name: string }> = {
-  en: { name: "DeepSeek API Usage Analytics Dashboard" },
-  zh: { name: "DeepSeek API 用量分析仪表盘" },
+const breadcrumbSchema: Record<Locale, { home: string; guideline: string; privacy: string; terms: string; changelog: string }> = {
+  en: {
+    home: "DeepSeek API Usage Analytics Dashboard",
+    guideline: "User Guide",
+    privacy: "Privacy Policy",
+    terms: "Terms of Use",
+    changelog: "Changelog",
+  },
+  zh: {
+    home: "DeepSeek API 用量分析仪表盘",
+    guideline: "使用指南",
+    privacy: "隐私政策",
+    terms: "使用条款",
+    changelog: "更新日志",
+  },
 };
 
 /**
  * 根据 locale 生成 BreadcrumbList JSON-LD
  *
- * 虽然目前是单页应用，但 BreadcrumbList 仍有助于搜索引擎理解页面
- * 在站点中的位置。对于单页应用，最少需要一个根级别的 ListItem。
+ * 包含站点所有主要页面的面包屑导航，
+ * 帮助搜索引擎理解站点层级结构。
  */
 export function buildBreadcrumbJsonLd(locale: Locale): Record<string, unknown> {
   const t = breadcrumbSchema[locale];
@@ -185,9 +197,66 @@ export function buildBreadcrumbJsonLd(locale: Locale): Record<string, unknown> {
       {
         "@type": "ListItem",
         position: 1,
-        name: t.name,
+        name: t.home,
         item: SITE_URL,
       },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: t.guideline,
+        item: `${SITE_URL}/guideline`,
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: t.privacy,
+        item: `${SITE_URL}/privacy`,
+      },
+      {
+        "@type": "ListItem",
+        position: 4,
+        name: t.terms,
+        item: `${SITE_URL}/terms`,
+      },
+      {
+        "@type": "ListItem",
+        position: 5,
+        name: t.changelog,
+        item: `${SITE_URL}/changelog`,
+      },
     ],
+  };
+}
+
+/** Organization Schema 翻译 */
+const organizationSchema: Record<Locale, { name: string; description: string }> = {
+  en: {
+    name: "DeepSeek API Usage Analytics Dashboard by Gavin & Mindrose Team",
+    description:
+      "Free, open-source, browser-side dashboard for DeepSeek API usage analytics. Drop your monthly CSVs and get instant cost analysis.",
+  },
+  zh: {
+    name: "DeepSeek API 用量分析仪表盘 by Gavin & Mindrose Team",
+    description:
+      "免费、开源、纯浏览器端的 DeepSeek API 用量分析仪表盘。拖拽月度 CSV 即可获取即时费用分析。",
+  },
+};
+
+/**
+ * 根据 locale 生成 Organization JSON-LD
+ *
+ * 帮助 Google 建立品牌实体识别（Knowledge Panel），
+ * 通过 sameAs 链接关联 GitHub 等外部平台。
+ */
+export function buildOrganizationJsonLd(locale: Locale): Record<string, unknown> {
+  const t = organizationSchema[locale];
+  return {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: t.name,
+    url: SITE_URL,
+    logo: `${SITE_URL}/ds-usage-logo.png`,
+    description: t.description,
+    sameAs: ["https://github.com/GavinCnod/ds-usage-analysis"],
   };
 }

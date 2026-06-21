@@ -78,21 +78,35 @@ export function DataProvider({ children }: { children: ReactNode }) {
       setState((s) => ({ ...s, loading: true, error: null, selectedModel: ALL_MODELS }));
       // Use setTimeout to avoid blocking the UI during parsing
       setTimeout(() => {
-        const parsed = parseDeepSeekData(amountCSV, costCSV);
-        if ("error" in parsed) {
+        try {
+          const parsed = parseDeepSeekData(amountCSV, costCSV);
+          if ("error" in parsed) {
+            setState({
+              result: null,
+              error: parsed.error,
+              warnings: [],
+              loading: false,
+              fileName,
+              selectedModel: ALL_MODELS,
+            });
+          } else {
+            setState({
+              result: parsed,
+              error: null,
+              warnings: parsed.warnings,
+              loading: false,
+              fileName,
+              selectedModel: ALL_MODELS,
+            });
+          }
+        } catch (err) {
           setState({
             result: null,
-            error: parsed.error,
+            error: {
+              type: "malformed_row" as const,
+              message: err instanceof Error ? err.message : "Unexpected parsing error",
+            },
             warnings: [],
-            loading: false,
-            fileName,
-            selectedModel: ALL_MODELS,
-          });
-        } else {
-          setState({
-            result: parsed,
-            error: null,
-            warnings: parsed.warnings,
             loading: false,
             fileName,
             selectedModel: ALL_MODELS,

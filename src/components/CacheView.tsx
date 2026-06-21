@@ -171,7 +171,7 @@ export default function CacheView() {
             {/* 大数字 Gauge — 纯排版，不用 ECharts */}
             <div className="text-center mb-12 pt-4">
                 <div
-                    className="text-[5rem] font-bold leading-none tracking-tighter"
+                    className="text-5xl sm:text-6xl md:text-[5rem] font-bold leading-none tracking-tighter"
                     style={{ color: "var(--text-primary)", letterSpacing: "-0.04em" }}
                 >
                     {(summary.cacheHitRate * 100).toFixed(1)}
@@ -193,7 +193,9 @@ export default function CacheView() {
                     >
                         {t.cache.dailyHitRate}
                     </h3>
-                    <ReactECharts option={trendOption} style={{ height: 300 }} />
+                    <div aria-label={t.cache.dailyHitRate} role="img">
+                      <ReactECharts option={trendOption} style={{ height: 300 }} />
+                    </div>
                 </div>
                 <div>
                     <h3
@@ -202,7 +204,9 @@ export default function CacheView() {
                     >
                         {t.cache.hitsVsMisses}
                     </h3>
-                    <ReactECharts option={byKeyOption} style={{ height: 300 }} />
+                    <div aria-label={t.cache.hitsVsMisses} role="img">
+                      <ReactECharts option={byKeyOption} style={{ height: 300 }} />
+                    </div>
                 </div>
             </div>
         </div>

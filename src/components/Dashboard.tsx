@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { useData, ALL_MODELS } from "@/lib/DataContext";
 import { useTranslation } from "@/i18n";
 import { MAX_UPLOAD_SIZE_BYTES } from "@/lib/concatFiles";
+import { trackEvent } from "@/lib/analytics";
 import TitleBar from "./TitleBar";
 import FooterBar from "./FooterBar";
 import LandingPage from "./LandingPage";
@@ -37,6 +38,8 @@ export default function Dashboard() {
   const reuploadRef = useRef<HTMLInputElement>(null);
   /** 重新上传时的文件过大警告 */
   const [reuploadSizeError, setReuploadSizeError] = useState<{ name: string; sizeMB: string } | null>(null);
+  const [reuploadConcatError, setReuploadConcatError] = useState<string | null>(null);
+  const mountedRef = useRef(false);
 
   const TABS: { key: Tab; label: string }[] = [
     { key: "overview", label: t.tabs.overview },
@@ -63,16 +66,31 @@ export default function Dashboard() {
         return;
       }
       setReuploadSizeError(null);
+      setReuploadConcatError(null);
 
-      const { concatMonthlyCSVs, extractZipCsvs } = await import("@/lib/concatFiles");
-      const csvEntries = await extractZipCsvs(fileArr);
-      if (csvEntries.length === 0) return;
-      const result = await concatMonthlyCSVs(csvEntries);
-      loadFiles(result.amountText, result.costText, result.label);
+      try {
+        const { concatMonthlyCSVs, extractZipCsvs } = await import("@/lib/concatFiles");
+        const csvEntries = await extractZipCsvs(fileArr);
+        if (csvEntries.length === 0) return;
+        const result = await concatMonthlyCSVs(csvEntries);
+        loadFiles(result.amountText, result.costText, result.label);
+        trackEvent("upload_csv");
+      } catch (err) {
+        setReuploadConcatError(err instanceof Error ? err.message : String(err));
+      }
       e.target.value = "";
     },
     [loadFiles]
   );
+
+  // Track tab switches (skip initial mount)
+  useEffect(() => {
+    if (mountedRef.current) {
+      trackEvent("tab_switch", { event_label: tab });
+    } else {
+      mountedRef.current = true;
+    }
+  }, [tab]);
 
   // 上传前状态：展示 Landing 落地页
   if (!result) {
@@ -115,6 +133,7 @@ export default function Dashboard() {
             <button
               onClick={() => {
                 setReuploadSizeError(null);
+                setReuploadConcatError(null);
                 reuploadRef.current?.click();
               }}
               className="text-xs font-medium transition-colors duration-200"
@@ -146,6 +165,33 @@ export default function Dashboard() {
 
         <ErrorDisplay />
         <WarningBanner />
+
+        {/* 重新上传文件解析错误横幅 */}
+        {reuploadConcatError && (
+          <div
+            className="mb-6 p-4 rounded-subtle text-sm flex items-start gap-3"
+            style={{
+              background: "var(--error-bg)",
+              border: "1px solid var(--error-border)",
+            }}
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+              className="shrink-0 mt-0.5" style={{ color: "var(--error-text)" }}>
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="8" x2="12" y2="12" />
+              <line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg>
+            <div>
+              <p className="font-semibold mb-1" style={{ color: "var(--error-text)" }}>
+                {t.dropzone.processingError ?? "Processing Error"}
+              </p>
+              <p style={{ color: "var(--error-text)", opacity: 0.85 }}>
+                {reuploadConcatError}
+              </p>
+            </div>
+          </div>
+        )}
 
         {/* 重新上传文件过大警告 */}
         {reuploadSizeError && (

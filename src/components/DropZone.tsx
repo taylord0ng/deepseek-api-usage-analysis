@@ -4,6 +4,7 @@ import { useState, useCallback, useRef, type DragEvent } from "react";
 import { useData } from "@/lib/DataContext";
 import { useTranslation } from "@/i18n";
 import { MAX_UPLOAD_SIZE_BYTES } from "@/lib/concatFiles";
+import { trackEvent } from "@/lib/analytics";
 
 /**
  * 拖拽上传区域
@@ -21,6 +22,7 @@ export default function DropZone() {
   const [reading, setReading] = useState(false);
   /** 文件过大警告信息：{fileName, sizeMB}，null 表示无警告 */
   const [sizeError, setSizeError] = useState<{ name: string; sizeMB: string } | null>(null);
+  const [concatError, setConcatError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const busy = loading || reading;
 
@@ -44,14 +46,20 @@ export default function DropZone() {
 
       // 清除之前的警告
       setSizeError(null);
+      setConcatError(null);
       setReading(true);
       try {
         const { concatMonthlyCSVs, extractZipCsvs } = await import("@/lib/concatFiles");
         const csvEntries = await extractZipCsvs(fileArr);
-        if (csvEntries.length === 0) return;
+        if (csvEntries.length === 0) {
+          setReading(false);
+          return;
+        }
         const result = await concatMonthlyCSVs(csvEntries);
         loadFiles(result.amountText, result.costText, result.label);
-      } finally {
+        trackEvent("upload_csv");
+      } catch (err) {
+        setConcatError(err instanceof Error ? err.message : String(err));
         setReading(false);
       }
     },
@@ -96,6 +104,7 @@ export default function DropZone() {
         onDragLeave={onDragLeave}
         onClick={() => {
           setSizeError(null);
+          setConcatError(null);
           fileInputRef.current?.click();
         }}
         className="p-16 text-center cursor-pointer transition-[background,border-color] duration-300"
@@ -144,6 +153,42 @@ export default function DropZone() {
           </div>
         )}
       </div>
+
+      {/* 文件解析错误横幅 */}
+      {concatError && (
+        <div
+          className="mt-4 p-4 rounded-subtle text-sm flex items-start gap-3"
+          style={{
+            background: "var(--error-bg)",
+            border: "1px solid var(--error-border)",
+          }}
+        >
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="shrink-0 mt-0.5"
+            style={{ color: "var(--error-text)" }}
+          >
+            <circle cx="12" cy="12" r="10" />
+            <line x1="12" y1="8" x2="12" y2="12" />
+            <line x1="12" y1="16" x2="12.01" y2="16" />
+          </svg>
+          <div>
+            <p className="font-semibold mb-1" style={{ color: "var(--error-text)" }}>
+              {t.dropzone.processingError ?? "Processing Error"}
+            </p>
+            <p style={{ color: "var(--error-text)", opacity: 0.85 }}>
+              {concatError}
+            </p>
+          </div>
+        </div>
+      )}
 
       {/* 文件过大警告横幅 */}
       {sizeError && (

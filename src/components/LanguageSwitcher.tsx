@@ -1,6 +1,7 @@
 "use client";
 
 import { useTranslation } from "@/i18n";
+import { trackEvent } from "@/lib/analytics";
 
 /**
  * 语言切换组件
@@ -19,7 +20,7 @@ export default function LanguageSwitcher() {
       aria-label="Language"
     >
       <button
-        onClick={() => setLocale("en")}
+        onClick={() => { setLocale("en"); trackEvent("language_switch", { event_label: "en" }); }}
         role="radio"
         aria-checked={locale === "en"}
         className="px-3 py-1 rounded-full transition-all duration-200"
@@ -32,7 +33,7 @@ export default function LanguageSwitcher() {
         EN
       </button>
       <button
-        onClick={() => setLocale("zh")}
+        onClick={() => { setLocale("zh"); trackEvent("language_switch", { event_label: "zh" }); }}
         role="radio"
         aria-checked={locale === "zh"}
         className="px-3 py-1 rounded-full transition-all duration-200"

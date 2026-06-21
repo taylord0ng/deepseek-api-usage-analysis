@@ -22,6 +22,17 @@ export default function KeyView() {
   if (!result) return null;
 
   const { keys, daily } = result;
+
+  if (keys.length === 0) {
+    return (
+      <div className="py-16 text-center">
+        <p className="text-sm" style={{ color: "var(--text-secondary)" }}>
+          {t.empty?.keys ?? "No API keys found in the data."}
+        </p>
+      </div>
+    );
+  }
+
   const maxCost = Math.max(...keys.map((k) => k.totalCost), 1);
   const isDark = theme === "dark";
 
@@ -35,7 +46,7 @@ export default function KeyView() {
       {/* Hero — 大数字活跃 Key 数 */}
       <div className="text-center mb-12 pt-4">
         <div
-          className="text-[5rem] font-bold leading-none tracking-tighter"
+          className="text-5xl sm:text-6xl md:text-[5rem] font-bold leading-none tracking-tighter"
           style={{ color: "var(--text-primary)", letterSpacing: "-0.04em" }}
         >
           {keys.length}

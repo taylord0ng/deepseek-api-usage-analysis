@@ -1,0 +1,36 @@
+name: Feature Request
+description: Suggest a new feature or improvement
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: "## Feature Request\n\nThanks for suggesting an improvement!"
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem are you solving?
+      description: Describe the problem or need this feature addresses.
+      placeholder: "I have 20+ API keys and it's hard to find a specific one in the table."
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: Suggested solution
+      description: Describe what you'd like to see. Be as specific as possible.
+      placeholder: "A search/filter input above the key table that filters by key name."
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Have you considered any workarounds or alternative approaches?
+      placeholder: "I currently scroll and scan manually, or use Ctrl+F in the browser."
+  - type: checkboxes
+    id: scope
+    attributes:
+      label: Scope
+      options:
+        - label: This feature is compatible with the browser-side privacy model (no server upload)
+        - label: This feature works for both English and Chinese users

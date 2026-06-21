@@ -145,9 +145,9 @@ export default function LandingPage() {
       <main className="max-w-6xl mx-auto px-6">
         {/* Hero + 上传区整体容器（装饰图作为背景层） */}
         <div className="relative overflow-hidden">
-          {/* 装饰背景层：CSV 主题图（左）+ 图表主题图（右） */}
+          {/* 装饰背景层：CSV 主题图（左）+ 图表主题图（右），移动端隐藏 */}
           <div
-            className="absolute inset-0 pointer-events-none select-none reveal-section"
+            className="absolute inset-0 pointer-events-none select-none reveal-section hidden md:block"
             style={bgDecorationStyle}
             ref={(el) => {
               sectionRefs.current[6] = el;

@@ -49,6 +49,48 @@ interface VersionEntry {
 /** 所有版本的更新日志，按版本倒序排列 */
 const CHANGELOG_DATA: VersionEntry[] = [
   {
+    version: "v0.5.3",
+    date: "2026-06-21",
+    added: [
+      {
+        en: "SEO enhancements — added keywords, twitter:site/creator, and author meta tags to all pages. Added Organization JSON-LD structured data for Google Knowledge Panel brand recognition. Expanded BreadcrumbList JSON-LD with all sub-page entries. Differentiated sitemap lastModified dates per route. Landing page OG image support for richer social media link previews.",
+        zh: "SEO 增强 — 为所有页面添加 keywords、twitter:site/creator 和 author 元标签。新增 Organization JSON-LD 结构化数据用于 Google Knowledge Panel 品牌识别。扩展 BreadcrumbList JSON-LD，包含所有子页面条目。各路由站点地图 lastModified 日期差异化。支持落地页 OG 图片，提升社交媒体链接预览效果。",
+      },
+      {
+        en: "GA4 conversion events — added upload_csv, share_card, tab_switch, and language_switch event tracking via a shared trackEvent() analytics helper. Only active when NEXT_PUBLIC_GA_ID is configured.",
+        zh: "GA4 转化事件 — 通过共享的 trackEvent() 分析辅助函数新增 upload_csv、share_card、tab_switch 和 language_switch 事件追踪。仅在配置 NEXT_PUBLIC_GA_ID 时生效。",
+      },
+      {
+        en: "Community infrastructure — added CONTRIBUTING.md, CODE_OF_CONDUCT.md, GitHub issue templates (bug report + feature request), and a pull request template to lower the contribution barrier.",
+        zh: "社区基础设施 — 新增 CONTRIBUTING.md、CODE_OF_CONDUCT.md、GitHub Issue 模板（Bug 报告 + 功能请求）和 Pull Request 模板，降低贡献门槛。",
+      },
+    ],
+    improved: [
+      {
+        en: "Responsive hero numbers — hero text now scales down on mobile screens (text-5xl → sm:text-6xl → md:text-[5rem]), preventing horizontal overflow on small viewports.",
+        zh: "响应式 Hero 数字 — Hero 文本现在在移动端屏幕上自适应缩小（text-5xl → sm:text-6xl → md:text-[5rem]），避免小视口上的水平溢出。",
+      },
+      {
+        en: "Chart accessibility — all ECharts instances now have descriptive aria-labels for screen readers.",
+        zh: "图表无障碍 — 所有 ECharts 实例现在具有供屏幕阅读器使用的描述性 aria-label。",
+      },
+    ],
+    fixed: [
+      {
+        en: "Critical: DropZone error handling — added missing catch clause for ZIP/CSV processing errors. Previously, a corrupt file or extraction failure would leave the UI stuck in an infinite \"Processing\" spinner. Now shows a user-visible error message with the ability to retry. Same fix applied to Dashboard re-upload flow.",
+        zh: "关键修复：DropZone 错误处理 — 为 ZIP/CSV 处理错误添加缺失的 catch 子句。此前，损坏的文件或解压失败会导致 UI 卡在无限「处理中」旋转状态。现在显示用户可见的错误信息，并允许重试。Dashboard 重新上传流程也应用了同样的修复。",
+      },
+      {
+        en: "DataContext parser crash protection — wrapped parseDeepSeekData() in a try/catch inside the setTimeout callback. Previously, a synchronous parser crash would throw into the void with no user feedback. Now routes to the ErrorDisplay component.",
+        zh: "DataContext 解析器崩溃保护 — 在 setTimeout 回调中将 parseDeepSeekData() 包裹在 try/catch 中。此前，同步解析器崩溃会静默失败，无任何用户反馈。现在将错误路由至 ErrorDisplay 组件显示。",
+      },
+      {
+        en: "Empty states — OverviewView, KeyView, TrendsView, and ProjectView now show descriptive empty-state messages when data is zero/empty after model filtering, instead of blank charts or tables.",
+        zh: "空状态 — OverviewView、KeyView、TrendsView 和 ProjectView 现在在模型筛选后数据为空时显示描述性的空状态提示信息，而非空白图表或表格。",
+      },
+    ],
+  },
+  {
     version: "v0.5.2",
     date: "2026-06-17",
     added: [

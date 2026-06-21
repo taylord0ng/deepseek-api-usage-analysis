@@ -1,0 +1,40 @@
+name: Bug Report
+description: File a bug report to help us improve
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: "## Bug Report\n\nThanks for taking the time to report a bug!"
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Describe the bug — what did you see, and what did you expect to see?
+      placeholder: "When I dropped a CSV file, the spinner appeared and never stopped."
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: What steps should someone follow to see the same bug?
+      placeholder: "1. Open deepseek-usage.xyz\n2. Drop file X\n3. Click Y"
+    validations:
+      required: true
+  - type: textarea
+    id: csv-info
+    attributes:
+      label: CSV data info
+      description: Describe the CSV files you were using (file names, approximate size, number of months). Do NOT share your actual CSV data or API keys.
+      placeholder: "amount-2026-5.csv and cost-2026-5.csv, about 200KB each"
+  - type: input
+    id: browser
+    attributes:
+      label: Browser
+      description: What browser and version are you using?
+      placeholder: "Chrome 130, Firefox 135, etc."
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots
+      description: If applicable, add screenshots to help explain the problem.

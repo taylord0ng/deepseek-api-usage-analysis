@@ -23,6 +23,7 @@ import { useProjectConfig } from "@/lib/ProjectConfigContext";
 import { extractShareCardData } from "@/lib/shareCardData";
 import type { ShareTab, ShareCardData } from "@/lib/shareCardData";
 import ShareCard, { CARD_W, CARD_H, type ShareCardStrings } from "./ShareCard";
+import { trackEvent } from "@/lib/analytics";
 
 // ============================================================================
 // localStorage
@@ -174,6 +175,7 @@ export default function ShareModal({ tab, onClose }: ShareModalProps) {
       if (navigator.clipboard && typeof ClipboardItem !== "undefined") {
         await navigator.clipboard.write([new ClipboardItem({ "image/png": blob })]);
         setToastMessage(t.share.copiedToast);
+        trackEvent("share_card", { event_label: "clipboard" });
       } else {
         downloadBlob(blob);
         setToastMessage(t.share.clipboardUnsupported);
@@ -194,6 +196,7 @@ export default function ShareModal({ tab, onClose }: ShareModalProps) {
       const blob = await captureImage();
       if (!blob) { setToastMessage(t.share.generateFailed); return; }
       downloadBlob(blob);
+      trackEvent("share_card", { event_label: "download" });
     } catch { setToastMessage(t.share.downloadFailed); }
     finally { setIsCapturing(false); }
   }, [captureImage, t]);

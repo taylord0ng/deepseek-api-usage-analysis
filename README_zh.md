@@ -36,9 +36,13 @@
 - **SEO 优化** — 服务端渲染元数据（规范 URL、OpenGraph 含 alternateLocale、Twitter 卡片）、JSON-LD 结构化数据（SoftwareApplication + FAQPage + BreadcrumbList，双语）、robots.txt + sitemap.xml、`<noscript>` 爬虫回退内容、支持锚点链接的落地页板块、`llms.txt` 面向 LLM 的站点描述
 - **落地页** — 完整的上传前落地页，包含主题感知背景图片、使用说明步骤、手风琴常见问题（9 项，含文件大小限制和项目分组）、多板块关于页面（项目起源、隐私与技术、团队介绍、商业合作含邮箱复制与社交链接 +「查看更新日志 →」链接）、滚动渐显动画、支持锚点链接的板块与延迟渲染性能优化
 - **用户操作手册** — 位于 `/guideline` 的完整双语使用指南，包含标注截图、交互式目录导航、分步仪表盘操作说明、CSV 导出指引、图表解读和故障排查章节
-- **更新日志** — 位于 `/changelog` 的专属页面，展示 v0.1.0 至 v0.5.2 的完整版本历史，按类别（新增/改进/修复/依赖变更）以彩色圆点分组；Apple 极简双语设计，与隐私政策/使用条款风格一致，含 JSON-LD WebPage 结构化数据、独立 SEO 元数据，可从 TitleBar、FooterBar 和落地页访问
+- **更新日志** — 位于 `/changelog` 的专属页面，展示 v0.1.0 至 v0.5.3 的完整版本历史，按类别（新增/改进/修复/依赖变更）以彩色圆点分组；Apple 极简双语设计，与隐私政策/使用条款风格一致，含 JSON-LD WebPage 结构化数据、独立 SEO 元数据，可从 TitleBar、FooterBar 和落地页访问
 - **隐私政策与使用条款** — `/privacy` 和 `/terms` 页面，包含双语法务内容、独立 SEO 元数据（规范 URL、OpenGraph、Twitter 卡片）、JSON-LD WebPage Schema 以及 Apple 极简风格的法律文本布局；每页页脚均有导航链接
-- **数据分析** — 可选的 Google Analytics 4 集成，通过 `NEXT_PUBLIC_GA_ID` 环境变量控制；未设置时零开销，仅追踪标准页面浏览 — 绝不追踪任何 CSV 数据
+- **数据分析** — 可选的 Google Analytics 4 集成，通过 `NEXT_PUBLIC_GA_ID` 环境变量控制；未设置时零开销。追踪页面浏览、文件上传、分享卡片生成、标签页切换和语言切换 — 绝不追踪任何 CSV 数据。
+- **增强 SEO** — Twitter `summary_large_image` 卡片含 1200×630 OG 图片、用于 Google 知识面板的 `Organization` JSON-LD Schema、包含所有子页面的扩展 `BreadcrumbList`、差异化的站点地图 `lastModified` 日期、所有页面的 `keywords` + `author` + `twitter:site`/`creator` 元标签
+- **社区友好** — `CONTRIBUTING.md`、`CODE_OF_CONDUCT.md`、Issue 模板（Bug 报告 + 功能请求）和 Pull Request 模板，欢迎贡献者
+- **错误韧性** — 优雅处理 ZIP/CSV 处理失败，显示用户可见的错误信息并支持重试；DataContext 解析器崩溃保护
+- **无障碍** — 所有图表具有描述性 `aria-label` 属性；响应式 Hero 文字从移动端的 `text-5xl` 缩放至桌面的 `text-[5rem]`；数据为空时显示空状态提示
 
 ## CSV 格式
 
@@ -72,6 +76,7 @@ npm install
 npm run dev        # 开发服务器 → localhost:3000
 npm run build      # 静态导出 → out/
 npm run lint       # ESLint
+npm test           # Vitest（21 个测试用例）
 ```
 
 ### 技术栈
@@ -116,7 +121,7 @@ src/
 │   ├── GuidelinePage.tsx    # 完整交互式用户操作手册（双语、标注截图、目录导航、滚动渐显）
 │   ├── PrivacyPage.tsx      # 隐私政策页（双语 7 章节法律文本，JSON-LD WebPage Schema，GitHub 源码链接）
 │   ├── TermsPage.tsx        # 使用条款页（双语 8 章节法律文本，JSON-LD WebPage Schema，MIT 许可证引用）
-│   ├── ChangelogPage.tsx     # 更新日志页（v0.1.0–v0.5.2 完整版本历史，按类别以彩色圆点分组，JSON-LD WebPage Schema，双语）
+│   ├── ChangelogPage.tsx     # 更新日志页（v0.1.0–v0.5.3 完整版本历史，按类别以彩色圆点分组，JSON-LD WebPage Schema，双语）
 │   ├── PrivacyContent.tsx    # <noscript> SEO 回退：双语隐私政策内容供爬虫抓取
 │   ├── TermsContent.tsx      # <noscript> SEO 回退：双语使用条款内容供爬虫抓取
 │   ├── ChangelogContent.tsx  # <noscript> SEO 回退：双语更新日志版本摘要供爬虫抓取
@@ -148,7 +153,14 @@ src/
     ├── DataContext.tsx      # 数据状态 + 模型筛选
     ├── ProjectConfigContext.tsx # 自定义项目分组配置（拖拽分配，localStorage 持久化）
     ├── shareCardData.ts     # 分享卡片数据提取（从 ParseResult 提取各标签页汇总数据）
+    ├── analytics.ts         # GA4 事件追踪辅助函数（共享 gtag 封装，含守卫逻辑）
     └── ThemeContext.tsx     # 主题状态 + useTheme Hook
+├── __tests__/
+│   ├── analytics.test.ts    # trackEvent 单元测试
+│   ├── schema.test.ts       # Organization + BreadcrumbList Schema 测试
+│   ├── sitemap.test.ts      # Sitemap lastModified 差异化测试
+│   ├── DataContext.test.tsx # loadFiles 错误处理测试
+│   └── DropZone.test.tsx    # 上传错误展示测试
 ```
 
 ## 设计系统
@@ -159,7 +171,7 @@ src/
 - **浅色主题**：`#F5F5F7` 冷灰纸质感底，`#1D1D1F` 哑光黑文字
 - **深色主题**：`#000000` 纯黑底，`#F5F5F7` 白色文字
 - **字体**：Hubot Sans，正文 400 字重 / 标题 500–700 字重，紧凑字间距
-- **Hero 模式**：总览/Key/缓存/趋势视图中 `5rem` 粗体大数字 — 数据优先的视觉呈现
+- **Hero 模式**：总览/Key/缓存/趋势视图中 `5rem` 粗体大数字 — 数据优先的视觉呈现；响应式缩放（`text-5xl sm:text-6xl md:text-[5rem]`）防止移动端溢出
 - **无卡片布局**：通栏模块，以 `1px solid var(--border)` 细线分割
 - **微交互**：细腻的 hover 过渡（200ms）、淡入/上滑动画、Intersection Observer 滚动渐显、手风琴折叠面板
 - **自定义滚动条**：6px 细条，透明轨道，主题色滑块
@@ -170,7 +182,7 @@ src/
 本应用为客户端渲染的静态 SPA 实现了多层 SEO 策略：
 
 - **generateMetadata()** — 动态服务端渲染元数据：规范 URL、OpenGraph（标题、描述、图片）、Twitter 卡片、hreflang 语言标注（en/zh）、robots 指令
-- **JSON-LD 结构化数据** — `SoftwareApplication` + `FAQPage` + `BreadcrumbList` 双语 Schema（英文和中文，共 6 个 script 标签），构建时通过 `layout.tsx` 中的 `<script type="application/ld+json">` 注入
+- **JSON-LD 结构化数据** — `SoftwareApplication` + `FAQPage` + `BreadcrumbList` + `Organization` 双语 Schema（英文和中文，共 8 个 script 标签），构建时通过 `layout.tsx` 中的 `<script type="application/ld+json">` 注入；`Organization` Schema 帮助 Google 建立品牌知识面板
 - **robots.txt + sitemap.xml** — 构建时通过 Next.js 16 `MetadataRoute` 约定生成；sitemap 包含 `/`、`/guideline`、`/privacy`、`/terms` 和 `/changelog` 五个条目；站点域名从 `NEXT_PUBLIC_SITE_URL` 环境变量读取
 - **`<noscript>` 回退** — `LandingContent.tsx` 输出关键落地页内容（使用说明、常见问题、关于），供不执行 JavaScript 的爬虫抓取；`PrivacyContent.tsx`、`TermsContent.tsx` 和 `ChangelogContent.tsx` 为隐私政策、使用条款和更新日志页面提供双语 `<noscript>` 回退内容（EEAT 信任信号）
 - **`llms.txt`** — 面向 LLM 的站点描述，位于 `/llms.txt`，总结应用功能、特性与结构，供 AI 工具使用
@@ -195,6 +207,31 @@ npm run build
 - **缓存**：`/_next/static` 和 `/fonts` 永久缓存（1 年），`/landing` 和 `/guideline` 图片 stale-while-revalidate 缓存（1 周）
 
 ## 更新日志
+
+### v0.5.3
+
+**新增：**
+
+- 增强 SEO — Twitter 卡片升级为 `summary_large_image`，含 1200×630 OG 社交预览图片；为所有页面添加 `keywords`、`twitter:site`/`creator` 和 `author` 元标签。
+- Organization JSON-LD 结构化数据，用于 Google 知识面板品牌识别；扩展 BreadcrumbList，包含所有子页面条目。
+- GA4 转化事件 — 通过共享的 `trackEvent()` 分析辅助函数新增 `upload_csv`、`share_card`、`tab_switch` 和 `language_switch` 事件追踪。
+- 社区基础设施 — `CONTRIBUTING.md`、`CODE_OF_CONDUCT.md`、GitHub Issue 模板（Bug 报告 + 功能请求）和 Pull Request 模板。
+
+**改进：**
+
+- 响应式 Hero 数字 — Hero 文本现可在移动端屏幕上自适应缩小（`text-5xl → sm:text-6xl → md:text-[5rem]`），避免水平溢出。
+- 图表无障碍 — 所有 ECharts 实例现具有供屏幕阅读器使用的描述性 `aria-label` 属性。
+- 站点地图 lastModified 日期 — 现按路由差异化设置；隐私政策/使用条款使用 `yearly` 更新频率和历史日期。
+
+**修复：**
+
+- 关键修复：DropZone 错误处理 — 为 ZIP/CSV 处理错误添加缺失的 `catch` 子句。此前损坏的文件或解压失败会导致 UI 卡在无限「处理中」旋转状态。现在显示用户可见的错误信息并支持重试。
+- DataContext 解析器崩溃保护 — 在 `setTimeout` 回调中将 `parseDeepSeekData()` 包裹在 `try/catch` 中。此前解析器同步崩溃会静默失败，无用户反馈。
+- 空状态 — OverviewView、KeyView、TrendsView 和 ProjectView 现已在模型筛选后数据为空时显示描述性空状态提示信息。
+
+**依赖变更：**
+
+- 新增 `vitest`、`@testing-library/react`、`@testing-library/jest-dom`、`jsdom` 和 `@vitejs/plugin-react` 测试基础设施依赖。5 个测试文件共 21 个测试用例。
 
 ### v0.5.2
 

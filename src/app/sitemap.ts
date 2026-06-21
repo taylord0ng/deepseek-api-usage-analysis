@@ -14,38 +14,38 @@ export const dynamic = "force-static";
 const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL || "https://deepseek-usage.xyz";
 
-/** 构建时生成 sitemap.xml 条目 */
+/** 构建时生成 sitemap.xml 条目，lastModified 按实际更新频率差异化设置 */
 export default function sitemap(): MetadataRoute.Sitemap {
-  const lastModified = new Date();
+  const buildDate = new Date();
 
   return [
     {
       url: SITE_URL,
-      lastModified,
+      lastModified: buildDate,
       changeFrequency: "monthly" as const,
       priority: 1,
     },
     {
       url: `${SITE_URL}/guideline`,
-      lastModified,
+      lastModified: buildDate,
       changeFrequency: "monthly" as const,
       priority: 0.8,
     },
     {
       url: `${SITE_URL}/privacy`,
-      lastModified,
-      changeFrequency: "monthly" as const,
+      lastModified: new Date("2026-06-08"),
+      changeFrequency: "yearly" as const,
       priority: 0.5,
     },
     {
       url: `${SITE_URL}/terms`,
-      lastModified,
-      changeFrequency: "monthly" as const,
+      lastModified: new Date("2026-06-08"),
+      changeFrequency: "yearly" as const,
       priority: 0.5,
     },
     {
       url: `${SITE_URL}/changelog`,
-      lastModified,
+      lastModified: buildDate,
       changeFrequency: "monthly" as const,
       priority: 0.5,
     },

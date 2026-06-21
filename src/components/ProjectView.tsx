@@ -54,6 +54,16 @@ export default function ProjectView() {
     [daily]
   );
 
+  if (allKeys.length === 0) {
+    return (
+      <div className="py-16 text-center">
+        <p className="text-sm" style={{ color: "var(--text-secondary)" }}>
+          {t.empty?.projects ?? "No data yet. Upload CSVs and configure project groups."}
+        </p>
+      </div>
+    );
+  }
+
   // 按项目配置聚合 daily 数据
   const projects = useMemo((): ProjectStats[] => {
     const map = new Map<string, {
@@ -115,7 +125,7 @@ export default function ProjectView() {
       {/* Hero */}
       <div className="text-center mb-12 pt-4">
         <div
-          className="text-[5rem] font-bold leading-none tracking-tighter"
+          className="text-5xl sm:text-6xl md:text-[5rem] font-bold leading-none tracking-tighter"
           style={{ color: "var(--text-primary)", letterSpacing: "-0.04em" }}
         >
           {activeCount}

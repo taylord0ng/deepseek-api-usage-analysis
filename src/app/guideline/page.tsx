@@ -42,10 +42,20 @@ export function generateMetadata(): Metadata {
     },
     twitter: {
       card: "summary",
+      site: "@GavinCnod",
+      creator: "@GavinCnod",
       title,
       description,
       images: [`${SITE_URL}/ds-usage-logo.png`],
     },
+    keywords: [
+      "DeepSeek usage guide",
+      "DeepSeek API dashboard tutorial",
+      "DeepSeek CSV export",
+      "API cost analysis guide",
+      "DeepSeek 使用指南",
+    ],
+    authors: [{ name: "Gavin & Mindrose Team" }],
     robots: {
       index: true,
       follow: true,

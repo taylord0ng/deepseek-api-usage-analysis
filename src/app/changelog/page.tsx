@@ -43,10 +43,14 @@ export function generateMetadata(): Metadata {
     },
     twitter: {
       card: "summary",
+      site: "@GavinCnod",
+      creator: "@GavinCnod",
       title,
       description,
       images: [`${SITE_URL}/ds-usage-logo.png`],
     },
+    keywords: ["DeepSeek dashboard changelog", "API analytics release notes", "DeepSeek 更新日志"],
+    authors: [{ name: "Gavin & Mindrose Team" }],
     robots: {
       index: true,
       follow: true,

@@ -10,14 +10,14 @@ A browser-side dashboard for DeepSeek API usage analytics. Users drag their mont
 
 Strictly follows an Apple-minimalist design language: cold gray paper-texture backgrounds, ample whitespace, "no-card" full-width modules with thin horizontal dividers, subtle rounded corners, and diffuse shadows. Full light/dark dual-theme support driven by CSS custom properties.
 
-**Version**: 0.5.2
+**Version**: 0.5.3
 
 ## Architecture
 
 ```
 src/
 ├── app/            # Next.js App Router (static export)
-│   ├── layout.tsx           # Root layout, generateMetadata() for SEO (canonical, OG, Twitter, hreflang, alternateLocale), 6 JSON-LD script tags (bilingual SoftwareApplication + FAQPage + BreadcrumbList), Google Analytics (gtag.js via NEXT_PUBLIC_GA_ID), ThemeProvider + I18nProvider + DataProvider + ProjectConfigProvider
+│   ├── layout.tsx           # Root layout, generateMetadata() for SEO (canonical, OG with 1200×630 image, Twitter summary_large_image, hreflang, alternateLocale, keywords, author, twitter:site/creator), 8 JSON-LD script tags (bilingual SoftwareApplication + FAQPage + BreadcrumbList + Organization), Google Analytics (gtag.js via NEXT_PUBLIC_GA_ID + trackEvent for conversion events), ThemeProvider + I18nProvider + DataProvider + ProjectConfigProvider
 │   ├── page.tsx             # Entry → renders <Dashboard />
 │   ├── guideline/
 │   │   └── page.tsx          # /guideline route: generates independent SEO metadata (canonical, OG, Twitter), renders <GuidelinePage />
@@ -40,7 +40,7 @@ src/
 │   ├── GuidelinePage.tsx     # Full interactive user guide page: bilingual content blocks (h1–h6, p, blockquote, tables, ul/ol), screenshot embedding with locale-aware image switching, dynamic table-of-contents, scroll-reveal sections (1660 lines of structured guide content)
 │   ├── PrivacyPage.tsx        # Privacy policy page: bilingual content (7 sections), JSON-LD WebPage schema, Apple-minimalist legal-text layout, back-to-home link + FooterBar, GitHub source link for transparency verification
 │   ├── TermsPage.tsx          # Terms of use page: bilingual content (8 sections), JSON-LD WebPage schema, Apple-minimalist legal-text layout, back-to-home link + FooterBar, open-source license reference
-│   ├── ChangelogPage.tsx      # Changelog page: complete version history (v0.1.0–v0.5.2), entries by category (Added/Improved/Fixed/Dependencies) with color-coded dots, JSON-LD WebPage schema, bilingual, Apple-minimalist legal-text layout matching privacy/terms pages
+│   ├── ChangelogPage.tsx      # Changelog page: complete version history (v0.1.0–v0.5.3), entries by category (Added/Improved/Fixed/Dependencies) with color-coded dots, JSON-LD WebPage schema, bilingual, Apple-minimalist legal-text layout matching privacy/terms pages
 │   ├── PrivacyContent.tsx     # Server-rendered <noscript> fallback: bilingual privacy policy sections for SEO crawlers that don't execute JS (EEAT trust signals)
 │   ├── TermsContent.tsx       # Server-rendered <noscript> fallback: bilingual terms of use sections for SEO crawlers that don't execute JS (EEAT trust signals)
 │   ├── ChangelogContent.tsx   # Server-rendered <noscript> fallback: bilingual changelog version history summary for SEO crawlers that don't execute JS
@@ -49,7 +49,7 @@ src/
 │   ├── ShareCard.tsx         # 1200×630 social media infographic card component: per-tab designs (Overview/Projects/Keys/Cache/Trends) with KPI hero, ECharts mini-chart, QR code, and app logo watermark
 │   ├── ShareModal.tsx        # Share dialog: live preview, "From XXX" name input (localStorage persisted), custom message, clipboard copy (WeChat/Feishu/DingTalk compatible), PNG download
 │   ├── Dashboard.tsx         # Main layout: routes between LandingPage (no data) and Dashboard view with 5 tabs (Overview / By Project / By Key / Cache / Trends); semantic hidden H1 for SEO; ShareButton integrated in tab nav bar
-│   ├── DropZone.tsx          # Drag-and-drop CSV/ZIP uploader (supports multi-file, ZIP auto-extraction, 50MB file size limit, "or click to upload")
+│   ├── DropZone.tsx          # Drag-and-drop CSV/ZIP uploader (supports multi-file, ZIP auto-extraction, 50MB file size limit, "or click to upload", error handling with inline error banner for processing failures)
 │   ├── ProjectView.tsx       # "By Project" tab: aggregates API keys into custom project groups (drag-and-drop config), per-project cost/token/cache stats with inline bars, CopyButton integration
 │   ├── KPICards.tsx          # Summary stat cards (card-less big-number layout)
 │   ├── OverviewView.tsx      # Hero total cost + daily cost bars + cost-by-key donut (theme-aware)
@@ -68,15 +68,17 @@ src/
     ├── parser.ts            # Papa Parse CSV pipeline (parse → pivot → join → computeKeyStats)
     ├── concatFiles.ts       # Multi-month CSV pairing & concatenation + ZIP extraction (JSZip) + 50MB upload size limit
     ├── format.ts            # Locale-aware formatCost / formatTokens / formatPercent / formatCostFull / formatTokensFull
-    ├── schema.ts            # JSON-LD structured data: SoftwareApplication + FAQPage + BreadcrumbList (bilingual en/zh, versioned)
+    ├── schema.ts            # JSON-LD structured data: SoftwareApplication + FAQPage + BreadcrumbList + Organization (bilingual en/zh, versioned)
     ├── DataContext.tsx       # Data state + model filter (selectedModel, filteredResult, filterResult)
     ├── ProjectConfigContext.tsx  # Custom project grouping config: drag-and-drop key assignment, localStorage persistence, uncategorized fallback, reset-to-default
     ├── shareCardData.ts     # Share card data extraction: extracts per-tab summary data (OverviewShareData, ProjectShareData, KeyShareData, CacheShareData, TrendsShareData) from ParseResult
+    ├── analytics.ts         # GA4 event tracking helper: trackEvent(name, params?) with gtag guard and error catch
     └── ThemeContext.tsx      # Light/dark theme context + useTheme hook + localStorage + system preference
 
 public/
 ├── ds-usage-logo.ico        # Favicon / app icon
 ├── ds-usage-logo.png        # App icon (PNG, 512×512, used in OpenGraph/Twitter metadata)
+├── og-image.png             # Social preview image (PNG, 1200×630, used as primary OpenGraph/Twitter image)
 ├── llms.txt                 # LLM-friendly site description (markdown): what the app does, how it works, privacy, links
 ├── fonts/
 │   ├── HubotSans-Regular.woff2   # Body text (weight 400)
@@ -96,6 +98,8 @@ public/
 
 - **Static export** (`next.config.ts` → `output: "export"`) — no SSR, no Node server
 - **All components are `"use client"`** — the app is purely client-side
+- **Vitest** for testing — 21 tests across 5 files covering analytics, schema, sitemap, DataContext error handling, and DropZone error display
+- **Community infrastructure**: `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, `.github/ISSUE_TEMPLATE/` (bug_report.yml, feature_request.yml), `.github/PULL_REQUEST_TEMPLATE.md`
 - **Next.js 16** with React 19 — App Router, `"use client"` directives, static export
 - **ECharts 6** via `echarts-for-react` for all visualizations (bar, line, pie/donut with theme-aware colors)
 - **Papa Parse** for CSV parsing (runs in browser)
@@ -105,7 +109,7 @@ public/
 - **Geist Mono** (from `next/font/google`) for code — variable weight
 - **CSS custom properties** for theming — all colors are `var(--bg)`, `var(--text-primary)`, etc.; NO hardcoded colors in components
 - **TypeScript 5** with strict mode, path alias `@/*` → `./src/*`
-- **SEO**: `generateMetadata()` in layout.tsx, guideline/page.tsx, privacy/page.tsx, terms/page.tsx, and changelog/page.tsx (canonical URL, OpenGraph, Twitter cards, hreflang alternates), JSON-LD structured data (SoftwareApplication + FAQPage [9 Q&A pairs] + BreadcrumbList + WebPage schemas for privacy/terms/changelog), robots.txt + sitemap.xml (includes /, /guideline, /privacy, /terms, /changelog), `<noscript>` crawler fallback, semantic hidden H1, `llms.txt` for LLM-friendly site description
+- **SEO**: `generateMetadata()` in layout.tsx, guideline/page.tsx, privacy/page.tsx, terms/page.tsx, and changelog/page.tsx (canonical URL, OpenGraph with 1200×630 image, Twitter summary_large_image cards, hreflang alternates, keywords, author, twitter:site/creator), JSON-LD structured data (SoftwareApplication + FAQPage [9 Q&A pairs] + BreadcrumbList + Organization + WebPage schemas for privacy/terms/changelog — 8 bilingual script tags total), robots.txt + sitemap.xml (differentiated lastModified per route, includes /, /guideline, /privacy, /terms, /changelog), `<noscript>` crawler fallback, semantic hidden H1, `llms.txt` for LLM-friendly site description
 - **Analytics**: Google Analytics via `NEXT_PUBLIC_GA_ID` env var — gtag.js injected in `<head>` at build time, conditional (only when GA_ID is set)
 
 ## SEO, Analytics & Deployment

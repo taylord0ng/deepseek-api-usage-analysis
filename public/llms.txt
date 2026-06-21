@@ -1,78 +1,32 @@
 # DeepSeek API Usage Analytics Dashboard
 
-> Visualize your DeepSeek API usage — drop your monthly ZIP exports or CSV files and get instant cost analytics, cache analysis, and per-key breakdowns. Free, open source, browser-side.
+> Visualize your DeepSeek API usage — drop your monthly ZIP exports or CSV files and get instant cost analytics, cache analysis, and per-key breakdowns. Open source (MIT), bilingual (EN/中文), and entirely browser-side. No account, no upload, no database.
 
-## What is this?
+## Features
 
-A free, privacy-first analytics tool for DeepSeek API users. Drag your monthly usage ZIP exports (or CSV files) onto the page and instantly see where your API budget goes. No account, no upload, no database — everything runs in your browser. Your data never leaves your computer.
+- **Bilingual UI** — Full English and 简体中文 support across all pages and content. Auto-detects browser language on first visit, with a one-click toggle to switch anytime. All documentation (User Guide, Privacy Policy, Terms of Use, Changelog) is available in both languages.
+- **Share Card Generation** — Generate professional 1200×630 social media infographic cards from any dashboard tab (Overview, Projects, Keys, Cache, Trends). Each card includes a KPI hero number, theme-aware mini-chart, QR code linking back to the app, and custom "From" signature. Copy to clipboard (paste directly into WeChat/Feishu/DingTalk) or download as PNG.
+- **Open Source** — Fully open source under the MIT license. Codebase is public on GitHub with community infrastructure: CONTRIBUTING.md, CODE_OF_CONDUCT.md, issue templates, and pull request template. Anyone can audit, fork, or contribute.
 
-## Who is this for?
+## Docs
 
-Anyone using the DeepSeek API platform who wants to understand their spending:
-- Developers monitoring API costs across multiple keys
-- Teams tracking cache hit rates to optimize token usage
-- Anyone curious about usage trends over time
+- [DeepSeek Usage Dashboard](https://deepseek-usage.xyz) — Main application: drag-and-drop CSV/ZIP analytics dashboard for DeepSeek API usage
+- [User Guide](https://deepseek-usage.xyz/guideline) — Bilingual step-by-step usage documentation with annotated screenshots
+- [Changelog](https://deepseek-usage.xyz/changelog) — Complete version history from v0.1.0 to v0.5.3
+- [Privacy Policy](https://deepseek-usage.xyz/privacy) — How your data is handled, bilingual legal text (7 sections)
+- [Terms of Use](https://deepseek-usage.xyz/terms) — Legal terms and disclaimers, bilingual (8 sections)
 
-## What can you do with it?
+## External
 
-- **See your total spend at a glance** — big hero number with daily cost breakdown, no spreadsheet needed. One-click copy to clipboard.
-- **Understand your API keys** — sortable table showing which keys cost the most, their token usage, and cache hit efficiency
-- **Group keys into custom projects** — drag API keys into custom project groups to analyze cost and usage per project
-- **Track cache performance** — see how much you save via cache hits vs. misses, with daily trend charts
-- **Follow multi-metric trends** — toggle between cost, tokens, hit rate, and request count over time on one chart
-- **Filter by model** — isolate a specific model to see its individual cost and usage patterns
-- **Compare months** — upload multiple months and see trends across time
-- **Share your dashboard as an image** — generate 1200×630 infographic cards from any tab (Overview, Projects, Keys, Cache, Trends) with mini-charts, QR code, and watermark; copy to clipboard or download as PNG
+- [GitHub Repository](https://github.com/GavinCnod/deepseek-api-usage-analysis) — Open source codebase (MIT license)
+- [DeepSeek Platform](https://platform.deepseek.com) — Official DeepSeek API platform (data source)
+- [MindRose](https://www.mindrose.xyz) — Built by Gavin Chen & the MindRose team
+- [LinkedIn — Gavin Chen](https://www.linkedin.com/in/gavinchensongwen3188536a) — Author's LinkedIn profile
 
-## How it works
+## Optional
 
-1. Go to DeepSeek Platform → Usage → download your monthly export (ZIP file containing amount and cost CSVs)
-2. Drag the ZIP file (or extracted CSVs) onto the dashboard — no unzipping needed
-3. Instantly see charts, tables, and insights — no configuration needed
+- [Complete Documentation (llms-full.txt)](https://deepseek-usage.xyz/llms-full.txt) — Full bilingual site content: How It Works, FAQ, About, Privacy Policy, Terms of Use, and complete version history (v0.1.0–v0.5.3)
 
-Supports multiple months at once. ZIP archives are extracted automatically in-browser. Individual CSV files are paired by year-month.
+## About
 
-## File size & limits
-
-Each individual file (CSV or ZIP entry) must be under 50 MB. This prevents malicious ZIP bombs from freezing the browser. DeepSeek monthly usage exports are typically under 1 MB — this limit should never be an issue for normal use.
-
-## What data does it read?
-
-DeepSeek platform exports two CSV files per month (either as standalone files or inside a ZIP):
-
-**Amount CSV** — records every API call with date, model, key name, token type, and token counts (input cache hit, input cache miss, output tokens, request count).
-
-**Cost CSV** — daily cost per model.
-
-The tool combines them to show you cost per key, per model, per project, and per day.
-
-## Privacy
-
-Your CSV files are processed entirely in your browser. They are never sent to any server. The app is a static website — it has no backend, no database, no analytics tracking. The source code is open and auditable.
-
-## Languages
-
-English and 中文 (Simplified Chinese). The app auto-detects your browser language on first visit, with a toggle to switch anytime.
-
-## Theme
-
-Light and dark mode, auto-matching your system preference at first visit, with a manual toggle. Designed in a clean, minimal Apple-inspired style.
-
-## Links
-
-- Website: https://deepseek-usage.xyz
-- GitHub: https://github.com/GavinCnod/deepseek-api-usage-analysis
-- DeepSeek Platform: https://platform.deepseek.com
-
-### App pages
-
-- User Guide: https://deepseek-usage.xyz/guideline — step-by-step usage documentation with screenshots
-- Changelog: https://deepseek-usage.xyz/changelog — complete version history from v0.1.0 to v0.5.2
-- Privacy Policy: https://deepseek-usage.xyz/privacy — how your data is handled
-- Terms of Use: https://deepseek-usage.xyz/terms — legal terms and disclaimers
-
-## About the team
-
-Built by Gavin Chen & the MindRose team. Open source under MIT license.
-- MindRose: https://www.mindrose.xyz
-- LinkedIn: https://www.linkedin.com/in/gavinchensongwen3188536a
+A free, privacy-first analytics tool for DeepSeek API users. Everything runs client-side in the browser — your CSV files are never uploaded to any server. Supports light/dark themes (auto-matched to system preference), ZIP auto-extraction, multi-month comparison, custom project grouping (drag-and-drop key assignment), model filtering, and social media share cards. Compatible with any static host (Vercel, Netlify, Cloudflare Pages, GitHub Pages). Tech stack: Next.js 16 (static export), React 19, TypeScript, Tailwind CSS v4, ECharts 6, Papa Parse, JSZip.

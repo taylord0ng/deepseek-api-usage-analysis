@@ -22,6 +22,16 @@ export default function OverviewView() {
 
   const { daily, keys, summary } = result;
 
+  if (daily.length === 0) {
+    return (
+      <div className="py-16 text-center">
+        <p className="text-sm" style={{ color: "var(--text-secondary)" }}>
+          {t.empty?.overview ?? "No data for the selected model. Try a different filter."}
+        </p>
+      </div>
+    );
+  }
+
   // 主题感知色
   const isDark = theme === "dark";
   const textColor = isDark ? "#98989D" : "#86868B";
@@ -106,7 +116,7 @@ export default function OverviewView() {
       {/* Hero — 大数字总费用 */}
       <div className="text-center mb-12 pt-4">
         <div
-          className="text-[5rem] font-bold leading-none tracking-tighter"
+          className="text-5xl sm:text-6xl md:text-[5rem] font-bold leading-none tracking-tighter"
           style={{ color: "var(--text-primary)", letterSpacing: "-0.04em" }}
         >
           {formatCost(summary.totalCost, locale)}
@@ -129,7 +139,9 @@ export default function OverviewView() {
           >
             {t.overview.dailyCost}
           </h3>
-          <ReactECharts option={dailyOption} style={{ height: 300 }} />
+          <div aria-label={t.overview.dailyCost} role="img">
+            <ReactECharts option={dailyOption} style={{ height: 300 }} />
+          </div>
         </div>
         <div>
           <h3
@@ -138,7 +150,9 @@ export default function OverviewView() {
           >
             {t.overview.costByKey}
           </h3>
-          <ReactECharts option={donutOption} style={{ height: 300 }} />
+          <div aria-label={t.overview.costByKey} role="img">
+            <ReactECharts option={donutOption} style={{ height: 300 }} />
+          </div>
         </div>
       </div>
     </div>

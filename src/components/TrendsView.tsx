@@ -25,6 +25,17 @@ export default function TrendsView() {
   if (!result) return null;
 
   const { daily } = result;
+
+  if (daily.length === 0) {
+    return (
+      <div className="py-16 text-center">
+        <p className="text-sm" style={{ color: "var(--text-secondary)" }}>
+          {t.empty?.trends ?? "Not enough data to show trends. Upload more months of CSVs."}
+        </p>
+      </div>
+    );
+  }
+
   const dates = [...new Set(daily.map((d) => d.date))].sort();
   const isDark = theme === "dark";
 
@@ -167,7 +178,7 @@ export default function TrendsView() {
       {/* Hero — 动态大数字，跟随指标切换 */}
       <div className="text-center mb-12 pt-4">
         <div
-          className="text-[5rem] font-bold leading-none tracking-tighter"
+          className="text-5xl sm:text-6xl md:text-[5rem] font-bold leading-none tracking-tighter"
           style={{ color: "var(--text-primary)", letterSpacing: "-0.04em" }}
         >
           {metric === "cacheHitRate" ? (
@@ -208,7 +219,9 @@ export default function TrendsView() {
         ))}
       </div>
 
-      <ReactECharts option={option} style={{ height: 360 }} />
+      <div aria-label="Trends Chart" role="img">
+        <ReactECharts option={option} style={{ height: 360 }} />
+      </div>
     </div>
   );
 }

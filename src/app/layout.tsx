@@ -5,7 +5,7 @@ import { DataProvider } from "@/lib/DataContext";
 import { ThemeProvider } from "@/lib/ThemeContext";
 import { ProjectConfigProvider } from "@/lib/ProjectConfigContext";
 import { AppI18nShell } from "./AppI18nShell";
-import { buildSoftwareAppJsonLd, buildFaqJsonLd, buildBreadcrumbJsonLd } from "@/lib/schema";
+import { buildSoftwareAppJsonLd, buildFaqJsonLd, buildBreadcrumbJsonLd, buildOrganizationJsonLd } from "@/lib/schema";
 
 /** Hubot Sans 为本地 WOFF2 字体，通过 globals.css 中的 @font-face 加载 */
 
@@ -56,6 +56,13 @@ export function generateMetadata(): Metadata {
       alternateLocale: ["zh_CN"],
       images: [
         {
+          url: `${SITE_URL}/og-image.png`,
+          width: 1200,
+          height: 630,
+          alt: "DeepSeek API Usage Analytics Dashboard — free, private, open source",
+          type: "image/png",
+        },
+        {
           url: `${SITE_URL}/ds-usage-logo.png`,
           width: 512,
           height: 512,
@@ -65,11 +72,24 @@ export function generateMetadata(): Metadata {
       ],
     },
     twitter: {
-      card: "summary",
+      card: "summary_large_image",
+      site: "@GavinCnod",
+      creator: "@GavinCnod",
       title,
       description,
-      images: [`${SITE_URL}/ds-usage-logo.png`],
+      images: [`${SITE_URL}/og-image.png`],
     },
+    keywords: [
+      "DeepSeek API usage analytics",
+      "DeepSeek cost tracker",
+      "DeepSeek token analysis",
+      "API key cost breakdown",
+      "DeepSeek cache hit rate",
+      "LLM cost dashboard",
+      "DeepSeek 用量分析",
+      "DeepSeek API 费用追踪",
+    ],
+    authors: [{ name: "Gavin & Mindrose Team" }],
     icons: {
       icon: "/ds-usage-logo.ico",
     },
@@ -149,6 +169,18 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify(buildBreadcrumbJsonLd("zh")),
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(buildOrganizationJsonLd("en")),
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(buildOrganizationJsonLd("zh")),
           }}
         />
         <ThemeProvider>

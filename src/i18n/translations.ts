@@ -32,6 +32,7 @@ const translations = {
       oversizedTitle: "File too large",
       oversizedHint:
         "Each file must be under 50 MB. The file \"{name}\" is {size} MB. Large files may freeze the browser.",
+      processingError: "Processing Error",
     },
     kpi: {
       totalCost: "Total Cost",
@@ -93,6 +94,12 @@ const translations = {
     },
     langSwitcher: {
       label: "Language",
+    },
+    empty: {
+      overview: "No data for the selected model. Try a different filter.",
+      keys: "No API keys found in the data.",
+      trends: "Not enough data to show trends. Upload more months of CSVs.",
+      projects: "No data yet. Upload CSVs and configure project groups.",
     },
     theme: {
       light: "Light",
@@ -327,6 +334,7 @@ const translations = {
       oversizedTitle: "文件过大",
       oversizedHint:
         "单个文件不能超过 50 MB。文件 \"{name}\" 大小为 {size} MB。过大的文件可能导致浏览器卡死。",
+      processingError: "处理错误",
     },
     kpi: {
       totalCost: "总费用",
@@ -387,6 +395,12 @@ const translations = {
     },
     langSwitcher: {
       label: "语言",
+    },
+    empty: {
+      overview: "所选模型暂无数据，请尝试切换筛选条件。",
+      keys: "未找到 API Key 数据。",
+      trends: "数据不足，无法显示趋势。请上传更多月份的 CSV。",
+      projects: "暂无数据。请上传 CSV 并配置项目分组。",
     },
     theme: {
       light: "浅色",

@@ -36,9 +36,13 @@ A browser-side analytics dashboard for DeepSeek API usage. Drag your monthly CSV
 - **SEO optimized** — Server-rendered metadata (canonical URLs, OpenGraph with alternateLocale, Twitter cards), JSON-LD structured data (SoftwareApplication + FAQPage + BreadcrumbList, bilingual), robots.txt + sitemap.xml, `<noscript>` crawler fallback content, anchor-linkable landing page sections, `llms.txt` for LLM-friendly site description
 - **Landing page** — Complete pre-upload landing with theme-aware background images, How It Works steps, accordion FAQ (9 items, including file size limits and project grouping), expanded multi-section About (project origin, privacy & tech, team, contact with email copy & social links + "View Changelog →" link), scroll-reveal animations, anchor-linkable sections with deferred rendering for performance
 - **User Guide** — Comprehensive bilingual user manual at `/guideline` with annotated screenshots, interactive table of contents, step-by-step dashboard navigation, CSV export instructions, chart interpretation guide, and troubleshooting section
-- **Changelog** — Dedicated `/changelog` page with complete version history (v0.1.0–v0.5.2) organized by category (Added/Improved/Fixed/Dependencies) with color-coded dots; Apple-minimalist bilingual design matching privacy/terms pages, JSON-LD WebPage schema, independent SEO metadata, linked from TitleBar, FooterBar, and LandingPage
+- **Changelog** — Dedicated `/changelog` page with complete version history (v0.1.0–v0.5.3) organized by category (Added/Improved/Fixed/Dependencies) with color-coded dots; Apple-minimalist bilingual design matching privacy/terms pages, JSON-LD WebPage schema, independent SEO metadata, linked from TitleBar, FooterBar, and LandingPage
 - **Privacy Policy & Terms** — `/privacy` and `/terms` pages with bilingual legal content, independent SEO metadata (canonical, OpenGraph, Twitter), JSON-LD WebPage schemas, and Apple-minimalist legal-text layout; linked from footer on every page
-- **Analytics** — Optional Google Analytics 4 integration via `NEXT_PUBLIC_GA_ID` env var; zero overhead when unset, standard page-view tracking only — no CSV data ever tracked
+- **Analytics** — Optional Google Analytics 4 integration via `NEXT_PUBLIC_GA_ID` env var; zero overhead when unset. Tracks page views, file uploads, share card generations, tab switches, and language switches — zero CSV data ever tracked.
+- **Enhanced SEO** — Twitter `summary_large_image` card with 1200×630 OG image, `Organization` JSON-LD schema for Google Knowledge Panel, expanded `BreadcrumbList` with all sub-pages, differentiated sitemap `lastModified` dates, `keywords` + `author` + `twitter:site`/`creator` meta tags on all pages
+- **Community ready** — `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, Issue templates (bug report + feature request), and Pull Request template to welcome contributors
+- **Error resilience** — Graceful error handling for ZIP/CSV processing failures with user-visible error messages and retry capability; parser crash protection in DataContext
+- **Accessibility** — All charts have descriptive `aria-label` attributes; responsive hero text scales from `text-5xl` on mobile to `text-[5rem]` on desktop; empty-state messages when filtered data is zero
 
 ## CSV Format
 
@@ -72,6 +76,7 @@ npm install
 npm run dev        # Dev server at localhost:3000
 npm run build      # Static export → out/
 npm run lint       # ESLint
+npm test           # Vitest (21 tests)
 ```
 
 ### Tech Stack
@@ -116,7 +121,7 @@ src/
 │   ├── GuidelinePage.tsx    # Full interactive user guide (bilingual, annotated screenshots, table of contents, scroll-reveal)
 │   ├── PrivacyPage.tsx      # Privacy policy page (bilingual 7-section legal text, JSON-LD WebPage schema, GitHub source links)
 │   ├── TermsPage.tsx        # Terms of use page (bilingual 8-section legal text, JSON-LD WebPage schema, MIT License reference)
-│   ├── ChangelogPage.tsx     # Changelog page (complete version history v0.1.0–v0.5.2, entries by category with colored dots, JSON-LD WebPage schema, bilingual)
+│   ├── ChangelogPage.tsx     # Changelog page (complete version history v0.1.0–v0.5.3, entries by category with colored dots, JSON-LD WebPage schema, bilingual)
 │   ├── PrivacyContent.tsx    # <noscript> SEO fallback: bilingual privacy policy for crawlers
 │   ├── TermsContent.tsx      # <noscript> SEO fallback: bilingual terms of use for crawlers
 │   ├── ChangelogContent.tsx  # <noscript> SEO fallback: bilingual changelog version summary for crawlers
@@ -148,7 +153,14 @@ src/
     ├── DataContext.tsx      # Data state + model filter
     ├── ProjectConfigContext.tsx # Custom project grouping config (drag-and-drop, localStorage persistence)
     ├── shareCardData.ts     # Share card data extraction (per-tab summary data from ParseResult)
+    ├── analytics.ts         # GA4 event tracking helper (shared gtag wrapper with guard)
     └── ThemeContext.tsx     # Theme state + useTheme hook
+├── __tests__/
+│   ├── analytics.test.ts    # trackEvent unit tests
+│   ├── schema.test.ts       # Organization + BreadcrumbList schema tests
+│   ├── sitemap.test.ts      # Sitemap lastModified differentiation tests
+│   ├── DataContext.test.tsx # loadFiles error handling tests
+│   └── DropZone.test.tsx    # Upload error display tests
 ```
 
 ## Design System
@@ -159,7 +171,7 @@ The dashboard follows an **Apple-minimalist** design language driven entirely by
 - **Light theme**: `#F5F5F7` cold gray paper background, `#1D1D1F` matte black text
 - **Dark theme**: `#000000` pure black background, `#F5F5F7` white text
 - **Typography**: Hubot Sans, weight 400 body / 500–700 headings, tight letter-spacing
-- **Hero pattern**: `5rem` bold numbers in Overview / Keys / Cache / Trends — prominent, data-first presentation
+- **Hero pattern**: `5rem` bold numbers in Overview / Keys / Cache / Trends — prominent, data-first presentation; responsive scaling (`text-5xl sm:text-6xl md:text-[5rem]`) prevents overflow on mobile
 - **No-card layout**: Full-width modules separated by `1px solid var(--border)` dividers
 - **Micro-interactions**: Subtle hover transitions (200ms), fade-in/slide-up animations, scroll-reveal sections with Intersection Observer, accordion QA panels
 - **Custom scrollbar**: 6px thin, transparent track, themed thumb
@@ -170,7 +182,7 @@ The dashboard follows an **Apple-minimalist** design language driven entirely by
 The app implements a multi-layered SEO strategy for a client-rendered static SPA:
 
 - **generateMetadata()** — Dynamic server-rendered metadata: canonical URL, OpenGraph (title, description, image), Twitter card, hreflang alternates (en/zh), robots directives
-- **JSON-LD structured data** — `SoftwareApplication` + `FAQPage` + `BreadcrumbList` schemas in both English and Chinese (6 total script tags), injected at build time via `<script type="application/ld+json">` in `layout.tsx`
+- **JSON-LD structured data** — `SoftwareApplication` + `FAQPage` + `BreadcrumbList` + `Organization` schemas in both English and Chinese (8 total script tags), injected at build time via `<script type="application/ld+json">` in `layout.tsx`; `Organization` schema enables Google Knowledge Panel brand recognition
 - **robots.txt + sitemap.xml** — Generated at build time via Next.js 16 `MetadataRoute` conventions; sitemap includes `/`, `/guideline`, `/privacy`, `/terms`, and `/changelog` entries; site URL from `NEXT_PUBLIC_SITE_URL` env var
 - **`<noscript>` fallback** — `LandingContent.tsx` outputs key landing page content (How It Works, FAQ, About) for crawlers that don't execute JavaScript; `PrivacyContent.tsx`, `TermsContent.tsx`, and `ChangelogContent.tsx` provide bilingual `<noscript>` fallbacks for the privacy, terms, and changelog pages (EEAT trust signals)
 - **`llms.txt`** — LLM-friendly site description served at `/llms.txt`, summarizing the app's purpose, features, and structure for AI tools
@@ -195,6 +207,31 @@ The repo includes `vercel.json` with pre-configured security headers and caching
 - **Caching**: immutable caching for `/_next/static` and `/fonts` (1 year), stale-while-revalidate for `/landing` and `/guideline` images (1 week)
 
 ## Changelog
+
+### v0.5.3
+
+**Added:**
+
+- Enhanced SEO — Twitter card upgraded to `summary_large_image` with 1200×630 OG social preview image; added `keywords`, `twitter:site`/`creator`, and `author` meta tags to all pages.
+- Organization JSON-LD structured data for Google Knowledge Panel brand recognition; expanded BreadcrumbList with all sub-page entries.
+- GA4 conversion events — `upload_csv`, `share_card`, `tab_switch`, and `language_switch` event tracking via shared `trackEvent()` analytics helper.
+- Community infrastructure — `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, GitHub Issue templates (bug report + feature request), and Pull Request template.
+
+**Improved:**
+
+- Responsive hero numbers — hero text now scales down on mobile screens (`text-5xl → sm:text-6xl → md:text-[5rem]`), preventing horizontal overflow.
+- Chart accessibility — all ECharts instances now have descriptive `aria-label` attributes for screen readers.
+- Sitemap lastModified dates — now differentiated per route; privacy/terms use `yearly` change frequency with historical dates.
+
+**Fixed:**
+
+- Critical: DropZone error handling — added missing `catch` clause for ZIP/CSV processing errors. Previously, a corrupt file or extraction failure left the UI stuck in an infinite "Processing" spinner. Now shows a user-visible error message with retry capability.
+- DataContext parser crash protection — wrapped `parseDeepSeekData()` in `try/catch` inside the `setTimeout` callback. Previously, a synchronous parser crash would fail silently with no user feedback.
+- Empty states — OverviewView, KeyView, TrendsView, and ProjectView now show descriptive empty-state messages when data is empty after model filtering.
+
+**Dependencies:**
+
+- Added `vitest`, `@testing-library/react`, `@testing-library/jest-dom`, `jsdom`, and `@vitejs/plugin-react` for test infrastructure. 21 tests across 5 test files.
 
 ### v0.5.2
 
