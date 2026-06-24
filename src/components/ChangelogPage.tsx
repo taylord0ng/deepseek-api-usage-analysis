@@ -49,6 +49,16 @@ interface VersionEntry {
 /** 所有版本的更新日志，按版本倒序排列 */
 const CHANGELOG_DATA: VersionEntry[] = [
   {
+    version: "v0.5.4",
+    date: "2026-06-24",
+    improved: [
+      {
+        en: "Optimized token number display format for Chinese language, more suitable for Chinese users.",
+        zh: "优化了中文语言下的 token 数字显示格式，更符合中文习惯。",
+      },
+    ],
+  },
+  {
     version: "v0.5.3",
     date: "2026-06-21",
     added: [

@@ -12,7 +12,7 @@
 
 - [DeepSeek Usage Dashboard](https://deepseek-usage.xyz) — Main application: drag-and-drop CSV/ZIP analytics dashboard for DeepSeek API usage
 - [User Guide](https://deepseek-usage.xyz/guideline) — Bilingual step-by-step usage documentation with annotated screenshots
-- [Changelog](https://deepseek-usage.xyz/changelog) — Complete version history from v0.1.0 to v0.5.3
+- [Changelog](https://deepseek-usage.xyz/changelog) — Complete version history from v0.1.0 to v0.5.4
 - [Privacy Policy](https://deepseek-usage.xyz/privacy) — How your data is handled, bilingual legal text (7 sections)
 - [Terms of Use](https://deepseek-usage.xyz/terms) — Legal terms and disclaimers, bilingual (8 sections)
 
@@ -25,7 +25,7 @@
 
 ## Optional
 
-- [Complete Documentation (llms-full.txt)](https://deepseek-usage.xyz/llms-full.txt) — Full bilingual site content: How It Works, FAQ, About, Privacy Policy, Terms of Use, and complete version history (v0.1.0–v0.5.3)
+- [Complete Documentation (llms-full.txt)](https://deepseek-usage.xyz/llms-full.txt) — Full bilingual site content: How It Works, FAQ, About, Privacy Policy, Terms of Use, and complete version history (v0.1.0–v0.5.4)
 
 ## About
 

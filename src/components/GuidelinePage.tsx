@@ -1210,7 +1210,7 @@ Apple 风格下划线标签，5 个标签页：
 function getManualContentEn(): string {
   return `# DeepSeek API Usage Analytics Dashboard — User Guide
 
-> Version: v0.5.3 | Language: English / 中文 | Last Updated: 2026-06-18
+> Version: v0.5.4 | Language: English / 中文 | Last Updated: 2026-06-24
 
 ---
 

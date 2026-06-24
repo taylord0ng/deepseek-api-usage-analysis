@@ -10,7 +10,7 @@ A browser-side dashboard for DeepSeek API usage analytics. Users drag their mont
 
 Strictly follows an Apple-minimalist design language: cold gray paper-texture backgrounds, ample whitespace, "no-card" full-width modules with thin horizontal dividers, subtle rounded corners, and diffuse shadows. Full light/dark dual-theme support driven by CSS custom properties.
 
-**Version**: 0.5.3
+**Version**: 0.5.4
 
 ## Architecture
 
@@ -40,7 +40,7 @@ src/
 │   ├── GuidelinePage.tsx     # Full interactive user guide page: bilingual content blocks (h1–h6, p, blockquote, tables, ul/ol), screenshot embedding with locale-aware image switching, dynamic table-of-contents, scroll-reveal sections (1660 lines of structured guide content)
 │   ├── PrivacyPage.tsx        # Privacy policy page: bilingual content (7 sections), JSON-LD WebPage schema, Apple-minimalist legal-text layout, back-to-home link + FooterBar, GitHub source link for transparency verification
 │   ├── TermsPage.tsx          # Terms of use page: bilingual content (8 sections), JSON-LD WebPage schema, Apple-minimalist legal-text layout, back-to-home link + FooterBar, open-source license reference
-│   ├── ChangelogPage.tsx      # Changelog page: complete version history (v0.1.0–v0.5.3), entries by category (Added/Improved/Fixed/Dependencies) with color-coded dots, JSON-LD WebPage schema, bilingual, Apple-minimalist legal-text layout matching privacy/terms pages
+│   ├── ChangelogPage.tsx      # Changelog page: complete version history (v0.1.0–v0.5.4), entries by category (Added/Improved/Fixed/Dependencies) with color-coded dots, JSON-LD WebPage schema, bilingual, Apple-minimalist legal-text layout matching privacy/terms pages
 │   ├── PrivacyContent.tsx     # Server-rendered <noscript> fallback: bilingual privacy policy sections for SEO crawlers that don't execute JS (EEAT trust signals)
 │   ├── TermsContent.tsx       # Server-rendered <noscript> fallback: bilingual terms of use sections for SEO crawlers that don't execute JS (EEAT trust signals)
 │   ├── ChangelogContent.tsx   # Server-rendered <noscript> fallback: bilingual changelog version history summary for SEO crawlers that don't execute JS

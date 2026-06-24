@@ -1,6 +1,6 @@
 # DeepSeek API Usage Analytics Dashboard — Full Content
 
-> A free, privacy-first analytics tool for DeepSeek API users. Drop your monthly ZIP exports or CSV files and get instant cost analytics, cache analysis, and per-key breakdowns. Open source (MIT), bilingual (EN/中文), entirely browser-side. No account, no upload, no database. Built by Gavin Chen & the MindRose team. Version 0.5.3.
+> A free, privacy-first analytics tool for DeepSeek API users. Drop your monthly ZIP exports or CSV files and get instant cost analytics, cache analysis, and per-key breakdowns. Open source (MIT), bilingual (EN/中文), entirely browser-side. No account, no upload, no database. Built by Gavin Chen & the MindRose team. Version 0.5.4.
 
 ---
 
@@ -266,6 +266,11 @@ If you have questions about these Terms of Use, please open an issue on our GitH
 
 ### English
 
+**v0.5.4** (2026-06-24)
+
+*Improved*
+- updated token counts number format in Chinese Language.
+
 **v0.5.3** (2026-06-21)
 
 *Added*
@@ -337,6 +342,11 @@ If you have questions about these Terms of Use, please open an issue on our GitH
 ---
 
 ### 中文
+
+**v0.5.4**（2026-06-24）
+
+*改进*
+- 改进token消耗量数字格式，更符合中文语法习惯。
 
 **v0.5.3** (2026-06-21)
 

@@ -18,11 +18,16 @@ export function formatCost(yuan: number, locale: Locale): string {
 /**
  * Format a token count.
  * EN: 1.2M / 1K / 123
- * ZH: 1.2万 / 1K / 123
+ * ZH: 1.234亿 / 1.2万 / 123
  */
 export function formatTokens(n: number, locale?: Locale): string {
-  if (locale === "zh" && n >= 10_000) {
-    return `${(n / 10_000).toFixed(1)}万`;
+  if (locale === "zh") {
+    if (n >= 100_000_000) {
+      return `${(n / 100_000_000).toFixed(3)}亿`;
+    }
+    if (n >= 10_000) {
+      return `${(n / 10_000).toFixed(1)}万`;
+    }
   }
   if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M`;
   if (n >= 1_000) return `${(n / 1_000).toFixed(0)}K`;
