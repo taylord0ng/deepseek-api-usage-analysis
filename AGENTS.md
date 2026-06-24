@@ -151,7 +151,7 @@ All sub-pages follow the same pattern: route directory under `src/app/` with `pa
 - **`/guideline`** (`GuidelinePage.tsx`): Bilingual user manual — markdown-like content blocks, 16+ annotated screenshots (locale-aware `-cn.png`/`-en.png`), dynamic sidebar ToC with Intersection Observer scroll tracking. Priority 0.8 in sitemap.
 - **`/privacy`** (`PrivacyPage.tsx`): 7-section bilingual legal text, JSON-LD WebPage schema, `max-w-3xl` centered layout, GitHub source links for transparency. Priority 0.5 in sitemap.
 - **`/terms`** (`TermsPage.tsx`): 8-section bilingual legal text, MIT License reference, JSON-LD WebPage schema, `max-w-2xl` layout. Priority 0.5 in sitemap.
-- **`/changelog`** (`ChangelogPage.tsx`): Complete version history from v0.1.0 to v0.5.2, entries organized by category (Added/Improved/Fixed/Dependencies) with color-coded dots, JSON-LD WebPage schema, bilingual, Apple-minimalist legal-text layout matching privacy/terms pages. Priority 0.5 in sitemap.
+- **`/changelog`** (`ChangelogPage.tsx`): Complete version history from v0.1.0 to v0.5.4, entries organized by category (Added/Improved/Fixed/Dependencies) with color-coded dots, JSON-LD WebPage schema, bilingual, Apple-minimalist legal-text layout matching privacy/terms pages. Priority 0.5 in sitemap.
 - **`/llms.txt`**: Static markdown file in `public/` — LLM-friendly site description (purpose, features, data format, privacy, links).
 
 ## Theme system

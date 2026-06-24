@@ -253,7 +253,7 @@ npm run build
 
 **新增：**
 
-- 更新日志页面（`/changelog`）— 专属页面展示 v0.1.0 至 v0.5.2 的完整版本历史，采用与隐私政策/使用条款一致的 Apple 极简双语设计。包含 JSON-LD WebPage 结构化数据、独立 SEO 元数据（canonical、OpenGraph、Twitter），版本条目按类别（新增/改进/修复/依赖）以彩色圆点分组展示。
+- 更新日志页面（`/changelog`）— 专属页面展示完整版本历史，采用与隐私政策/使用条款一致的 Apple 极简双语设计。包含 JSON-LD WebPage 结构化数据、独立 SEO 元数据（canonical、OpenGraph、Twitter），版本条目按类别（新增/改进/修复/依赖）以彩色圆点分组展示。
 - TitleBar 时钟图标链接至更新日志页面，与现有操作手册书籍图标并列。
 - 落地页关于区域社交链接胶囊下方新增「查看更新日志 →」链接。
 

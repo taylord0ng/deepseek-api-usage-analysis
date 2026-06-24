@@ -120,8 +120,8 @@ const CHANGELOG_DATA: VersionEntry[] = [
     version: "v0.5.1",
     added: [
       {
-        en: "Changelog page (/changelog) — a dedicated page showcasing the complete version history from v0.1.0 to v0.5.2, in Apple-minimalist bilingual design matching privacy/terms pages. Includes JSON-LD WebPage schema, independent SEO metadata (canonical, OpenGraph, Twitter), and version entries organized by category (Added/Improved/Fixed/Dependencies) with color-coded dots.",
-        zh: "更新日志页面（/changelog）— 专属页面展示 v0.1.0 至 v0.5.2 的完整版本历史，采用与隐私政策/使用条款一致的 Apple 极简双语设计。包含 JSON-LD WebPage 结构化数据、独立 SEO 元数据（canonical、OpenGraph、Twitter），版本条目按类别（新增/改进/修复/依赖）以彩色圆点分组展示。",
+        en: "Changelog page (/changelog) — a dedicated page showcasing the complete version history, in Apple-minimalist bilingual design matching privacy/terms pages. Includes JSON-LD WebPage schema, independent SEO metadata (canonical, OpenGraph, Twitter), and version entries organized by category (Added/Improved/Fixed/Dependencies) with color-coded dots.",
+        zh: "更新日志页面（/changelog）— 专属页面展示完整版本历史，采用与隐私政策/使用条款一致的 Apple 极简双语设计。包含 JSON-LD WebPage 结构化数据、独立 SEO 元数据（canonical、OpenGraph、Twitter），版本条目按类别（新增/改进/修复/依赖）以彩色圆点分组展示。",
       },
       {
         en: "TitleBar clock icon linking to the changelog page, alongside the existing guideline book icon.",
