@@ -5,8 +5,8 @@ Thank you for your interest in contributing! This document will help you get sta
 ## Development Setup
 
 ```bash
-git clone https://github.com/GavinCnod/ds-usage-analysis.git
-cd ds-usage-analysis
+git clone https://github.com/GavinCnod/deepseek-api-usage-analysis.git
+cd deepseek-api-usage-analysis
 npm install
 npm run dev
 ```
@@ -84,5 +84,5 @@ const { t } = useTranslation();
 ## Need Help?
 
 - Check the [User Guide](https://deepseek-usage.xyz/guideline)
-- Open a [GitHub Discussion](https://github.com/GavinCnod/ds-usage-analysis/discussions)
-- File an [issue](https://github.com/GavinCnod/ds-usage-analysis/issues)
+- Open a [GitHub Discussion](https://github.com/GavinCnod/deepseek-api-usage-analysis/discussions)
+- File an [issue](https://github.com/GavinCnod/deepseek-api-usage-analysis/issues)

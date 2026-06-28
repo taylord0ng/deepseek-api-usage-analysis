@@ -257,6 +257,6 @@ export function buildOrganizationJsonLd(locale: Locale): Record<string, unknown>
     url: SITE_URL,
     logo: `${SITE_URL}/ds-usage-logo.png`,
     description: t.description,
-    sameAs: ["https://github.com/GavinCnod/ds-usage-analysis"],
+    sameAs: ["https://github.com/GavinCnod/deepseek-api-usage-analysis"],
   };
 }

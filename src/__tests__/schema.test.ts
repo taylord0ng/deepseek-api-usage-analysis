@@ -14,7 +14,7 @@ describe("buildOrganizationJsonLd", () => {
     expect(result.url).toContain("deepseek-usage.xyz");
     expect(result.logo).toContain("ds-usage-logo.png");
     expect(result.sameAs).toEqual([
-      "https://github.com/GavinCnod/ds-usage-analysis",
+      "https://github.com/GavinCnod/deepseek-api-usage-analysis",
     ]);
   });
 
