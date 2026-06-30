@@ -429,3 +429,5 @@ If you have questions about these Terms of Use, please open an issue on our GitH
 - [DeepSeek Platform](https://platform.deepseek.com) — Official data source
 - [MindRose](https://www.mindrose.xyz) — Team website
 - [LinkedIn — Gavin Chen](https://www.linkedin.com/in/gavinchensongwen3188536a) — Author profile
+- [Sister Project Repository (Agnes Usage Analysis)]: https://github.com/GavinCnod/agnes-api-usage-analysis
+- [Sister Project (Agnes Usage Analysis)]: https://github.com/GavinCnod/agnes-api-usage-analysis

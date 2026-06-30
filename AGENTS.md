@@ -33,9 +33,9 @@ src/
 │   ├── robots.ts            # Build-time robots.txt generation (Next.js 16 convention)
 │   └── sitemap.ts           # Build-time sitemap.xml generation (includes /, /guideline, /privacy, /terms, /changelog entries, NEXT_PUBLIC_SITE_URL)
 ├── components/
-│   ├── TitleBar.tsx          # Shared sticky top nav: logo + app name + GitHub icon + guideline book icon + changelog clock icon + LanguageSwitcher + ThemeSwitcher (all icon tooltips use i18n)
-│   ├── FooterBar.tsx         # Shared footer: thin divider + copyright + guideline link + privacy link + terms link + changelog link + GitHub link + version (props: animate, sectionRef)
-│   ├── LandingPage.tsx       # Pre-upload landing: Hero with theme-aware bg images + Upload + HowItWorks (with "View Full Guide →" link) + accordion QA (9 items) + multi-section About (Why/Privacy/MindRose/Contact with email copy & social links + "View Changelog →" link, scroll-reveal)
+│   ├── TitleBar.tsx          # Shared sticky top nav: logo + app name + Agnes sister-project pill (with tracked UTM link) + GitHub icon + guideline book icon + changelog clock icon + LanguageSwitcher + ThemeSwitcher (all icon tooltips use i18n)
+│   ├── FooterBar.tsx         # Shared footer: thin divider + "Related Tools" sister-project links row (Agnes tool + Agnes repo + TOOL_SERIES_NAME) + copyright + guideline link + privacy link + terms link + changelog link + GitHub link + version (props: animate, sectionRef)
+│   ├── LandingPage.tsx       # Pre-upload landing: Hero with theme-aware bg images + Upload + Sister Project section (Agnes AI cross-link) + HowItWorks (with "View Full Guide →" link) + accordion QA (9 items) + multi-section About (Why/Privacy/MindRose/Contact with email copy & social links + "View Changelog →" link, scroll-reveal)
 │   ├── LandingContent.tsx    # Server-rendered <noscript> fallback: HowItWorks + QA (9 items) + expanded multi-section About for SEO crawlers
 │   ├── GuidelinePage.tsx     # Full interactive user guide page: bilingual content blocks (h1–h6, p, blockquote, tables, ul/ol), screenshot embedding with locale-aware image switching, dynamic table-of-contents, scroll-reveal sections (1660 lines of structured guide content)
 │   ├── PrivacyPage.tsx        # Privacy policy page: bilingual content (7 sections), JSON-LD WebPage schema, Apple-minimalist legal-text layout, back-to-home link + FooterBar, GitHub source link for transparency verification
@@ -68,11 +68,12 @@ src/
     ├── parser.ts            # Papa Parse CSV pipeline (parse → pivot → join → computeKeyStats)
     ├── concatFiles.ts       # Multi-month CSV pairing & concatenation + ZIP extraction (JSZip) + 50MB upload size limit
     ├── format.ts            # Locale-aware formatCost / formatTokens / formatPercent / formatCostFull / formatTokensFull
-    ├── schema.ts            # JSON-LD structured data: SoftwareApplication + FAQPage + BreadcrumbList + Organization (bilingual en/zh, versioned)
+    ├── schema.ts            # JSON-LD structured data: SoftwareApplication + FAQPage + BreadcrumbList + Organization (bilingual en/zh, versioned, uses sisterProjects for site URLs, GitHub links, sameAs array, and brand)
     ├── DataContext.tsx       # Data state + model filter (selectedModel, filteredResult, filterResult)
     ├── ProjectConfigContext.tsx  # Custom project grouping config: drag-and-drop key assignment, localStorage persistence, uncategorized fallback, reset-to-default
     ├── shareCardData.ts     # Share card data extraction: extracts per-tab summary data (OverviewShareData, ProjectShareData, KeyShareData, CacheShareData, TrendsShareData) from ParseResult
     ├── analytics.ts         # GA4 event tracking helper: trackEvent(name, params?) with gtag guard and error catch
+    ├── sisterProjects.ts    # Sister project cross-linking config: Agnes/DeepSeek brand info, tracked URLs with UTM params, TOOL_SERIES_NAME, buildTrackedSisterUrl()
     └── ThemeContext.tsx      # Light/dark theme context + useTheme hook + localStorage + system preference
 
 public/
@@ -119,8 +120,8 @@ public/
 Multi-layered SEO for a client-rendered static SPA:
 - **Build-time**: `robots.ts` + `sitemap.ts` (Next.js 16 `MetadataRoute` conventions) generate `/robots.txt` and `/sitemap.xml` (includes `/`, `/guideline`, `/privacy`, `/terms`, `/changelog`). Site URL from `NEXT_PUBLIC_SITE_URL` env var (default: `https://deepseek-usage.xyz`).
 - **`generateMetadata()`**: `layout.tsx`, `guideline/page.tsx`, `privacy/page.tsx`, `terms/page.tsx`, `changelog/page.tsx` each generate canonical URL, OpenGraph (with `alternateLocale: ["zh_CN"]`), Twitter card, hreflang alternates, and robots directives.
-- **JSON-LD**: `src/lib/schema.ts` generates bilingual `SoftwareApplication` + `FAQPage` (9 Q&A) + `BreadcrumbList` — 6 `<script type="application/ld+json">` tags injected at build time. Privacy/terms pages each have client-rendered `WebPage` schema.
-- **`<noscript>` fallback**: `LandingContent.tsx` outputs How It Works, FAQ (9 items), About for crawlers that don't execute JS. `PrivacyContent.tsx`, `TermsContent.tsx`, and `ChangelogContent.tsx` provide bilingual `<noscript>` SEO fallbacks for legal pages and version history (EEAT trust signals).
+- **JSON-LD**: `src/lib/schema.ts` generates bilingual `SoftwareApplication` + `FAQPage` (9 Q&A) + `BreadcrumbList` + `Organization` — 8 `<script type="application/ld+json">` tags injected at build time. Organization schema includes `sameAs` links to both DeepSeek and Agnes GitHub repos, plus `brand: "API Usage Analyzer Series"`. Privacy/terms/changelog pages each have client-rendered `WebPage` schema. Site URLs, GitHub URLs, and tool branding are sourced from `src/lib/sisterProjects.ts`.
+- **`<noscript>` fallback**: `LandingContent.tsx` outputs How It Works, FAQ (9 items), About for crawlers that don't execute JS. `PrivacyContent.tsx`, `TermsContent.tsx`, and `ChangelogContent.tsx` provide bilingual `<noscript>` SEO fallbacks for legal pages and version history (EEAT trust signals). Note: the Sister Project section is NOT in `LandingContent.tsx` (marketing cross-link, not SEO-critical).
 - **Client enhancements**: Visible `<h1>` on landing, `sr-only` `<h1>` on dashboard, theme-aware hero images, `llms.txt` for LLM-friendly site description.
 
 ### Google Analytics
@@ -227,17 +228,51 @@ Keys are flat 2-level (`group.keyName`) in `src/i18n/translations.ts`. Do NOT ne
 
 | Group | Consumers |
 |---|---|
-| `app`, `tabs` (overview/projects/keys/cache/trends), `header`, `footer`, `modelFilter` | `Dashboard.tsx`, `TitleBar.tsx`, `FooterBar.tsx` |
+| `app`, `tabs` (overview/projects/keys/cache/trends), `header` (loadDifferent, clear, sisterProject, sisterProjectTitle), `footer` (text, version, relatedTools, sisterProject, visitSisterRepo), `modelFilter` | `Dashboard.tsx`, `TitleBar.tsx`, `FooterBar.tsx` |
 | `dropzone`, `error`, `warning` | `DropZone.tsx`, `ErrorDisplay.tsx` |
 | `kpi`, `overview`, `trends`, `cache`, `keys` | `KPICards.tsx`, `OverviewView.tsx`, `TrendsView.tsx`, `CacheView.tsx`, `KeyView.tsx` |
 | `projects` (22 keys: modal, drag-and-drop, validation) | `ProjectView.tsx` config modal |
 | `share` (18 keys: modal, inputs, toast, labels) | `ShareButton.tsx`, `ShareModal.tsx`, `ShareCard.tsx` |
-| `landing` (howItWorks, qaQ1–qaQ9, about*) | `LandingPage.tsx`, `LandingContent.tsx`, `schema.ts` |
+| `landing` (howItWorks, qaQ1–qaQ9, sisterBadge/sisterTitle/sisterDesc/sisterVisit/sisterRepo, about*) | `LandingPage.tsx`, `LandingContent.tsx`, `schema.ts` |
 | `guideline`, `privacy` (21 keys), `terms` (22 keys), `changelog` (10 keys), `meta`, `theme` | `GuidelinePage.tsx`, `PrivacyPage.tsx`, `TermsPage.tsx`, `ChangelogPage.tsx`, `layout.tsx`, `ThemeSwitcher.tsx` |
 
 ## Multi-month CSV & ZIP support (concatFiles)
 
 `src/lib/concatFiles.ts` — pairs files by `amount-{year}-{month}.csv` / `cost-{year}-{month}.csv` pattern. Only months with BOTH files are paired. First file keeps headers; subsequent headers stripped. Label: `"2026-5 ~ 2026-6"`. ZIP archives auto-detected and extracted via JSZip. `MAX_UPLOAD_SIZE_BYTES = 50 * 1024 * 1024` (50 MB) prevents ZIP bombs. Used by `DropZone.tsx` and `Dashboard.tsx`.
+
+## Sister Project Cross-Linking (v0.5.4)
+
+`src/lib/sisterProjects.ts` provides a centralized config module for cross-linking between the two sibling tools in the "API Usage Analyzer Series" product family (DeepSeek + Agnes). All cross-site links flow through this single module so UTM tracking, brand names, and URLs stay consistent.
+
+### Configuration
+
+- **`deepseekProject`**: Current tool's brand info — `name`, `siteUrl` (from `NEXT_PUBLIC_SITE_URL` or `"https://deepseek-usage.xyz"`), `githubUrl` (`"https://github.com/GavinCnod/deepseek-api-usage-analysis"`)
+- **`agnesProject`**: Sister tool's brand info — `name`, `siteUrl` (from `NEXT_PUBLIC_AGNES_SITE_URL` or falls back to GitHub URL), `githubUrl` (from `NEXT_PUBLIC_AGNES_GITHUB_URL` or `"https://github.com/GavinCnod/agnes-api-usage-analysis"`)
+- **`agnesProject.trackedSiteUrls`**: Pre-built UTM-tracked URLs for the Agnes site (header/landing/footer entry points), via `buildTrackedSisterUrl()` with `utm_source=agnes_site`, `utm_medium=referral`, and per-location `utm_campaign`
+- **`agnesProject.trackedRepoUrls`**: Same UTM-tracking for Agnes GitHub links (landing/footer entry points)
+- **`TOOL_SERIES_NAME`**: Brand constant — `"API Usage Analyzer Series"` — used in FooterBar and Organization JSON-LD
+
+### UTM tracking
+
+`buildTrackedSisterUrl(baseUrl, campaign)` appends:
+- `utm_source=agnes_site`
+- `utm_medium=referral`
+- `utm_campaign=<campaign>` (e.g., `sister_tool_header`, `sister_tool_landing`, `sister_tool_footer`, `sister_repo_landing`, `sister_repo_footer`)
+
+### Integration points
+
+| Consumer | Usage |
+|---|---|
+| `TitleBar.tsx` | Agnes pill button → `agnesProject.trackedSiteUrls.header` |
+| `LandingPage.tsx` | Sister Project section → `agnesProject.trackedSiteUrls.landing` + `agnesProject.trackedRepoUrls.landing` |
+| `FooterBar.tsx` | "Related Tools" row → `agnesProject.trackedSiteUrls.footer` + `agnesProject.trackedRepoUrls.footer` + `TOOL_SERIES_NAME`; GitHub link → `deepseekProject.githubUrl` |
+| `schema.ts` | Organization JSON-LD → `sameAs` array (both GitHub URLs + Agnes site URL), `brand: TOOL_SERIES_NAME`, `url: deepseekProject.siteUrl`, `SITE_URL` constant |
+
+### Environment variables
+
+- **`NEXT_PUBLIC_SITE_URL`**: Current site URL (default: `https://deepseek-usage.xyz`)
+- **`NEXT_PUBLIC_AGNES_SITE_URL`**: Agnes site URL (default: falls back to Agnes GitHub URL)
+- **`NEXT_PUBLIC_AGNES_GITHUB_URL`**: Agnes GitHub repo URL (default: `https://github.com/GavinCnod/agnes-api-usage-analysis`)
 
 ## Custom Project Grouping (By Project tab)
 
@@ -351,14 +386,15 @@ The app has two distinct page states managed by `Dashboard.tsx`:
 
 ### Landing page (pre-upload, `!result`)
 Rendered via `<LandingPage />` — scrollable single-page with:
-1. **TitleBar** — sticky top nav: logo + app name + GitHub + LanguageSwitcher + ThemeSwitcher
+1. **TitleBar** — sticky top nav: logo + app name + Agnes sister-project pill + GitHub + LanguageSwitcher + ThemeSwitcher
 2. **Hero** — centered title/subtitle (`pt-16 pb-10`), theme-aware bg decoration images (CSV sketch left, chart sketch right), `pointer-events-none`
 3. **Upload** — `<DropZone />` + `<ErrorDisplay />`
-4. **`<noscript>` fallback** — `LandingContent.tsx` for SEO crawlers (How It Works + FAQ + About)
-5. **How It Works** — 3-step grid with numbered circles, `id="how-it-works"`, "View Full Guide →" link, `content-visibility: auto`
-6. **QA** — 9-item accordion (`id="faq"`, `max-w-2xl`): Q5=$0 cost, Q6=incomplete upload, Q7=user guide, Q8=file size limit, Q9=project grouping. Accessible: `aria-expanded`/`aria-controls`, keyboard Enter/Space, inline `max-height`/`opacity` transition
-7. **About** — `id="about"`, 4 subsections (Why/Privacy/MindRose/Contact) with email copy + social link pills + "View Changelog →" link, `content-visibility: auto`
-8. **FooterBar** — with `animate` prop for scroll-reveal
+4. **Sister Project** — Agnes AI cross-link section: badge ("Sister Project"), title, description, two action links (open Agnes analyzer site, view GitHub repo) with tracked UTM URLs
+5. **`<noscript>` fallback** — `LandingContent.tsx` for SEO crawlers (How It Works + FAQ + About)
+6. **How It Works** — 3-step grid with numbered circles, `id="how-it-works"`, "View Full Guide →" link, `content-visibility: auto`
+7. **QA** — 9-item accordion (`id="faq"`, `max-w-2xl`): Q5=$0 cost, Q6=incomplete upload, Q7=user guide, Q8=file size limit, Q9=project grouping. Accessible: `aria-expanded`/`aria-controls`, keyboard Enter/Space, inline `max-height`/`opacity` transition
+8. **About** — `id="about"`, 4 subsections (Why/Privacy/MindRose/Contact) with email copy + social link pills + "View Changelog →" link, `content-visibility: auto`
+9. **FooterBar** — with `animate` prop for scroll-reveal
 
 Sections separated by thin `<hr>` (`var(--border)`). `.reveal-section` + Intersection Observer (15% threshold, one-shot, fade-in + slide-up). Respects `prefers-reduced-motion`.
 
@@ -375,10 +411,11 @@ Rendered inline in `Dashboard.tsx` with:
 **TitleBar** (`src/components/TitleBar.tsx`):
 - Sticky top bar with `z-50`, thin bottom border (`var(--border)`)
 - Left: logo (`next/image`, 32×32, unoptimized for static export) + app title (`t.app.title`) in bold
-- Right: GitHub icon link (SVG, `w-8 h-8` circle hover background) + guideline book icon (Link to `/guideline`, i18n `aria-label`/`title`) + changelog clock icon (Link to `/changelog`, i18n `aria-label`/`title`) + `<LanguageSwitcher />` + `<ThemeSwitcher />`
+- Right: Agnes sister-project pill button (hidden on mobile via `hidden md:inline-flex`, tracked UTM link, i18n `aria-label`/`title`) + GitHub icon link (SVG, `w-8 h-8` circle hover background) + guideline book icon (Link to `/guideline`, i18n `aria-label`/`title`) + changelog clock icon (Link to `/changelog`, i18n `aria-label`/`title`) + `<LanguageSwitcher />` + `<ThemeSwitcher />`
 - Used by both `LandingPage` and `Dashboard`
 
 **FooterBar** (`src/components/FooterBar.tsx`):
+- "Related Tools" row: label + Agnes tool link + Agnes repo link + `TOOL_SERIES_NAME` (all with tracked UTM URLs, sourced from `sisterProjects.ts`)
 - Thin HR divider + centered muted text + guideline link (`t.guideline.pageTitle`) + privacy link (`t.privacy.pageTitle`) + terms link (`t.terms.pageTitle`) + changelog link (`t.changelog.pageTitle`) + GitHub link + version number
 - Text from `t.footer.text`, version from `t.footer.version`
 - Links separated by `·` dividers; privacy and terms links point to `/privacy` and `/terms` respectively
@@ -436,3 +473,5 @@ Apple-style underline tabs: `text-xs font-semibold uppercase tracking-wide`, 2px
 - **Adding a new page with independent SEO metadata**: Create a route directory under `src/app/` (e.g., `privacy/`), add `page.tsx` with its own `generateMetadata()` (canonical URL, OpenGraph, Twitter, robots), create the page component in `src/components/`, add the URL to `src/app/sitemap.ts`, and add translation keys to the `translations.ts` file. For structured content pages, consider adding JSON-LD schema (e.g., `WebPage`) in the client component. Add navigation links to `FooterBar.tsx`.
 - **Adding a `<noscript>` SEO fallback for a page**: Create a `*Content.tsx` component that outputs the page's key bilingual text content wrapped in `<noscript>` with `<section lang="en">` and `<section lang="zh">` blocks. Import translations at module scope from `@/i18n/translations`. Include the component in the page's `page.tsx` alongside the client component. This ensures crawlers that don't execute JS can still index the page content (EEAT trust signals). See `PrivacyContent.tsx`, `TermsContent.tsx`, and `ChangelogContent.tsx` for the pattern.
 - **Adding Google Analytics to a page**: GA is injected globally in `layout.tsx` — no per-page setup needed. To track page-views on client-side navigations, call `gtag('config', GA_ID, { page_path: ... })` in a `useEffect`. Set `NEXT_PUBLIC_GA_ID` in deployment environment; leave unset locally to disable tracking.
+- **Adding or updating a sister project link**: Edit `src/lib/sisterProjects.ts` — it centralizes all brand info (names, URLs, GitHub repos) and tracked UTM URLs for the "API Usage Analyzer Series" product family. Add new `trackedSiteUrls` or `trackedRepoUrls` entries via `buildTrackedSisterUrl(baseUrl, campaign)` for new cross-link entry points. The module is consumed by `TitleBar.tsx`, `LandingPage.tsx`, `FooterBar.tsx`, and `schema.ts`. New env vars (`NEXT_PUBLIC_AGNES_SITE_URL`, `NEXT_PUBLIC_AGNES_GITHUB_URL`) follow the same opt-in pattern as `NEXT_PUBLIC_SITE_URL`.
+- **Adding a new tool to the product family**: Update `TOOL_SERIES_NAME` in `sisterProjects.ts`, add a new project export object following the `deepseekProject`/`agnesProject` pattern, add env var fallbacks, update Organization JSON-LD `sameAs` + `brand` in `schema.ts`, and add cross-links in `TitleBar.tsx`, `LandingPage.tsx`, and `FooterBar.tsx`.

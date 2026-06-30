@@ -41,7 +41,8 @@
 - **Apple 极简设计** — 冷灰纸质感底、大量留白、「无卡片」通栏模块布局、细横线分割、5rem Hero 大数字、弥散阴影
 - **100% 隐私** — 所有 CSV 解析（Papa Parse）、ZIP 解压（JSZip）和费用计算均在浏览器客户端完成；项目配置仅存储于浏览器的 localStorage 中
 - **SEO 优化** — 服务端渲染元数据（规范 URL、OpenGraph 含 alternateLocale、Twitter 卡片）、JSON-LD 结构化数据（SoftwareApplication + FAQPage + BreadcrumbList，双语）、robots.txt + sitemap.xml、`<noscript>` 爬虫回退内容、支持锚点链接的落地页板块、`llms.txt` 面向 LLM 的站点描述
-- **落地页** — 完整的上传前落地页，包含主题感知背景图片、使用说明步骤、手风琴常见问题（9 项，含文件大小限制和项目分组）、多板块关于页面（项目起源、隐私与技术、团队介绍、商业合作含邮箱复制与社交链接 +「查看更新日志 →」链接）、滚动渐显动画、支持锚点链接的板块与延迟渲染性能优化
+- **姊妹项目交叉链接** — 集中化的 `sisterProjects.ts` 模块管理「API Usage Analyzer Series」产品矩阵中两个姐妹工具（DeepSeek + Agnes）之间的交叉链接。所有跨站 URL 均通过统一配置来源流转，并附带 UTM 追踪（`utm_source=agnes_site`、`utm_medium=referral`、按位置区分的 `utm_campaign`）。姊妹项目链接出现在 TitleBar（胶囊按钮）、LandingPage（专属区段）、FooterBar（「姊妹工具」行）以及 Organization JSON-LD Schema 中。
+- **落地页** — 完整的上传前落地页，包含主题感知背景图片、姊妹项目区段（Agnes AI 交叉链接，含 UTM 追踪 URL）、使用说明步骤、手风琴常见问题（9 项，含文件大小限制和项目分组）、多板块关于页面（项目起源、隐私与技术、团队介绍、商业合作含邮箱复制与社交链接 +「查看更新日志 →」链接）、滚动渐显动画、支持锚点链接的板块与延迟渲染性能优化
 - **用户操作手册** — 位于 `/guideline` 的完整双语使用指南，包含标注截图、交互式目录导航、分步仪表盘操作说明、CSV 导出指引、图表解读和故障排查章节
 - **更新日志** — 位于 `/changelog` 的专属页面，展示 v0.1.0 至 v0.5.4 的完整版本历史，按类别（新增/改进/修复/依赖变更）以彩色圆点分组；Apple 极简双语设计，与隐私政策/使用条款风格一致，含 JSON-LD WebPage 结构化数据、独立 SEO 元数据，可从 TitleBar、FooterBar 和落地页访问
 - **隐私政策与使用条款** — `/privacy` 和 `/terms` 页面，包含双语法务内容、独立 SEO 元数据（规范 URL、OpenGraph、Twitter 卡片）、JSON-LD WebPage Schema 以及 Apple 极简风格的法律文本布局；每页页脚均有导航链接
@@ -121,9 +122,9 @@ src/
 │   ├── robots.ts           # 构建时 robots.txt 生成
 │   └── sitemap.ts          # 构建时 sitemap.xml 生成（含 /、/guideline、/privacy、/terms、/changelog 条目）
 ├── components/
-│   ├── TitleBar.tsx         # 共享顶部导航栏（Logo + 应用名 + GitHub + 操作手册书籍图标 + 更新日志时钟图标 + 语言 + 主题）
-│   ├── FooterBar.tsx        # 共享页脚（版权 + 操作手册链接 + 隐私政策链接 + 使用条款链接 + 更新日志链接 + GitHub 链接 + 版本号，可选渐显动画）
-│   ├── LandingPage.tsx      # 落地页（Hero 含主题背景图 + 上传 + 使用说明含「查看完整指南」链接 + 手风琴FAQ + 关于，滚动渐显）
+│   ├── TitleBar.tsx         # 共享顶部导航栏（Logo + 应用名 + Agnes 姊妹项目胶囊按钮 + GitHub + 操作手册书籍图标 + 更新日志时钟图标 + 语言 + 主题）
+│   ├── FooterBar.tsx        # 共享页脚（「姊妹工具」交叉链接行 + 版权 + 操作手册链接 + 隐私政策链接 + 使用条款链接 + 更新日志链接 + GitHub 链接 + 版本号，可选渐显动画）
+│   ├── LandingPage.tsx      # 落地页（Hero 含主题背景图 + 姊妹项目区段 + 上传 + 使用说明含「查看完整指南」链接 + 手风琴FAQ + 关于，滚动渐显）
 │   ├── LandingContent.tsx   # 服务端渲染 <noscript> 回退内容，供搜索引擎爬虫抓取
 │   ├── GuidelinePage.tsx    # 完整交互式用户操作手册（双语、标注截图、目录导航、滚动渐显）
 │   ├── PrivacyPage.tsx      # 隐私政策页（双语 7 章节法律文本，JSON-LD WebPage Schema，GitHub 源码链接）
@@ -161,6 +162,7 @@ src/
     ├── ProjectConfigContext.tsx # 自定义项目分组配置（拖拽分配，localStorage 持久化）
     ├── shareCardData.ts     # 分享卡片数据提取（从 ParseResult 提取各标签页汇总数据）
     ├── analytics.ts         # GA4 事件追踪辅助函数（共享 gtag 封装，含守卫逻辑）
+    ├── sisterProjects.ts    # 姊妹项目交叉链接配置（Agnes/DeepSeek 品牌信息，含 UTM 参数的追踪链接）
     └── ThemeContext.tsx     # 主题状态 + useTheme Hook
 ├── __tests__/
 │   ├── analytics.test.ts    # trackEvent 单元测试
@@ -204,7 +206,7 @@ npm run build
 # out/ → Vercel, Netlify, GitHub Pages, Cloudflare Pages 等
 ```
 
-设置 `NEXT_PUBLIC_SITE_URL` 环境变量为你的生产环境域名，以确保正确的规范 URL、站点地图和 OpenGraph 元数据。可选择性设置 `NEXT_PUBLIC_GA_ID` 为 Google Analytics 4 测量 ID 以启用页面浏览追踪。
+设置 `NEXT_PUBLIC_SITE_URL` 环境变量为你的生产环境域名，以确保正确的规范 URL、站点地图和 OpenGraph 元数据。可选择性设置 `NEXT_PUBLIC_GA_ID` 为 Google Analytics 4 测量 ID 以启用页面浏览追踪。如需姊妹项目交叉链接，可设置 `NEXT_PUBLIC_AGNES_SITE_URL`（Agnes 站点地址）和 `NEXT_PUBLIC_AGNES_GITHUB_URL`（Agnes GitHub 仓库地址）。
 
 ### Vercel 部署
 
@@ -216,6 +218,10 @@ npm run build
 ## 更新日志
 
 ### v0.5.4
+
+**新增：**
+
+- 姊妹项目交叉链接 — 集中化的 `src/lib/sisterProjects.ts` 模块，管理「API Usage Analyzer Series」产品矩阵（DeepSeek + Agnes）的交叉链接。TitleBar 新增 Agnes AI 胶囊按钮、LandingPage 新增专属姊妹项目区段、FooterBar 新增「姊妹工具」行、扩展 Organization JSON-LD Schema（`sameAs` + `brand`）。所有跨站链接均附带 UTM 追踪（`utm_source=agnes_site`、`utm_medium=referral`、按位置区分的 `utm_campaign`）。
 
 **改进：**
 

@@ -22,6 +22,8 @@
 - [DeepSeek Platform](https://platform.deepseek.com) — Official DeepSeek API platform (data source)
 - [MindRose](https://www.mindrose.xyz) — Built by Gavin Chen & the MindRose team
 - [LinkedIn — Gavin Chen](https://www.linkedin.com/in/gavinchensongwen3188536a) — Author's LinkedIn profile
+- [Sister Project Repository (Agnes Usage Analysis)]: https://github.com/GavinCnod/agnes-api-usage-analysis
+- [Sister Project (Agnes Usage Analysis)]: https://github.com/GavinCnod/agnes-api-usage-analysis
 
 ## Optional
 

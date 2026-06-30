@@ -41,7 +41,8 @@ If you also analyze Agnes AI usage, check the companion open-source project in t
 - **Apple-minimalist design** — Cold gray paper-texture background, generous whitespace, "no-card" full-width modules, thin horizontal dividers, 5rem hero numbers, diffuse shadows
 - **100% private** — All CSV parsing (Papa Parse), ZIP extraction (JSZip), and cost computation runs client-side; project configuration stored in your browser's localStorage only
 - **SEO optimized** — Server-rendered metadata (canonical URLs, OpenGraph with alternateLocale, Twitter cards), JSON-LD structured data (SoftwareApplication + FAQPage + BreadcrumbList, bilingual), robots.txt + sitemap.xml, `<noscript>` crawler fallback content, anchor-linkable landing page sections, `llms.txt` for LLM-friendly site description
-- **Landing page** — Complete pre-upload landing with theme-aware background images, How It Works steps, accordion FAQ (9 items, including file size limits and project grouping), expanded multi-section About (project origin, privacy & tech, team, contact with email copy & social links + "View Changelog →" link), scroll-reveal animations, anchor-linkable sections with deferred rendering for performance
+- **Sister project cross-linking** — Centralized `sisterProjects.ts` module manages cross-links between the two sibling tools in the "API Usage Analyzer Series" product family (DeepSeek + Agnes). All cross-site URLs flow through a single config source with UTM tracking (`utm_source=agnes_site`, `utm_medium=referral`, per-location `utm_campaign`). Sister project links appear in the TitleBar (pill button), LandingPage (dedicated section), FooterBar ("Related Tools" row), and Organization JSON-LD schema.
+- **Landing page** — Complete pre-upload landing with theme-aware background images, Sister Project section (Agnes AI cross-link with tracked UTM URLs), How It Works steps, accordion FAQ (9 items, including file size limits and project grouping), expanded multi-section About (project origin, privacy & tech, team, contact with email copy & social links + "View Changelog →" link), scroll-reveal animations, anchor-linkable sections with deferred rendering for performance
 - **User Guide** — Comprehensive bilingual user manual at `/guideline` with annotated screenshots, interactive table of contents, step-by-step dashboard navigation, CSV export instructions, chart interpretation guide, and troubleshooting section
 - **Changelog** — Dedicated `/changelog` page with complete version history (v0.1.0–v0.5.4) organized by category (Added/Improved/Fixed/Dependencies) with color-coded dots; Apple-minimalist bilingual design matching privacy/terms pages, JSON-LD WebPage schema, independent SEO metadata, linked from TitleBar, FooterBar, and LandingPage
 - **Privacy Policy & Terms** — `/privacy` and `/terms` pages with bilingual legal content, independent SEO metadata (canonical, OpenGraph, Twitter), JSON-LD WebPage schemas, and Apple-minimalist legal-text layout; linked from footer on every page
@@ -121,9 +122,9 @@ src/
 │   ├── robots.ts           # Build-time robots.txt generation
 │   └── sitemap.ts          # Build-time sitemap.xml generation (includes /, /guideline, /privacy, /terms, /changelog)
 ├── components/
-│   ├── TitleBar.tsx         # Shared top nav bar (logo + app name + GitHub + guide book icon + changelog clock icon + language + theme)
-│   ├── FooterBar.tsx        # Shared footer (copyright + guideline link + privacy link + terms link + changelog link + GitHub link + version, optional animate/reveal)
-│   ├── LandingPage.tsx      # Landing page (Hero with theme images + Upload + HowItWorks + "View Full Guide" link + accordion QA + About, scroll-reveal)
+│   ├── TitleBar.tsx         # Shared top nav bar (logo + app name + Agnes sister-project pill + GitHub + guide book icon + changelog clock icon + language + theme)
+│   ├── FooterBar.tsx        # Shared footer ("Related Tools" sister-project links row + copyright + guideline link + privacy link + terms link + changelog link + GitHub link + version, optional animate/reveal)
+│   ├── LandingPage.tsx      # Landing page (Hero with theme images + Sister Project section + Upload + HowItWorks + "View Full Guide" link + accordion QA + About, scroll-reveal)
 │   ├── LandingContent.tsx   # Server-rendered <noscript> fallback for SEO crawlers
 │   ├── GuidelinePage.tsx    # Full interactive user guide (bilingual, annotated screenshots, table of contents, scroll-reveal)
 │   ├── PrivacyPage.tsx      # Privacy policy page (bilingual 7-section legal text, JSON-LD WebPage schema, GitHub source links)
@@ -161,6 +162,7 @@ src/
     ├── ProjectConfigContext.tsx # Custom project grouping config (drag-and-drop, localStorage persistence)
     ├── shareCardData.ts     # Share card data extraction (per-tab summary data from ParseResult)
     ├── analytics.ts         # GA4 event tracking helper (shared gtag wrapper with guard)
+    ├── sisterProjects.ts    # Sister project cross-linking config (Agnes/DeepSeek brand info, tracked URLs with UTM params)
     └── ThemeContext.tsx     # Theme state + useTheme hook
 ├── __tests__/
 │   ├── analytics.test.ts    # trackEvent unit tests
@@ -204,7 +206,7 @@ npm run build
 # out/ → Vercel, Netlify, GitHub Pages, Cloudflare Pages, etc.
 ```
 
-Set `NEXT_PUBLIC_SITE_URL` to your production domain for correct canonical URLs, sitemap, and OpenGraph metadata. Optionally set `NEXT_PUBLIC_GA_ID` to your Google Analytics 4 measurement ID for page-view tracking.
+Set `NEXT_PUBLIC_SITE_URL` to your production domain for correct canonical URLs, sitemap, and OpenGraph metadata. Optionally set `NEXT_PUBLIC_GA_ID` to your Google Analytics 4 measurement ID for page-view tracking. For sister project cross-linking, set `NEXT_PUBLIC_AGNES_SITE_URL` (Agnes site URL) and `NEXT_PUBLIC_AGNES_GITHUB_URL` (Agnes GitHub repo URL).
 
 ### Vercel Deployment
 
@@ -216,6 +218,10 @@ The repo includes `vercel.json` with pre-configured security headers and caching
 ## Changelog
 
 ### v0.5.4
+
+**Added:**
+
+- Sister project cross-linking — centralized `src/lib/sisterProjects.ts` module for the "API Usage Analyzer Series" product family (DeepSeek + Agnes). Agnes AI pill button in TitleBar, dedicated Sister Project section on LandingPage, "Related Tools" row in FooterBar, and expanded Organization JSON-LD schema (`sameAs` + `brand`). All cross-site links include UTM tracking (`utm_source=agnes_site`, `utm_medium=referral`, per-location `utm_campaign`).
 
 **Improved:**
 
