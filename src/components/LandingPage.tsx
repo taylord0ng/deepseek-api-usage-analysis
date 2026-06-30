@@ -9,6 +9,7 @@ import FooterBar from "./FooterBar";
 import DropZone from "./DropZone";
 import ErrorDisplay from "./ErrorDisplay";
 import LandingContent from "./LandingContent";
+import { agnesProject } from "@/lib/sisterProjects";
 
 /**
  * Landing 页面 - 上传前的完整落地页
@@ -191,6 +192,72 @@ export default function LandingPage() {
             <ErrorDisplay />
           </section>
         </div>
+
+
+        <section
+          className="pb-12 reveal-section"
+          ref={(el) => {
+            sectionRefs.current[2] = el;
+          }}
+        >
+          <div
+            className="mx-auto max-w-3xl rounded-[28px] px-6 py-6 md:px-8"
+            style={{
+              background: "var(--bg-surface)",
+              border: "1px solid var(--border)",
+              boxShadow: "var(--shadow-card)",
+            }}
+          >
+            <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
+              <div className="max-w-2xl">
+                <p
+                  className="mb-2 text-[11px] font-semibold uppercase tracking-[0.24em]"
+                  style={{ color: "var(--text-tertiary)" }}
+                >
+                  {t.landing.sisterBadge}
+                </p>
+                <h2
+                  className="text-xl font-semibold tracking-tight text-pretty"
+                  style={{ color: "var(--text-primary)", letterSpacing: "-0.03em" }}
+                >
+                  {t.landing.sisterTitle}
+                </h2>
+                <p
+                  className="mt-2 max-w-xl text-sm leading-relaxed text-pretty"
+                  style={{ color: "var(--text-secondary)" }}
+                >
+                  {t.landing.sisterDesc}
+                </p>
+              </div>
+              <div className="flex flex-wrap items-center gap-3">
+                <a
+                  href={agnesProject.trackedSiteUrls.landing}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center rounded-full px-4 py-2 text-sm font-medium transition-all duration-200 hover:opacity-85"
+                  style={{
+                    background: "var(--text-primary)",
+                    color: "var(--bg)",
+                  }}
+                >
+                  {t.landing.sisterVisit}
+                </a>
+                <a
+                  href={agnesProject.trackedRepoUrls.landing}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center rounded-full px-4 py-2 text-sm font-medium transition-all duration-200 hover:bg-[var(--bg-surface-hover)]"
+                  style={{
+                    color: "var(--text-secondary)",
+                    border: "1px solid var(--border)",
+                  }}
+                >
+                  {t.landing.sisterRepo}
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
 
         {/* ============================================================ */}
         {/* 使用说明                                                       */}

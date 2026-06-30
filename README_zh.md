@@ -8,6 +8,13 @@
 
 > [English version](README.md)
 
+## 姊妹项目
+
+如果你也在分析 Agnes AI 的调用与成本，可以继续查看同一产品矩阵下的配套开源项目：
+
+- GitHub：[Agnes AI Usage Analytics Repo](https://github.com/GavinCnod/agnes-api-usage-analysis)
+- 网站：[Agnes AI Usage Analytics](https://agnes-usage.xyz)
+
 ## 使用方式
 
 1. 前往 [DeepSeek 平台](https://platform.deepseek.com) → 用量 → 导出月度数据

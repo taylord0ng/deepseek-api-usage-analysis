@@ -5,6 +5,7 @@
  * 在 LandingPage 客户端组件中根据当前 locale 动态渲染。
  */
 import type { Locale } from "@/i18n/translations";
+import { agnesProject, deepseekProject, TOOL_SERIES_NAME } from "@/lib/sisterProjects";
 
 /* ------------------------------------------------------------------ */
 /*  多语言翻译映射                                                       */
@@ -14,8 +15,7 @@ import type { Locale } from "@/i18n/translations";
 const APP_VERSION = "0.5.4";
 
 /** 站点公开 URL */
-const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL || "https://deepseek-usage.xyz";
+const SITE_URL = deepseekProject.siteUrl;
 
 /** SoftwareApplication Schema 翻译 */
 const softwareAppSchema: Record<
@@ -250,6 +250,13 @@ const organizationSchema: Record<Locale, { name: string; description: string }> 
  */
 export function buildOrganizationJsonLd(locale: Locale): Record<string, unknown> {
   const t = organizationSchema[locale];
+  const sameAs = Array.from(
+    new Set([
+      deepseekProject.githubUrl,
+      agnesProject.githubUrl,
+      agnesProject.siteUrl,
+    ])
+  );
   return {
     "@context": "https://schema.org",
     "@type": "Organization",
@@ -257,6 +264,7 @@ export function buildOrganizationJsonLd(locale: Locale): Record<string, unknown>
     url: SITE_URL,
     logo: `${SITE_URL}/ds-usage-logo.png`,
     description: t.description,
-    sameAs: ["https://github.com/GavinCnod/deepseek-api-usage-analysis"],
+    sameAs,
+    brand: TOOL_SERIES_NAME,
   };
 }

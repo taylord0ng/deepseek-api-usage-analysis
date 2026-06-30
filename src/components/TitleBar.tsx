@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useTranslation } from "@/i18n";
 import LanguageSwitcher from "./LanguageSwitcher";
 import ThemeSwitcher from "./ThemeSwitcher";
+import { agnesProject, deepseekProject } from "@/lib/sisterProjects";
 
 /**
  * GitHub 图标 SVG
@@ -63,7 +64,21 @@ export default function TitleBar() {
         </div>
         <div className="flex items-center gap-3">
           <a
-            href="https://github.com/GavinCnod/deepseek-api-usage-analysis"
+            href={agnesProject.trackedSiteUrls.header}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hidden md:inline-flex items-center rounded-full px-3 py-1.5 text-xs font-medium transition-all duration-200 hover:bg-[var(--bg-surface-hover)]"
+            style={{
+              color: "var(--text-secondary)",
+              border: "1px solid var(--border)",
+            }}
+            aria-label={t.header.sisterProjectTitle}
+            title={t.header.sisterProjectTitle}
+          >
+            {t.header.sisterProject}
+          </a>
+          <a
+            href={agnesProject.githubUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center justify-center w-8 h-8 rounded-full transition-all duration-200 hover:bg-[var(--border)]"

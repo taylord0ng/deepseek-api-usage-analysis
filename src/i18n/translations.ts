@@ -16,12 +16,17 @@ const translations = {
       trends: "Trends",
     },
     header: {
-      loadDifferent: "Load different files",
+      loadDifferent: "Load different file",
       clear: "Clear",
+      sisterProject: "Agnes AI Tool",
+      sisterProjectTitle: "Visit the sister Agnes AI usage analyzer",
     },
     footer: {
-      text: "DeepSeek API Usage Analytics Dashboard by Gavin & Mindrose Team · Data processed locally in your browser · ",
+      text: "Deepseek AI Usage Analytics Dashboard by Gavin & Mindrose Team · Data processed locally in your browser · ",
       version: "Version",
+      relatedTools: "Related Tools",
+      sisterProject: "Agnes AI Usage Analytics",
+      visitSisterRepo: "Agnes Repo",
     },
     dropzone: {
       processing: "Processing CSVs\u2026",
@@ -284,6 +289,12 @@ const translations = {
       qaA8: "Yes, each file must be under 50 MB. This prevents malicious ZIP bombs from freezing your browser. DeepSeek monthly usage exports are typically under 1 MB, so this limit should never be an issue for normal use.",
       qaQ9: "Can I group API keys by custom projects?",
       qaA9: "Yes. Switch to the 'By Custom Projects' tab and click the gear icon to open the configuration panel. Drag API key names from the unassigned pool into your custom project groups. Your project configuration is saved in your browser's local storage.",
+      sisterBadge: "Sister Project",
+      sisterTitle: "Also using Agnes AI API?",
+      sisterDesc:
+        "Open the dedicated Agnes AI usage analyzer to review token spend, model distribution, and trends with a matching browser-side workflow.",
+      sisterVisit: "Open Agnes AI Analyzer",
+      sisterRepo: "View GitHub Repo",
       aboutSectionTitle: "About",
       aboutWhyTitle: "Why We Built This",
       aboutWhyDesc:
@@ -321,10 +332,15 @@ const translations = {
     header: {
       loadDifferent: "加载其他文件",
       clear: "清除",
+      sisterProject: "Agnes AI 工具",
+      sisterProjectTitle: "前往姊妹项目 Agnes AI 用量分析器",
     },
     footer: {
       text: "DeepSeek API 用量分析仪表盘 · 数据仅在浏览器本地处理 · ",
       version: "版本",
+      relatedTools: "姊妹工具",
+      sisterProject: "Agnes AI 用量分析器",
+      visitSisterRepo: "Agnes AI 仓库",
     },
     dropzone: {
       processing: "正在处理 CSV\u2026",
@@ -585,6 +601,12 @@ const translations = {
       qaA8: "有，单个文件不能超过 50 MB。这是为了防止恶意 ZIP 炸弹导致浏览器卡死。DeepSeek 月度用量导出文件通常小于 1 MB，正常使用不会触发此限制。",
       qaQ9: "可以按自定义项目分组 API Key 吗？",
       qaA9: "可以。切换到「按自定义项目」标签页，点击齿轮图标打开配置面板。将 API Key 从「未分配 Key」区域拖拽到对应的自定义项目分组中即可。项目配置保存在浏览器本地存储中。",
+      sisterBadge: "姊妹项目",
+      sisterTitle: "你也在用 Agnes API 吗？",
+      sisterDesc:
+        "如果你还在同时分析 Agnes AI 的成本、模型分布与趋势，可以打开配套的 Agnes AI 专用分析器，继续沿用相同的纯浏览器工作流。",
+      sisterVisit: "打开 Agnes AI 分析器",
+      sisterRepo: "查看 GitHub 仓库",
       aboutSectionTitle: "关于我们",
       aboutWhyTitle: "为什么开发这个工具？",
       aboutWhyDesc:

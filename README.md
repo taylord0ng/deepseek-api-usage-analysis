@@ -8,6 +8,13 @@ A browser-side analytics dashboard for DeepSeek API usage. Drag your monthly CSV
 
 > [中文版](README_zh.md)
 
+## Sister Project
+
+If you also analyze Agnes AI usage, check the companion open-source project in the same tool family:
+
+- GitHub: [Agnes AI Usage Analytics Repo](https://github.com/GavinCnod/agnes-api-usage-analysis)
+- Website: [Agnes AI Usage Analytics](https://agnes-usage.xyz)
+
 ## How it works
 
 1. Go to [DeepSeek Platform](https://platform.deepseek.com) → Usage → Export monthly data
