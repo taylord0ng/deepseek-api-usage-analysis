@@ -262,7 +262,7 @@ export default function LandingPage() {
           className="pt-10 pb-12 reveal-section"
           style={{ contentVisibility: "auto" }}
           ref={(el) => {
-            sectionRefs.current[2] = el;
+            sectionRefs.current[3] = el;
           }}
         >
           <h2
@@ -345,7 +345,7 @@ export default function LandingPage() {
           className="pt-10 pb-12 reveal-section"
           style={{ contentVisibility: "auto" }}
           ref={(el) => {
-            sectionRefs.current[3] = el;
+            sectionRefs.current[4] = el;
           }}
         >
           <h2
@@ -434,7 +434,7 @@ export default function LandingPage() {
           className="pt-10 pb-16 reveal-section"
           style={{ contentVisibility: "auto" }}
           ref={(el) => {
-            sectionRefs.current[4] = el;
+            sectionRefs.current[6] = el; 
           }}
         >
           <h2
