@@ -200,61 +200,55 @@ export default function LandingPage() {
             sectionRefs.current[2] = el;
           }}
         >
-          <div
-            className="mx-auto max-w-3xl rounded-[28px] px-6 py-6 md:px-8"
-            style={{
-              background: "var(--bg-surface)",
-              border: "1px solid var(--border)",
-              boxShadow: "var(--shadow-card)",
-            }}
-          >
-            <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
-              <div className="max-w-2xl">
-                <p
-                  className="mb-2 text-[11px] font-semibold uppercase tracking-[0.24em]"
-                  style={{ color: "var(--text-tertiary)" }}
-                >
-                  {t.landing.sisterBadge}
-                </p>
-                <h2
-                  className="text-xl font-semibold tracking-tight text-pretty"
-                  style={{ color: "var(--text-primary)", letterSpacing: "-0.03em" }}
-                >
-                  {t.landing.sisterTitle}
-                </h2>
-                <p
-                  className="mt-2 max-w-xl text-sm leading-relaxed text-pretty"
-                  style={{ color: "var(--text-secondary)" }}
-                >
-                  {t.landing.sisterDesc}
-                </p>
-              </div>
-              <div className="flex flex-wrap items-center gap-3">
-                <a
-                  href={agnesProject.trackedSiteUrls.landing}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center rounded-full px-4 py-2 text-sm font-medium transition-all duration-200 hover:opacity-85"
-                  style={{
-                    background: "var(--text-primary)",
-                    color: "var(--bg)",
-                  }}
-                >
-                  {t.landing.sisterVisit}
-                </a>
-                <a
-                  href={agnesProject.trackedRepoUrls.landing}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center rounded-full px-4 py-2 text-sm font-medium transition-all duration-200 hover:bg-[var(--bg-surface-hover)]"
-                  style={{
-                    color: "var(--text-secondary)",
-                    border: "1px solid var(--border)",
-                  }}
-                >
-                  {t.landing.sisterRepo}
-                </a>
-              </div>
+          <div className="mx-auto max-w-2xl px-6 text-center">
+            <div
+              className="mx-auto mb-5 h-px w-12"
+              style={{ background: "var(--border)" }}
+              aria-hidden="true"
+            />
+            <p
+              className="text-[11px] font-semibold uppercase tracking-[0.24em]"
+              style={{ color: "var(--text-tertiary)" }}
+            >
+              {t.landing.sisterBadge}
+            </p>
+            <h2
+              className="mt-3 text-xl font-semibold tracking-tight text-pretty"
+              style={{ color: "var(--text-primary)", letterSpacing: "-0.03em" }}
+            >
+              {t.landing.sisterTitle}
+            </h2>
+            <p
+              className="mt-3 text-sm leading-relaxed text-pretty"
+              style={{ color: "var(--text-secondary)" }}
+            >
+              {t.landing.sisterDesc}
+            </p>
+            <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+              <a
+                href={agnesProject.trackedSiteUrls.landing}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 rounded-subtle px-3 py-1.5 text-sm font-medium transition-colors duration-200 hover:bg-[var(--bg-surface-hover)]"
+                style={{
+                  color: "var(--text-primary)",
+                  border: "1px solid var(--border)",
+                  background: "var(--bg-surface)",
+                }}
+              >
+                {t.landing.sisterVisit}
+                <span aria-hidden="true">→</span>
+              </a>
+              <a
+                href={agnesProject.trackedRepoUrls.landing}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 text-sm font-medium transition-colors duration-200 hover:opacity-80"
+                style={{ color: "var(--text-secondary)" }}
+              >
+                {t.landing.sisterRepo}
+                <span aria-hidden="true">→</span>
+              </a>
             </div>
           </div>
         </section>
