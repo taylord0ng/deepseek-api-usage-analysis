@@ -49,6 +49,46 @@ interface VersionEntry {
 /** 所有版本的更新日志，按版本倒序排列 */
 const CHANGELOG_DATA: VersionEntry[] = [
   {
+    version: "v0.6.0",
+    date: "2026-07-04",
+    added: [
+      {
+        en: "3 SEO landing pages — DeepSeek API Cost Tracker, Cache Hit Rate Analyzer, and Pricing Calculator (interactive slider + competitor pricing table). Each page has independent canonical/OG/Twitter SEO metadata, bilingual content, and commerce-oriented modules (affiliate recommendations, MindRose service CTA).",
+        zh: "3 个 SEO 落地页 — DeepSeek API 费用追踪器、缓存命中率分析器和价格计算器（交互式滑块 + 竞品定价对比表）。每个页面拥有独立的 canonical/OG/Twitter SEO 元数据、双语内容，以及商业化模块（联盟推荐、MindRose 服务导流 CTA）。",
+      },
+      {
+        en: "Blog infrastructure — blog index with 3-card grid + 3 bilingual articles: Context Caching Guide, Top 5 Cost Optimization Tools comparison, and OpenAI vs DeepSeek cost-benefit analysis. Structured content system (`ArticleRenderer` + `ArticleSection[]`) enables rapid article creation. All articles support EN/ZH switching.",
+        zh: "博客基础设施 — 博客首页 3 卡片网格 + 3 篇双语文章：上下文缓存终极指南、Top 5 成本优化工具横评、OpenAI vs DeepSeek 成本收益分析。结构化内容系统（`ArticleRenderer` + `ArticleSection[]`）支持快速创建新文章。所有文章支持中英文切换。",
+      },
+      {
+        en: "Affiliate marketing integration — centralized `affiliates.ts` config module (Vultr, DigitalOcean, Namecheap, OpenRouter referral URLs). Affiliate links added to tool pages and blog CTA areas with `rel=sponsored nofollow` compliance.",
+        zh: "联盟营销集成 — 集中化 `affiliates.ts` 配置模块（Vultr、DigitalOcean、Namecheap、OpenRouter 推荐链接）。联盟链接已加入工具页和博客 CTA 区域，使用 `rel=sponsored nofollow` 合规标注。",
+      },
+      {
+        en: "UTM-based conversion tracking funnel — `trackLandingCTA()`, `trackOutboundClick()`, `trackPageView()` helpers in analytics module. Full GA4 configuration guide at `docs/promotion/GA4_Tracking_Guide.md` with step-by-step setup instructions.",
+        zh: "基于 UTM 的转化追踪漏斗 — analytics 模块新增 `trackLandingCTA()`、`trackOutboundClick()`、`trackPageView()` 辅助函数。完整 GA4 配置指南位于 `docs/promotion/GA4_Tracking_Guide.md`，含逐步配置说明。",
+      },
+      {
+        en: "Blog navigation in TitleBar (pen icon) and FooterBar (text link). Logo in TitleBar now links to home page.",
+        zh: "TitleBar 新增博客导航（笔形图标），FooterBar 新增博客文字链接。TitleBar 中的 Logo 现在可点击回到首页。",
+      },
+    ],
+    improved: [
+      {
+        en: "Responsive TitleBar — mobile layout with `...` popover menu (Agnes, GitHub, Guideline, Blog, Changelog, Theme toggle). Clean logo + title + language switcher on mobile; full icon row on desktop.",
+        zh: "响应式 TitleBar — 移动端采用 `...` 弹出菜单（Agnes、GitHub、操作手册、博客、更新日志、主题切换）。移动端仅留 Logo + 标题 + 语言切换；桌面端完整图标行。",
+      },
+      {
+        en: "Enhanced icons — guideline now uses a compass icon (navigation/guide metaphor); blog uses a pen icon (writing/blog metaphor). Meanings are more distinct at small sizes.",
+        zh: "图标语义优化 — 操作手册改为指南针图标（导航/指南隐喻）；博客改为笔形图标（写作/博客隐喻）。小尺寸下含义更清晰。",
+      },
+      {
+        en: "SEO coverage — sitemap expanded from 5 to 12 entries (3 tool pages + blog index + 3 articles). llms.txt and llms-full.txt updated with all new pages. Page title optimized to include 'Cost Tracker' keyword. Blog index and all articles now have full generateMetadata().",
+        zh: "SEO 覆盖 — sitemap 从 5 条扩展至 12 条（3 个工具页 + 博客首页 + 3 篇文章）。llms.txt 和 llms-full.txt 已更新覆盖所有新页面。页面标题优化为包含 'Cost Tracker' 关键词。博客首页及所有文章现已具备完整的 generateMetadata()。",
+      },
+    ],
+  },
+  {
     version: "v0.5.4",
     date: "2026-06-24",
     improved: [

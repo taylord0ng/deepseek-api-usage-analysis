@@ -44,7 +44,7 @@ If you also analyze Agnes AI usage, check the companion open-source project in t
 - **Sister project cross-linking** — Centralized `sisterProjects.ts` module manages cross-links between the two sibling tools in the "API Usage Analyzer Series" product family (DeepSeek + Agnes). All cross-site URLs flow through a single config source with UTM tracking (`utm_source=agnes_site`, `utm_medium=referral`, per-location `utm_campaign`). Sister project links appear in the TitleBar (pill button), LandingPage (dedicated section), FooterBar ("Related Tools" row), and Organization JSON-LD schema.
 - **Landing page** — Complete pre-upload landing with theme-aware background images, Sister Project section (Agnes AI cross-link with tracked UTM URLs), How It Works steps, accordion FAQ (9 items, including file size limits and project grouping), expanded multi-section About (project origin, privacy & tech, team, contact with email copy & social links + "View Changelog →" link), scroll-reveal animations, anchor-linkable sections with deferred rendering for performance
 - **User Guide** — Comprehensive bilingual user manual at `/guideline` with annotated screenshots, interactive table of contents, step-by-step dashboard navigation, CSV export instructions, chart interpretation guide, and troubleshooting section
-- **Changelog** — Dedicated `/changelog` page with complete version history (v0.1.0–v0.5.4) organized by category (Added/Improved/Fixed/Dependencies) with color-coded dots; Apple-minimalist bilingual design matching privacy/terms pages, JSON-LD WebPage schema, independent SEO metadata, linked from TitleBar, FooterBar, and LandingPage
+- **Changelog** — Dedicated `/changelog` page with complete version history (v0.1.0–v0.6.0) organized by category (Added/Improved/Fixed/Dependencies) with color-coded dots; Apple-minimalist bilingual design matching privacy/terms pages, JSON-LD WebPage schema, independent SEO metadata, linked from TitleBar, FooterBar, and LandingPage
 - **Privacy Policy & Terms** — `/privacy` and `/terms` pages with bilingual legal content, independent SEO metadata (canonical, OpenGraph, Twitter), JSON-LD WebPage schemas, and Apple-minimalist legal-text layout; linked from footer on every page
 - **Analytics** — Optional Google Analytics 4 integration via `NEXT_PUBLIC_GA_ID` env var; zero overhead when unset. Tracks page views, file uploads, share card generations, tab switches, and language switches — zero CSV data ever tracked.
 - **Enhanced SEO** — Twitter `summary_large_image` card with 1200×630 OG image, `Organization` JSON-LD schema for Google Knowledge Panel, expanded `BreadcrumbList` with all sub-pages, differentiated sitemap `lastModified` dates, `keywords` + `author` + `twitter:site`/`creator` meta tags on all pages
@@ -129,7 +129,7 @@ src/
 │   ├── GuidelinePage.tsx    # Full interactive user guide (bilingual, annotated screenshots, table of contents, scroll-reveal)
 │   ├── PrivacyPage.tsx      # Privacy policy page (bilingual 7-section legal text, JSON-LD WebPage schema, GitHub source links)
 │   ├── TermsPage.tsx        # Terms of use page (bilingual 8-section legal text, JSON-LD WebPage schema, MIT License reference)
-│   ├── ChangelogPage.tsx     # Changelog page (complete version history v0.1.0–v0.5.4, entries by category with colored dots, JSON-LD WebPage schema, bilingual)
+│   ├── ChangelogPage.tsx     # Changelog page (complete version history v0.1.0–v0.6.0, entries by category with colored dots, JSON-LD WebPage schema, bilingual)
 │   ├── PrivacyContent.tsx    # <noscript> SEO fallback: bilingual privacy policy for crawlers
 │   ├── TermsContent.tsx      # <noscript> SEO fallback: bilingual terms of use for crawlers
 │   ├── ChangelogContent.tsx  # <noscript> SEO fallback: bilingual changelog version summary for crawlers
@@ -216,6 +216,24 @@ The repo includes `vercel.json` with pre-configured security headers and caching
 - **Caching**: immutable caching for `/_next/static` and `/fonts` (1 year), stale-while-revalidate for `/landing` and `/guideline` images (1 week)
 
 ## Changelog
+
+### v0.6.0
+
+**Added:**
+
+- 3 SEO landing pages — `CostTrackerPage`, `CacheAnalyzerPage`, and `PricingCalculatorPage` (interactive slider calculator + competitor pricing comparison table). Each page has independent canonical URL, OpenGraph with `summary_large_image`, Twitter card, hreflang, keywords, and bilingual content. Commerce-oriented modules include affiliate tool recommendations (Portkey, Helicone) and Vultr referral CTA.
+- Blog infrastructure — blog index with 3-card tag/description grid + 3 bilingual articles: *The Ultimate Guide to DeepSeek API Context Caching*, *Top 5 DeepSeek API Cost Optimization & Observability Tools*, and *OpenAI o3 vs DeepSeek V4 Pro: Cost-Benefit Analysis*. All articles support EN/ZH switching via `BlogArticlePage` → `ArticleRenderer` structured content system (`src/lib/content/articleCaching|articleTools|articleOpenai.ts`).
+- Affiliate marketing integration — centralized `src/lib/affiliates.ts` config module with Vultr, DigitalOcean, Namecheap, and OpenRouter referral URLs. Affiliate links added to landing pages and blog CTAs with `rel=sponsored nofollow`.
+- UTM-based conversion tracking funnel — `trackLandingCTA()`, `trackOutboundClick()`, `trackPageView()` helpers in `src/lib/analytics.ts`. Comprehensive GA4 configuration guide at `docs/promotion/GA4_Tracking_Guide.md`.
+- Blog navigation — pen icon button in TitleBar, text link in FooterBar between Changelog and GitHub. Logo in TitleBar now links to home page.
+- Bilingual blog index — article card titles, descriptions, and tags sourced from `blogIndex.*` translation keys (en/zh).
+
+**Improved:**
+
+- Responsive TitleBar — mobile layout uses `...` popover menu (Agnes, GitHub, Guideline, Blog, Changelog, Theme toggle). Desktop retains full icon row. Clean separation prevents overflow on 375px-wide screens.
+- Enhanced TitleBar icons — guideline now uses a compass icon (navigation metaphor), blog uses a pen icon (writing metaphor). Clearer semantic distinction at 16×16px.
+- SEO coverage — sitemap expanded from 5 to 12 entries, covering all new tool pages, blog index, and 3 articles. `llms.txt` and `llms-full.txt` updated with all new pages.
+- SEO metadata — page title optimized to `DeepSeek API Usage Dashboard & Cost Tracker | Free & Secure` with keywords-first strategy. All blog pages now have independent `generateMetadata()` (canonical, OG, Twitter, keywords, robots).
 
 ### v0.5.4
 

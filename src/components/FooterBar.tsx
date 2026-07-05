@@ -5,7 +5,7 @@ import { useTranslation } from "@/i18n";
 import { agnesProject, deepseekProject, TOOL_SERIES_NAME } from "@/lib/sisterProjects";
 
 /** 应用版本号，与 package.json 保持同步 */
-const APP_VERSION = "0.5.4";
+const APP_VERSION = "0.6.0";
 
 /**
  * FooterBar 属性

@@ -12,7 +12,7 @@ import { agnesProject, deepseekProject, TOOL_SERIES_NAME } from "@/lib/sisterPro
 /* ------------------------------------------------------------------ */
 
 /** 应用版本号，与 package.json 保持同步 */
-const APP_VERSION = "0.5.4";
+const APP_VERSION = "0.6.0";
 
 /** 站点公开 URL */
 const SITE_URL = deepseekProject.siteUrl;

@@ -129,7 +129,7 @@ src/
 │   ├── GuidelinePage.tsx    # 完整交互式用户操作手册（双语、标注截图、目录导航、滚动渐显）
 │   ├── PrivacyPage.tsx      # 隐私政策页（双语 7 章节法律文本，JSON-LD WebPage Schema，GitHub 源码链接）
 │   ├── TermsPage.tsx        # 使用条款页（双语 8 章节法律文本，JSON-LD WebPage Schema，MIT 许可证引用）
-│   ├── ChangelogPage.tsx     # 更新日志页（v0.1.0–v0.5.4 完整版本历史，按类别以彩色圆点分组，JSON-LD WebPage Schema，双语）
+│   ├── ChangelogPage.tsx     # 更新日志页（v0.1.0–v0.6.0 完整版本历史，按类别以彩色圆点分组，JSON-LD WebPage Schema，双语）
 │   ├── PrivacyContent.tsx    # <noscript> SEO 回退：双语隐私政策内容供爬虫抓取
 │   ├── TermsContent.tsx      # <noscript> SEO 回退：双语使用条款内容供爬虫抓取
 │   ├── ChangelogContent.tsx  # <noscript> SEO 回退：双语更新日志版本摘要供爬虫抓取
@@ -216,6 +216,24 @@ npm run build
 - **缓存**：`/_next/static` 和 `/fonts` 永久缓存（1 年），`/landing` 和 `/guideline` 图片 stale-while-revalidate 缓存（1 周）
 
 ## 更新日志
+
+### v0.6.0
+
+**新增：**
+
+- 3 个 SEO 落地页 — `CostTrackerPage`（费用追踪器）、`CacheAnalyzerPage`（缓存分析器）和 `PricingCalculatorPage`（交互式滑块计算器 + 竞品定价对比表）。每个页面拥有独立的 canonical URL、OpenGraph `summary_large_image`、Twitter 卡片、hreflang、关键词和双语内容。商业化模块包括联盟工具推荐（Portkey、Helicone）和 Vultr 推荐 CTA。
+- 博客基础设施 — 博客首页 3 卡片标签/描述网格 + 3 篇双语文章：《DeepSeek API 上下文缓存终极指南》、《Top 5 DeepSeek API 成本优化与可观测性工具》、《OpenAI o3 vs DeepSeek V4 Pro：成本收益分析》。所有文章通过 `BlogArticlePage` → `ArticleRenderer` 结构化内容系统（`src/lib/content/articleCaching|articleTools|articleOpenai.ts`）支持中英文切换。
+- 联盟营销集成 — 集中化 `src/lib/affiliates.ts` 配置模块，含 Vultr、DigitalOcean、Namecheap 和 OpenRouter 推荐链接。联盟链接已加入落地页和博客 CTA 区域，使用 `rel=sponsored nofollow` 合规标注。
+- 基于 UTM 的转化追踪漏斗 — `src/lib/analytics.ts` 新增 `trackLandingCTA()`、`trackOutboundClick()`、`trackPageView()` 辅助函数。完整的 GA4 配置指南位于 `docs/promotion/GA4_Tracking_Guide.md`。
+- 博客导航 — TitleBar 笔形图标按钮，FooterBar 中 Changelog 和 GitHub 之间新增文字链接。TitleBar 中的 Logo 现可点击回到首页。
+- 双语博客首页 — 文章卡片标题、描述和标签来自 `blogIndex.*` 翻译键（中英双语）。
+
+**改进：**
+
+- 响应式 TitleBar — 移动端采用 `...` 弹出菜单（Agnes、GitHub、操作手册、博客、更新日志、主题切换）。桌面端保留完整图标行。清晰分离避免 375px 宽屏幕溢出。
+- TitleBar 图标增强 — 操作手册改为指南针图标（导航隐喻），博客改为笔形图标（写作隐喻）。16×16px 尺寸下语义区分更明确。
+- SEO 覆盖 — sitemap 从 5 条扩展至 12 条，覆盖所有新工具页、博客首页和 3 篇文章。`llms.txt` 和 `llms-full.txt` 已更新覆盖所有新页面。
+- SEO 元数据 — 页面标题优化为 `DeepSeek API Usage Dashboard & Cost Tracker | Free & Secure`，关键词前置策略。所有博客页面现具备独立的 `generateMetadata()`（canonical、OG、Twitter、keywords、robots）。
 
 ### v0.5.4
 

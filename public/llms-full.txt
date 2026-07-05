@@ -1,6 +1,6 @@
 # DeepSeek API Usage Analytics Dashboard — Full Content
 
-> A free, privacy-first analytics tool for DeepSeek API users. Drop your monthly ZIP exports or CSV files and get instant cost analytics, cache analysis, and per-key breakdowns. Open source (MIT), bilingual (EN/中文), entirely browser-side. No account, no upload, no database. Built by Gavin Chen & the MindRose team. Version 0.5.4.
+> A free, privacy-first analytics tool for DeepSeek API users. Drop your monthly ZIP exports or CSV files and get instant cost analytics, cache analysis, and per-key breakdowns. Open source (MIT), bilingual (EN/中文), entirely browser-side. No account, no upload, no database. Built by Gavin Chen & the MindRose team. Version 0.6.0.
 
 ---
 
@@ -266,6 +266,22 @@ If you have questions about these Terms of Use, please open an issue on our GitH
 
 ### English
 
+**v0.6.0** (2026-07-04)
+
+*Added*
+- 3 SEO landing pages — DeepSeek API Cost Tracker, Cache Hit Rate Analyzer, and Pricing Calculator (interactive slider + competitor pricing table). Each with independent canonical/OG/Twitter SEO metadata and bilingual content.
+- Blog infrastructure — blog index + 3 bilingual articles: Context Caching Guide, Top 5 Cost Optimization Tools comparison, OpenAI vs DeepSeek cost-benefit analysis. Structured content system via ArticleRenderer.
+- Affiliate marketing integration — centralized `affiliates.ts` config (Vultr, DigitalOcean, Namecheap, OpenRouter). Links added with `rel=sponsored nofollow` compliance.
+- UTM-based conversion tracking funnel — `trackLandingCTA()`, `trackOutboundClick()`, `trackPageView()` helpers. Full GA4 config guide at docs/promotion/GA4_Tracking_Guide.md.
+- Blog navigation in TitleBar (pen icon) and FooterBar. Logo now links to home page.
+- Bilingual blog index — card titles/descriptions/tags from blogIndex translation keys.
+
+*Improved*
+- Responsive TitleBar — mobile `...` popover menu; desktop full icon row. No overflow on 375px screens.
+- Enhanced TitleBar icons — guideline uses compass icon, blog uses pen icon. Clearer semantics at 16px.
+- SEO coverage — sitemap expanded from 5 to 12 entries; llms.txt/llms-full.txt updated with all new pages.
+- SEO metadata — optimized page title with keywords-first strategy; all blog pages now have independent generateMetadata().
+
 **v0.5.4** (2026-06-24)
 
 *Improved*
@@ -342,6 +358,22 @@ If you have questions about these Terms of Use, please open an issue on our GitH
 ---
 
 ### 中文
+
+**v0.6.0**（2026-07-04）
+
+*新增*
+- 3 个 SEO 落地页 — DeepSeek API 费用追踪器、缓存命中率分析器和价格计算器（交互式滑块 + 竞品定价对比表）。每个页面拥有独立的 canonical/OG/Twitter SEO 元数据和双语内容。
+- 博客基础设施 — 博客首页 + 3 篇双语文章：上下文缓存指南、Top 5 成本优化工具横评、OpenAI vs DeepSeek 成本收益分析。通过 ArticleRenderer 结构化内容系统。
+- 联盟营销集成 — 集中化 affiliates.ts 配置模块（Vultr、DigitalOcean、Namecheap、OpenRouter）。链接使用 rel=sponsored nofollow 合规标注。
+- 基于 UTM 的转化追踪漏斗 — trackLandingCTA()、trackOutboundClick()、trackPageView() 辅助函数。完整 GA4 配置指南位于 docs/promotion/GA4_Tracking_Guide.md。
+- TitleBar 新增博客导航（笔形图标）和 FooterBar 博客文字链接。Logo 现在可点击回到首页。
+- 双语博客首页 — 文章卡片标题、描述和标签来自 blogIndex 翻译键。
+
+*改进*
+- 响应式 TitleBar — 移动端 ... 弹出菜单；桌面端完整图标行。375px 宽屏幕无溢出。
+- TitleBar 图标增强 — 操作手册使用指南针图标，博客使用笔形图标。16px 尺寸下语义更清晰。
+- SEO 覆盖 — sitemap 从 5 条扩展至 12 条；llms.txt/llms-full.txt 覆盖所有新页面。
+- SEO 元数据 — 标题优化为关键词前置策略；所有博客页面现具备独立的 generateMetadata()。
 
 **v0.5.4**（2026-06-24）
 
