@@ -1,5 +1,6 @@
 /** 文件说明：DeepSeek 缓存命中率分析页路由与 SEO 元数据。 */
 import type { Metadata } from "next";
+import { buildAuthorMetadata } from "@/lib/authors";
 import { CacheAnalyzerPage } from "@/components/CacheAnalyzerPage";
 
 const SITE_URL =
@@ -48,11 +49,14 @@ export function generateMetadata(): Metadata {
       "improve DeepSeek caching",
       "DeepSeek API cost optimization",
     ],
-    authors: [{ name: "Gavin & Mindrose Team" }],
+    ...buildAuthorMetadata(),
     robots: { index: true, follow: true },
   };
 }
 
+/**
+ * 渲染缓存命中率分析落地页路由。
+ */
 export default function CacheAnalyzerRoute() {
   return <CacheAnalyzerPage />;
 }

@@ -262,6 +262,29 @@ const translations = {
     blog: {
       pageTitle: "Blog",
     },
+    author: {
+      pageTitle: "Author",
+      pageSubtitle:
+        "Background, authorship, and public identity signals for the DeepSeek API Usage Analytics Dashboard project.",
+      intro:
+        "This page consolidates the people and team information behind the project, so readers and search engines can connect the product, blog content, and external profiles in one place.",
+      profileTitle: "Author Profile",
+      profileName: "Gavin Chen",
+      profileRole: "Builder of the DeepSeek API Usage Analytics Dashboard",
+      profileDesc:
+        "Gavin Chen leads product direction, technical implementation, and content strategy for this project, working together with the MindRose team on product delivery and consulting.",
+      verificationTitle: "Public Profiles & Verification",
+      teamMembersTitle: "Team Members",
+      teamMembersDesc:
+        "This section is intentionally reserved for future member profiles, including role, expertise, and public links as the team page expands.",
+      memberPlaceholderName: "More member profiles coming soon",
+      memberPlaceholderRole: "Reserved section",
+      memberPlaceholderDesc:
+        "When additional contributors are introduced, this block will list their responsibilities, background, and profile links.",
+      githubLabel: "Project GitHub Repository",
+      linkedInLabel: "Gavin's LinkedIn",
+      websiteLabel: "MindRose Website",
+    },
     blogIndex: {
       pageTitle: "DeepSeek API Blog",
       pageSubtitle:
@@ -308,6 +331,47 @@ const translations = {
       recommendedTools: "Recommended Tools",
       recommendedDesc:
         "Looking for real-time API observability? These tools complement our CSV-based analyzer:",
+      useCasesTitle: "Real Usage Scenarios",
+      useCase1Title: "Finance or ops review",
+      useCase1Desc:
+        "Upload the monthly export before invoice review. The dashboard highlights daily spikes, zero-cost anomalies, and which keys drove the change.",
+      useCase2Title: "Client or project chargeback",
+      useCase2Desc:
+        "If one DeepSeek account serves multiple apps or customers, use the per-key and custom-project views to map spending back to each internal owner.",
+      useCase3Title: "Optimization rollback checks",
+      useCase3Desc:
+        "After changing prompts, routing rules, or cache settings, compare multiple months side by side to verify whether the optimization actually reduced spend.",
+      comparisonTitle: "When This Tool Fits Best",
+      comparisonDesc:
+        "This page is best for teams that already export monthly billing CSVs and want a fast answer without setting up an always-on observability stack.",
+      comparisonHeaderTool: "Option",
+      comparisonHeaderBestFor: "Best for",
+      comparisonHeaderTradeoff: "Trade-off",
+      comparisonRow1Label: "This CSV analyzer",
+      comparisonRow1BestFor:
+        "Fast monthly cost reviews, privacy-sensitive teams, zero setup",
+      comparisonRow1Tradeoff:
+        "Not real-time; works on exported billing files",
+      comparisonRow2Label: "API gateway / observability",
+      comparisonRow2BestFor:
+        "Live request monitoring, alerts, prompt tracing, team workflows",
+      comparisonRow2Tradeoff:
+        "Usually requires proxy routing, vendor setup, and ongoing cost",
+      comparisonRow3Label: "Manual spreadsheets",
+      comparisonRow3BestFor:
+        "Ad-hoc checks when the team is very small and the data is simple",
+      comparisonRow3Tradeoff:
+        "Hard to maintain, weak cache visibility, error-prone over time",
+      faqTitle: "Cost Tracking FAQ",
+      faq1Q: "Why use a CSV cost tracker if I already have the DeepSeek billing page?",
+      faq1A:
+        "DeepSeek's billing view is useful for raw exports, but this tool restructures the data into daily trends, per-key attribution, cache hit visibility, and project-level summaries.",
+      faq2Q: "Who should review this page every month?",
+      faq2A:
+        "Usually the engineer who owns prompts, the team lead who tracks burn, or the operations person who reconciles invoice deltas. The page is meant for those handoff moments.",
+      faq3Q: "Can I use it for post-optimization proof?",
+      faq3A:
+        "Yes. Upload two or more months and compare daily and per-key changes. That makes it easier to tell whether a prompt rewrite or caching improvement actually reduced cost.",
       backToHome: "Back to Home",
     },
     cacheAnalyzer: {
@@ -336,6 +400,41 @@ const translations = {
       feature2Title: "Per-Key Hits vs Misses",
       feature2Desc:
         "Stacked bar chart for each API key shows exactly how many tokens were cache hits (green) vs misses (gray), with percentage labels and tooltips.",
+      benchmarkTitle: "Practical Hit Rate Benchmarks",
+      benchmarkDesc:
+        "Exact results vary by workload, but these operating bands are a useful way to judge whether your prompt structure is leaving savings on the table.",
+      benchmark1Title: "Below 20%",
+      benchmark1Desc:
+        "Usually means the stable prefix is too short, or variable content appears too early in the prompt.",
+      benchmark2Title: "20% - 40%",
+      benchmark2Desc:
+        "A workable baseline for mixed workloads. You are getting some reuse, but prompt ordering likely still has room to improve.",
+      benchmark3Title: "40% - 60%",
+      benchmark3Desc:
+        "A strong result for many production teams. Static instructions and reusable context are likely structured reasonably well.",
+      benchmark4Title: "60%+",
+      benchmark4Desc:
+        "Excellent for repetitive workflows such as customer support, templated extraction, or fixed system prompts with small user deltas.",
+      strategyTitle: "Additional Optimization Strategies",
+      strategy1Title: "Separate stable context from user input",
+      strategy1Desc:
+        "Keep long-lived knowledge, policy blocks, and tool instructions in a reusable prefix. Append user-specific data after that block.",
+      strategy2Title: "Version prompts deliberately",
+      strategy2Desc:
+        "Small edits to the beginning of the prompt can reset your cache economics overnight. Treat prompt revisions like code releases and watch the hit-rate trend after each change.",
+      strategy3Title: "Group similar traffic paths",
+      strategy3Desc:
+        "If multiple products share the same assistant logic, align their prompt scaffolding so the reusable prefix stays identical across requests.",
+      diagnosisTitle: "What to Check When the Rate Drops",
+      diagnosis1Title: "Prompt templates changed",
+      diagnosis1Desc:
+        "A new prefix, reordered instructions, or inserted timestamp near the front can collapse hit rate even when the user experience looks unchanged.",
+      diagnosis2Title: "Traffic mix shifted",
+      diagnosis2Desc:
+        "A sudden increase in one-off tasks, long-tail queries, or new products can reduce prefix reuse without any code regression.",
+      diagnosis3Title: "Cache-friendly requests are not routed consistently",
+      diagnosis3Desc:
+        "If logically similar requests hit different models, keys, or prompt wrappers, the reusable prefix can fragment and dilute the overall rate.",
       bottomCTATitle: "Need help optimizing your prompts for caching?",
       bottomCTADesc:
         "The MindRose team specializes in LLM architecture and prompt engineering. We can help you redesign your system for maximum cache efficiency.",
@@ -369,6 +468,38 @@ const translations = {
       compClaudeOpus: "Claude Opus 4.8",
       compOpenaiO3Notes: "~270× more expensive input vs DS V4 Flash",
       compClaudeOpusNotes: "~45× more expensive input vs DS V4 Flash",
+      estimationGuideTitle: "How to Estimate Monthly Usage",
+      estimationGuideDesc:
+        "If you do not already have billing exports, start from product traffic: requests per day, average prompt size, average response length, and expected cache reuse.",
+      estimateStep1Title: "1. Estimate request volume",
+      estimateStep1Desc:
+        "Count how many requests your app will send in a normal day, then multiply by 30. Separate peak campaigns from baseline traffic.",
+      estimateStep2Title: "2. Estimate prompt and response size",
+      estimateStep2Desc:
+        "Use a few representative prompts to approximate average input and output tokens. For rough planning, consistency matters more than absolute precision.",
+      estimateStep3Title: "3. Add a cache assumption",
+      estimateStep3Desc:
+        "If your system prompt and context are reused heavily, model a higher hit rate. If every request is unique, start closer to 0% and treat savings as upside.",
+      billingModelTitle: "How the Billing Model Works",
+      billingModelInputTitle: "Uncached input tokens",
+      billingModelInputDesc:
+        "These are charged at the model's standard input rate. Large prompts dominate cost when the cache hit rate is low.",
+      billingModelCacheTitle: "Cached input tokens",
+      billingModelCacheDesc:
+        "When the prefix matches a previous request, DeepSeek charges the reduced cache-hit price instead of the full input rate.",
+      billingModelOutputTitle: "Output tokens",
+      billingModelOutputDesc:
+        "Generated tokens are billed separately and can become the main cost driver in agentic or reasoning-heavy workflows.",
+      resultGuideTitle: "How to Read the Result",
+      resultGuide1Title: "Use Flash for high-volume routine work",
+      resultGuide1Desc:
+        "If the workload is repetitive and latency-sensitive, DeepSeek V4 Flash usually sets the floor for cost planning.",
+      resultGuide2Title: "Use Pro when quality offsets the delta",
+      resultGuide2Desc:
+        "The real question is not whether Pro is more expensive, but whether it cuts retries, human review, or downstream errors enough to justify the gap.",
+      resultGuide3Title: "Compare competitors with your actual mix",
+      resultGuide3Desc:
+        "A model that looks expensive on list price can still make sense for narrow tasks. Re-run the calculator with your own token mix before locking the stack.",
       deployCTA: "Ready to deploy your AI stack?",
       deployCTADesc:
         "Get free cloud credits to run your AI workloads. Vultr offers $100 credit for new users — enough to host your LLM proxy or analytics pipeline.",
@@ -690,6 +821,29 @@ const translations = {
     blog: {
       pageTitle: "博客",
     },
+    author: {
+      pageTitle: "作者",
+      pageSubtitle:
+        "集中展示 DeepSeek API 用量分析仪表盘项目背后的作者背景、团队信息与公开身份信号。",
+      intro:
+        "这个页面把项目背后的人、团队与公开资料汇总到一起，便于读者和搜索引擎把产品、博客内容与外部身份信息建立起清晰关联。",
+      profileTitle: "作者简介",
+      profileName: "Gavin Chen",
+      profileRole: "DeepSeek API 用量分析仪表盘创建者",
+      profileDesc:
+        "Gavin Chen 负责这个项目的产品方向、技术实现与内容策略，并与 MindRose 团队一起完成产品交付与咨询工作。",
+      verificationTitle: "公开资料与身份验证",
+      teamMembersTitle: "团队成员",
+      teamMembersDesc:
+        "这里预留给后续补充的成员档案，包括角色、专长与公开链接，方便逐步扩展团队页面。",
+      memberPlaceholderName: "更多成员资料即将补充",
+      memberPlaceholderRole: "预留区块",
+      memberPlaceholderDesc:
+        "后续引入更多贡献者时，这里会列出他们的职责分工、背景信息与个人主页链接。",
+      githubLabel: "项目 GitHub 仓库",
+      linkedInLabel: "Gavin 的 LinkedIn",
+      websiteLabel: "MindRose 官网",
+    },
     blogIndex: {
       pageTitle: "DeepSeek API 博客",
       pageSubtitle:
@@ -736,6 +890,47 @@ const translations = {
       recommendedTools: "推荐工具",
       recommendedDesc:
         "需要实时 API 可观测性？以下工具可与我们的 CSV 分析器互补：",
+      useCasesTitle: "典型使用场景",
+      useCase1Title: "财务或运营月度复盘",
+      useCase1Desc:
+        "在核对账单前上传月度导出，快速定位每日费用尖峰、异常归零以及到底是哪几个 Key 推高了支出。",
+      useCase2Title: "客户 / 项目分摊结算",
+      useCase2Desc:
+        "如果一个 DeepSeek 账号服务多个应用或客户，可借助按 Key 与自定义项目视图，把费用回溯到具体内部负责人。",
+      useCase3Title: "优化方案回归验证",
+      useCase3Desc:
+        "改了 Prompt、路由策略或缓存配置后，直接横向比较多个月份，验证这次优化是否真的把成本压下来了。",
+      comparisonTitle: "这个工具最适合什么场景",
+      comparisonDesc:
+        "如果你已经有月度账单 CSV，并希望在零部署、强隐私前提下快速看清成本结构，这一页比重型可观测性方案更合适。",
+      comparisonHeaderTool: "方案",
+      comparisonHeaderBestFor: "适合场景",
+      comparisonHeaderTradeoff: "取舍",
+      comparisonRow1Label: "本地 CSV 分析器",
+      comparisonRow1BestFor:
+        "月度成本复盘、隐私敏感团队、零部署上手",
+      comparisonRow1Tradeoff:
+        "不是实时监控；依赖导出的账单文件",
+      comparisonRow2Label: "API 网关 / 可观测平台",
+      comparisonRow2BestFor:
+        "实时请求监控、告警、Prompt Trace、团队协作",
+      comparisonRow2Tradeoff:
+        "通常需要代理接入、供应商配置和持续付费",
+      comparisonRow3Label: "手工表格",
+      comparisonRow3BestFor:
+        "团队很小且数据简单时的临时核对",
+      comparisonRow3Tradeoff:
+        "维护成本高，缓存可见性弱，长期容易出错",
+      faqTitle: "费用追踪常见问题",
+      faq1Q: "既然 DeepSeek 后台已经有账单页，为什么还需要 CSV 成本追踪器？",
+      faq1A:
+        "平台账单页适合导出原始数据，但这个工具会把数据重组为每日趋势、按 Key 归因、缓存命中可见性和项目级汇总，更利于定位问题和复盘。",
+      faq2Q: "谁最适合每月看这页？",
+      faq2A:
+        "通常是负责 Prompt 的工程师、关注 burn rate 的团队负责人，或对账单差异做核对的运营同学。这页就是为这些交接时刻准备的。",
+      faq3Q: "它能用于证明一次优化真的有效吗？",
+      faq3A:
+        "可以。上传两个月或更多月份的数据，对比每日与各 Key 的变化，就能更直观看出 Prompt 改写或缓存优化是否真的降低了成本。",
       backToHome: "返回首页",
     },
     cacheAnalyzer: {
@@ -764,6 +959,41 @@ const translations = {
       feature2Title: "各 Key 命中 vs 未命中",
       feature2Desc:
         "每个 API Key 的堆叠柱状图清晰展示计入缓存的 Token（绿色）vs 未命中（灰色），附百分比标签和悬浮提示。",
+      benchmarkTitle: "命中率经验基准",
+      benchmarkDesc:
+        "不同业务的准确数值会有差异，但下面这些实务区间足够用来判断：你的 Prompt 结构是否还留有明显的节流空间。",
+      benchmark1Title: "低于 20%",
+      benchmark1Desc:
+        "通常说明稳定前缀太短，或者可变内容出现在 Prompt 前段，导致可复用部分几乎被打散。",
+      benchmark2Title: "20% - 40%",
+      benchmark2Desc:
+        "属于可用但仍有提升空间的基础线。已经有一定复用，但 Prompt 排布通常还可以继续优化。",
+      benchmark3Title: "40% - 60%",
+      benchmark3Desc:
+        "对很多生产团队来说已经是相当不错的结果，说明静态指令和可复用上下文的组织方式基本合理。",
+      benchmark4Title: "60% 以上",
+      benchmark4Desc:
+        "对于客服、模板化抽取、固定系统提示词加少量用户变量这类重复流程，属于非常优秀的缓存表现。",
+      strategyTitle: "更多优化策略",
+      strategy1Title: "把稳定上下文与用户输入拆开",
+      strategy1Desc:
+        "把长期不变的知识、策略块、工具说明组织成可复用前缀，再把用户级别的动态数据追加在后面。",
+      strategy2Title: "像发版一样管理 Prompt 版本",
+      strategy2Desc:
+        "Prompt 前缀的小改动就可能让缓存经济性一夜归零。把 Prompt 修订当成代码发布，并在每次变更后盯紧命中率曲线。",
+      strategy3Title: "合并相似流量路径",
+      strategy3Desc:
+        "如果多个产品共享同一套助手逻辑，尽量统一 Prompt 骨架，让跨请求的可复用前缀保持一致。",
+      diagnosisTitle: "命中率突然下滑时检查什么",
+      diagnosis1Title: "Prompt 模板变了",
+      diagnosis1Desc:
+        "前缀改写、指令重排，或在开头插入时间戳，都可能在表面体验不变的情况下大幅拖垮命中率。",
+      diagnosis2Title: "流量结构变了",
+      diagnosis2Desc:
+        "如果一次性任务、长尾查询或新产品流量突然增多，即使代码没回退，前缀复用率也会自然下降。",
+      diagnosis3Title: "适合缓存的请求没有稳定路由",
+      diagnosis3Desc:
+        "逻辑相似的请求若被分散到不同模型、不同 Key 或不同 Prompt 包装层，整体可复用前缀会被切碎。",
       bottomCTATitle: "需要帮助优化 Prompt 缓存策略？",
       bottomCTADesc:
         "MindRose 团队专注于 LLM 架构设计与 Prompt 工程。我们可以帮助你重新设计方案，实现最高的缓存效率。",
@@ -797,6 +1027,38 @@ const translations = {
       compClaudeOpus: "Claude Opus 4.8",
       compOpenaiO3Notes: "输入价格约为 DS V4 Flash 的 270 倍",
       compClaudeOpusNotes: "输入价格约为 DS V4 Flash 的 45 倍",
+      estimationGuideTitle: "如何估算月用量",
+      estimationGuideDesc:
+        "如果你手头还没有账单导出，可以先从产品流量倒推：每天请求数、平均 Prompt 长度、平均回复长度，以及预期缓存复用率。",
+      estimateStep1Title: "1. 先估算请求量",
+      estimateStep1Desc:
+        "统计应用在正常一天会发出多少请求，再乘以 30。把活动高峰和日常基线拆开估算更靠谱。",
+      estimateStep2Title: "2. 再估算输入 / 输出 Token",
+      estimateStep2Desc:
+        "挑几组有代表性的 Prompt，估算平均输入和输出 Token。做预算时，稳定的口径往往比极致精确更重要。",
+      estimateStep3Title: "3. 最后补上缓存假设",
+      estimateStep3Desc:
+        "如果系统提示词和上下文复用很高，就用更高的命中率建模；如果每次请求都很独特，就先按接近 0% 估算，把缓存收益当成上行空间。",
+      billingModelTitle: "计费模型怎么理解",
+      billingModelInputTitle: "未命中的输入 Token",
+      billingModelInputDesc:
+        "这部分按模型标准输入价计费。当缓存命中率较低时，大 Prompt 往往是总成本的主导项。",
+      billingModelCacheTitle: "命中的缓存输入 Token",
+      billingModelCacheDesc:
+        "当前缀命中历史请求时，DeepSeek 会按更低的缓存命中价格计费，而不是全额输入价格。",
+      billingModelOutputTitle: "输出 Token",
+      billingModelOutputDesc:
+        "模型生成的输出会单独计费。在 Agent 或深度推理场景里，输出成本本身也可能成为主要开销。",
+      resultGuideTitle: "如何解读计算结果",
+      resultGuide1Title: "高频常规任务优先看 Flash",
+      resultGuide1Desc:
+        "如果工作负载重复度高、又对延迟敏感，DeepSeek V4 Flash 往往是成本规划的基准下限。",
+      resultGuide2Title: "只有质量收益覆盖价差时再上 Pro",
+      resultGuide2Desc:
+        "关键不在于 Pro 是否更贵，而在于它是否能减少重试、人审和下游错误，从而抵掉这部分价差。",
+      resultGuide3Title: "竞品比较要带入你的真实流量结构",
+      resultGuide3Desc:
+        "列表价格看起来贵的模型，放到特定窄任务里仍可能合理。定栈前请用你自己的 Token 结构再跑一遍计算器。",
       deployCTA: "准备部署你的 AI 技术栈？",
       deployCTADesc:
         "获取免费云额度来运行你的 AI 工作负载。Vultr 为新用户提供 $100 信用金 — 足够托管你的 LLM 代理或分析管线。",

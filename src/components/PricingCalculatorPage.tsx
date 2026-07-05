@@ -1,3 +1,4 @@
+/** 文件说明：DeepSeek API 定价计算器 SEO 落地页，包含交互式估算器、计费模型说明与竞品对比。 */
 "use client";
 
 import { useState } from "react";
@@ -15,6 +16,9 @@ const PRICING = {
   claudeOpus: { input: 15.00, output: 75.00, cacheHit: 3.75 },
 };
 
+/**
+ * 格式化美元成本显示。
+ */
 function formatCost(usd: number): string {
   if (usd < 0.01) return "$0.01";
   if (usd < 1000) return `$${usd.toFixed(2)}`;
@@ -38,6 +42,7 @@ export function PricingCalculatorPage() {
   const outputM = outputTokens / 1_000_000;
   const cacheFraction = cacheHitRate / 100;
 
+  /** 根据输入、输出和缓存命中率估算某个模型的月度成本。 */
   const calcCost = (p: { input: number; output: number; cacheHit: number }) => {
     const cachedInput = inputM * cacheFraction * p.cacheHit;
     const uncachedInput = inputM * (1 - cacheFraction) * p.input;
@@ -49,6 +54,21 @@ export function PricingCalculatorPage() {
   const v4ProCost = calcCost(PRICING.v4Pro);
   const o3Cost = calcCost(PRICING.openaiO3);
   const claudeCost = calcCost(PRICING.claudeOpus);
+  const estimateSteps = [
+    { title: t.pricingCalculator.estimateStep1Title, desc: t.pricingCalculator.estimateStep1Desc },
+    { title: t.pricingCalculator.estimateStep2Title, desc: t.pricingCalculator.estimateStep2Desc },
+    { title: t.pricingCalculator.estimateStep3Title, desc: t.pricingCalculator.estimateStep3Desc },
+  ];
+  const billingItems = [
+    { title: t.pricingCalculator.billingModelInputTitle, desc: t.pricingCalculator.billingModelInputDesc },
+    { title: t.pricingCalculator.billingModelCacheTitle, desc: t.pricingCalculator.billingModelCacheDesc },
+    { title: t.pricingCalculator.billingModelOutputTitle, desc: t.pricingCalculator.billingModelOutputDesc },
+  ];
+  const resultGuides = [
+    { title: t.pricingCalculator.resultGuide1Title, desc: t.pricingCalculator.resultGuide1Desc },
+    { title: t.pricingCalculator.resultGuide2Title, desc: t.pricingCalculator.resultGuide2Desc },
+    { title: t.pricingCalculator.resultGuide3Title, desc: t.pricingCalculator.resultGuide3Desc },
+  ];
 
   return (
     <div className="min-h-screen" style={{ background: "var(--bg)" }}>
@@ -211,6 +231,82 @@ export function PricingCalculatorPage() {
 
         <hr style={{ borderColor: "var(--border)", marginBottom: "3rem" }} />
 
+        {/* 月用量估算方法 */}
+        <section className="mb-16">
+          <h2
+            className="text-lg font-bold tracking-tight mb-3"
+            style={{ color: "var(--text-primary)", letterSpacing: "-0.02em" }}
+          >
+            {t.pricingCalculator.estimationGuideTitle}
+          </h2>
+          <p
+            className="text-sm leading-relaxed text-pretty mb-6"
+            style={{ color: "var(--text-secondary)" }}
+          >
+            {t.pricingCalculator.estimationGuideDesc}
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+            {estimateSteps.map((item, idx) => (
+              <div
+                key={item.title}
+                className="p-5 rounded-subtle"
+                style={{ border: "1px solid var(--border)" }}
+              >
+                <span
+                  className="inline-flex items-center justify-center w-6 h-6 rounded-full text-xs font-bold mb-3"
+                  style={{ background: "var(--text-primary)", color: "var(--accent-inverse)" }}
+                >
+                  {idx + 1}
+                </span>
+                <h3
+                  className="text-sm font-semibold mb-2"
+                  style={{ color: "var(--text-primary)" }}
+                >
+                  {item.title}
+                </h3>
+                <p
+                  className="text-sm leading-relaxed text-pretty"
+                  style={{ color: "var(--text-secondary)" }}
+                >
+                  {item.desc}
+                </p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <hr style={{ borderColor: "var(--border)", marginBottom: "3rem" }} />
+
+        {/* 计费模型说明 */}
+        <section className="mb-16">
+          <h2
+            className="text-lg font-bold tracking-tight mb-5"
+            style={{ color: "var(--text-primary)", letterSpacing: "-0.02em" }}
+          >
+            {t.pricingCalculator.billingModelTitle}
+          </h2>
+          <div className="grid grid-cols-1 gap-5">
+            {billingItems.map((item) => (
+              <div key={item.title}>
+                <h3
+                  className="text-sm font-semibold mb-2"
+                  style={{ color: "var(--text-primary)" }}
+                >
+                  {item.title}
+                </h3>
+                <p
+                  className="text-sm leading-relaxed text-pretty"
+                  style={{ color: "var(--text-secondary)" }}
+                >
+                  {item.desc}
+                </p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <hr style={{ borderColor: "var(--border)", marginBottom: "3rem" }} />
+
         {/* 竞品对比表 */}
         <section className="mb-16">
           <h2
@@ -287,6 +383,36 @@ export function PricingCalculatorPage() {
                 </tr>
               </tbody>
             </table>
+          </div>
+        </section>
+
+        <hr style={{ borderColor: "var(--border)", marginBottom: "3rem" }} />
+
+        {/* 结果解读 */}
+        <section className="mb-16">
+          <h2
+            className="text-lg font-bold tracking-tight mb-5"
+            style={{ color: "var(--text-primary)", letterSpacing: "-0.02em" }}
+          >
+            {t.pricingCalculator.resultGuideTitle}
+          </h2>
+          <div className="space-y-5">
+            {resultGuides.map((item) => (
+              <div key={item.title}>
+                <h3
+                  className="text-sm font-semibold mb-2"
+                  style={{ color: "var(--text-primary)" }}
+                >
+                  {item.title}
+                </h3>
+                <p
+                  className="text-sm leading-relaxed text-pretty"
+                  style={{ color: "var(--text-secondary)" }}
+                >
+                  {item.desc}
+                </p>
+              </div>
+            ))}
           </div>
         </section>
 

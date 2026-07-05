@@ -1,3 +1,4 @@
+/** 文件说明：DeepSeek API Cost Tracker SEO 落地页，包含产品卖点、场景说明、对比表与 FAQ。 */
 "use client";
 
 import Link from "next/link";
@@ -25,6 +26,33 @@ export function CostTrackerPage() {
     { title: t.costTracker.feature2Title, desc: t.costTracker.feature2Desc },
     { title: t.costTracker.feature3Title, desc: t.costTracker.feature3Desc },
     { title: t.costTracker.feature4Title, desc: t.costTracker.feature4Desc },
+  ];
+  const useCases = [
+    { title: t.costTracker.useCase1Title, desc: t.costTracker.useCase1Desc },
+    { title: t.costTracker.useCase2Title, desc: t.costTracker.useCase2Desc },
+    { title: t.costTracker.useCase3Title, desc: t.costTracker.useCase3Desc },
+  ];
+  const comparisons = [
+    {
+      label: t.costTracker.comparisonRow1Label,
+      bestFor: t.costTracker.comparisonRow1BestFor,
+      tradeoff: t.costTracker.comparisonRow1Tradeoff,
+    },
+    {
+      label: t.costTracker.comparisonRow2Label,
+      bestFor: t.costTracker.comparisonRow2BestFor,
+      tradeoff: t.costTracker.comparisonRow2Tradeoff,
+    },
+    {
+      label: t.costTracker.comparisonRow3Label,
+      bestFor: t.costTracker.comparisonRow3BestFor,
+      tradeoff: t.costTracker.comparisonRow3Tradeoff,
+    },
+  ];
+  const faqItems = [
+    { question: t.costTracker.faq1Q, answer: t.costTracker.faq1A },
+    { question: t.costTracker.faq2Q, answer: t.costTracker.faq2A },
+    { question: t.costTracker.faq3Q, answer: t.costTracker.faq3A },
   ];
 
   return (
@@ -147,6 +175,96 @@ export function CostTrackerPage() {
 
         <hr style={{ borderColor: "var(--border)", marginBottom: "3rem" }} />
 
+        {/* 真实使用场景 */}
+        <section className="mb-16">
+          <h2
+            className="text-lg font-bold tracking-tight mb-3"
+            style={{
+              color: "var(--text-primary)",
+              letterSpacing: "-0.02em",
+            }}
+          >
+            {t.costTracker.useCasesTitle}
+          </h2>
+          <div className="grid grid-cols-1 gap-5">
+            {useCases.map((item) => (
+              <div
+                key={item.title}
+                className="p-5 rounded-subtle"
+                style={{ border: "1px solid var(--border)" }}
+              >
+                <h3
+                  className="text-sm font-semibold mb-2"
+                  style={{ color: "var(--text-primary)" }}
+                >
+                  {item.title}
+                </h3>
+                <p
+                  className="text-sm leading-relaxed text-pretty"
+                  style={{ color: "var(--text-secondary)" }}
+                >
+                  {item.desc}
+                </p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <hr style={{ borderColor: "var(--border)", marginBottom: "3rem" }} />
+
+        {/* 方案对比 */}
+        <section className="mb-16">
+          <h2
+            className="text-lg font-bold tracking-tight mb-3"
+            style={{
+              color: "var(--text-primary)",
+              letterSpacing: "-0.02em",
+            }}
+          >
+            {t.costTracker.comparisonTitle}
+          </h2>
+          <p
+            className="text-sm leading-relaxed text-pretty mb-6"
+            style={{ color: "var(--text-secondary)" }}
+          >
+            {t.costTracker.comparisonDesc}
+          </p>
+          <div className="overflow-x-auto">
+            <table className="w-full text-xs" style={{ borderCollapse: "collapse" }}>
+              <thead>
+                <tr style={{ borderBottom: "2px solid var(--border)" }}>
+                  <th className="text-left py-2 pr-4" style={{ color: "var(--text-primary)" }}>
+                    {t.costTracker.comparisonHeaderTool}
+                  </th>
+                  <th className="text-left py-2 px-3" style={{ color: "var(--text-secondary)" }}>
+                    {t.costTracker.comparisonHeaderBestFor}
+                  </th>
+                  <th className="text-left py-2 pl-3" style={{ color: "var(--text-secondary)" }}>
+                    {t.costTracker.comparisonHeaderTradeoff}
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {comparisons.map((item) => (
+                  <tr key={item.label} style={{ borderBottom: "1px solid var(--border)" }}>
+                    <td className="py-3 pr-4 font-semibold" style={{ color: "var(--text-primary)" }}>
+                      {item.label}
+                    </td>
+                    <td className="py-3 px-3 leading-relaxed" style={{ color: "var(--text-secondary)" }}>
+                      {item.bestFor}
+                    </td>
+                    <td className="py-3 pl-3 leading-relaxed" style={{ color: "var(--text-tertiary)" }}>
+                      {item.tradeoff}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <hr style={{ borderColor: "var(--border)", marginBottom: "3rem" }} />
+
         {/* Bottom CTA */}
         <section className="mb-16 text-center">
           <h2
@@ -175,6 +293,39 @@ export function CostTrackerPage() {
           >
             {t.costTracker.cta}
           </a>
+        </section>
+
+        <hr style={{ borderColor: "var(--border)", marginBottom: "3rem" }} />
+
+        {/* FAQ */}
+        <section className="mb-16">
+          <h2
+            className="text-lg font-bold tracking-tight mb-5"
+            style={{
+              color: "var(--text-primary)",
+              letterSpacing: "-0.02em",
+            }}
+          >
+            {t.costTracker.faqTitle}
+          </h2>
+          <div className="space-y-5">
+            {faqItems.map((item) => (
+              <div key={item.question}>
+                <h3
+                  className="text-sm font-semibold mb-2"
+                  style={{ color: "var(--text-primary)" }}
+                >
+                  {item.question}
+                </h3>
+                <p
+                  className="text-sm leading-relaxed text-pretty"
+                  style={{ color: "var(--text-secondary)" }}
+                >
+                  {item.answer}
+                </p>
+              </div>
+            ))}
+          </div>
         </section>
 
         <hr style={{ borderColor: "var(--border)", marginBottom: "3rem" }} />

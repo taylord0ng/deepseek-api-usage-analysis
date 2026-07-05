@@ -1,5 +1,6 @@
 /** 文件说明：DeepSeek API Cost Tracker 落地页路由与 SEO 元数据。 */
 import type { Metadata } from "next";
+import { buildAuthorMetadata } from "@/lib/authors";
 import { CostTrackerPage } from "@/components/CostTrackerPage";
 
 const SITE_URL =
@@ -56,7 +57,7 @@ export function generateMetadata(): Metadata {
       "DeepSeek API cost monitoring",
       "free DeepSeek cost tool",
     ],
-    authors: [{ name: "Gavin & Mindrose Team" }],
+    ...buildAuthorMetadata(),
     robots: {
       index: true,
       follow: true,
@@ -64,6 +65,9 @@ export function generateMetadata(): Metadata {
   };
 }
 
+/**
+ * 渲染成本追踪落地页路由。
+ */
 export default function CostTrackerRoute() {
   return <CostTrackerPage />;
 }

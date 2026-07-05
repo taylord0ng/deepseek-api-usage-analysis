@@ -1,3 +1,4 @@
+/** 文件说明：DeepSeek 缓存命中率 SEO 落地页，包含缓存机制说明、经验基准、优化策略与诊断内容。 */
 "use client";
 
 import Link from "next/link";
@@ -24,6 +25,22 @@ export function CacheAnalyzerPage() {
     { title: t.cacheAnalyzer.cachingTip1Title, desc: t.cacheAnalyzer.cachingTip1Desc },
     { title: t.cacheAnalyzer.cachingTip2Title, desc: t.cacheAnalyzer.cachingTip2Desc },
     { title: t.cacheAnalyzer.cachingTip3Title, desc: t.cacheAnalyzer.cachingTip3Desc },
+  ];
+  const benchmarks = [
+    { title: t.cacheAnalyzer.benchmark1Title, desc: t.cacheAnalyzer.benchmark1Desc },
+    { title: t.cacheAnalyzer.benchmark2Title, desc: t.cacheAnalyzer.benchmark2Desc },
+    { title: t.cacheAnalyzer.benchmark3Title, desc: t.cacheAnalyzer.benchmark3Desc },
+    { title: t.cacheAnalyzer.benchmark4Title, desc: t.cacheAnalyzer.benchmark4Desc },
+  ];
+  const strategies = [
+    { title: t.cacheAnalyzer.strategy1Title, desc: t.cacheAnalyzer.strategy1Desc },
+    { title: t.cacheAnalyzer.strategy2Title, desc: t.cacheAnalyzer.strategy2Desc },
+    { title: t.cacheAnalyzer.strategy3Title, desc: t.cacheAnalyzer.strategy3Desc },
+  ];
+  const diagnosisItems = [
+    { title: t.cacheAnalyzer.diagnosis1Title, desc: t.cacheAnalyzer.diagnosis1Desc },
+    { title: t.cacheAnalyzer.diagnosis2Title, desc: t.cacheAnalyzer.diagnosis2Desc },
+    { title: t.cacheAnalyzer.diagnosis3Title, desc: t.cacheAnalyzer.diagnosis3Desc },
   ];
 
   return (
@@ -131,6 +148,76 @@ export function CacheAnalyzerPage() {
 
         <hr style={{ borderColor: "var(--border)", marginBottom: "3rem" }} />
 
+        {/* 命中率经验基准 */}
+        <section className="mb-16">
+          <h2
+            className="text-lg font-bold tracking-tight mb-3"
+            style={{ color: "var(--text-primary)", letterSpacing: "-0.02em" }}
+          >
+            {t.cacheAnalyzer.benchmarkTitle}
+          </h2>
+          <p
+            className="text-sm leading-relaxed text-pretty mb-6"
+            style={{ color: "var(--text-secondary)" }}
+          >
+            {t.cacheAnalyzer.benchmarkDesc}
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            {benchmarks.map((item) => (
+              <div
+                key={item.title}
+                className="p-5 rounded-subtle"
+                style={{ border: "1px solid var(--border)" }}
+              >
+                <h3
+                  className="text-sm font-semibold mb-2"
+                  style={{ color: "var(--text-primary)" }}
+                >
+                  {item.title}
+                </h3>
+                <p
+                  className="text-sm leading-relaxed text-pretty"
+                  style={{ color: "var(--text-secondary)" }}
+                >
+                  {item.desc}
+                </p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <hr style={{ borderColor: "var(--border)", marginBottom: "3rem" }} />
+
+        {/* 更多优化策略 */}
+        <section className="mb-16">
+          <h2
+            className="text-lg font-bold tracking-tight mb-5"
+            style={{ color: "var(--text-primary)", letterSpacing: "-0.02em" }}
+          >
+            {t.cacheAnalyzer.strategyTitle}
+          </h2>
+          <div className="grid grid-cols-1 gap-5">
+            {strategies.map((item) => (
+              <div key={item.title}>
+                <h3
+                  className="text-sm font-semibold mb-2"
+                  style={{ color: "var(--text-primary)" }}
+                >
+                  {item.title}
+                </h3>
+                <p
+                  className="text-sm leading-relaxed text-pretty"
+                  style={{ color: "var(--text-secondary)" }}
+                >
+                  {item.desc}
+                </p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <hr style={{ borderColor: "var(--border)", marginBottom: "3rem" }} />
+
         {/* 工具功能亮点 */}
         <section className="mb-16">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
@@ -150,6 +237,36 @@ export function CacheAnalyzerPage() {
                 {t.cacheAnalyzer.feature2Desc}
               </p>
             </div>
+          </div>
+        </section>
+
+        <hr style={{ borderColor: "var(--border)", marginBottom: "3rem" }} />
+
+        {/* 命中率下滑诊断 */}
+        <section className="mb-16">
+          <h2
+            className="text-lg font-bold tracking-tight mb-5"
+            style={{ color: "var(--text-primary)", letterSpacing: "-0.02em" }}
+          >
+            {t.cacheAnalyzer.diagnosisTitle}
+          </h2>
+          <div className="space-y-5">
+            {diagnosisItems.map((item) => (
+              <div key={item.title}>
+                <h3
+                  className="text-sm font-semibold mb-2"
+                  style={{ color: "var(--text-primary)" }}
+                >
+                  {item.title}
+                </h3>
+                <p
+                  className="text-sm leading-relaxed text-pretty"
+                  style={{ color: "var(--text-secondary)" }}
+                >
+                  {item.desc}
+                </p>
+              </div>
+            ))}
           </div>
         </section>
 

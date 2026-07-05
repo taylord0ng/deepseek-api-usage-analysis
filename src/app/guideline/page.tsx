@@ -1,5 +1,6 @@
 /** 文件说明：操作指南页面路由与 SEO 元数据。 */
 import type { Metadata } from "next";
+import { buildAuthorMetadata } from "@/lib/authors";
 import { GuidelinePage } from "@/components/GuidelinePage";
 
 /** 站点公开 URL（构建时从 .env 注入） */
@@ -60,7 +61,7 @@ export function generateMetadata(): Metadata {
       "API cost analysis guide",
       "DeepSeek 使用指南",
     ],
-    authors: [{ name: "Gavin & Mindrose Team" }],
+    ...buildAuthorMetadata(),
     robots: {
       index: true,
       follow: true,

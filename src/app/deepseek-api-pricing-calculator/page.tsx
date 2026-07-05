@@ -1,5 +1,6 @@
 /** 文件说明：DeepSeek API 定价计算器落地页路由与 SEO 元数据。 */
 import type { Metadata } from "next";
+import { buildAuthorMetadata } from "@/lib/authors";
 import { PricingCalculatorPage } from "@/components/PricingCalculatorPage";
 
 const SITE_URL =
@@ -48,11 +49,14 @@ export function generateMetadata(): Metadata {
       "DeepSeek vs OpenAI cost",
       "LLM pricing comparison",
     ],
-    authors: [{ name: "Gavin & Mindrose Team" }],
+    ...buildAuthorMetadata(),
     robots: { index: true, follow: true },
   };
 }
 
+/**
+ * 渲染定价计算器落地页路由。
+ */
 export default function PricingCalculatorRoute() {
   return <PricingCalculatorPage />;
 }

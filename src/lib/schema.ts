@@ -5,6 +5,12 @@
  * 在 LandingPage 客户端组件中根据当前 locale 动态渲染。
  */
 import type { Locale } from "@/i18n/translations";
+import {
+  AUTHOR_PAGE_URL,
+  GAVIN_LINKEDIN_URL,
+  MINDROSE_SITE_URL,
+  TEAM_MEMBERS_URL,
+} from "@/lib/authors";
 import { agnesProject, deepseekProject, TOOL_SERIES_NAME } from "@/lib/sisterProjects";
 
 /* ------------------------------------------------------------------ */
@@ -165,13 +171,24 @@ export function buildFaqJsonLd(locale: Locale): Record<string, unknown> {
  *
  * 面包屑导航的多语言名称映射。
  */
-const breadcrumbSchema: Record<Locale, { home: string; guideline: string; privacy: string; terms: string; changelog: string }> = {
+const breadcrumbSchema: Record<
+  Locale,
+  {
+    home: string;
+    guideline: string;
+    privacy: string;
+    terms: string;
+    changelog: string;
+    author: string;
+  }
+> = {
   en: {
     home: "DeepSeek API Usage Analytics Dashboard",
     guideline: "User Guide",
     privacy: "Privacy Policy",
     terms: "Terms of Use",
     changelog: "Changelog",
+    author: "Author",
   },
   zh: {
     home: "DeepSeek API 用量分析仪表盘",
@@ -179,6 +196,7 @@ const breadcrumbSchema: Record<Locale, { home: string; guideline: string; privac
     privacy: "隐私政策",
     terms: "使用条款",
     changelog: "更新日志",
+    author: "作者",
   },
 };
 
@@ -224,6 +242,12 @@ export function buildBreadcrumbJsonLd(locale: Locale): Record<string, unknown> {
         name: t.changelog,
         item: `${SITE_URL}/changelog`,
       },
+      {
+        "@type": "ListItem",
+        position: 6,
+        name: t.author,
+        item: AUTHOR_PAGE_URL,
+      },
     ],
   };
 }
@@ -266,5 +290,60 @@ export function buildOrganizationJsonLd(locale: Locale): Record<string, unknown>
     description: t.description,
     sameAs,
     brand: TOOL_SERIES_NAME,
+  };
+}
+
+/** 博客文章 JSON-LD 生成参数 */
+export interface ArticleJsonLdInput {
+  headline: string;
+  description: string;
+  url: string;
+  datePublished: string;
+  dateModified: string;
+  authorName: string;
+  imageUrl: string;
+}
+
+/**
+ * 生成博客文章 BlogPosting JSON-LD。
+ *
+ * 用于 blog 文章详情页，补充文章标题、发布日期、作者、图片等结构化数据，
+ * 帮助搜索引擎更准确理解页面的文章属性。
+ */
+export function buildArticleJsonLd(
+  input: ArticleJsonLdInput
+): Record<string, unknown> {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: input.headline,
+    description: input.description,
+    url: input.url,
+    mainEntityOfPage: input.url,
+    datePublished: input.datePublished,
+    dateModified: input.dateModified,
+    author: {
+      "@type": "Person",
+      name: input.authorName,
+      url: AUTHOR_PAGE_URL,
+      sameAs: [AUTHOR_PAGE_URL, GAVIN_LINKEDIN_URL],
+      worksFor: {
+        "@type": "Organization",
+        name: "MindRose Team",
+        url: TEAM_MEMBERS_URL,
+        sameAs: [MINDROSE_SITE_URL],
+      },
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "MindRose Team",
+      url: TEAM_MEMBERS_URL,
+      sameAs: [MINDROSE_SITE_URL],
+      logo: {
+        "@type": "ImageObject",
+        url: `${SITE_URL}/ds-usage-logo.png`,
+      },
+    },
+    image: [input.imageUrl],
   };
 }

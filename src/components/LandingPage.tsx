@@ -151,7 +151,7 @@ export default function LandingPage() {
             className="absolute inset-0 pointer-events-none select-none reveal-section hidden md:block"
             style={bgDecorationStyle}
             ref={(el) => {
-              sectionRefs.current[6] = el;
+              sectionRefs.current[7] = el;
             }}
             aria-hidden="true"
           />
@@ -193,66 +193,6 @@ export default function LandingPage() {
           </section>
         </div>
 
-
-        <section
-          className="pb-12 reveal-section"
-          ref={(el) => {
-            sectionRefs.current[2] = el;
-          }}
-        >
-          <div className="mx-auto max-w-2xl px-6 text-center">
-            <div
-              className="mx-auto mb-5 h-px w-12"
-              style={{ background: "var(--border)" }}
-              aria-hidden="true"
-            />
-            <p
-              className="text-[11px] font-semibold uppercase tracking-[0.24em]"
-              style={{ color: "var(--text-tertiary)" }}
-            >
-              {t.landing.sisterBadge}
-            </p>
-            <h2
-              className="mt-3 text-xl font-semibold tracking-tight text-pretty"
-              style={{ color: "var(--text-primary)", letterSpacing: "-0.03em" }}
-            >
-              {t.landing.sisterTitle}
-            </h2>
-            <p
-              className="mt-3 text-sm leading-relaxed text-pretty"
-              style={{ color: "var(--text-secondary)" }}
-            >
-              {t.landing.sisterDesc}
-            </p>
-            <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
-              <a
-                href={agnesProject.trackedSiteUrls.landing}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 rounded-subtle px-3 py-1.5 text-sm font-medium transition-colors duration-200 hover:bg-[var(--bg-surface-hover)]"
-                style={{
-                  color: "var(--text-primary)",
-                  border: "1px solid var(--border)",
-                  background: "var(--bg-surface)",
-                }}
-              >
-                {t.landing.sisterVisit}
-                <span aria-hidden="true">→</span>
-              </a>
-              <a
-                href={agnesProject.trackedRepoUrls.landing}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 text-sm font-medium transition-colors duration-200 hover:opacity-80"
-                style={{ color: "var(--text-secondary)" }}
-              >
-                {t.landing.sisterRepo}
-                <span aria-hidden="true">→</span>
-              </a>
-            </div>
-          </div>
-        </section>
-
         {/* ============================================================ */}
         {/* 使用说明                                                       */}
         {/* ============================================================ */}
@@ -262,7 +202,7 @@ export default function LandingPage() {
           className="pt-10 pb-12 reveal-section"
           style={{ contentVisibility: "auto" }}
           ref={(el) => {
-            sectionRefs.current[3] = el;
+            sectionRefs.current[2] = el;
           }}
         >
           <h2
@@ -345,7 +285,7 @@ export default function LandingPage() {
           className="pt-10 pb-12 reveal-section"
           style={{ contentVisibility: "auto" }}
           ref={(el) => {
-            sectionRefs.current[4] = el;
+            sectionRefs.current[3] = el;
           }}
         >
           <h2
@@ -434,7 +374,7 @@ export default function LandingPage() {
           className="pt-10 pb-16 reveal-section"
           style={{ contentVisibility: "auto" }}
           ref={(el) => {
-            sectionRefs.current[6] = el; 
+            sectionRefs.current[4] = el;
           }}
         >
           <h2
@@ -562,6 +502,31 @@ export default function LandingPage() {
 
             {/* 社交链接 */}
             <div className="flex flex-wrap items-center justify-center gap-4">
+              {/* 作者页 */}
+              <Link
+                href="/author"
+                className="inline-flex items-center gap-2 text-sm transition-colors duration-200
+                           rounded-subtle px-3 py-1.5 hover:bg-[var(--bg-surface-hover)]"
+                style={{
+                  color: "var(--text-secondary)",
+                  border: "1px solid var(--border)",
+                }}
+              >
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm0 2c-4.418 0-8 1.79-8 4v2h16v-2c0-2.21-3.582-4-8-4Z"
+                    fill="currentColor"
+                  />
+                </svg>
+                {t.author.pageTitle}
+              </Link>
+
               {/* GitHub */}
               <a
                 href="https://github.com/GavinCnod/deepseek-api-usage-analysis"
@@ -678,12 +643,72 @@ export default function LandingPage() {
             </div>
           </div>
         </section>
+
+        {/* ============================================================ */}
+        {/* 姐妹项目                                                       */}
+        {/* ============================================================ */}
+        <hr className="reveal-section" style={{ borderColor: "var(--border)" }} />
+        <section
+          className="pt-10 pb-16 reveal-section"
+          style={{ contentVisibility: "auto" }}
+          ref={(el) => {
+            sectionRefs.current[5] = el;
+          }}
+        >
+          <h2
+            className="text-[11px] font-semibold uppercase tracking-widest mb-8 text-center text-pretty"
+            style={{ color: "var(--text-secondary)" }}
+          >
+            {t.landing.sisterBadge}
+          </h2>
+
+          <div className="max-w-2xl mx-auto text-center">
+            <h3
+              className="text-sm font-semibold mb-3 text-pretty"
+              style={{ color: "var(--text-primary)" }}
+            >
+              {t.landing.sisterTitle}
+            </h3>
+            <p
+              className="text-sm leading-relaxed text-pretty"
+              style={{ color: "var(--text-secondary)" }}
+            >
+              {t.landing.sisterDesc}
+            </p>
+            <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+              <a
+                href={agnesProject.trackedSiteUrls.landing}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 rounded-subtle px-3 py-1.5 text-sm font-medium transition-colors duration-200 hover:bg-[var(--bg-surface-hover)]"
+                style={{
+                  color: "var(--text-primary)",
+                  border: "1px solid var(--border)",
+                  background: "var(--bg-surface)",
+                }}
+              >
+                {t.landing.sisterVisit}
+                <span aria-hidden="true">→</span>
+              </a>
+              <a
+                href={agnesProject.trackedRepoUrls.landing}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 text-sm font-medium transition-colors duration-200 hover:opacity-80"
+                style={{ color: "var(--text-secondary)" }}
+              >
+                {t.landing.sisterRepo}
+                <span aria-hidden="true">→</span>
+              </a>
+            </div>
+          </div>
+        </section>
       </main>
 
       <FooterBar
         animate
         sectionRef={(el) => {
-          sectionRefs.current[5] = el;
+          sectionRefs.current[6] = el;
         }}
       />
     </div>

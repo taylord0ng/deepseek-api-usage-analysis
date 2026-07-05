@@ -1,6 +1,6 @@
+/** 文件说明：博客文章结构化内容渲染器，负责统一渲染段落、列表、代码块与价格表。 */
 "use client";
 
-import Link from "next/link";
 import type { ArticleSection, PricingRow } from "@/lib/content";
 
 /* ===== Props ===== */
@@ -16,6 +16,35 @@ interface ArticleRendererProps {
 /* ===== Inline HTML 渲染 ===== */
 
 /**
+ * 格式化文章内容里的受控内联 HTML。
+ *
+ * 目前统一支持 `<strong>`、`<em>`、`<a>`、`<code>` 四类标签，
+ * 供段落与列表项复用，避免不同内容块的渲染行为不一致。
+ */
+function formatRichHtml(html: string): string {
+  return html
+    .replace(
+      /<strong>([^<]*)<\/strong>/g,
+      '<strong style="color:var(--text-primary);font-weight:600">$1</strong>'
+    )
+    .replace(
+      /<em>([^<]*)<\/em>/g,
+      '<em style="font-style:italic">$1</em>'
+    )
+    .replace(
+      /<a href="([^"]+)">([^<]*)<\/a>/g,
+      (_: string, href: string, text: string) => {
+        const isInternal = href.startsWith("/") || href.startsWith("mailto:");
+        return `<a href="${href}" ${isInternal ? "" : 'target="_blank" rel="sponsored nofollow noopener noreferrer"'} class="underline" style="color:var(--accent)">${text}</a>`;
+      }
+    )
+    .replace(
+      /<code>([^<]*)<\/code>/g,
+      '<code class="text-xs px-1 py-0.5 rounded font-mono" style="background:var(--border);color:var(--text-primary)">$1</code>'
+    );
+}
+
+/**
  * 将段落字符串渲染为 JSX。
  * 支持 <strong>, <em>, <a href="...">, <code> 四种内联标签。
  * 内容来自项目自身的 content 模块，XSS 安全。
@@ -26,18 +55,23 @@ function RichParagraph({ html }: { html: string }) {
       className="mb-3 text-sm leading-relaxed text-pretty"
       style={{ color: "var(--text-secondary)" }}
       dangerouslySetInnerHTML={{
-        __html: html
-          .replace(
-            /<a href="([^"]+)">([^<]*)<\/a>/g,
-            (_: string, href: string, text: string) => {
-              const isInternal = href.startsWith("/") || href.startsWith("mailto:");
-              return `<a href="${href}" ${isInternal ? "" : 'target="_blank" rel="sponsored nofollow noopener noreferrer"'} class="underline" style="color:var(--accent)">${text}</a>`;
-            }
-          )
-          .replace(
-            /<code>([^<]*)<\/code>/g,
-            '<code class="text-xs px-1 py-0.5 rounded font-mono" style="background:var(--border);color:var(--text-primary)">$1</code>'
-          ),
+        __html: formatRichHtml(html),
+      }}
+    />
+  );
+}
+
+/**
+ * 将列表项字符串渲染为富文本内联内容。
+ *
+ * 列表项不能再包一层 `<p>`，因此单独输出为 `<span>`，
+ * 但复用与段落完全相同的内联标签处理逻辑。
+ */
+function RichListItem({ html }: { html: string }) {
+  return (
+    <span
+      dangerouslySetInnerHTML={{
+        __html: formatRichHtml(html),
       }}
     />
   );
@@ -74,13 +108,21 @@ export default function ArticleRenderer({ sections, pricingTable }: ArticleRende
               case "ul":
                 return (
                   <ul key={bi} className="list-disc pl-5 mb-3 space-y-1 text-sm" style={{ color: "var(--text-secondary)" }}>
-                    {block.items.map((item, ii) => <li key={ii}>{item}</li>)}
+                    {block.items.map((item, ii) => (
+                      <li key={ii}>
+                        <RichListItem html={item} />
+                      </li>
+                    ))}
                   </ul>
                 );
               case "ol":
                 return (
                   <ol key={bi} className="list-decimal pl-5 mb-4 space-y-1.5 text-sm" style={{ color: "var(--text-secondary)" }}>
-                    {block.items.map((item, ii) => <li key={ii}>{item}</li>)}
+                    {block.items.map((item, ii) => (
+                      <li key={ii}>
+                        <RichListItem html={item} />
+                      </li>
+                    ))}
                   </ol>
                 );
               case "inline_code":

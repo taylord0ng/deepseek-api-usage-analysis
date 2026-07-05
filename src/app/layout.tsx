@@ -4,6 +4,7 @@ import "./globals.css";
 import { DataProvider } from "@/lib/DataContext";
 import { ThemeProvider } from "@/lib/ThemeContext";
 import { ProjectConfigProvider } from "@/lib/ProjectConfigContext";
+import { buildAuthorMetadata } from "@/lib/authors";
 import { AppI18nShell } from "./AppI18nShell";
 import { buildSoftwareAppJsonLd, buildFaqJsonLd, buildBreadcrumbJsonLd, buildOrganizationJsonLd } from "@/lib/schema";
 
@@ -89,7 +90,7 @@ export function generateMetadata(): Metadata {
       "DeepSeek 用量分析",
       "DeepSeek API 费用追踪",
     ],
-    authors: [{ name: "Gavin & Mindrose Team" }],
+    ...buildAuthorMetadata(),
     icons: {
       icon: "/ds-usage-logo.ico",
     },
@@ -109,6 +110,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      data-scroll-behavior="smooth"
       className={`${geistMono.variable} h-full antialiased`}
       suppressHydrationWarning
     >

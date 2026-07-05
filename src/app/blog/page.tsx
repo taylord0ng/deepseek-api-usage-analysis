@@ -1,5 +1,6 @@
 /** 文件说明：博客首页路由与 SEO 元数据。 */
 import type { Metadata } from "next";
+import { buildAuthorMetadata } from "@/lib/authors";
 import BlogIndex from "@/components/BlogIndex";
 
 const SITE_URL =
@@ -48,11 +49,14 @@ export function generateMetadata(): Metadata {
       "API caching strategies",
       "AI pricing comparison",
     ],
-    authors: [{ name: "Gavin & Mindrose Team" }],
+    ...buildAuthorMetadata(),
     robots: { index: true, follow: true },
   };
 }
 
+/**
+ * 渲染博客首页。
+ */
 export default function BlogRoute() {
   return <BlogIndex />;
 }

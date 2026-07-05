@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { buildAuthorMetadata } from "@/lib/authors";
 import { ChangelogPage } from "@/components/ChangelogPage";
 import ChangelogContent from "@/components/ChangelogContent";
 
@@ -50,7 +51,7 @@ export function generateMetadata(): Metadata {
       images: [`${SITE_URL}/og-image.png`],
     },
     keywords: ["DeepSeek dashboard changelog", "API analytics release notes", "DeepSeek 更新日志"],
-    authors: [{ name: "Gavin & Mindrose Team" }],
+    ...buildAuthorMetadata(),
     robots: {
       index: true,
       follow: true,
@@ -69,5 +70,10 @@ export function generateMetadata(): Metadata {
  * - SEO metadata + OpenGraph + Twitter Card
  */
 export default function ChangelogRoute() {
-  return <ChangelogPage />;
+  return (
+    <>
+      <ChangelogPage />
+      <ChangelogContent />
+    </>
+  );
 }

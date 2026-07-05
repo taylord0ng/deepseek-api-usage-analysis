@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { buildAuthorMetadata } from "@/lib/authors";
 import { TermsPage } from "@/components/TermsPage";
 import TermsContent from "@/components/TermsContent";
 
@@ -50,7 +51,7 @@ export function generateMetadata(): Metadata {
       images: [`${SITE_URL}/og-image.png`],
     },
     keywords: ["DeepSeek dashboard terms", "open source analytics terms", "DeepSeek 使用条款"],
-    authors: [{ name: "Gavin & Mindrose Team" }],
+    ...buildAuthorMetadata(),
     robots: {
       index: true,
       follow: true,

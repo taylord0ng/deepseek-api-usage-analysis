@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { buildAuthorMetadata } from "@/lib/authors";
 import { PrivacyPage } from "@/components/PrivacyPage";
 import PrivacyContent from "@/components/PrivacyContent";
 
@@ -50,7 +51,7 @@ export function generateMetadata(): Metadata {
       images: [`${SITE_URL}/og-image.png`],
     },
     keywords: ["DeepSeek dashboard privacy", "API usage analytics privacy", "DeepSeek 隐私政策"],
-    authors: [{ name: "Gavin & Mindrose Team" }],
+    ...buildAuthorMetadata(),
     robots: {
       index: true,
       follow: true,

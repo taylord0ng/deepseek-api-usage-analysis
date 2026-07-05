@@ -1,9 +1,13 @@
+/** 文件说明：博客文章统一布局组件，负责标题、作者信息、正文容器与底部交叉链接。 */
 "use client";
 
 import Link from "next/link";
 import { ReactNode } from "react";
-import { useTranslation } from "@/i18n";
 import { trackEvent } from "@/lib/analytics";
+import {
+  AUTHOR_PAGE_PATH,
+  TEAM_MEMBERS_SECTION_ID,
+} from "@/lib/authors";
 import TitleBar from "./TitleBar";
 import FooterBar from "./FooterBar";
 
@@ -34,19 +38,23 @@ interface BlogPostLayoutProps {
   prevPost?: { title: string; slug: string };
 }
 
+/**
+ * 渲染博客文章统一布局。
+ *
+ * 输出统一的返回导航、标题、作者信息、正文与底部 CTA，
+ * 并将作者身份链接到公开主页以增强可验证性信号。
+ */
 export default function BlogPostLayout({
   meta,
   children,
   nextPost,
   prevPost,
 }: BlogPostLayoutProps) {
-  const { t } = useTranslation();
-
   return (
     <div className="min-h-screen" style={{ background: "var(--bg)" }}>
       <TitleBar />
 
-      <article className="max-w-2xl mx-auto px-6 py-8">
+      <article className="max-w-3xl mx-auto px-6 py-8">
         {/* 返回 Blog 首页 */}
         <Link
           href="/blog"
@@ -89,7 +97,23 @@ export default function BlogPostLayout({
         >
           <span>{meta.date}</span>
           <span aria-hidden="true">·</span>
-          <span>{meta.author}</span>
+          <span className="flex flex-wrap items-center gap-x-1.5 gap-y-1">
+            <Link
+              href={AUTHOR_PAGE_PATH}
+              className="transition-colors duration-200 hover:opacity-80"
+              style={{ color: "var(--text-secondary)" }}
+            >
+              Gavin Chen
+            </Link>
+            <span aria-hidden="true">&amp;</span>
+            <Link
+              href={`${AUTHOR_PAGE_PATH}#${TEAM_MEMBERS_SECTION_ID}`}
+              className="transition-colors duration-200 hover:opacity-80"
+              style={{ color: "var(--text-secondary)" }}
+            >
+              MindRose Team
+            </Link>
+          </span>
         </div>
 
         {/* 文章正文 */}
