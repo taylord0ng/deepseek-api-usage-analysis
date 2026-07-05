@@ -1,4 +1,4 @@
-# DeepSeek API 用量分析仪表盘
+# DeepSeek API 用量分析仪表盘 & 费用追踪器
 
 <p align="center">
   <img src="public/ds-usage-logo.png" alt="Logo" width="128" />

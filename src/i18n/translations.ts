@@ -29,14 +29,14 @@ const translations = {
       visitSisterRepo: "Agnes Repo",
     },
     dropzone: {
-      processing: "Processing CSVs\u2026",
+      processing: "Processing CSVs…",
       title: "Drop your DeepSeek CSVs here or click to upload",
       hint: "Drop one or more months — amount-*.csv + cost-*.csv pairs, or a .zip archive",
       privacy:
         "Multiple months are auto-merged · Files stay in your browser — nothing is uploaded",
       oversizedTitle: "File too large",
       oversizedHint:
-        "Each file must be under 50 MB. The file \"{name}\" is {size} MB. Large files may freeze the browser.",
+        'Each file must be under 50 MB. The file "{name}" is {size} MB. Large files may freeze the browser.',
       processingError: "Processing Error",
     },
     kpi: {
@@ -142,7 +142,7 @@ const translations = {
       modalTitle: "Share to Social Media",
       copyFailed: "Copy failed, try download instead",
       clipboardUnsupported: "Clipboard image not supported, downloaded instead",
-      generating: "Generating\u2026",
+      generating: "Generating…",
       generateFailed: "Failed to generate image",
       downloadFailed: "Download failed",
     },
@@ -168,7 +168,7 @@ const translations = {
       keyboardHint: "Tip: Drag keys to assign, or select a project from the dropdown on each unassigned key (keyboard: Tab to select → Enter to confirm)",
       resetConfig: "Reset All",
       emptyHint: "Click the gear icon to configure custom project groups",
-      assignTo: "Assign to\u2026",
+      assignTo: "Assign to…",
     },
     guideline: {
       pageTitle: "User Guide",
@@ -196,7 +196,7 @@ const translations = {
       pageTitle: "Privacy Policy",
       effectiveDate: "Effective Date: June 13, 2026",
       intro:
-        "Your privacy is critically important to us. This Privacy Policy explains how the DeepSeek API Usage Analytics Dashboard (\"the App\") handles your data.",
+        'Your privacy is critically important to us. This Privacy Policy explains how the DeepSeek API Usage Analytics Dashboard ("the App") handles your data.',
       noCollectionTitle: "1. No Data Collection",
       noCollectionDesc:
         "The App is a pure client-side application. All CSV file parsing, cost computation, and chart rendering happen entirely within your browser. We do not collect, store, transmit, or have access to any of the CSV data you upload.",
@@ -223,16 +223,16 @@ const translations = {
       contactDesc:
         "If you have questions or concerns about this Privacy Policy, please open an issue on our GitHub repository or reach out to the development team.",
       githubLabel: "GitHub Repository",
-      reviewSourceCode: "Review source code \u2192",
+      reviewSourceCode: "Review source code →",
     },
     terms: {
       pageTitle: "Terms of Use",
       effectiveDate: "Effective Date: June 13, 2026",
       intro:
-        "By using the DeepSeek API Usage Analytics Dashboard (\"the App\"), you agree to these Terms of Use. If you do not agree, please do not use the App.",
+        'By using the DeepSeek API Usage Analytics Dashboard ("the App"), you agree to these Terms of Use. If you do not agree, please do not use the App.',
       asIsTitle: "1. As-Is Service",
       asIsDesc:
-        "The App is provided \"as is\" and \"as available,\" without warranties of any kind, either express or implied. We do not guarantee that the App will be error-free, uninterrupted, or suitable for your specific needs.",
+        'The App is provided "as is" and "as available," without warranties of any kind, either express or implied. We do not guarantee that the App will be error-free, uninterrupted, or suitable for your specific needs.',
       noWarrantyTitle: "2. No Warranty",
       noWarrantyDesc:
         "To the fullest extent permitted by law, we disclaim all warranties, including but not limited to implied warranties of merchantability, fitness for a particular purpose, and non-infringement. Use of the App is at your own risk.",
@@ -246,7 +246,7 @@ const translations = {
       openSourceDesc:
         "The App is open source software released under the MIT License. You are free to review, modify, and distribute the source code in accordance with the license terms. The source code is available on GitHub.",
       openSourceLicense:
-        "Full license text: MIT License \u2014 see the LICENSE file in the project repository.",
+        "Full license text: MIT License — see the LICENSE file in the project repository.",
       limitationTitle: "6. Limitation of Liability",
       limitationDesc:
         "In no event shall the developers or contributors be liable for any direct, indirect, incidental, special, consequential, or punitive damages arising out of or related to your use of or inability to use the App, even if advised of the possibility of such damages. This includes, but is not limited to, damages for errors, omissions, service interruptions, or financial losses.",
@@ -257,7 +257,123 @@ const translations = {
       contactDesc:
         "If you have questions about these Terms of Use, please open an issue on our GitHub repository or reach out to the development team.",
       githubLabel: "GitHub Repository",
-      reviewSourceCode: "Review source code \u2192",
+      reviewSourceCode: "Review source code →",
+    },
+    blog: {
+      pageTitle: "Blog",
+    },
+    blogIndex: {
+      pageTitle: "DeepSeek API Blog",
+      pageSubtitle:
+        "Deep dives into DeepSeek API cost optimization, context caching strategies, pricing comparisons, and developer tools — brought to you by the MindRose team.",
+      article1Title:
+        "The Ultimate Guide to DeepSeek API Context Caching (2026)",
+      article1Desc:
+        "Learn how DeepSeek's prefix-matching disk caching works, why your cache hit rate might be lower than expected, and 5 prompt engineering techniques to maximize savings.",
+      article1Tags: "Caching, Cost Optimization, DeepSeek",
+      article2Title:
+        "Top 5 DeepSeek API Cost Optimization & Observability Tools",
+      article2Desc:
+        "A comprehensive comparison of the best tools for monitoring and optimizing DeepSeek API costs — from real-time observability platforms to privacy-first CSV analyzers.",
+      article2Tags: "Tools, Comparison, Cost Optimization",
+      article3Title:
+        "OpenAI o3 vs DeepSeek V4 Pro: A Developer's Cost-Benefit Analysis",
+      article3Desc:
+        "Hard numbers on API pricing differences — input costs can differ by 270×. We break down when each model makes economic sense and how to migrate smoothly.",
+      article3Tags: "Comparison, Pricing, OpenAI",
+    },
+    costTracker: {
+      pageTitle: "DeepSeek API Cost Tracker",
+      badge: "Free Tool",
+      heroTitle: "Track Every Cent of Your DeepSeek API Spend",
+      heroDesc:
+        "Drop your DeepSeek billing CSVs and get instant cost breakdowns by day, model, and API key — all processed locally in your browser. No signup, no server upload.",
+      cta: "Analyze My Costs Now",
+      privacyBadge: "100% Private — data never leaves your browser",
+      feature1Title: "Daily Cost Breakdown",
+      feature1Desc:
+        "See exactly how much you spent each day with an interactive bar chart. Spot anomalies and spending spikes at a glance.",
+      feature2Title: "Per-Key Cost Attribution",
+      feature2Desc:
+        "Know which API key is burning through your budget. Detailed per-key tables with inline usage bars and copy-to-clipboard support.",
+      feature3Title: "Cache Hit Rate Monitoring",
+      feature3Desc:
+        "Understand how much you save through context caching. Green/amber/red color coding makes it easy to spot low-hanging optimization opportunities.",
+      feature4Title: "Multi-Month Comparison",
+      feature4Desc:
+        "Drag multiple ZIP files at once and they auto-pair by month. Compare spending trends across billing cycles to track your optimization progress.",
+      bottomCTA: "Ready to take control of your API costs?",
+      bottomCTADesc:
+        "No account needed. No data leaves your browser. Just drag, drop, and discover where your tokens go.",
+      recommendedTools: "Recommended Tools",
+      recommendedDesc:
+        "Looking for real-time API observability? These tools complement our CSV-based analyzer:",
+      backToHome: "Back to Home",
+    },
+    cacheAnalyzer: {
+      pageTitle: "DeepSeek Cache Hit Rate Analyzer",
+      badge: "Free Tool",
+      heroTitle: "Maximize Your DeepSeek Cache Hit Rate",
+      heroDesc:
+        "DeepSeek context caching can slash your API costs by up to 90% — but only if you know your hit rate. Upload your CSVs and get a crystal-clear picture of cache performance.",
+      cta: "Analyze My Cache Performance",
+      privacyBadge: "100% Private — data never leaves your browser",
+      cachingExplainerTitle: "How DeepSeek Context Caching Works",
+      cachingExplainerDesc:
+        "DeepSeek uses prefix matching for its disk caching. If the beginning of your prompt (the prefix) stays the same across requests, subsequent calls reuse the cached computation — dramatically reducing costs. The longer your cached prefix relative to total input, the more you save.",
+      cachingTip1Title: "Keep system prompts fixed",
+      cachingTip1Desc:
+        "Place static instructions at the beginning of every request. DeepSeek caches prompts starting from the first token; changing anything at the front invalidates the entire cache.",
+      cachingTip2Title: "Put dynamic content last",
+      cachingTip2Desc:
+        "Structure your prompts so that user queries, timestamps, and other variable content appear after the fixed system prompt and context. This maximizes the reusable prefix length.",
+      cachingTip3Title: "Monitor with our tool",
+      cachingTip3Desc:
+        "Our cache hit rate chart shows daily trends and per-key stacked bars. A hit rate above 40% (green) means good caching; below 20% (red) means there's room for prompt engineering improvements.",
+      feature1Title: "Daily Cache Trend Line",
+      feature1Desc:
+        "Track your cache hit rate over time. Did a prompt change tank your rate? The trend line tells the story.",
+      feature2Title: "Per-Key Hits vs Misses",
+      feature2Desc:
+        "Stacked bar chart for each API key shows exactly how many tokens were cache hits (green) vs misses (gray), with percentage labels and tooltips.",
+      bottomCTATitle: "Need help optimizing your prompts for caching?",
+      bottomCTADesc:
+        "The MindRose team specializes in LLM architecture and prompt engineering. We can help you redesign your system for maximum cache efficiency.",
+      bottomCTALink: "Let's talk →",
+      backToHome: "Back to Home",
+    },
+    pricingCalculator: {
+      pageTitle: "DeepSeek API Pricing Calculator",
+      badge: "Free Tool",
+      heroTitle: "Estimate Your DeepSeek API Costs Instantly",
+      heroDesc:
+        "Compare DeepSeek V4 Flash, V4 Pro, and competitor model pricing. Adjust input/output token counts and cache hit rate assumptions to see real cost projections.",
+      inputTokensLabel: "Monthly Input Tokens",
+      outputTokensLabel: "Monthly Output Tokens",
+      cacheHitRateLabel: "Cache Hit Rate (%)",
+      cacheHitRateHint: "Higher hit rate = lower cost. DeepSeek caches at 12.5% of the original input price for hits.",
+      costEstimateTitle: "Estimated Monthly Cost",
+      deepseekV4Flash: "DeepSeek V4 Flash",
+      deepseekV4Pro: "DeepSeek V4 Pro",
+      competitorComparison: "Competitor Pricing Comparison",
+      comparisonNote:
+        "Based on published API pricing as of July 2026. Actual costs may vary based on usage patterns and caching efficiency.",
+      compModelHeader: "Model",
+      compInputPriceHeader: "Input / 1M tokens",
+      compOutputPriceHeader: "Output / 1M tokens",
+      compCacheHitHeader: "Cache Hit / 1M tokens",
+      compNotesHeader: "Notes",
+      compDeepseekV4Flash: "DeepSeek V4 Flash",
+      compDeepseekV4Pro: "DeepSeek V4 Pro",
+      compOpenaiO3: "OpenAI o3",
+      compClaudeOpus: "Claude Opus 4.8",
+      compOpenaiO3Notes: "~270× more expensive input vs DS V4 Flash",
+      compClaudeOpusNotes: "~45× more expensive input vs DS V4 Flash",
+      deployCTA: "Ready to deploy your AI stack?",
+      deployCTADesc:
+        "Get free cloud credits to run your AI workloads. Vultr offers $100 credit for new users — enough to host your LLM proxy or analytics pipeline.",
+      deployCTALink: "Get Vultr Free Credit ($100)",
+      backToHome: "Back to Home",
     },
     landing: {
       howItWorksTitle: "How It Works",
@@ -281,7 +397,7 @@ const translations = {
       qaA4: "Any model listed in your DeepSeek exports. The dashboard auto-detects all models and provides a filter to view them individually or combined.",
       qaQ5: "Why does my cost show as $0?",
       qaA5: "You need to upload both the amount CSV and the cost CSV for the same month. If either file is missing, cost data cannot be calculated.",
-      qaQ6: "What does \"Incomplete Upload\" mean?",
+      qaQ6: 'What does "Incomplete Upload" mean?',
       qaA6: "It means a month has only the amount file or only the cost file — not both. Add the missing file and re-upload to resolve this.",
       qaQ7: "Where can I find more troubleshooting help?",
       qaA7: "Check the Troubleshooting section in our full User Guide. It covers common issues like CSV format errors, cache configuration, file naming conventions, and more.",
@@ -298,13 +414,13 @@ const translations = {
       aboutSectionTitle: "About",
       aboutWhyTitle: "Why We Built This",
       aboutWhyDesc:
-        "As our DeepSeek API calls surged, we found the official CSV billing exports nearly impossible to read at a glance. To answer questions like \"which project consumed the most tokens?\" and \"what is our real cache hit rate?\", we built our own simple, intuitive, and absolutely secure visualization dashboard.",
+        'As our DeepSeek API calls surged, we found the official CSV billing exports nearly impossible to read at a glance. To answer questions like "which project consumed the most tokens?" and "what is our real cache hit rate?", we built our own simple, intuitive, and absolutely secure visualization dashboard.',
       aboutPrivacyTitle: "Under the Hood: Privacy & Tech",
       aboutPrivacyDesc:
         "When handling billing data, privacy is non-negotiable. That's why we chose a pure frontend architecture. Built with Next.js 16 (App Router) and React 19, powered by Papa Parse and ECharts, all CSV parsing and chart rendering happens 100% locally in your browser. No backend server, no database — your data never leaves your device. With Apple-inspired minimalist design and CSS custom property-driven dual themes, we aim to deliver the most elegant data analytics experience.",
       aboutMindRoseTitle: "About MindRose",
       aboutMindRoseDesc:
-        "This project is open-sourced by Gavin Chen and the MindRose team. MindRose is a tech team focused on delivering lightweight digital solutions for small and medium manufacturers, logistics companies, and cross-border traders. We don't sell vague \"digital transformation\" concepts — we use AI and full-stack agile development (Next.js, React, Mendix, etc.) to deliver applications that solve real business pain points within weeks. From SEO-optimized independent e-commerce sites, to agile internal system builds, to AI agent workflow integration — we understand tech, and more importantly, we understand your business.",
+        'This project is open-sourced by Gavin Chen and the MindRose team. MindRose is a tech team focused on delivering lightweight digital solutions for small and medium manufacturers, logistics companies, and cross-border traders. We don\'t sell vague "digital transformation" concepts — we use AI and full-stack agile development (Next.js, React, Mendix, etc.) to deliver applications that solve real business pain points within weeks. From SEO-optimized independent e-commerce sites, to agile internal system builds, to AI agent workflow integration — we understand tech, and more importantly, we understand your business.',
       aboutContactTitle: "Let's Work Together",
       aboutContactDesc:
         "Looking to build a custom data dashboard for your business? Need deep AI integration into your workflows? Want modern, elegant UI/UX? Need cross-department, multi-terminal business systems? Or interested in collaborating on this open-source project?",
@@ -343,13 +459,13 @@ const translations = {
       visitSisterRepo: "Agnes AI 仓库",
     },
     dropzone: {
-      processing: "正在处理 CSV\u2026",
+      processing: "正在处理 CSV…",
       title: "拖拽 DeepSeek CSV 文件到此处或点击上传",
       hint: "拖拽一个或多个月份 — amount-*.csv + cost-*.csv 文件对，或 .zip 压缩包",
       privacy: "多月份自动合并 · 文件仅存储在浏览器中 — 不会上传",
       oversizedTitle: "文件过大",
       oversizedHint:
-        "单个文件不能超过 50 MB。文件 \"{name}\" 大小为 {size} MB。过大的文件可能导致浏览器卡死。",
+        '文件过大：文件 "{name}" 大小为 {size} MB。单个文件不能超过 50 MB，过大的文件可能导致浏览器卡死。',
       processingError: "处理错误",
     },
     kpi: {
@@ -436,7 +552,7 @@ const translations = {
       shareTab: "分享此视图",
       yourName: "你的名字 / 团队名字",
       namePlaceholder: "例如：Mindrose 团队",
-      nameHint: "图片上会以大号字体显示 \"From XXX\"",
+      nameHint: '图片上会以大号字体显示 "From XXX"',
       messageLabel: "自定义文案（可选）",
       messagePlaceholder: "例如：我们团队上个月 DeepSeek API 花了 ¥12K，缓存命中率还不错！",
       messageHint: "写一句传播语，大家更愿意转发和讨论",
@@ -454,7 +570,7 @@ const translations = {
       modalTitle: "分享到社交媒体",
       copyFailed: "复制失败，请尝试下载",
       clipboardUnsupported: "浏览器不支持剪贴板图片，已自动下载",
-      generating: "生成中\u2026",
+      generating: "生成中…",
       generateFailed: "图片生成失败",
       downloadFailed: "下载失败",
     },
@@ -480,7 +596,7 @@ const translations = {
       keyboardHint: "提示：拖拽 Key 分配项目，或使用未分配 Key 旁的下拉菜单通过键盘操作（Tab 选择 → Enter 确认）",
       resetConfig: "全部重置",
       emptyHint: "点击齿轮图标配置自定义项目分组",
-      assignTo: "分配到\u2026",
+      assignTo: "分配到…",
     },
     guideline: {
       pageTitle: "用户操作手册",
@@ -508,7 +624,7 @@ const translations = {
       pageTitle: "隐私政策",
       effectiveDate: "生效日期：2026 年 6 月 13 日",
       intro:
-        "您的隐私对我们至关重要。本隐私政策说明了 DeepSeek API 用量分析仪表盘（以下简称\u201C本应用\u201D）如何处理您的数据。",
+        "您的隐私对我们至关重要。本隐私政策说明了 DeepSeek API 用量分析仪表盘（以下简称“本应用”）如何处理您的数据。",
       noCollectionTitle: "1. 不收集数据",
       noCollectionDesc:
         "本应用是纯客户端应用。所有 CSV 文件解析、费用计算和图表渲染都在您的浏览器内完成。我们不会收集、存储、传输或访问您上传的任何 CSV 数据。",
@@ -535,16 +651,16 @@ const translations = {
       contactDesc:
         "如果您对本隐私政策有任何疑问或疑虑，请在我们的 GitHub 仓库提交 Issue，或联系开发团队。",
       githubLabel: "GitHub 仓库",
-      reviewSourceCode: "查看源码验证 \u2192",
+      reviewSourceCode: "查看源码验证 →",
     },
     terms: {
       pageTitle: "使用条款",
       effectiveDate: "生效日期：2026 年 6 月 13 日",
       intro:
-        "使用 DeepSeek API 用量分析仪表盘（以下简称\u201C本应用\u201D）即表示您同意本使用条款。如果您不同意，请勿使用本应用。",
+        "使用 DeepSeek API 用量分析仪表盘（以下简称“本应用”）即表示您同意本使用条款。如果您不同意，请勿使用本应用。",
       asIsTitle: "1. 按现状提供",
       asIsDesc:
-        "本应用按\u201C现状\u201D和\u201C可用\u201D状态提供，不作任何明示或暗示的保证。我们不保证本应用无错误、不中断或适用于您的特定需求。",
+        "本应用按“现状”和“可用”状态提供，不作任何明示或暗示的保证。我们不保证本应用无错误、不中断或适用于您的特定需求。",
       noWarrantyTitle: "2. 免责声明",
       noWarrantyDesc:
         "在法律允许的最大范围内，我们不承担所有保证，包括但不限于适销性、特定用途适用性和非侵权的默示保证。使用本应用的风险由您自行承担。",
@@ -569,7 +685,123 @@ const translations = {
       contactDesc:
         "如果您对本使用条款有任何疑问，请在我们的 GitHub 仓库提交 Issue，或联系开发团队。",
       githubLabel: "GitHub 仓库",
-      reviewSourceCode: "查看源码验证 \u2192",
+      reviewSourceCode: "查看源码验证 →",
+    },
+    blog: {
+      pageTitle: "博客",
+    },
+    blogIndex: {
+      pageTitle: "DeepSeek API 博客",
+      pageSubtitle:
+        "深度解析 DeepSeek API 成本优化、上下文缓存策略、定价对比和开发者工具——由 MindRose 团队原创。",
+      article1Title:
+        "DeepSeek API 上下文缓存终极指南（2026）",
+      article1Desc:
+        "了解 DeepSeek 前缀匹配磁盘缓存的运作原理、缓存命中率偏低的原因，以及 5 个提升缓存命中率的 Prompt 工程技巧。",
+      article1Tags: "缓存, 成本优化, DeepSeek",
+      article2Title:
+        "Top 5 DeepSeek API 成本优化与可观测性工具横评",
+      article2Desc:
+        "深度盘点主流 DeepSeek API 监控与优化工具——从实时可观测性平台到隐私优先的 CSV 分析器，全面对比。",
+      article2Tags: "工具, 对比, 成本优化",
+      article3Title:
+        "OpenAI o3 vs DeepSeek V4 Pro：开发者成本收益分析",
+      article3Desc:
+        "硬核 API 定价数据对比——输入成本差距可达 270 倍。分析各模型的经济适用场景，以及如何平滑迁移。",
+      article3Tags: "对比, 定价, OpenAI",
+    },
+    costTracker: {
+      pageTitle: "DeepSeek API 费用追踪器",
+      badge: "免费工具",
+      heroTitle: "追踪 DeepSeek API 的每一分钱",
+      heroDesc:
+        "拖入 DeepSeek 账单 CSV，即刻获取按日、按模型、按 API Key 分类的费用明细 — 所有数据在浏览器本地处理。无需注册，无需上传。",
+      cta: "立即分析费用",
+      privacyBadge: "100% 隐私 — 数据绝不离开你的浏览器",
+      feature1Title: "每日费用明细",
+      feature1Desc:
+        "通过交互式柱状图精确查看每日支出。一眼发现异常消费和费用尖峰。",
+      feature2Title: "按 Key 费用归因",
+      feature2Desc:
+        "搞清楚到底是哪个 API Key 在吞噬预算。详细到 Key 的表格包含内嵌用量条和一键复制功能。",
+      feature3Title: "缓存命中率监控",
+      feature3Desc:
+        "全面了解上下文缓存为你节省了多少成本。绿色/琥珀色/红色三色标记，让你轻松发现最值得优化的 API Key。",
+      feature4Title: "多月对比分析",
+      feature4Desc:
+        "一次拖入多个 ZIP 文件，自动按月份配对合并。跨账单周期对比消费趋势，追踪你的优化成果。",
+      bottomCTA: "准备好掌控 API 成本了吗？",
+      bottomCTADesc:
+        "无需注册。数据绝不离开浏览器。只需拖拽、放下，Token 去向一目了然。",
+      recommendedTools: "推荐工具",
+      recommendedDesc:
+        "需要实时 API 可观测性？以下工具可与我们的 CSV 分析器互补：",
+      backToHome: "返回首页",
+    },
+    cacheAnalyzer: {
+      pageTitle: "DeepSeek 缓存命中率分析器",
+      badge: "免费工具",
+      heroTitle: "最大化你的 DeepSeek 缓存命中率",
+      heroDesc:
+        "DeepSeek 上下文缓存可将 API 成本最高削减 90% — 但前提是你得知道自己的命中率。上传 CSV，秒获缓存表现的清晰全景。",
+      cta: "分析我的缓存表现",
+      privacyBadge: "100% 隐私 — 数据绝不离开你的浏览器",
+      cachingExplainerTitle: "DeepSeek 上下文缓存如何工作",
+      cachingExplainerDesc:
+        "DeepSeek 采用前缀匹配的磁盘缓存机制。如果你的请求开头（前缀）在不同调用中保持一致，后续请求将复用已缓存的计算结果 — 显著降低成本。缓存的稳态前缀相对总输入越长，节省越多。",
+      cachingTip1Title: "固定系统提示词",
+      cachingTip1Desc:
+        "将静态指令放在每次请求的最前面。DeepSeek 从第一个 token 开始缓存；前端任意位置的修改都会使整个缓存失效。",
+      cachingTip2Title: "将动态内容放在末尾",
+      cachingTip2Desc:
+        "组织 Prompt 结构时，将用户问题、时间戳等可变内容放在固定系统提示词和下文之后。这能最大程度扩大可复用的前缀长度。",
+      cachingTip3Title: "使用我们的工具监控",
+      cachingTip3Desc:
+        "每日缓存命中率趋势图 + 各 Key 命中/未命中堆叠柱状图。命中率 > 40%（绿色）表示缓存良好；< 20%（红色）则表示 Prompt 工程还有优化空间。",
+      feature1Title: "每日缓存趋势线",
+      feature1Desc:
+        "持续追踪缓存命中率的变化。某次 Prompt 调整是否拖累了命中率？趋势线一目了然。",
+      feature2Title: "各 Key 命中 vs 未命中",
+      feature2Desc:
+        "每个 API Key 的堆叠柱状图清晰展示计入缓存的 Token（绿色）vs 未命中（灰色），附百分比标签和悬浮提示。",
+      bottomCTATitle: "需要帮助优化 Prompt 缓存策略？",
+      bottomCTADesc:
+        "MindRose 团队专注于 LLM 架构设计与 Prompt 工程。我们可以帮助你重新设计方案，实现最高的缓存效率。",
+      bottomCTALink: "联系我们 →",
+      backToHome: "返回首页",
+    },
+    pricingCalculator: {
+      pageTitle: "DeepSeek API 价格计算器",
+      badge: "免费工具",
+      heroTitle: "即刻估算你的 DeepSeek API 成本",
+      heroDesc:
+        "对比 DeepSeek V4 Flash、V4 Pro 及竞品模型价格。调整输入/输出 Token 数量和缓存命中率假设，查看真实的成本预估。",
+      inputTokensLabel: "月输入 Token 量",
+      outputTokensLabel: "月输出 Token 量",
+      cacheHitRateLabel: "缓存命中率 (%)",
+      cacheHitRateHint: "命中率越高，成本越低。DeepSeek 缓存命中按原始输入价格的 12.5% 计费。",
+      costEstimateTitle: "预估月度费用",
+      deepseekV4Flash: "DeepSeek V4 Flash",
+      deepseekV4Pro: "DeepSeek V4 Pro",
+      competitorComparison: "竞品定价对比",
+      comparisonNote:
+        "基于 2026 年 7 月公开发布的 API 定价。实际费用可能因使用模式和缓存效率而有所不同。",
+      compModelHeader: "模型",
+      compInputPriceHeader: "输入 / 百万 Token",
+      compOutputPriceHeader: "输出 / 百万 Token",
+      compCacheHitHeader: "缓存命中 / 百万 Token",
+      compNotesHeader: "备注",
+      compDeepseekV4Flash: "DeepSeek V4 Flash",
+      compDeepseekV4Pro: "DeepSeek V4 Pro",
+      compOpenaiO3: "OpenAI o3",
+      compClaudeOpus: "Claude Opus 4.8",
+      compOpenaiO3Notes: "输入价格约为 DS V4 Flash 的 270 倍",
+      compClaudeOpusNotes: "输入价格约为 DS V4 Flash 的 45 倍",
+      deployCTA: "准备部署你的 AI 技术栈？",
+      deployCTADesc:
+        "获取免费云额度来运行你的 AI 工作负载。Vultr 为新用户提供 $100 信用金 — 足够托管你的 LLM 代理或分析管线。",
+      deployCTALink: "领取 Vultr 免费额度 ($100)",
+      backToHome: "返回首页",
     },
     landing: {
       howItWorksTitle: "使用方式",
@@ -593,10 +825,10 @@ const translations = {
       qaA4: "DeepSeek 导出中的所有模型均支持。仪表盘会自动检测所有模型，并提供筛选器以便单独或合并查看。",
       qaQ5: "为什么费用显示为 0？",
       qaA5: "需要同时上传同一个月的 amount CSV 和 cost CSV 两个文件。如果缺少其中任何一个，费用数据将无法计算。",
-      qaQ6: "显示\u201C上传不完整\u201D是什么意思？",
+      qaQ6: "显示“上传不完整”是什么意思？",
       qaA6: "表示某个月份只有 amount 文件或只有 cost 文件，缺少另一个。补充缺失的文件并重新上传即可解决。",
       qaQ7: "哪里可以找到更多故障排查帮助？",
-      qaA7: "请查看完整操作指南中的\u201C常见问题排查\u201D章节，涵盖了 CSV 格式错误、缓存配置、文件命名规范等常见问题。",
+      qaA7: "请查看完整操作指南中的“常见问题排查”章节，涵盖了 CSV 格式错误、缓存配置、文件命名规范等常见问题。",
       qaQ8: "有文件大小限制吗？",
       qaA8: "有，单个文件不能超过 50 MB。这是为了防止恶意 ZIP 炸弹导致浏览器卡死。DeepSeek 月度用量导出文件通常小于 1 MB，正常使用不会触发此限制。",
       qaQ9: "可以按自定义项目分组 API Key 吗？",
@@ -610,13 +842,13 @@ const translations = {
       aboutSectionTitle: "关于我们",
       aboutWhyTitle: "为什么开发这个工具？",
       aboutWhyDesc:
-        "随着 DeepSeek API 调用的激增，我们发现官方后台导出的 CSV 账单数据难以直观阅读。\n为了搞清楚\u201C到底哪个项目消耗了最多的 Token\u201D以及\u201C缓存命中率如何\u201D，我们决定自己动手，打造一个简单、直观且绝对安全的可视化仪表盘。",
+        "随着 DeepSeek API 调用的激增，我们发现官方后台导出的 CSV 账单数据难以直观阅读。\n为了搞清楚“到底哪个项目消耗了最多的 Token”以及“缓存命中率如何”，我们决定自己动手，打造一个简单、直观且绝对安全的可视化仪表盘。",
       aboutPrivacyTitle: "极致的隐私与技术架构",
       aboutPrivacyDesc:
         "处理账单数据，隐私是不可妥协的底线。因此，我们采用了纯前端的架构设计。\n基于 Next.js 16 (App Router) 和 React 19，结合 Papa Parse 与 ECharts，所有的 CSV 数据解析和图表渲染 100% 在你的浏览器本地完成。\n没有数据库，你的数据绝不会离开你的设备半步。\n配合 Apple 风格的极简设计和 CSS 自定义属性驱动的双主题，我们希望为你提供最优雅的数据分析体验。",
       aboutMindRoseTitle: "关于 MindRose",
       aboutMindRoseDesc:
-        "本项目由 Gavin Chen 及 MindRose 团队开发并开源呈现。MindRose 是专注于为中小制造企业、物流公司及跨国贸易商提供轻量级数字化解决方案的科技团队。\n我们不卖虚无的\u201C数字化转型\u201D概念，而是通过 AI 技术与全栈敏捷开发（Next.js、React、Mendix 等），在几周内为你交付解决实际业务痛点的应用。\n从外贸独立站的 SEO 优化重构，到企业内部核心系统的敏捷搭建，再到 AI Agent 的业务流接入，我们懂技术，更懂你的商业场景。",
+        "本项目由 Gavin Chen 及 MindRose 团队开发并开源呈现。MindRose 是专注于为中小制造企业、物流公司及跨国贸易商提供轻量级数字化解决方案的科技团队。\n我们不卖虚无的“数字化转型”概念，而是通过 AI 技术与全栈敏捷开发（Next.js、React、Mendix 等），在几周内为你交付解决实际业务痛点的应用。\n从外贸独立站的 SEO 优化重构，到企业内部核心系统的敏捷搭建，再到 AI Agent 的业务流接入，我们懂技术，更懂你的商业场景。",
       aboutContactTitle: "商业合作",
       aboutContactDesc:
         "想要为你的企业定制类似的数据看板？或者需要将 AI 深度集成到你的业务工作流中？\n或者需要现代优雅的用户交互界面？或者需要多终端的跨部门业务系统？\n或者是基于当前开源项目的进一步合作？",

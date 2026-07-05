@@ -11,6 +11,7 @@ A browser-side dashboard for DeepSeek API usage analytics. Users drag their mont
 Strictly follows an Apple-minimalist design language: cold gray paper-texture backgrounds, ample whitespace, "no-card" full-width modules with thin horizontal dividers, subtle rounded corners, and diffuse shadows. Full light/dark dual-theme support driven by CSS custom properties.
 
 **Version**: 0.5.4
+- **New in this version**: Sister-project cross-linking, 3 SEO landing pages (Cost Tracker / Cache Analyzer / Pricing Calculator), Blog with 3 articles, Affiliate marketing integration
 
 ## Architecture
 
@@ -27,6 +28,17 @@ src/
 │   │   └── page.tsx          # /terms route: generates independent SEO metadata (canonical, OG, Twitter), renders <TermsPage />
 │   ├── changelog/
 │   │   └── page.tsx          # /changelog route: generates independent SEO metadata (canonical, OG, Twitter), renders <ChangelogPage />
+│   ├── deepseek-api-cost-tracker/
+│   │   └── page.tsx          # /deepseek-api-cost-tracker SEO landing (canonical, OG summary_large_image, Twitter), renders <CostTrackerPage />
+│   ├── deepseek-cache-hit-rate-analyzer/
+│   │   └── page.tsx          # /deepseek-cache-hit-rate-analyzer SEO landing (canonical, OG summary_large_image, Twitter), renders <CacheAnalyzerPage />
+│   ├── deepseek-api-pricing-calculator/
+│   │   └── page.tsx          # /deepseek-api-pricing-calculator SEO landing (canonical, OG summary_large_image, Twitter), renders <PricingCalculatorPage />
+│   ├── blog/
+│   │   ├── page.tsx                    # /blog article index: 3-card grid with tags/descriptions
+│   │   ├── deepseek-context-caching-guide/page.tsx    # Blog article 1: Context caching deep-dive
+│   │   ├── deepseek-cost-optimization-tools/page.tsx  # Blog article 2: Top 5 tools comparison
+│   │   └── openai-vs-deepseek-cost-comparison/page.tsx # Blog article 3: OpenAI vs DeepSeek pricing
 │   ├── globals.css          # Tailwind v4 + @font-face Hubot Sans + CSS variables + reveal/accordion + base styles
 │   ├── favicon.ico          # App icon (branded)
 │   ├── AppI18nShell.tsx     # Client shell: I18nProvider + <html lang> sync
@@ -41,6 +53,13 @@ src/
 │   ├── PrivacyPage.tsx        # Privacy policy page: bilingual content (7 sections), JSON-LD WebPage schema, Apple-minimalist legal-text layout, back-to-home link + FooterBar, GitHub source link for transparency verification
 │   ├── TermsPage.tsx          # Terms of use page: bilingual content (8 sections), JSON-LD WebPage schema, Apple-minimalist legal-text layout, back-to-home link + FooterBar, open-source license reference
 │   ├── ChangelogPage.tsx      # Changelog page: complete version history (v0.1.0–v0.5.4), entries by category (Added/Improved/Fixed/Dependencies) with color-coded dots, JSON-LD WebPage schema, bilingual, Apple-minimalist legal-text layout matching privacy/terms pages
+│   ├── CostTrackerPage.tsx     # SEO landing page: DeepSeek API Cost Tracker — captures "deepseek api cost tracker" intent, features + recommended tools (Portkey/Helicone affiliate links)
+│   ├── CacheAnalyzerPage.tsx   # SEO landing page: DeepSeek Cache Hit Rate Analyzer — caching education module (prefix matching, 3 optimization tips) + MindRose consulting CTA
+│   ├── PricingCalculatorPage.tsx  # SEO landing page: DeepSeek API Pricing Calculator — interactive slider calculator + competitor pricing comparison table + Vultr affiliate CTA
+│   ├── BlogPostLayout.tsx     # Reusable blog post template: Apple-minimalist layout (max-w-2xl), metadata row, cross-links, CTA banner; used by all /blog/* article pages
+│   ├── BlogArticlePage.tsx    # Generic blog article wrapper: locale-aware content loading, renders BlogPostLayout + ArticleRenderer
+│   ├── ArticleRenderer.tsx    # Structured content renderer: walks ArticleSection[] blocks, renders h2/h3/p/ul/ol/code/table with Apple-minimalist typography
+│   ├── BlogIndex.tsx          # Blog index page: 3-card grid with bilingual titles/descriptions/tags from translations
 │   ├── PrivacyContent.tsx     # Server-rendered <noscript> fallback: bilingual privacy policy sections for SEO crawlers that don't execute JS (EEAT trust signals)
 │   ├── TermsContent.tsx       # Server-rendered <noscript> fallback: bilingual terms of use sections for SEO crawlers that don't execute JS (EEAT trust signals)
 │   ├── ChangelogContent.tsx   # Server-rendered <noscript> fallback: bilingual changelog version history summary for SEO crawlers that don't execute JS
@@ -60,27 +79,29 @@ src/
 │   ├── LanguageSwitcher.tsx  # EN / 中文 toggle (Apple pill segmented control with `role="radio"`)
 │   └── ThemeSwitcher.tsx     # Light / Dark toggle (Apple-minimalist SVG icon button)
 ├── i18n/
-│   ├── index.ts             # Barrel export
-│   ├── I18nProvider.tsx     # React context + useTranslation hook + localStorage persistence
-│   └── translations.ts      # All UI strings in en/zh (app, tabs, dropzone, kpi, landing, warning, privacy, terms, projects, etc.)
+│   ├── index.ts              # Barrel export
+│   ├── I18nProvider.tsx      # React context + useTranslation hook + localStorage persistence
+│   └── translations.ts       # All UI strings in en/zh (27+ key groups: app, tabs, dropzone, kpi, landing, privacy, terms, projects, costTracker, cacheAnalyzer, pricingCalculator, etc.)
 └── lib/
-    ├── types.ts             # AmountRow, CostRow, DailyUsage, KeyStats, ParseResult, ParseError, ParseWarning
-    ├── parser.ts            # Papa Parse CSV pipeline (parse → pivot → join → computeKeyStats)
-    ├── concatFiles.ts       # Multi-month CSV pairing & concatenation + ZIP extraction (JSZip) + 50MB upload size limit
-    ├── format.ts            # Locale-aware formatCost / formatTokens / formatPercent / formatCostFull / formatTokensFull
-    ├── schema.ts            # JSON-LD structured data: SoftwareApplication + FAQPage + BreadcrumbList + Organization (bilingual en/zh, versioned, uses sisterProjects for site URLs, GitHub links, sameAs array, and brand)
-    ├── DataContext.tsx       # Data state + model filter (selectedModel, filteredResult, filterResult)
+    ├── types.ts              # AmountRow, CostRow, DailyUsage, KeyStats, ParseResult, ParseError, ParseWarning
+    ├── parser.ts             # Papa Parse CSV pipeline (parse → pivot → join → computeKeyStats)
+    ├── concatFiles.ts        # Multi-month CSV/ZIP pairing, extraction & concat + 50MB size limit
+    ├── format.ts             # Locale-aware formatCost / formatTokens / formatPercent / formatCostFull / formatTokensFull
+    ├── schema.ts             # JSON-LD structured data: SoftwareApplication + FAQPage + BreadcrumbList + Organization (bilingual en/zh, versioned, uses sisterProjects for site URLs, GitHub links, sameAs array, and brand)
+    ├── DataContext.tsx        # Data state + model filter (selectedModel, filteredResult, filterResult)
     ├── ProjectConfigContext.tsx  # Custom project grouping config: drag-and-drop key assignment, localStorage persistence, uncategorized fallback, reset-to-default
-    ├── shareCardData.ts     # Share card data extraction: extracts per-tab summary data (OverviewShareData, ProjectShareData, KeyShareData, CacheShareData, TrendsShareData) from ParseResult
-    ├── analytics.ts         # GA4 event tracking helper: trackEvent(name, params?) with gtag guard and error catch
-    ├── sisterProjects.ts    # Sister project cross-linking config: Agnes/DeepSeek brand info, tracked URLs with UTM params, TOOL_SERIES_NAME, buildTrackedSisterUrl()
-    └── ThemeContext.tsx      # Light/dark theme context + useTheme hook + localStorage + system preference
+    ├── shareCardData.ts      # Share card data extraction: extracts per-tab summary data (OverviewShareData, ProjectShareData, KeyShareData, CacheShareData, TrendsShareData) from ParseResult
+    ├── analytics.ts          # GA4 event tracking helper: trackEvent(name, params?) with gtag guard and error catch
+    ├── sisterProjects.ts     # Sister project cross-linking config: Agnes/DeepSeek brand info, tracked URLs with UTM params, TOOL_SERIES_NAME, buildTrackedSisterUrl()
+    ├── affiliates.ts         # Affiliate marketing link config: Vultr/DO/Namecheap/OpenRouter referral URLs, recommended tools list, centralized management
+    └── ThemeContext.tsx       # Light/dark theme context + useTheme hook + localStorage + system preference
 
 public/
 ├── ds-usage-logo.ico        # Favicon / app icon
 ├── ds-usage-logo.png        # App icon (PNG, 512×512, used in OpenGraph/Twitter metadata)
 ├── og-image.png             # Social preview image (PNG, 1200×630, used as primary OpenGraph/Twitter image)
 ├── llms.txt                 # LLM-friendly site description (markdown): what the app does, how it works, privacy, links
+├── llms-full.txt            # Expanded LLM site description (markdown): full detail version for AI context windows
 ├── fonts/
 │   ├── HubotSans-Regular.woff2   # Body text (weight 400)
 │   ├── HubotSans-Medium.woff2    # Medium weight (500)
@@ -149,7 +170,7 @@ Root-level `vercel.json` configures production deployment on Vercel with securit
 
 All sub-pages follow the same pattern: route directory under `src/app/` with `page.tsx` generating independent SEO metadata (canonical URL, OpenGraph, Twitter card), component in `src/components/`, URL in `sitemap.xml`, and navigation links in `FooterBar.tsx`.
 
-- **`/guideline`** (`GuidelinePage.tsx`): Bilingual user manual — markdown-like content blocks, 16+ annotated screenshots (locale-aware `-cn.png`/`-en.png`), dynamic sidebar ToC with Intersection Observer scroll tracking. Priority 0.8 in sitemap.
+- **`/guideline`** (`GuidelinePage.tsx`): Bilingual user manual — markdown-like content blocks, 24 annotated screenshots (12 per locale, locale-aware `-cn.png`/`-en.png`), dynamic sidebar ToC with Intersection Observer scroll tracking. Priority 0.8 in sitemap.
 - **`/privacy`** (`PrivacyPage.tsx`): 7-section bilingual legal text, JSON-LD WebPage schema, `max-w-3xl` centered layout, GitHub source links for transparency. Priority 0.5 in sitemap.
 - **`/terms`** (`TermsPage.tsx`): 8-section bilingual legal text, MIT License reference, JSON-LD WebPage schema, `max-w-2xl` layout. Priority 0.5 in sitemap.
 - **`/changelog`** (`ChangelogPage.tsx`): Complete version history from v0.1.0 to v0.5.4, entries organized by category (Added/Improved/Fixed/Dependencies) with color-coded dots, JSON-LD WebPage schema, bilingual, Apple-minimalist legal-text layout matching privacy/terms pages. Priority 0.5 in sitemap.

@@ -1,0 +1,186 @@
+"use client";
+
+import Link from "next/link";
+import { useTranslation } from "@/i18n";
+import { trackLandingCTA, trackOutboundClick } from "@/lib/analytics";
+import TitleBar from "./TitleBar";
+import FooterBar from "./FooterBar";
+
+/** UTM 参数：将落地页 CTA 转化归因到本页面 */
+const UTM =
+  "utm_source=deepseek-usage.xyz&utm_medium=referral&utm_campaign=landing_cache_analyzer";
+const HOME_CTA = `/?${UTM}`;
+
+/**
+ * DeepSeek Cache Hit Rate Analyzer 落地页
+ *
+ * 独立 SEO 落地页，捕获 "deepseek cache hit rate analysis" 搜索意图。
+ * 包含缓存机制教育模块和 MindRose 商业导流 CTA。
+ */
+export function CacheAnalyzerPage() {
+  const { t } = useTranslation();
+
+  const tips = [
+    { title: t.cacheAnalyzer.cachingTip1Title, desc: t.cacheAnalyzer.cachingTip1Desc },
+    { title: t.cacheAnalyzer.cachingTip2Title, desc: t.cacheAnalyzer.cachingTip2Desc },
+    { title: t.cacheAnalyzer.cachingTip3Title, desc: t.cacheAnalyzer.cachingTip3Desc },
+  ];
+
+  return (
+    <div className="min-h-screen" style={{ background: "var(--bg)" }}>
+      <TitleBar />
+
+      <div className="max-w-3xl mx-auto px-6 py-8">
+        {/* 返回首页 */}
+        <Link
+          href="/"
+          className="inline-flex items-center gap-1.5 text-xs font-medium transition-colors duration-200 mb-8 hover:opacity-80"
+          style={{ color: "var(--text-secondary)" }}
+        >
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M19 12H5M12 19l-7-7 7-7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+          {t.cacheAnalyzer.backToHome}
+        </Link>
+
+        {/* Hero */}
+        <section className="mb-16">
+          <span
+            className="inline-block text-[11px] font-semibold uppercase tracking-widest mb-4 px-2.5 py-1 rounded-full"
+            style={{ color: "var(--accent)", border: "1px solid var(--border)" }}
+          >
+            {t.cacheAnalyzer.badge}
+          </span>
+          <h1
+            className="text-3xl sm:text-4xl font-bold tracking-tight mb-4"
+            style={{ color: "var(--text-primary)", letterSpacing: "-0.03em" }}
+          >
+            {t.cacheAnalyzer.heroTitle}
+          </h1>
+          <p
+            className="text-base leading-relaxed text-pretty mb-6 max-w-xl"
+            style={{ color: "var(--text-secondary)" }}
+          >
+            {t.cacheAnalyzer.heroDesc}
+          </p>
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+            <a
+              href={HOME_CTA}
+              onClick={() => trackLandingCTA("cache_analyzer", "hero")}
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-200 hover:opacity-90"
+              style={{ background: "var(--text-primary)", color: "var(--accent-inverse)" }}
+            >
+              {t.cacheAnalyzer.cta}
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </a>
+            <span className="text-xs" style={{ color: "var(--text-tertiary)" }}>
+              {t.cacheAnalyzer.privacyBadge}
+            </span>
+          </div>
+        </section>
+
+        <hr style={{ borderColor: "var(--border)", marginBottom: "3rem" }} />
+
+        {/* Cache 机制解释 */}
+        <section className="mb-16">
+          <h2
+            className="text-lg font-bold tracking-tight mb-3"
+            style={{ color: "var(--text-primary)", letterSpacing: "-0.02em" }}
+          >
+            {t.cacheAnalyzer.cachingExplainerTitle}
+          </h2>
+          <p
+            className="text-sm leading-relaxed text-pretty mb-8"
+            style={{ color: "var(--text-secondary)" }}
+          >
+            {t.cacheAnalyzer.cachingExplainerDesc}
+          </p>
+
+          {/* 3 个优化技巧 */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
+            {tips.map((tip, idx) => (
+              <div
+                key={idx}
+                className="p-5 rounded-subtle"
+                style={{ border: "1px solid var(--border)" }}
+              >
+                <span
+                  className="inline-flex items-center justify-center w-6 h-6 rounded-full text-xs font-bold mb-3"
+                  style={{ background: "var(--text-primary)", color: "var(--accent-inverse)" }}
+                >
+                  {idx + 1}
+                </span>
+                <h3
+                  className="text-sm font-semibold mb-2"
+                  style={{ color: "var(--text-primary)", letterSpacing: "-0.01em" }}
+                >
+                  {tip.title}
+                </h3>
+                <p
+                  className="text-xs leading-relaxed text-pretty"
+                  style={{ color: "var(--text-secondary)" }}
+                >
+                  {tip.desc}
+                </p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <hr style={{ borderColor: "var(--border)", marginBottom: "3rem" }} />
+
+        {/* 工具功能亮点 */}
+        <section className="mb-16">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+            <div>
+              <h3 className="text-sm font-semibold mb-2" style={{ color: "var(--text-primary)" }}>
+                {t.cacheAnalyzer.feature1Title}
+              </h3>
+              <p className="text-sm leading-relaxed" style={{ color: "var(--text-secondary)" }}>
+                {t.cacheAnalyzer.feature1Desc}
+              </p>
+            </div>
+            <div>
+              <h3 className="text-sm font-semibold mb-2" style={{ color: "var(--text-primary)" }}>
+                {t.cacheAnalyzer.feature2Title}
+              </h3>
+              <p className="text-sm leading-relaxed" style={{ color: "var(--text-secondary)" }}>
+                {t.cacheAnalyzer.feature2Desc}
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <hr style={{ borderColor: "var(--border)", marginBottom: "3rem" }} />
+
+        {/* MindRose 导流 CTA */}
+        <section className="mb-16 text-center">
+          <h2
+            className="text-xl font-bold tracking-tight mb-3"
+            style={{ color: "var(--text-primary)", letterSpacing: "-0.02em" }}
+          >
+            {t.cacheAnalyzer.bottomCTATitle}
+          </h2>
+          <p
+            className="text-sm leading-relaxed text-pretty mb-6 max-w-md mx-auto"
+            style={{ color: "var(--text-secondary)" }}
+          >
+            {t.cacheAnalyzer.bottomCTADesc}
+          </p>
+          <a
+            href="mailto:hello@mindrose.xyz"
+            onClick={() => trackOutboundClick("cache_analyzer", "mindrose")}
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-200 hover:opacity-90"
+            style={{ background: "var(--text-primary)", color: "var(--accent-inverse)" }}
+          >
+            {t.cacheAnalyzer.bottomCTALink}
+          </a>
+        </section>
+      </div>
+
+      <FooterBar />
+    </div>
+  );
+}

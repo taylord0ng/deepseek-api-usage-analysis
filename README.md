@@ -1,4 +1,4 @@
-# DeepSeek API Usage Analytics Dashboard by Gavin & Mindrose Team
+# DeepSeek API Usage Dashboard & Cost Tracker by Gavin & Mindrose Team
 
 <p align="center">
   <img src="public/ds-usage-logo.png" alt="Logo" width="128" />

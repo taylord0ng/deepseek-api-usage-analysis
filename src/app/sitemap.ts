@@ -49,5 +49,47 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly" as const,
       priority: 0.5,
     },
+    {
+      url: `${SITE_URL}/deepseek-api-cost-tracker`,
+      lastModified: buildDate,
+      changeFrequency: "monthly" as const,
+      priority: 0.8,
+    },
+    {
+      url: `${SITE_URL}/deepseek-cache-hit-rate-analyzer`,
+      lastModified: buildDate,
+      changeFrequency: "monthly" as const,
+      priority: 0.8,
+    },
+    {
+      url: `${SITE_URL}/deepseek-api-pricing-calculator`,
+      lastModified: buildDate,
+      changeFrequency: "monthly" as const,
+      priority: 0.8,
+    },
+    {
+      url: `${SITE_URL}/blog`,
+      lastModified: buildDate,
+      changeFrequency: "weekly" as const,
+      priority: 0.7,
+    },
+    {
+      url: `${SITE_URL}/blog/deepseek-context-caching-guide`,
+      lastModified: buildDate,
+      changeFrequency: "monthly" as const,
+      priority: 0.6,
+    },
+    {
+      url: `${SITE_URL}/blog/deepseek-cost-optimization-tools`,
+      lastModified: buildDate,
+      changeFrequency: "monthly" as const,
+      priority: 0.6,
+    },
+    {
+      url: `${SITE_URL}/blog/openai-vs-deepseek-cost-comparison`,
+      lastModified: buildDate,
+      changeFrequency: "monthly" as const,
+      priority: 0.6,
+    },
   ];
 }

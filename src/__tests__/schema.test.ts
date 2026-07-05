@@ -13,9 +13,11 @@ describe("buildOrganizationJsonLd", () => {
     expect(result.name).toContain("DeepSeek");
     expect(result.url).toContain("deepseek-usage.xyz");
     expect(result.logo).toContain("ds-usage-logo.png");
-    expect(result.sameAs).toEqual([
-      "https://github.com/GavinCnod/deepseek-api-usage-analysis",
-    ]);
+    expect(result.sameAs).toEqual(
+      expect.arrayContaining([
+        "https://github.com/GavinCnod/deepseek-api-usage-analysis",
+      ])
+    );
   });
 
   it("returns valid Organization schema for Chinese", () => {

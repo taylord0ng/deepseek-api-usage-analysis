@@ -32,9 +32,9 @@ const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
  * alternates.languages 指向同一 URL 以告知搜索引擎双语内容存在。
  */
 export function generateMetadata(): Metadata {
-  const title = "DeepSeek API Usage Analytics Dashboard by Gavin & Mindrose Team";
+  const title = "DeepSeek API Usage Dashboard & Cost Tracker | Free & Secure";
   const description =
-    "Visualize your DeepSeek API usage — drop your monthly CSVs and get instant cost analytics, cache analysis, and per-key breakdowns. Free, open source, browser-side.";
+    "Analyze your DeepSeek API billing CSVs instantly. Track token usage, monitor cache hit rates, and view cost by API key. 100% browser-side, no data uploaded. Free & open source.";
 
   return {
     title,
@@ -51,7 +51,7 @@ export function generateMetadata(): Metadata {
       description,
       url: SITE_URL,
       type: "website",
-      siteName: "DeepSeek API Usage Analytics Dashboard by Gavin & Mindrose Team",
+      siteName: "DeepSeek API Usage Dashboard & Cost Tracker",
       locale: "en_US",
       alternateLocale: ["zh_CN"],
       images: [

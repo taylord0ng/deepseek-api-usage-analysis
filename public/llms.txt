@@ -11,6 +11,13 @@
 ## Docs
 
 - [DeepSeek Usage Dashboard](https://deepseek-usage.xyz) — Main application: drag-and-drop CSV/ZIP analytics dashboard for DeepSeek API usage
+- [DeepSeek API Cost Tracker](https://deepseek-usage.xyz/deepseek-api-cost-tracker) — SEO landing page: free, private DeepSeek API cost tracking tool
+- [DeepSeek Cache Hit Rate Analyzer](https://deepseek-usage.xyz/deepseek-cache-hit-rate-analyzer) — SEO landing page: cache performance analysis and optimization guide
+- [DeepSeek API Pricing Calculator](https://deepseek-usage.xyz/deepseek-api-pricing-calculator) — SEO landing page: interactive pricing calculator with competitor comparison
+- [Blog](https://deepseek-usage.xyz/blog) — DeepSeek API cost optimization articles and developer guides
+- [Blog: Context Caching Guide](https://deepseek-usage.xyz/blog/deepseek-context-caching-guide) — Deep dive into DeepSeek prefix-matching disk caching
+- [Blog: Cost Optimization Tools](https://deepseek-usage.xyz/blog/deepseek-cost-optimization-tools) — Top 5 DeepSeek API cost optimization & observability tools compared
+- [Blog: OpenAI vs DeepSeek](https://deepseek-usage.xyz/blog/openai-vs-deepseek-cost-comparison) — Cost-benefit analysis: OpenAI o3 vs DeepSeek V4 Pro
 - [User Guide](https://deepseek-usage.xyz/guideline) — Bilingual step-by-step usage documentation with annotated screenshots
 - [Changelog](https://deepseek-usage.xyz/changelog) — Complete version history from v0.1.0 to v0.5.4
 - [Privacy Policy](https://deepseek-usage.xyz/privacy) — How your data is handled, bilingual legal text (7 sections)

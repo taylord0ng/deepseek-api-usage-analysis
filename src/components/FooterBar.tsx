@@ -91,6 +91,14 @@ export default function FooterBar({ animate = false, sectionRef }: FooterBarProp
         </Link>
         <span aria-hidden="true">·</span>
         <Link
+          href="/blog"
+          className="transition-colors duration-200 hover:underline underline-offset-2"
+          style={{ color: "var(--text-secondary)" }}
+        >
+          {t.blog.pageTitle}
+        </Link>
+        <span aria-hidden="true">·</span>
+        <Link
           href="/changelog"
           className="transition-colors duration-200 hover:underline underline-offset-2"
           style={{ color: "var(--text-secondary)" }}
