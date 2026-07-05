@@ -1,6 +1,6 @@
 # DeepSeek API Usage Analytics Dashboard — Full Content
 
-> A free, privacy-first analytics tool for DeepSeek API users. Drop your monthly ZIP exports or CSV files and get instant cost analytics, cache analysis, and per-key breakdowns. Open source (MIT), bilingual (EN/中文), entirely browser-side. No account, no upload, no database. Built by Gavin Chen & the MindRose team. Version 0.6.0.
+> A free, privacy-first analytics tool for DeepSeek API users. Drop your monthly ZIP exports or CSV files and get instant cost analytics, cache analysis, and per-key breakdowns. Open source (MIT), bilingual (EN/中文), entirely browser-side. No account, no upload, no database. Built by Gavin Chen & the MindRose team. Version 0.6.1.
 
 ---
 
@@ -266,6 +266,16 @@ If you have questions about these Terms of Use, please open an issue on our GitH
 
 ### English
 
+**v0.6.1** (2026-07-05)
+
+*Added*
+- Author page (`/author`) — bilingual profile page for Gavin Chen with bio, skill tags, social links, JSON-LD Person schema, independent SEO metadata, and <noscript> crawler fallback. FooterBar navigation link added.
+- Centralized author config (`src/lib/authors.ts`) — single source of truth for social/contact URLs. Blog articles now include full Author Person metadata in JSON-LD.
+
+*Improved*
+- Site-wide SEO metadata — added author, keywords, and twitter:site/twitter:creator to all page-level generateMetadata() calls.
+- Code cleanup — removed deprecated landing page image asset and unused mode imports.
+
 **v0.6.0** (2026-07-04)
 
 *Added*
@@ -358,6 +368,16 @@ If you have questions about these Terms of Use, please open an issue on our GitH
 ---
 
 ### 中文
+
+**v0.6.1**（2026-07-05）
+
+*新增*
+- 作者页面（`/author`）— Gavin Chen 的双语个人资料页，含个人简介、技能标签、社交链接、JSON-LD Person Schema、独立 SEO 元数据和 <noscript> 爬虫回退。FooterBar 新增导航链接。
+- 集中化作者配置（`src/lib/authors.ts`）— 社交/联系链接的统一数据源。博客文章在 JSON-LD 中包含完整的作者 Person 元数据。
+
+*改进*
+- 全站 SEO 元数据优化 — 为所有页面级 generateMetadata() 调用添加 author、keywords 和 twitter:site/twitter:creator 元标签。
+- 代码清理 — 移除已废弃的旧落地页图片资源和未使用的模块导入。
 
 **v0.6.0**（2026-07-04）
 

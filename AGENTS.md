@@ -10,8 +10,8 @@ A browser-side dashboard for DeepSeek API usage analytics. Users drag their mont
 
 Strictly follows an Apple-minimalist design language: cold gray paper-texture backgrounds, ample whitespace, "no-card" full-width modules with thin horizontal dividers, subtle rounded corners, and diffuse shadows. Full light/dark dual-theme support driven by CSS custom properties.
 
-**Version**: 0.6.0
-- **New in this version**: Sister-project cross-linking, 3 SEO landing pages (Cost Tracker / Cache Analyzer / Pricing Calculator), Blog with 3 articles, Affiliate marketing integration
+**Version**: 0.6.1
+- **New in this version**: Author page with unified site-wide metadata, SEO optimization pass, responsive navigation refinements
 
 ## Architecture
 
@@ -39,6 +39,8 @@ src/
 │   │   ├── deepseek-context-caching-guide/page.tsx    # Blog article 1: Context caching deep-dive
 │   │   ├── deepseek-cost-optimization-tools/page.tsx  # Blog article 2: Top 5 tools comparison
 │   │   └── openai-vs-deepseek-cost-comparison/page.tsx # Blog article 3: OpenAI vs DeepSeek pricing
+│   ├── author/
+│   │   └── page.tsx          # /author route: generates independent SEO metadata (canonical, OG, Twitter), renders <AuthorPage />
 │   ├── globals.css          # Tailwind v4 + @font-face Hubot Sans + CSS variables + reveal/accordion + base styles
 │   ├── favicon.ico          # App icon (branded)
 │   ├── AppI18nShell.tsx     # Client shell: I18nProvider + <html lang> sync
@@ -52,10 +54,12 @@ src/
 │   ├── GuidelinePage.tsx     # Full interactive user guide page: bilingual content blocks (h1–h6, p, blockquote, tables, ul/ol), screenshot embedding with locale-aware image switching, dynamic table-of-contents, scroll-reveal sections (1660 lines of structured guide content)
 │   ├── PrivacyPage.tsx        # Privacy policy page: bilingual content (7 sections), JSON-LD WebPage schema, Apple-minimalist legal-text layout, back-to-home link + FooterBar, GitHub source link for transparency verification
 │   ├── TermsPage.tsx          # Terms of use page: bilingual content (8 sections), JSON-LD WebPage schema, Apple-minimalist legal-text layout, back-to-home link + FooterBar, open-source license reference
-│   ├── ChangelogPage.tsx      # Changelog page: complete version history (v0.1.0–v0.6.0), entries by category (Added/Improved/Fixed/Dependencies) with color-coded dots, JSON-LD WebPage schema, bilingual, Apple-minimalist legal-text layout matching privacy/terms pages
+│   ├── ChangelogPage.tsx      # Changelog page: complete version history (v0.1.0–v0.6.1), entries by category (Added/Improved/Fixed/Dependencies) with color-coded dots, JSON-LD WebPage schema, bilingual, Apple-minimalist legal-text layout matching privacy/terms pages
 │   ├── CostTrackerPage.tsx     # SEO landing page: DeepSeek API Cost Tracker — captures "deepseek api cost tracker" intent, features + recommended tools (Portkey/Helicone affiliate links)
 │   ├── CacheAnalyzerPage.tsx   # SEO landing page: DeepSeek Cache Hit Rate Analyzer — caching education module (prefix matching, 3 optimization tips) + MindRose consulting CTA
 │   ├── PricingCalculatorPage.tsx  # SEO landing page: DeepSeek API Pricing Calculator — interactive slider calculator + competitor pricing comparison table + Vultr affiliate CTA
+│   ├── AuthorPage.tsx          # Author/Gavin profile page: bilingual bio, skills tags, social links (GitHub/LinkedIn/Email/MindRose/WeChat), JSON-LD Person schema, independent SEO metadata
+│   ├── AuthorContent.tsx       # Server-rendered <noscript> fallback: bilingual author bio sections for SEO crawlers (EEAT signals)
 │   ├── BlogPostLayout.tsx     # Reusable blog post template: Apple-minimalist layout (max-w-2xl), metadata row, cross-links, CTA banner; used by all /blog/* article pages
 │   ├── BlogArticlePage.tsx    # Generic blog article wrapper: locale-aware content loading, renders BlogPostLayout + ArticleRenderer
 │   ├── ArticleRenderer.tsx    # Structured content renderer: walks ArticleSection[] blocks, renders h2/h3/p/ul/ol/code/table with Apple-minimalist typography
@@ -94,6 +98,7 @@ src/
     ├── analytics.ts          # GA4 event tracking helper: trackEvent(name, params?) with gtag guard and error catch
     ├── sisterProjects.ts     # Sister project cross-linking config: Agnes/DeepSeek brand info, tracked URLs with UTM params, TOOL_SERIES_NAME, buildTrackedSisterUrl()
     ├── affiliates.ts         # Affiliate marketing link config: Vultr/DO/Namecheap/OpenRouter referral URLs, recommended tools list, centralized management
+    ├── authors.ts            # Author profile config: Gavin social/contact links (GitHub, LinkedIn, Email, MindRose, WeChat), team member page URLs
     └── ThemeContext.tsx       # Light/dark theme context + useTheme hook + localStorage + system preference
 
 public/
@@ -173,7 +178,7 @@ All sub-pages follow the same pattern: route directory under `src/app/` with `pa
 - **`/guideline`** (`GuidelinePage.tsx`): Bilingual user manual — markdown-like content blocks, 24 annotated screenshots (12 per locale, locale-aware `-cn.png`/`-en.png`), dynamic sidebar ToC with Intersection Observer scroll tracking. Priority 0.8 in sitemap.
 - **`/privacy`** (`PrivacyPage.tsx`): 7-section bilingual legal text, JSON-LD WebPage schema, `max-w-3xl` centered layout, GitHub source links for transparency. Priority 0.5 in sitemap.
 - **`/terms`** (`TermsPage.tsx`): 8-section bilingual legal text, MIT License reference, JSON-LD WebPage schema, `max-w-2xl` layout. Priority 0.5 in sitemap.
-- **`/changelog`** (`ChangelogPage.tsx`): Complete version history from v0.1.0 to v0.6.0, entries organized by category (Added/Improved/Fixed/Dependencies) with color-coded dots, JSON-LD WebPage schema, bilingual, Apple-minimalist legal-text layout matching privacy/terms pages. Priority 0.5 in sitemap.
+- **`/changelog`** (`ChangelogPage.tsx`): Complete version history from v0.1.0 to v0.6.1, entries organized by category (Added/Improved/Fixed/Dependencies) with color-coded dots, JSON-LD WebPage schema, bilingual, Apple-minimalist legal-text layout matching privacy/terms pages. Priority 0.5 in sitemap.
 - **`/llms.txt`**: Static markdown file in `public/` — LLM-friendly site description (purpose, features, data format, privacy, links).
 
 ## Theme system
@@ -189,23 +194,15 @@ The app supports full light/dark dual-theme switching, designed in Apple-minimal
 
 ### Landing page theme-aware images
 
-The landing page hero area displays background decoration images that switch with the theme:
-- CSV-themed sketch on the left (`notion_sketch_csv_light.png` / `notion_sketch_csv_dark.png`)
-- Chart-themed sketch on the right (`notion_sketch_chart_light.png` / `notion_sketch_chart_dark.png`)
-- Images are positioned absolutely as non-interactive decoration (`pointer-events-none`, `aria-hidden="true"`)
-- Swapped via `useTheme()` → `isDark` branching in `LandingPage.tsx`
+Hero background images switch with theme: `notion_sketch_csv_light.png` / `notion_sketch_csv_dark.png` (left) and `notion_sketch_chart_light.png` / `notion_sketch_chart_dark.png` (right). Non-interactive decoration (`pointer-events-none`, `aria-hidden`), swapped via `useTheme()` → `isDark`.
 
 ### CSS variable design
 
-All colors are defined as CSS custom properties on `:root, .light` and `.dark` selectors in `globals.css`. Components NEVER use hardcoded color values — always reference `var(--...)`. For full token reference, read `src/app/globals.css` (30+ tokens for bg, text, border, accent, semantic colors, shadows, dropzone states).
-
-Tailwind v4 `@theme inline` in `globals.css` maps key CSS variables to Tailwind utility classes (`bg-background`, `text-foreground`, `border-border`, `animate-fade-in`, etc.). Key utility classes: `.shadow-diffuse`, `.shadow-diffuse-md`, `.rounded-subtle`, `.reveal-section` / `.reveal-section.visible` (Intersection Observer scroll-reveal), `.accordion-panel` / `.accordion-panel.open`.
-
-Global base styles: smooth scrolling, `color-scheme` per theme, inverted selection, 6px themed scrollbar, `prefers-reduced-motion` support.
+All colors via CSS custom properties on `:root, .light` / `.dark` in `globals.css` — NEVER hardcode colors in components. Tailwind v4 `@theme inline` maps variables to utilities (`bg-background`, `text-foreground`, `border-border`, `animate-fade-in`). Key classes: `.shadow-diffuse`, `.shadow-diffuse-md`, `.rounded-subtle`, `.reveal-section` / `.reveal-section.visible`, `.accordion-panel` / `.accordion-panel.open`. Global: smooth scrolling, `color-scheme` per theme, 6px themed scrollbar, `prefers-reduced-motion`.
 
 ### ECharts theme integration
 
-All chart components (`OverviewView`, `TrendsView`, `CacheView`, `KeyView`) use `useTheme()` from `ThemeContext` to derive chart colors. Pattern:
+Chart components use `useTheme()` for colors:
 
 ```tsx
 const { theme } = useTheme();
@@ -263,37 +260,7 @@ Keys are flat 2-level (`group.keyName`) in `src/i18n/translations.ts`. Do NOT ne
 
 ## Sister Project Cross-Linking (v0.5.4)
 
-`src/lib/sisterProjects.ts` provides a centralized config module for cross-linking between the two sibling tools in the "API Usage Analyzer Series" product family (DeepSeek + Agnes). All cross-site links flow through this single module so UTM tracking, brand names, and URLs stay consistent.
-
-### Configuration
-
-- **`deepseekProject`**: Current tool's brand info — `name`, `siteUrl` (from `NEXT_PUBLIC_SITE_URL` or `"https://deepseek-usage.xyz"`), `githubUrl` (`"https://github.com/GavinCnod/deepseek-api-usage-analysis"`)
-- **`agnesProject`**: Sister tool's brand info — `name`, `siteUrl` (from `NEXT_PUBLIC_AGNES_SITE_URL` or falls back to GitHub URL), `githubUrl` (from `NEXT_PUBLIC_AGNES_GITHUB_URL` or `"https://github.com/GavinCnod/agnes-api-usage-analysis"`)
-- **`agnesProject.trackedSiteUrls`**: Pre-built UTM-tracked URLs for the Agnes site (header/landing/footer entry points), via `buildTrackedSisterUrl()` with `utm_source=agnes_site`, `utm_medium=referral`, and per-location `utm_campaign`
-- **`agnesProject.trackedRepoUrls`**: Same UTM-tracking for Agnes GitHub links (landing/footer entry points)
-- **`TOOL_SERIES_NAME`**: Brand constant — `"API Usage Analyzer Series"` — used in FooterBar and Organization JSON-LD
-
-### UTM tracking
-
-`buildTrackedSisterUrl(baseUrl, campaign)` appends:
-- `utm_source=agnes_site`
-- `utm_medium=referral`
-- `utm_campaign=<campaign>` (e.g., `sister_tool_header`, `sister_tool_landing`, `sister_tool_footer`, `sister_repo_landing`, `sister_repo_footer`)
-
-### Integration points
-
-| Consumer | Usage |
-|---|---|
-| `TitleBar.tsx` | Agnes pill button → `agnesProject.trackedSiteUrls.header` |
-| `LandingPage.tsx` | Sister Project section → `agnesProject.trackedSiteUrls.landing` + `agnesProject.trackedRepoUrls.landing` |
-| `FooterBar.tsx` | "Related Tools" row → `agnesProject.trackedSiteUrls.footer` + `agnesProject.trackedRepoUrls.footer` + `TOOL_SERIES_NAME`; GitHub link → `deepseekProject.githubUrl` |
-| `schema.ts` | Organization JSON-LD → `sameAs` array (both GitHub URLs + Agnes site URL), `brand: TOOL_SERIES_NAME`, `url: deepseekProject.siteUrl`, `SITE_URL` constant |
-
-### Environment variables
-
-- **`NEXT_PUBLIC_SITE_URL`**: Current site URL (default: `https://deepseek-usage.xyz`)
-- **`NEXT_PUBLIC_AGNES_SITE_URL`**: Agnes site URL (default: falls back to Agnes GitHub URL)
-- **`NEXT_PUBLIC_AGNES_GITHUB_URL`**: Agnes GitHub repo URL (default: `https://github.com/GavinCnod/agnes-api-usage-analysis`)
+`src/lib/sisterProjects.ts` — centralized config for cross-linking between the "API Usage Analyzer Series" sibling tools (DeepSeek + Agnes). Exports `deepseekProject`, `agnesProject` (brand info, tracked URLs via `buildTrackedSisterUrl()` with `utm_source=agnes_site&utm_medium=referral&utm_campaign=...`), and `TOOL_SERIES_NAME`. Consumed by `TitleBar.tsx` (Agnes pill), `LandingPage.tsx` (Sister Project section), `FooterBar.tsx` ("Related Tools" row), `schema.ts` (Organization JSON-LD `sameAs`/`brand`). Env vars: `NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_AGNES_SITE_URL`, `NEXT_PUBLIC_AGNES_GITHUB_URL`.
 
 ## Custom Project Grouping (By Project tab)
 
@@ -322,45 +289,14 @@ A "By Custom Projects" tab in the dashboard lets users organize API keys into us
 
 ## Social Media Share Cards (v0.5.2)
 
-Each dashboard tab (Overview / Projects / Keys / Cache / Trends) supports generating a 1200×630 social media infographic share card. The feature is implemented across three new components and a data extraction module:
+Each dashboard tab generates a 1200×630 infographic share card via `ShareButton` → `ShareModal` → `ShareCard`:
 
-### Architecture
+- **`ShareButton`**: SVG share icon in tab nav bar, opens `ShareModal`.
+- **`ShareModal`**: Dialog with live preview, "From XXX" name input (localStorage persisted), optional custom message, clipboard copy (PNG via `html2canvas` → paste to WeChat/Feishu/DingTalk), PNG download, QR code (client-side `qrcode` → `https://deepseek-usage.xyz`).
+- **`ShareCard`**: Pure 1200×630 rendering component — per-tab KPI hero + ECharts mini-chart + date range + logo + QR + watermark. Theme/locale-aware.
+- **`shareCardData.ts`**: Data extraction layer — `ShareTab` type, per-tab data interfaces, `extractShareCardData()` from `ParseResult` + optional `ProjectConfig`.
 
-- **`ShareButton`** (`src/components/ShareButton.tsx`): Minimal share icon (SVG share icon + "Share" label) in the tab navigation bar. Opens the ShareModal for the current active tab.
-- **`ShareModal`** (`src/components/ShareModal.tsx`): Full-featured share dialog with:
-  - Live preview: scaled ShareCard thumbnail that updates in real-time as user types
-  - "From XXX" name/team name input — large signature on the card, persisted to `localStorage["ds-share-name"]`
-  - Optional custom message — displayed as a quote-style annotation on the card
-  - Clipboard copy: captures the card as PNG via `html2canvas`, copies to clipboard (paste directly into WeChat / Feishu / DingTalk)
-  - PNG download: exports the card as a `.png` file
-  - QR code: points to `https://deepseek-usage.xyz`, generated client-side via `qrcode`
-  - App logo watermark on the card for brand identification
-- **`ShareCard`** (`src/components/ShareCard.tsx`): Pure rendering component of the 1200×630 infographic card. Per-tab designs with:
-  - Top-left KPI summary rows + right-aligned tab label badge
-  - Left side: hero big-number (cost/cache rate/peak/etc.) + metric details
-  - Right side: ECharts mini-chart (pie/bar/line) relevant to the tab
-  - Bottom: date range + app logo + QR code + "Generated by" watermark
-  - Theme-aware (light/dark), locale-aware labels
-- **`shareCardData.ts`** (`src/lib/shareCardData.ts`): Data extraction layer. Defines `ShareTab` type, per-tab data interfaces (`OverviewShareData`, `ProjectShareData`, `KeyShareData`, `CacheShareData`, `TrendsShareData`), and `extractShareCardData()` function that computes tab-specific aggregates from `ParseResult` (with optional `ProjectConfig` for the projects tab).
-
-### Integration
-
-- `ShareButton` is rendered in `Dashboard.tsx`'s tab navigation bar via `ml-auto` push-right positioning
-- `ShareModal` reads data from `useData()` (current filtered data), `useProjectConfig()` (project grouping), `useTheme()`, and `useTranslation()`
-- The share card capture uses `html2canvas` to snapshot the rendered `<ShareCard>` DOM node at native 1200×630 resolution
-- QR code is generated as a `data:` URL via the `qrcode` library
-- Clipboard copy uses `navigator.clipboard.write([new ClipboardItem(...)])` with PNG blob; falls back to download-only on unsupported browsers
-
-### Dependencies
-
-- `html2canvas` — DOM-to-canvas screenshot for card capture
-- `qrcode` — client-side QR code generation (no server needed)
-
-### Styling
-
-- `ShareButton`: `text-xs font-medium` with `var(--text-tertiary)` color, hover → `var(--text-primary)`. SVG share icon (15×15) + "Share" label (hidden on small screens via `hidden sm:inline`)
-- `ShareModal`: Apple-minimalist sheet/overlay — `fixed inset-0 z-[100]` with centered `max-w-[520px]` dialog, thin border (`var(--border)`), `var(--bg)` background, `shadow-diffuse-md`. Input fields: `rounded-subtle` with `var(--border)` border, `var(--text-primary)` text on `var(--bg-surface)` background
-- `ShareCard`: Rendered at 1200×630 with `pointer-events-none` (non-interactive). Typography: 600–700 weight headings, 400–500 body, tight `tracking-tighter` hero numbers. Theme colors: `#F5F5F7` / `#000000` (bg), `#1D1D1F` / `#F5F5F7` (text). Per-tab color accents: blue (Overview), purple (Projects), green (Keys), orange (Cache), teal (Trends)
+Dependencies: `html2canvas`, `qrcode`.
 
 ## CopyButton component
 
@@ -374,76 +310,33 @@ Each dashboard tab (Overview / Projects / Keys / Cache / Trends) supports genera
 
 ## Upload security
 
-The app implements client-side upload safety measures:
-
-- **50MB per-file limit**: `MAX_UPLOAD_SIZE_BYTES = 50 * 1024 * 1024` in `concatFiles.ts`. Files exceeding this limit are rejected with a user-facing error message before any parsing occurs. This is a ZIP bomb protection measure — legitimate DeepSeek monthly exports are typically under 1 MB.
-- **Error display**: `DropZone.tsx` checks file sizes during upload processing and surfaces oversized-file errors through `<ErrorDisplay />` with i18n titles.
-- **FAQ coverage**: Landing page FAQ includes Q8 ("Is there a file size limit?") explaining the 50MB cap.
-- **Privacy**: All validation happens client-side — no file content is sent anywhere.
+- **50MB per-file limit**: `MAX_UPLOAD_SIZE_BYTES = 50 * 1024 * 1024` in `concatFiles.ts`. ZIP bomb protection — legitimate exports are <1 MB. Errors surfaced via `ErrorDisplay` with i18n titles.
+- **Privacy**: All validation client-side — no file content leaves the browser.
 
 ## CSV format (DeepSeek platform)
 
 **amount CSV**: `utc_date | model | api_key_name | api_key | type | price | amount`
-- `type` is pivoted: `request_count | output_tokens | input_cache_hit_tokens | input_cache_miss_tokens`
-- `request_count` rows have empty `price` → parsed as `0`
-- `user_id` column present but not validated (optional)
+- `type` pivoted: `request_count | output_tokens | input_cache_hit_tokens | input_cache_miss_tokens`; `user_id` optional
 
 **cost CSV**: `utc_date | model | cost | currency`
-- `wallet_type` column present but not validated (optional)
-- Cost is distributed proportionally across API keys within each (date, model) group based on total token usage
+- `wallet_type` optional; cost distributed proportionally across keys within each (date, model) group by token usage
 
 ## Parsing pipeline (parser.ts)
 
-1. `parseAmountCSV()` — validates columns, parses each row, validates `type` enum, `price`, `amount`
-2. `parseCostCSV()` — validates columns, parses each row, validates `cost`
-3. `pivotAmountRows()` — groups by `(date, model, api_key_name)`, spreads type→columns, tracks pricing
-4. `joinCosts()` — distributes cost proportionally by token share within each `(date, model)` group
-5. `computeKeyStats()` — aggregates per-key totals, computes cache hit rates
-6. Summary: total cost, total tokens, cache stats, active keys count, date range, model list
+1. `parseAmountCSV()` / `parseCostCSV()` — validate columns, parse rows
+2. `pivotAmountRows()` — group by (date, model, api_key_name), spread type→columns
+3. `joinCosts()` — distribute cost proportionally by token share per (date, model)
+4. `computeKeyStats()` — per-key totals, cache hit rates, summary
 
 ## Page architecture
 
-The app has two distinct page states managed by `Dashboard.tsx`:
+Two states managed by `Dashboard.tsx`:
 
-### Landing page (pre-upload, `!result`)
-Rendered via `<LandingPage />` — scrollable single-page with:
-1. **TitleBar** — sticky top nav: logo + app name + Agnes sister-project pill + GitHub + LanguageSwitcher + ThemeSwitcher
-2. **Hero** — centered title/subtitle (`pt-16 pb-10`), theme-aware bg decoration images (CSV sketch left, chart sketch right), `pointer-events-none`
-3. **Upload** — `<DropZone />` + `<ErrorDisplay />`
-4. **Sister Project** — Agnes AI cross-link section: badge ("Sister Project"), title, description, two action links (open Agnes analyzer site, view GitHub repo) with tracked UTM URLs
-5. **`<noscript>` fallback** — `LandingContent.tsx` for SEO crawlers (How It Works + FAQ + About)
-6. **How It Works** — 3-step grid with numbered circles, `id="how-it-works"`, "View Full Guide →" link, `content-visibility: auto`
-7. **QA** — 9-item accordion (`id="faq"`, `max-w-2xl`): Q5=$0 cost, Q6=incomplete upload, Q7=user guide, Q8=file size limit, Q9=project grouping. Accessible: `aria-expanded`/`aria-controls`, keyboard Enter/Space, inline `max-height`/`opacity` transition
-8. **About** — `id="about"`, 4 subsections (Why/Privacy/MindRose/Contact) with email copy + social link pills + "View Changelog →" link, `content-visibility: auto`
-9. **FooterBar** — with `animate` prop for scroll-reveal
+**Landing page** (`!result`): TitleBar → Hero (theme-aware bg images) → DropZone + ErrorDisplay → Sister Project (Agnes cross-link with UTM) → `<noscript>` SEO fallback (`LandingContent`) → HowItWorks (3-step, "View Full Guide →") → QA (9-item accordion, accessible) → About (4 subsections + email copy + social links + "View Changelog →") → FooterBar (with `animate`). All sections separated by thin `<hr>` (`var(--border)`), `.reveal-section` + IntersectionObserver (15% threshold, one-shot), respects `prefers-reduced-motion`.
 
-Sections separated by thin `<hr>` (`var(--border)`). `.reveal-section` + Intersection Observer (15% threshold, one-shot, fade-in + slide-up). Respects `prefers-reduced-motion`.
+**Dashboard view** (`result` exists): TitleBar → sr-only H1 → action bar (file name + date range + re-upload/clear) → ErrorDisplay + KPICards + 5 tabs (Overview/By Project/By Key/Cache/Trends) + model filter + chart views → FooterBar.
 
-### Dashboard view (post-upload, `result` exists)
-Rendered inline in `Dashboard.tsx` with:
-1. **TitleBar** — same shared component
-2. **Semantic hidden H1** — `<h1 className="sr-only">` for screen readers and search engines
-3. **Action bar** — file name + date range (left) + re-upload/clear buttons (right)
-4. **Content** — ErrorDisplay + WarningBanner, KPICards, tabs (Overview / By Project / By Key / Cache / Trends), model filter, chart views
-5. **FooterBar** — same shared component
-
-### Shared components
-
-**TitleBar** (`src/components/TitleBar.tsx`):
-- Sticky top bar with `z-50`, thin bottom border (`var(--border)`)
-- Left: logo (`next/image`, 32×32, unoptimized for static export) + app title (`t.app.title`) in bold
-- Right: Agnes sister-project pill button (hidden on mobile via `hidden md:inline-flex`, tracked UTM link, i18n `aria-label`/`title`) + GitHub icon link (SVG, `w-8 h-8` circle hover background) + guideline book icon (Link to `/guideline`, i18n `aria-label`/`title`) + changelog clock icon (Link to `/changelog`, i18n `aria-label`/`title`) + `<LanguageSwitcher />` + `<ThemeSwitcher />`
-- Used by both `LandingPage` and `Dashboard`
-
-**FooterBar** (`src/components/FooterBar.tsx`):
-- "Related Tools" row: label + Agnes tool link + Agnes repo link + `TOOL_SERIES_NAME` (all with tracked UTM URLs, sourced from `sisterProjects.ts`)
-- Thin HR divider + centered muted text + guideline link (`t.guideline.pageTitle`) + privacy link (`t.privacy.pageTitle`) + terms link (`t.terms.pageTitle`) + changelog link (`t.changelog.pageTitle`) + GitHub link + version number
-- Text from `t.footer.text`, version from `t.footer.version`
-- Links separated by `·` dividers; privacy and terms links point to `/privacy` and `/terms` respectively
-- Accepts optional `animate` prop: when true, wraps content in a `reveal-section` div and exposes `sectionRef` callback for IntersectionObserver registration (Landing page use)
-- Without `animate`, renders content directly (Dashboard use)
-- Mobile-friendly with `flex-wrap` for small screens
-- Used by `LandingPage`, `Dashboard`, `PrivacyPage`, `TermsPage`, and `GuidelinePage`
+**Shared**: `TitleBar` — sticky `z-50`, logo + title + Agnes pill + GitHub + blog pen + guideline compass + changelog clock + lang + theme; responsive via `...` popover on mobile. `FooterBar` — "Related Tools" row (Agnes site + repo + TOOL_SERIES_NAME with UTM) + divider + links (guideline/privacy/terms/blog/author/changelog/GitHub) + version; optional `animate` prop for scroll-reveal.
 
 ## Component patterns
 
@@ -471,28 +364,20 @@ Apple-style underline tabs: `text-xs font-semibold uppercase tracking-wide`, 2px
 
 ## Common tasks
 
-- **Adding a new UI string**: Add to both `en` and `zh` in `src/i18n/translations.ts` as flat 2-level keys (`group.keyName`), then use `t.group.keyName` in the component. Do NOT nest deeper than 2 levels — the type system flattens leaf keys to `string`.
-- **Adding a new chart**: Use `ReactECharts` from `echarts-for-react`, construct option with `useMemo`, use `useTheme()` for theme-aware colors
-- **Modifying the parser**: Types in `src/lib/types.ts`, logic in `src/lib/parser.ts`
-- **Adding a new CSS variable**: Define in both `:root, .light` AND `.dark` blocks in `src/app/globals.css`, then reference as `var(--your-token)` in components
-- **Changing the visual design**: Update CSS variables in `globals.css` — do NOT hardcode colors in individual components
-- **Adding a new view/tab**: Add to `TABS` array in `Dashboard.tsx`, add translation keys under `tabs.*` in both locales, create component with Hero + chart pattern using `filteredResult`
-- **Adding clipboard copy to a value**: Import `<CopyButton>` from `@/components/CopyButton`, wrap the display value as its child, pass `value` (numeric) and `name` (display label for toast). The component handles clipboard API, fallback, toast, and timer cleanup.
-- **Adding social media share card support for a new tab**: If a new dashboard tab is added, update `ShareTab` in `src/lib/shareCardData.ts`, add the corresponding data interface and extraction logic, add a `ShareCard` render branch for the tab's infographic layout (KPI + mini-chart), and add translations under `share.*` in both locales.
-- **Modifying share card design**: Edit `ShareCard.tsx` to change the infographic layout, colors, or chart type for any tab. Card dimensions are constants `CARD_W` (1200) / `CARD_H` (630). Chart options are computed with `useMemo` using theme-aware colors. QR code URL is hardcoded in `ShareModal.tsx` (`useEffect` → `QRCode.toDataURL`).
-- **Adding a new custom project config feature**: Project definitions live in `ProjectConfigContext` with localStorage persistence. Edit `ProjectDef` type and `ProjectConfigContext` for schema changes, `ProjectView` for display changes, and `translations.ts` under `projects.*` for UI strings. Config modal uses drag-and-drop + keyboard-accessible dropdowns.
-- **Managing ZIP uploads**: ZIP extraction logic lives in `concatFiles.ts` via JSZip. The `concatMonthlyCSVs()` function auto-detects `.zip` files and extracts CSV content before pairing. To change the file size limit, update `MAX_UPLOAD_SIZE_BYTES` in `concatFiles.ts`.
-- **Adding a new upload validation**: Add check logic in `DropZone.tsx`, error key in `translations.ts` under `error.*` or `dropzone.*`, and display via `ErrorDisplay.tsx`.
-- **Adding or modifying a landing page section**: Edit `LandingPage.tsx` — add a new `<section>` block with `reveal-section` class and `ref` callback for Intersection Observer. Precede each section with a thin `<hr style={{ borderColor: "var(--border)" }} />` divider. Use Apple-minimalist spacing (`pt-10 pb-12` or `pb-16`), centered `<h2>` with `text-[11px]` uppercase section title styling, subsections headed by `<h3>`, and content using `var(--text-primary)` / `var(--text-secondary)` colors. Add an `id` attribute for direct anchor linking (e.g., `id="how-it-works"`). For below-the-fold sections, add `style={{ contentVisibility: "auto" }}` to defer rendering and reduce initial paint cost. Add translation keys under `landing.*` group (flat 2-level keys). If the content is important for SEO, also add it to `LandingContent.tsx` inside the `<noscript>` block.
-- **Adding email / clipboard interaction**: Use `navigator.clipboard.writeText()` with a `<textarea>` fallback for older browsers. Dynamically concatenate email addresses at runtime (`"hello" + "@" + "domain"`) to deter scraping. Provide immediate visual feedback (e.g., SVG checkmark + "Copied" tooltip, 2s timeout).
-- **Supporting a new CSV column**: Add to types in `types.ts`, update parser validation in `parser.ts`, add to pivot/join logic if needed
-- **Changing the font**: Replace WOFF2 files in `public/fonts/`, update `@font-face` declarations in `globals.css`, update `--font-sans` in the `@theme inline` block
-- **Adding a new animation**: Define `@keyframes` in `globals.css`, add to `@theme inline` block as `--animate-*`. Respect `prefers-reduced-motion` by including in the global media query.
-- **Updating SEO metadata**: Edit `generateMetadata()` in `layout.tsx` for page-level meta tags (title, description, OG, Twitter, alternateLocale). Edit `src/lib/schema.ts` for JSON-LD structured data (SoftwareApplication, FAQPage, BreadcrumbList). For new landing page sections visible to crawlers without JS, add content to `LandingContent.tsx`. For sub-pages with independent SEO (guideline, privacy, terms, changelog), each has its own `page.tsx` with dedicated `generateMetadata()`.
-- **Changing the site URL**: Set `NEXT_PUBLIC_SITE_URL` env var (in `.env` or deployment platform). It propagates to metadata canonical URL, `robots.ts` sitemap pointer, and `sitemap.ts` entry URL.
-- **Adding a new theme-aware landing image**: Add light and dark variants to `public/landing/`, then update the `isDark` branching in `LandingPage.tsx` to reference the correct paths.
-- **Adding a new page with independent SEO metadata**: Create a route directory under `src/app/` (e.g., `privacy/`), add `page.tsx` with its own `generateMetadata()` (canonical URL, OpenGraph, Twitter, robots), create the page component in `src/components/`, add the URL to `src/app/sitemap.ts`, and add translation keys to the `translations.ts` file. For structured content pages, consider adding JSON-LD schema (e.g., `WebPage`) in the client component. Add navigation links to `FooterBar.tsx`.
-- **Adding a `<noscript>` SEO fallback for a page**: Create a `*Content.tsx` component that outputs the page's key bilingual text content wrapped in `<noscript>` with `<section lang="en">` and `<section lang="zh">` blocks. Import translations at module scope from `@/i18n/translations`. Include the component in the page's `page.tsx` alongside the client component. This ensures crawlers that don't execute JS can still index the page content (EEAT trust signals). See `PrivacyContent.tsx`, `TermsContent.tsx`, and `ChangelogContent.tsx` for the pattern.
-- **Adding Google Analytics to a page**: GA is injected globally in `layout.tsx` — no per-page setup needed. To track page-views on client-side navigations, call `gtag('config', GA_ID, { page_path: ... })` in a `useEffect`. Set `NEXT_PUBLIC_GA_ID` in deployment environment; leave unset locally to disable tracking.
-- **Adding or updating a sister project link**: Edit `src/lib/sisterProjects.ts` — it centralizes all brand info (names, URLs, GitHub repos) and tracked UTM URLs for the "API Usage Analyzer Series" product family. Add new `trackedSiteUrls` or `trackedRepoUrls` entries via `buildTrackedSisterUrl(baseUrl, campaign)` for new cross-link entry points. The module is consumed by `TitleBar.tsx`, `LandingPage.tsx`, `FooterBar.tsx`, and `schema.ts`. New env vars (`NEXT_PUBLIC_AGNES_SITE_URL`, `NEXT_PUBLIC_AGNES_GITHUB_URL`) follow the same opt-in pattern as `NEXT_PUBLIC_SITE_URL`.
-- **Adding a new tool to the product family**: Update `TOOL_SERIES_NAME` in `sisterProjects.ts`, add a new project export object following the `deepseekProject`/`agnesProject` pattern, add env var fallbacks, update Organization JSON-LD `sameAs` + `brand` in `schema.ts`, and add cross-links in `TitleBar.tsx`, `LandingPage.tsx`, and `FooterBar.tsx`.
+- **Adding a new UI string**: Add flat 2-level keys (`group.keyName`) to both `en` and `zh` in `src/i18n/translations.ts`, then use `t.group.keyName`. Do NOT nest deeper than 2 levels.
+- **Adding a new chart**: Use `ReactECharts` from `echarts-for-react`, construct option with `useMemo`, use `useTheme()` for theme-aware colors.
+- **Modifying the parser**: Types in `src/lib/types.ts`, logic in `src/lib/parser.ts`.
+- **Adding a new CSS variable**: Define in both `:root, .light` AND `.dark` blocks in `src/app/globals.css`, reference as `var(--your-token)`.
+- **Adding a new view/tab**: Add to `TABS` array in `Dashboard.tsx`, add translation keys under `tabs.*`, create component with Hero + chart pattern using `filteredResult`.
+- **Adding clipboard copy**: Import `<CopyButton>` from `@/components/CopyButton`, wrap display value, pass `value` (numeric) and `name` (toast label).
+- **Adding share card support**: Update `ShareTab` in `src/lib/shareCardData.ts`, add data interface + extraction logic, add `ShareCard` render branch, add translations under `share.*`.
+- **Managing ZIP uploads**: Logic in `concatFiles.ts` via JSZip; change size limit via `MAX_UPLOAD_SIZE_BYTES`. Add upload validation in `DropZone.tsx` + `ErrorDisplay.tsx`.
+- **Adding a landing page section**: Add `<section>` with `reveal-section` class + `ref` callback in `LandingPage.tsx`, add `id` for anchoring, add translation keys under `landing.*`. For SEO-critical content, also add to `LandingContent.tsx` inside `<noscript>`.
+- **Adding a new page with independent SEO**: Create route dir under `src/app/`, add `page.tsx` with `generateMetadata()`, create component in `src/components/`, add URL to `src/app/sitemap.ts`, add translations, add nav links to `FooterBar.tsx`. For structured content, add `<noscript>` fallback via `*Content.tsx` component (see `PrivacyContent.tsx`, `TermsContent.tsx`, `ChangelogContent.tsx`).
+- **Updating SEO metadata**: Edit `generateMetadata()` in page `layout.tsx` for meta tags; edit `src/lib/schema.ts` for JSON-LD. Site URL via `NEXT_PUBLIC_SITE_URL` env var.
+- **Adding/changing sister project links**: Edit `src/lib/sisterProjects.ts` (centralized brand info, tracked UTM URLs). Consumed by `TitleBar.tsx`, `LandingPage.tsx`, `FooterBar.tsx`, `schema.ts`.
+- **Adding a new tool to the product family**: Add project export in `sisterProjects.ts` following existing pattern, update Organization JSON-LD `sameAs` + `brand` in `schema.ts`, add cross-links in UI components.
+- **Adding Google Analytics**: GA injected globally in `layout.tsx` via `NEXT_PUBLIC_GA_ID` — no per-page setup. Set env var in deployment; leave unset locally.
+- **Changing the font**: Replace WOFF2 in `public/fonts/`, update `@font-face` in `globals.css`, update `--font-sans` in `@theme inline`.
+- **Adding an animation**: Define `@keyframes` in `globals.css`, add to `@theme inline` as `--animate-*`. Respect `prefers-reduced-motion`.
+- **Adding email / clipboard interaction**: Use `navigator.clipboard.writeText()` with `<textarea>` fallback. Concatenate email at runtime to deter scraping.

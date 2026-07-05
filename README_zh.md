@@ -129,7 +129,16 @@ src/
 │   ├── GuidelinePage.tsx    # 完整交互式用户操作手册（双语、标注截图、目录导航、滚动渐显）
 │   ├── PrivacyPage.tsx      # 隐私政策页（双语 7 章节法律文本，JSON-LD WebPage Schema，GitHub 源码链接）
 │   ├── TermsPage.tsx        # 使用条款页（双语 8 章节法律文本，JSON-LD WebPage Schema，MIT 许可证引用）
-│   ├── ChangelogPage.tsx     # 更新日志页（v0.1.0–v0.6.0 完整版本历史，按类别以彩色圆点分组，JSON-LD WebPage Schema，双语）
+│   ├── ChangelogPage.tsx     # 更新日志页（v0.1.0–v0.6.1 完整版本历史，按类别以彩色圆点分组，JSON-LD WebPage Schema，双语）
+│   ├── CostTrackerPage.tsx    # SEO 落地页：DeepSeek API 费用追踪器（功能 + 联盟推荐）
+│   ├── CacheAnalyzerPage.tsx  # SEO 落地页：DeepSeek 缓存命中率分析器（缓存教育 + MindRose CTA）
+│   ├── PricingCalculatorPage.tsx # SEO 落地页：DeepSeek API 价格计算器（交互式滑块 + 竞品对比表 + Vultr CTA）
+│   ├── BlogPostLayout.tsx    # 可复用博客文章模板（Apple 极简风格，元数据行，交叉链接，CTA）
+│   ├── BlogArticlePage.tsx   # 通用博客文章包装器（根据语言加载内容）
+│   ├── ArticleRenderer.tsx   # 结构化内容渲染器（h2/h3/p/ul/ol/code/table 区块）
+│   ├── BlogIndex.tsx         # 博客首页（3 卡片网格，双语标题/描述/标签）
+│   ├── AuthorPage.tsx        # 作者个人资料页（双语简介、技能、社交链接、JSON-LD Person Schema）
+│   ├── AuthorContent.tsx     # <noscript> SEO 回退：双语作者简介供爬虫抓取
 │   ├── PrivacyContent.tsx    # <noscript> SEO 回退：双语隐私政策内容供爬虫抓取
 │   ├── TermsContent.tsx      # <noscript> SEO 回退：双语使用条款内容供爬虫抓取
 │   ├── ChangelogContent.tsx  # <noscript> SEO 回退：双语更新日志版本摘要供爬虫抓取
@@ -163,6 +172,8 @@ src/
     ├── shareCardData.ts     # 分享卡片数据提取（从 ParseResult 提取各标签页汇总数据）
     ├── analytics.ts         # GA4 事件追踪辅助函数（共享 gtag 封装，含守卫逻辑）
     ├── sisterProjects.ts    # 姊妹项目交叉链接配置（Agnes/DeepSeek 品牌信息，含 UTM 参数的追踪链接）
+    ├── affiliates.ts        # 联盟营销链接配置（Vultr/DO/Namecheap/OpenRouter 推荐链接）
+    ├── authors.ts            # 作者个人资料配置（社交/联系链接、团队成员页面链接）
     └── ThemeContext.tsx     # 主题状态 + useTheme Hook
 ├── __tests__/
 │   ├── analytics.test.ts    # trackEvent 单元测试
@@ -216,6 +227,18 @@ npm run build
 - **缓存**：`/_next/static` 和 `/fonts` 永久缓存（1 年），`/landing` 和 `/guideline` 图片 stale-while-revalidate 缓存（1 周）
 
 ## 更新日志
+
+### v0.6.1
+
+**新增：**
+
+- 作者页面（`/author`）— Gavin Chen 的专属双语个人资料页，包含个人简介、技能标签、社交链接（GitHub、LinkedIn、Email、MindRose、微信）、JSON-LD Person Schema、独立 SEO 元数据（canonical、OG、Twitter）、Apple 极简风格布局和 `<noscript>` 爬虫回退。FooterBar 新增导航链接。
+- 集中化作者配置模块（`src/lib/authors.ts`）— 社交/联系链接和团队成员页面 URL 的统一数据源。博客文章页面在 JSON-LD 中包含完整的作者 Person 元数据（`sameAs` 链接、`worksFor` MindRose 组织信息）。
+
+**改进：**
+
+- 全站 SEO 元数据优化 — 为所有页面级 `generateMetadata()` 调用（博客文章、工具落地页、操作手册、隐私政策、使用条款、更新日志）添加 `author`、`keywords` 和 `twitter:site`/`twitter:creator` 元标签。通过 `authors.ts` 统一全站作者引用。
+- 代码清理 — 移除已废弃的旧落地页图片资源和未使用的模块级导入。
 
 ### v0.6.0
 

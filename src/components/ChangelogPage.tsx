@@ -49,6 +49,30 @@ interface VersionEntry {
 /** 所有版本的更新日志，按版本倒序排列 */
 const CHANGELOG_DATA: VersionEntry[] = [
   {
+    version: "v0.6.1",
+    date: "2026-07-05",
+    added: [
+      {
+        en: "Author page (`/author`) — dedicated bilingual profile page for Gavin Chen with bio, skill tags, social links (GitHub, LinkedIn, Email, MindRose, WeChat), JSON-LD Person schema, independent SEO metadata (canonical, OG, Twitter), Apple-minimalist layout, and `<noscript>` crawler fallback via `AuthorContent.tsx`. Navigation link added to FooterBar.",
+        zh: "作者页面（`/author`）— Gavin Chen 的专属双语个人资料页，包含个人简介、技能标签、社交链接（GitHub、LinkedIn、Email、MindRose、微信）、JSON-LD Person Schema、独立 SEO 元数据（canonical、OG、Twitter）、Apple 极简风格布局，以及通过 `AuthorContent.tsx` 实现的 `<noscript>` 爬虫回退。FooterBar 新增导航链接。",
+      },
+      {
+        en: "Centralized author config module (`src/lib/authors.ts`) — single source of truth for author social/contact URLs (GitHub, LinkedIn, Email, MindRose, WeChat) and team member page URLs. Consumed by AuthorPage, BlogPostLayout (author metadata), and schema.ts (Person/Article JSON-LD). Blog article pages now include full author Person metadata (`sameAs` links, `worksFor` MindRose org) in JSON-LD.",
+        zh: "集中化作者配置模块（`src/lib/authors.ts`）— 作者社交/联系链接（GitHub、LinkedIn、Email、MindRose、微信）和团队成员页面 URL 的统一数据源。被 AuthorPage、BlogPostLayout（作者元数据）和 schema.ts（Person/Article JSON-LD）引用。博客文章页面现在在 JSON-LD 中包含完整的作者 Person 元数据（`sameAs` 链接、`worksFor` MindRose 组织信息）。",
+      },
+    ],
+    improved: [
+      {
+        en: "Site-wide SEO metadata pass — added `author` meta tag, `keywords`, and `twitter:site`/`twitter:creator` to all page-level `generateMetadata()` calls (blog articles, tool landing pages, guideline, privacy, terms, changelog). Unified author references across all pages using the new `authors.ts` config.",
+        zh: "全站 SEO 元数据优化 — 为所有页面级 `generateMetadata()` 调用（博客文章、工具落地页、操作手册、隐私政策、使用条款、更新日志）添加 `author` 元标签、`keywords` 和 `twitter:site`/`twitter:creator`。使用新的 `authors.ts` 配置统一全站作者引用。",
+      },
+      {
+        en: "Code cleanup — removed deprecated old landing page image asset. Removed unused module-level imports across page components.",
+        zh: "代码清理 — 移除已废弃的旧落地页图片资源。清理页面组件中未使用的模块级导入。",
+      },
+    ],
+  },
+  {
     version: "v0.6.0",
     date: "2026-07-04",
     added: [

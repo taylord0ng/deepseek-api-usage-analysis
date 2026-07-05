@@ -44,7 +44,7 @@ If you also analyze Agnes AI usage, check the companion open-source project in t
 - **Sister project cross-linking** — Centralized `sisterProjects.ts` module manages cross-links between the two sibling tools in the "API Usage Analyzer Series" product family (DeepSeek + Agnes). All cross-site URLs flow through a single config source with UTM tracking (`utm_source=agnes_site`, `utm_medium=referral`, per-location `utm_campaign`). Sister project links appear in the TitleBar (pill button), LandingPage (dedicated section), FooterBar ("Related Tools" row), and Organization JSON-LD schema.
 - **Landing page** — Complete pre-upload landing with theme-aware background images, Sister Project section (Agnes AI cross-link with tracked UTM URLs), How It Works steps, accordion FAQ (9 items, including file size limits and project grouping), expanded multi-section About (project origin, privacy & tech, team, contact with email copy & social links + "View Changelog →" link), scroll-reveal animations, anchor-linkable sections with deferred rendering for performance
 - **User Guide** — Comprehensive bilingual user manual at `/guideline` with annotated screenshots, interactive table of contents, step-by-step dashboard navigation, CSV export instructions, chart interpretation guide, and troubleshooting section
-- **Changelog** — Dedicated `/changelog` page with complete version history (v0.1.0–v0.6.0) organized by category (Added/Improved/Fixed/Dependencies) with color-coded dots; Apple-minimalist bilingual design matching privacy/terms pages, JSON-LD WebPage schema, independent SEO metadata, linked from TitleBar, FooterBar, and LandingPage
+- **Changelog** — Dedicated `/changelog` page with complete version history (v0.1.0–v0.6.1) organized by category (Added/Improved/Fixed/Dependencies) with color-coded dots; Apple-minimalist bilingual design matching privacy/terms pages, JSON-LD WebPage schema, independent SEO metadata, linked from TitleBar, FooterBar, and LandingPage
 - **Privacy Policy & Terms** — `/privacy` and `/terms` pages with bilingual legal content, independent SEO metadata (canonical, OpenGraph, Twitter), JSON-LD WebPage schemas, and Apple-minimalist legal-text layout; linked from footer on every page
 - **Analytics** — Optional Google Analytics 4 integration via `NEXT_PUBLIC_GA_ID` env var; zero overhead when unset. Tracks page views, file uploads, share card generations, tab switches, and language switches — zero CSV data ever tracked.
 - **Enhanced SEO** — Twitter `summary_large_image` card with 1200×630 OG image, `Organization` JSON-LD schema for Google Knowledge Panel, expanded `BreadcrumbList` with all sub-pages, differentiated sitemap `lastModified` dates, `keywords` + `author` + `twitter:site`/`creator` meta tags on all pages
@@ -129,7 +129,16 @@ src/
 │   ├── GuidelinePage.tsx    # Full interactive user guide (bilingual, annotated screenshots, table of contents, scroll-reveal)
 │   ├── PrivacyPage.tsx      # Privacy policy page (bilingual 7-section legal text, JSON-LD WebPage schema, GitHub source links)
 │   ├── TermsPage.tsx        # Terms of use page (bilingual 8-section legal text, JSON-LD WebPage schema, MIT License reference)
-│   ├── ChangelogPage.tsx     # Changelog page (complete version history v0.1.0–v0.6.0, entries by category with colored dots, JSON-LD WebPage schema, bilingual)
+│   ├── ChangelogPage.tsx     # Changelog page (complete version history v0.1.0–v0.6.1, entries by category with colored dots, JSON-LD WebPage schema, bilingual)
+│   ├── CostTrackerPage.tsx    # SEO landing: DeepSeek API Cost Tracker (features + affiliate recommendations)
+│   ├── CacheAnalyzerPage.tsx  # SEO landing: DeepSeek Cache Hit Rate Analyzer (caching education + MindRose CTA)
+│   ├── PricingCalculatorPage.tsx # SEO landing: DeepSeek API Pricing Calculator (interactive slider + competitor table + Vultr CTA)
+│   ├── BlogPostLayout.tsx    # Reusable blog post template (Apple-minimalist, metadata row, cross-links, CTA)
+│   ├── BlogArticlePage.tsx   # Generic blog article wrapper (locale-aware content loading)
+│   ├── ArticleRenderer.tsx   # Structured content renderer (h2/h3/p/ul/ol/code/table blocks)
+│   ├── BlogIndex.tsx         # Blog index page (3-card grid, bilingual titles/descriptions/tags)
+│   ├── AuthorPage.tsx        # Author profile page (bilingual bio, skills, social links, JSON-LD Person schema)
+│   ├── AuthorContent.tsx     # <noscript> SEO fallback: bilingual author bio for crawlers
 │   ├── PrivacyContent.tsx    # <noscript> SEO fallback: bilingual privacy policy for crawlers
 │   ├── TermsContent.tsx      # <noscript> SEO fallback: bilingual terms of use for crawlers
 │   ├── ChangelogContent.tsx  # <noscript> SEO fallback: bilingual changelog version summary for crawlers
@@ -163,6 +172,8 @@ src/
     ├── shareCardData.ts     # Share card data extraction (per-tab summary data from ParseResult)
     ├── analytics.ts         # GA4 event tracking helper (shared gtag wrapper with guard)
     ├── sisterProjects.ts    # Sister project cross-linking config (Agnes/DeepSeek brand info, tracked URLs with UTM params)
+    ├── affiliates.ts        # Affiliate marketing link config (Vultr/DO/Namecheap/OpenRouter referral URLs)
+    ├── authors.ts            # Author profile config (social/contact URLs, team member page links)
     └── ThemeContext.tsx     # Theme state + useTheme hook
 ├── __tests__/
 │   ├── analytics.test.ts    # trackEvent unit tests
@@ -216,6 +227,18 @@ The repo includes `vercel.json` with pre-configured security headers and caching
 - **Caching**: immutable caching for `/_next/static` and `/fonts` (1 year), stale-while-revalidate for `/landing` and `/guideline` images (1 week)
 
 ## Changelog
+
+### v0.6.1
+
+**Added:**
+
+- Author page (`/author`) — dedicated bilingual profile page for Gavin Chen with bio, skill tags, social links (GitHub, LinkedIn, Email, MindRose, WeChat), JSON-LD Person schema, independent SEO metadata (canonical, OG, Twitter), Apple-minimalist layout, and `<noscript>` crawler fallback. FooterBar navigation link added.
+- Centralized author config module (`src/lib/authors.ts`) — single source of truth for social/contact URLs and team member page URLs. Blog article pages now include full author Person metadata (`sameAs` links, `worksFor` MindRose org) in JSON-LD.
+
+**Improved:**
+
+- Site-wide SEO metadata — added `author`, `keywords`, and `twitter:site`/`twitter:creator` meta tags to all page-level `generateMetadata()` calls (blog articles, tool landing pages, guideline, privacy, terms, changelog). Unified author references via `authors.ts`.
+- Code cleanup — removed deprecated old landing page image asset and unused module-level imports.
 
 ### v0.6.0
 
