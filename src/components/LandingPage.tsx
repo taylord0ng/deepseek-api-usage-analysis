@@ -680,11 +680,11 @@ export default function LandingPage() {
                 href={agnesProject.trackedSiteUrls.landing}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 rounded-subtle px-3 py-1.5 text-sm font-medium transition-colors duration-200 hover:bg-[var(--bg-surface-hover)]"
+                className="inline-flex items-center gap-2 text-sm transition-colors duration-200
+                           rounded-subtle px-3 py-1.5 hover:bg-[var(--bg-surface-hover)]"
                 style={{
-                  color: "var(--text-primary)",
+                  color: "var(--text-secondary)",
                   border: "1px solid var(--border)",
-                  background: "var(--bg-surface)",
                 }}
               >
                 {t.landing.sisterVisit}
@@ -694,8 +694,12 @@ export default function LandingPage() {
                 href={agnesProject.trackedRepoUrls.landing}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 text-sm font-medium transition-colors duration-200 hover:opacity-80"
-                style={{ color: "var(--text-secondary)" }}
+                className="inline-flex items-center gap-2 text-sm transition-colors duration-200
+                           rounded-subtle px-3 py-1.5 hover:bg-[var(--bg-surface-hover)]"
+                style={{
+                  color: "var(--text-secondary)",
+                  border: "1px solid var(--border)",
+                }}
               >
                 {t.landing.sisterRepo}
                 <span aria-hidden="true">→</span>

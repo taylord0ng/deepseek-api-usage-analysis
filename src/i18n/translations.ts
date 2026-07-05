@@ -261,6 +261,9 @@ const translations = {
     },
     blog: {
       pageTitle: "Blog",
+      ctaTitle: "Try our free DeepSeek API Usage Dashboard",
+      ctaDesc: "Drag your CSVs, see your costs. 100% private, no signup.",
+      ctaButton: "Open Dashboard",
     },
     author: {
       pageTitle: "Author",
@@ -286,9 +289,9 @@ const translations = {
       websiteLabel: "MindRose Website",
     },
     blogIndex: {
-      pageTitle: "DeepSeek API Blog",
+      pageTitle: "Blog: How We Grow with DeepSeek Faster, Better, and Smarter",
       pageSubtitle:
-        "Deep dives into DeepSeek API cost optimization, context caching strategies, pricing comparisons, and developer tools — brought to you by the MindRose team.",
+        "Deep dives into DeepSeek API use cases, cost optimization, context caching strategies, pricing comparisons, and developer tools — original content from the MindRose team.",
       article1Title:
         "The Ultimate Guide to DeepSeek API Context Caching (2026)",
       article1Desc:
@@ -820,6 +823,9 @@ const translations = {
     },
     blog: {
       pageTitle: "博客",
+      ctaTitle: "试试我们的免费 DeepSeek API 用量仪表盘",
+      ctaDesc: "拖入 CSV，立刻看清成本。100% 本地处理，无需注册。",
+      ctaButton: "打开仪表盘",
     },
     author: {
       pageTitle: "作者",
@@ -845,9 +851,9 @@ const translations = {
       websiteLabel: "MindRose 官网",
     },
     blogIndex: {
-      pageTitle: "DeepSeek API 博客",
+      pageTitle: "博客：我们怎么多快好省地和 DeepSeek 一起成长？",
       pageSubtitle:
-        "深度解析 DeepSeek API 成本优化、上下文缓存策略、定价对比和开发者工具——由 MindRose 团队原创。",
+        "深度解析 DeepSeek API 使用场景、成本优化、上下文缓存策略、定价对比和开发者工具 —— 由 MindRose 团队原创。",
       article1Title:
         "DeepSeek API 上下文缓存终极指南（2026）",
       article1Desc:

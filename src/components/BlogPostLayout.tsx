@@ -3,6 +3,7 @@
 
 import Link from "next/link";
 import { ReactNode } from "react";
+import { useTranslation } from "@/i18n";
 import { trackEvent } from "@/lib/analytics";
 import {
   AUTHOR_PAGE_PATH,
@@ -14,7 +15,7 @@ import FooterBar from "./FooterBar";
 /**
  * Blog 文章统一排版模板
  *
- * Apple 极简风格 — max-w-2xl 阅读宽度、Hubot Sans 标题、署名 + 日期、CTA 横幅。
+ * Apple 极简风格 — max-w-3xl 阅读宽度、Hubot Sans 标题、署名 + 日期、CTA 横幅。
  * 所有 blog 文章页面通过此组件渲染，保持一致的视觉风格。
  *
  * Props:
@@ -50,6 +51,8 @@ export default function BlogPostLayout({
   nextPost,
   prevPost,
 }: BlogPostLayoutProps) {
+  const { t } = useTranslation();
+
   return (
     <div className="min-h-screen" style={{ background: "var(--bg)" }}>
       <TitleBar />
@@ -76,7 +79,7 @@ export default function BlogPostLayout({
               strokeLinejoin="round"
             />
           </svg>
-          Blog
+          {t.blog.pageTitle}
         </Link>
 
         {/* 文章标题 */}
@@ -133,13 +136,13 @@ export default function BlogPostLayout({
             className="text-sm font-semibold mb-2"
             style={{ color: "var(--text-primary)" }}
           >
-            Try our free DeepSeek API Usage Dashboard
+            {t.blog.ctaTitle}
           </p>
           <p
             className="text-xs mb-4"
             style={{ color: "var(--text-tertiary)" }}
           >
-            Drag your CSVs, see your costs. 100% private, no signup.
+            {t.blog.ctaDesc}
           </p>
           <Link
             href={`/?utm_source=deepseek-usage.xyz&utm_medium=referral&utm_campaign=blog_${meta.slug}`}
@@ -150,7 +153,8 @@ export default function BlogPostLayout({
               color: "var(--accent-inverse)",
             }}
           >
-            Open Dashboard →
+            {t.blog.ctaButton}
+            <span aria-hidden="true">→</span>
           </Link>
         </div>
 

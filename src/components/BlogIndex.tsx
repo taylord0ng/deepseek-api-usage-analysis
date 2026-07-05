@@ -52,7 +52,7 @@ export default function BlogIndex() {
           {t.blogIndex.pageTitle}
         </h1>
         <p
-          className="text-sm leading-relaxed text-pretty mb-12 max-w-xl"
+          className="text-sm leading-relaxed text-pretty mb-12 max-w-3xl"
           style={{ color: "var(--text-secondary)" }}
         >
           {t.blogIndex.pageSubtitle}
