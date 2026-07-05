@@ -620,8 +620,6 @@ export function GuidelinePage() {
       <TitleBar />
 
       <div className="max-w-6xl mx-auto px-6 py-8">
-        {/* 语义化 H1 */}
-        {/* <h1 className="sr-only">{t.guideline.pageTitle}</h1> */}
 
         <div className="flex gap-12">
           {/* 左侧目录 — 桌面端固定 */}

@@ -1,9 +1,13 @@
+/** 文件说明：DeepSeek 缓存命中率分析页路由与 SEO 元数据。 */
 import type { Metadata } from "next";
 import { CacheAnalyzerPage } from "@/components/CacheAnalyzerPage";
 
 const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL || "https://deepseek-usage.xyz";
 
+/**
+ * 生成缓存分析落地页的 SEO 元数据。
+ */
 export function generateMetadata(): Metadata {
   const title = "DeepSeek Cache Hit Rate Analyzer | Optimize Your API Costs";
   const description =
@@ -12,7 +16,13 @@ export function generateMetadata(): Metadata {
   return {
     title,
     description,
-    alternates: { canonical: `${SITE_URL}/deepseek-cache-hit-rate-analyzer` },
+    alternates: {
+      canonical: `${SITE_URL}/deepseek-cache-hit-rate-analyzer`,
+      languages: {
+        en: `${SITE_URL}/deepseek-cache-hit-rate-analyzer`,
+        zh: `${SITE_URL}/deepseek-cache-hit-rate-analyzer`,
+      },
+    },
     openGraph: {
       title,
       description,

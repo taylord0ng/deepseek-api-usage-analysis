@@ -1,9 +1,13 @@
+/** 文件说明：博客首页路由与 SEO 元数据。 */
 import type { Metadata } from "next";
 import BlogIndex from "@/components/BlogIndex";
 
 const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL || "https://deepseek-usage.xyz";
 
+/**
+ * 生成博客首页的 SEO 元数据。
+ */
 export function generateMetadata(): Metadata {
   const title = "Blog — DeepSeek API Usage Analytics & Cost Optimization";
   const description =
@@ -12,7 +16,13 @@ export function generateMetadata(): Metadata {
   return {
     title,
     description,
-    alternates: { canonical: `${SITE_URL}/blog` },
+    alternates: {
+      canonical: `${SITE_URL}/blog`,
+      languages: {
+        en: `${SITE_URL}/blog`,
+        zh: `${SITE_URL}/blog`,
+      },
+    },
     openGraph: {
       title,
       description,

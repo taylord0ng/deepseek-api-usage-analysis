@@ -1,9 +1,13 @@
+/** 文件说明：DeepSeek API Cost Tracker 落地页路由与 SEO 元数据。 */
 import type { Metadata } from "next";
 import { CostTrackerPage } from "@/components/CostTrackerPage";
 
 const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL || "https://deepseek-usage.xyz";
 
+/**
+ * 生成成本追踪落地页的 SEO 元数据。
+ */
 export function generateMetadata(): Metadata {
   const title = "DeepSeek API Cost Tracker | Free & Secure Billing Dashboard";
   const description =
@@ -14,6 +18,10 @@ export function generateMetadata(): Metadata {
     description,
     alternates: {
       canonical: `${SITE_URL}/deepseek-api-cost-tracker`,
+      languages: {
+        en: `${SITE_URL}/deepseek-api-cost-tracker`,
+        zh: `${SITE_URL}/deepseek-api-cost-tracker`,
+      },
     },
     openGraph: {
       title,

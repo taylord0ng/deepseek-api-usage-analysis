@@ -1,9 +1,13 @@
+/** 文件说明：DeepSeek API 定价计算器落地页路由与 SEO 元数据。 */
 import type { Metadata } from "next";
 import { PricingCalculatorPage } from "@/components/PricingCalculatorPage";
 
 const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL || "https://deepseek-usage.xyz";
 
+/**
+ * 生成定价计算器落地页的 SEO 元数据。
+ */
 export function generateMetadata(): Metadata {
   const title = "DeepSeek API Pricing Calculator | Compare Model Costs Instantly";
   const description =
@@ -12,7 +16,13 @@ export function generateMetadata(): Metadata {
   return {
     title,
     description,
-    alternates: { canonical: `${SITE_URL}/deepseek-api-pricing-calculator` },
+    alternates: {
+      canonical: `${SITE_URL}/deepseek-api-pricing-calculator`,
+      languages: {
+        en: `${SITE_URL}/deepseek-api-pricing-calculator`,
+        zh: `${SITE_URL}/deepseek-api-pricing-calculator`,
+      },
+    },
     openGraph: {
       title,
       description,

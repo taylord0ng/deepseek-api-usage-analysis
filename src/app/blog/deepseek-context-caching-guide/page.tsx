@@ -1,3 +1,4 @@
+/** 文件说明：博客文章《DeepSeek Context Caching Guide》路由与 SEO 元数据。 */
 import type { Metadata } from "next";
 import BlogArticlePage from "@/components/BlogArticlePage";
 import { en, zh } from "@/lib/content/articleCaching";
@@ -12,11 +13,20 @@ const META = {
   slug: "deepseek-context-caching-guide",
 };
 
+/**
+ * 生成文章《DeepSeek Context Caching Guide》的 SEO 元数据。
+ */
 export function generateMetadata(): Metadata {
   return {
     title: META.title,
     description: META.description,
-    alternates: { canonical: `${SITE_URL}/blog/deepseek-context-caching-guide` },
+    alternates: {
+      canonical: `${SITE_URL}/blog/deepseek-context-caching-guide`,
+      languages: {
+        en: `${SITE_URL}/blog/deepseek-context-caching-guide`,
+        zh: `${SITE_URL}/blog/deepseek-context-caching-guide`,
+      },
+    },
     openGraph: { title: META.title, description: META.description, url: `${SITE_URL}/blog/deepseek-context-caching-guide`, type: "article", siteName: "DeepSeek API Usage Dashboard & Cost Tracker", locale: "en_US", images: [{ url: `${SITE_URL}/og-image.png`, width: 1200, height: 630, alt: META.title, type: "image/png" }] },
     twitter: { card: "summary_large_image", site: "@GavinCnod", creator: "@GavinCnod", title: META.title, description: META.description, images: [`${SITE_URL}/og-image.png`] },
     keywords: ["DeepSeek context caching", "DeepSeek cache hit rate", "DeepSeek API cost optimization", "prompt caching guide"],

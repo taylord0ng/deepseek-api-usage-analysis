@@ -1,3 +1,4 @@
+/** 文件说明：操作指南页面路由与 SEO 元数据。 */
 import type { Metadata } from "next";
 import { GuidelinePage } from "@/components/GuidelinePage";
 
@@ -21,6 +22,10 @@ export function generateMetadata(): Metadata {
     description,
     alternates: {
       canonical: `${SITE_URL}/guideline`,
+      languages: {
+        en: `${SITE_URL}/guideline`,
+        zh: `${SITE_URL}/guideline`,
+      },
     },
     openGraph: {
       title,
@@ -41,12 +46,12 @@ export function generateMetadata(): Metadata {
       ],
     },
     twitter: {
-      card: "summary",
+      card: "summary_large_image",
       site: "@GavinCnod",
       creator: "@GavinCnod",
       title,
       description,
-      images: [`${SITE_URL}/ds-usage-logo.png`],
+      images: [`${SITE_URL}/og-image.png`],
     },
     keywords: [
       "DeepSeek usage guide",

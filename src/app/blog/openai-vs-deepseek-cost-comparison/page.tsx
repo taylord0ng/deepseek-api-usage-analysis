@@ -1,3 +1,4 @@
+/** 文件说明：博客文章《OpenAI vs DeepSeek Cost Comparison》路由与 SEO 元数据。 */
 import type { Metadata } from "next";
 import BlogArticlePage from "@/components/BlogArticlePage";
 import { en, zh } from "@/lib/content/articleOpenai";
@@ -12,11 +13,20 @@ const META = {
   slug: "openai-vs-deepseek-cost-comparison",
 };
 
+/**
+ * 生成文章《OpenAI vs DeepSeek Cost Comparison》的 SEO 元数据。
+ */
 export function generateMetadata(): Metadata {
   return {
     title: META.title,
     description: META.description,
-    alternates: { canonical: `${SITE_URL}/blog/openai-vs-deepseek-cost-comparison` },
+    alternates: {
+      canonical: `${SITE_URL}/blog/openai-vs-deepseek-cost-comparison`,
+      languages: {
+        en: `${SITE_URL}/blog/openai-vs-deepseek-cost-comparison`,
+        zh: `${SITE_URL}/blog/openai-vs-deepseek-cost-comparison`,
+      },
+    },
     openGraph: { title: META.title, description: META.description, url: `${SITE_URL}/blog/openai-vs-deepseek-cost-comparison`, type: "article", siteName: "DeepSeek API Usage Dashboard & Cost Tracker", locale: "en_US", images: [{ url: `${SITE_URL}/og-image.png`, width: 1200, height: 630, alt: META.title, type: "image/png" }] },
     twitter: { card: "summary_large_image", site: "@GavinCnod", creator: "@GavinCnod", title: META.title, description: META.description, images: [`${SITE_URL}/og-image.png`] },
     keywords: ["DeepSeek vs OpenAI", "OpenAI o3 pricing", "DeepSeek V4 Pro", "LLM cost comparison", "AI pricing 2026"],
