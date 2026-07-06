@@ -10,8 +10,7 @@
  * 并为两种语言条目都补齐 `alternates.languages`，以便搜索引擎识别双语镜像关系。
  */
 import type { MetadataRoute } from "next";
-import { buildLocaleAlternates, buildLocalePathname } from "@/lib/localeRouting";
-import { SITE_URL } from "@/lib/site";
+import { buildLocaleAlternates, buildLocaleUrl } from "@/lib/localeRouting";
 
 /** 静态导出兼容：标记此路由在构建时静态生成 */
 export const dynamic = "force-static";
@@ -121,14 +120,14 @@ function buildLocalizedEntries(
 
   return [
     {
-      url: `${SITE_URL}${buildLocalePathname("en", route.pathname)}`,
+      url: buildLocaleUrl("en", route.pathname),
       lastModified: route.lastModified,
       changeFrequency: route.changeFrequency,
       priority: route.priority,
       alternates,
     },
     {
-      url: `${SITE_URL}${buildLocalePathname("zh", route.pathname)}`,
+      url: buildLocaleUrl("zh", route.pathname),
       lastModified: route.lastModified,
       changeFrequency: route.changeFrequency,
       priority: route.priority,

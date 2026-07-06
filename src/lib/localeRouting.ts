@@ -83,9 +83,12 @@ export function buildLocalePathname(
 
 /**
  * 根据目标语言构建公开绝对 URL。
+ *
+ * 首页固定为 SITE_URL（不带尾部斜杠），避免规范化 URL 不一致。
  */
 export function buildLocaleUrl(locale: Locale, pathname: string = "/"): string {
-  return `${SITE_URL}${buildLocalePathname(locale, pathname)}`;
+  const localePath = buildLocalePathname(locale, pathname);
+  return localePath === "/" ? SITE_URL : `${SITE_URL}${localePath}`;
 }
 
 /**
