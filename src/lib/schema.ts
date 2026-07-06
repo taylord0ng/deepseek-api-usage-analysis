@@ -6,11 +6,13 @@
  */
 import type { Locale } from "@/i18n/translations";
 import {
-  AUTHOR_PAGE_URL,
+  buildAuthorPageUrl,
+  buildTeamMembersUrl,
   GAVIN_LINKEDIN_URL,
   MINDROSE_SITE_URL,
-  TEAM_MEMBERS_URL,
 } from "@/lib/authors";
+import { buildLocaleUrl } from "@/lib/localeRouting";
+import { LOGO_IMAGE_URL } from "@/lib/site";
 import { agnesProject, deepseekProject, TOOL_SERIES_NAME } from "@/lib/sisterProjects";
 
 /* ------------------------------------------------------------------ */
@@ -19,9 +21,6 @@ import { agnesProject, deepseekProject, TOOL_SERIES_NAME } from "@/lib/sisterPro
 
 /** 应用版本号，与 package.json 保持同步 */
 const APP_VERSION = "0.6.1";
-
-/** 站点公开 URL */
-const SITE_URL = deepseekProject.siteUrl;
 
 /** SoftwareApplication Schema 翻译 */
 const softwareAppSchema: Record<
@@ -137,10 +136,12 @@ export function buildSoftwareAppJsonLd(locale: Locale): Record<string, unknown> 
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
     name: t.name,
+    url: buildLocaleUrl(locale, "/"),
     version: t.version,
     operatingSystem: "Any (web browser)",
     applicationCategory: "DeveloperApplication",
     description: t.description,
+    inLanguage: locale,
     offers: {
       "@type": "Offer",
       price: "0",
@@ -155,6 +156,8 @@ export function buildFaqJsonLd(locale: Locale): Record<string, unknown> {
   return {
     "@context": "https://schema.org",
     "@type": "FAQPage",
+    url: buildLocaleUrl(locale, "/"),
+    inLanguage: locale,
     mainEntity: t.questions.map((item) => ({
       "@type": "Question",
       name: item.q,
@@ -216,37 +219,37 @@ export function buildBreadcrumbJsonLd(locale: Locale): Record<string, unknown> {
         "@type": "ListItem",
         position: 1,
         name: t.home,
-        item: SITE_URL,
+        item: buildLocaleUrl(locale, "/"),
       },
       {
         "@type": "ListItem",
         position: 2,
         name: t.guideline,
-        item: `${SITE_URL}/guideline`,
+        item: buildLocaleUrl(locale, "/guideline"),
       },
       {
         "@type": "ListItem",
         position: 3,
         name: t.privacy,
-        item: `${SITE_URL}/privacy`,
+        item: buildLocaleUrl(locale, "/privacy"),
       },
       {
         "@type": "ListItem",
         position: 4,
         name: t.terms,
-        item: `${SITE_URL}/terms`,
+        item: buildLocaleUrl(locale, "/terms"),
       },
       {
         "@type": "ListItem",
         position: 5,
         name: t.changelog,
-        item: `${SITE_URL}/changelog`,
+        item: buildLocaleUrl(locale, "/changelog"),
       },
       {
         "@type": "ListItem",
         position: 6,
         name: t.author,
-        item: AUTHOR_PAGE_URL,
+        item: buildAuthorPageUrl(locale),
       },
     ],
   };
@@ -277,7 +280,6 @@ export function buildOrganizationJsonLd(locale: Locale): Record<string, unknown>
   const sameAs = Array.from(
     new Set([
       deepseekProject.githubUrl,
-      agnesProject.githubUrl,
       agnesProject.siteUrl,
     ])
   );
@@ -285,9 +287,10 @@ export function buildOrganizationJsonLd(locale: Locale): Record<string, unknown>
     "@context": "https://schema.org",
     "@type": "Organization",
     name: t.name,
-    url: SITE_URL,
-    logo: `${SITE_URL}/ds-usage-logo.png`,
+    url: buildLocaleUrl(locale, "/"),
+    logo: LOGO_IMAGE_URL,
     description: t.description,
+    inLanguage: locale,
     sameAs,
     brand: TOOL_SERIES_NAME,
   };
@@ -295,6 +298,7 @@ export function buildOrganizationJsonLd(locale: Locale): Record<string, unknown>
 
 /** 博客文章 JSON-LD 生成参数 */
 export interface ArticleJsonLdInput {
+  locale: Locale;
   headline: string;
   description: string;
   url: string;
@@ -313,6 +317,9 @@ export interface ArticleJsonLdInput {
 export function buildArticleJsonLd(
   input: ArticleJsonLdInput
 ): Record<string, unknown> {
+  const authorPageUrl = buildAuthorPageUrl(input.locale);
+  const teamMembersUrl = buildTeamMembersUrl(input.locale);
+
   return {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
@@ -322,26 +329,27 @@ export function buildArticleJsonLd(
     mainEntityOfPage: input.url,
     datePublished: input.datePublished,
     dateModified: input.dateModified,
+    inLanguage: input.locale,
     author: {
       "@type": "Person",
       name: input.authorName,
-      url: AUTHOR_PAGE_URL,
-      sameAs: [AUTHOR_PAGE_URL, GAVIN_LINKEDIN_URL],
+      url: authorPageUrl,
+      sameAs: [authorPageUrl, GAVIN_LINKEDIN_URL],
       worksFor: {
         "@type": "Organization",
         name: "MindRose Team",
-        url: TEAM_MEMBERS_URL,
+        url: teamMembersUrl,
         sameAs: [MINDROSE_SITE_URL],
       },
     },
     publisher: {
       "@type": "Organization",
       name: "MindRose Team",
-      url: TEAM_MEMBERS_URL,
+      url: teamMembersUrl,
       sameAs: [MINDROSE_SITE_URL],
       logo: {
         "@type": "ImageObject",
-        url: `${SITE_URL}/ds-usage-logo.png`,
+        url: LOGO_IMAGE_URL,
       },
     },
     image: [input.imageUrl],

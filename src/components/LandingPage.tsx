@@ -10,6 +10,7 @@ import DropZone from "./DropZone";
 import ErrorDisplay from "./ErrorDisplay";
 import LandingContent from "./LandingContent";
 import { agnesProject } from "@/lib/sisterProjects";
+import { buildLocalePath } from "@/lib/localeRouting";
 
 /**
  * Landing 页面 - 上传前的完整落地页
@@ -25,8 +26,11 @@ import { agnesProject } from "@/lib/sisterProjects";
  * 尊重 prefers-reduced-motion 偏好（CSS 层面全局处理）。
  */
 export default function LandingPage() {
-  const { t } = useTranslation();
+  const { locale, t } = useTranslation();
   const { theme } = useTheme();
+  const guidelineHref = buildLocalePath("/guideline", locale);
+  const authorHref = buildLocalePath("/author", locale);
+  const changelogHref = buildLocalePath("/changelog", locale);
 
   // 主题感知的背景装饰图
   const isDark = theme === "dark";
@@ -247,7 +251,7 @@ export default function LandingPage() {
           {/* 操作指南入口 — 步骤下方居中链接 */}
           <div className="mt-8 text-center">
             <Link
-              href="/guideline"
+              href={guidelineHref}
               className="inline-flex items-center gap-1.5 text-xs font-medium transition-colors duration-200 hover:opacity-80"
               style={{ color: "var(--text-secondary)" }}
             >
@@ -504,7 +508,7 @@ export default function LandingPage() {
             <div className="flex flex-wrap items-center justify-center gap-4">
               {/* 作者页 */}
               <Link
-                href="/author"
+                href={authorHref}
                 className="inline-flex items-center gap-2 text-sm transition-colors duration-200
                            rounded-subtle px-3 py-1.5 hover:bg-[var(--bg-surface-hover)]"
                 style={{
@@ -612,7 +616,7 @@ export default function LandingPage() {
             {/* 更新日志入口 */}
             <div className="text-center mt-8">
               <Link
-                href="/changelog"
+                href={changelogHref}
                 className="inline-flex items-center gap-1.5 text-xs font-medium transition-colors duration-200 hover:opacity-80"
                 style={{ color: "var(--text-secondary)" }}
               >
@@ -688,20 +692,6 @@ export default function LandingPage() {
                 }}
               >
                 {t.landing.sisterVisit}
-                <span aria-hidden="true">→</span>
-              </a>
-              <a
-                href={agnesProject.trackedRepoUrls.landing}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-sm transition-colors duration-200
-                           rounded-subtle px-3 py-1.5 hover:bg-[var(--bg-surface-hover)]"
-                style={{
-                  color: "var(--text-secondary)",
-                  border: "1px solid var(--border)",
-                }}
-              >
-                {t.landing.sisterRepo}
                 <span aria-hidden="true">→</span>
               </a>
             </div>

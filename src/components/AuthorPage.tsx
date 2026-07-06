@@ -4,8 +4,10 @@
 import Link from "next/link";
 import { useMemo } from "react";
 import { useTranslation } from "@/i18n";
+import { buildLocalePath, buildLocaleUrl } from "@/lib/localeRouting";
 import {
-  AUTHOR_PAGE_URL,
+  buildAuthorPageUrl,
+  buildTeamMembersUrl,
   GAVIN_LINKEDIN_URL,
   MINDROSE_SITE_URL,
   TEAM_MEMBERS_SECTION_ID,
@@ -25,10 +27,13 @@ const GITHUB_REPO_URL =
  */
 export function AuthorPage() {
   const { locale, t } = useTranslation();
+  const homeHref = buildLocalePath("/", locale);
 
   /** 作者页 JSON-LD 结构化数据。 */
   const authorJsonLd = useMemo(() => {
     const isZh = locale === "zh";
+    const authorPageUrl = buildAuthorPageUrl(locale);
+    const teamMembersUrl = buildTeamMembersUrl(locale);
 
     return {
       "@context": "https://schema.org",
@@ -36,14 +41,15 @@ export function AuthorPage() {
       name: isZh
         ? "作者页 — Gavin Chen 与 MindRose 团队"
         : "Author Page — Gavin Chen & MindRose Team",
-      url: AUTHOR_PAGE_URL,
+      url: authorPageUrl,
       description: isZh
         ? "DeepSeek API 用量分析仪表盘项目作者与团队介绍页，包含作者背景、团队简介、联系方式与公开身份验证链接。"
         : "Author and team page for the DeepSeek API Usage Analytics Dashboard, including background, team information, contact details, and public verification links.",
+      inLanguage: locale,
       mainEntity: {
         "@type": "Person",
         name: "Gavin Chen",
-        url: AUTHOR_PAGE_URL,
+        url: authorPageUrl,
         sameAs: [GAVIN_LINKEDIN_URL],
         jobTitle: isZh
           ? "DeepSeek API 用量分析仪表盘创建者"
@@ -51,14 +57,14 @@ export function AuthorPage() {
         worksFor: {
           "@type": "Organization",
           name: "MindRose Team",
-          url: `${AUTHOR_PAGE_URL}#${TEAM_MEMBERS_SECTION_ID}`,
+          url: teamMembersUrl,
           sameAs: [MINDROSE_SITE_URL],
         },
       },
       isPartOf: {
         "@type": "WebSite",
         name: "DeepSeek API Usage Analytics Dashboard",
-        url: "https://deepseek-usage.xyz",
+        url: buildLocaleUrl(locale, "/"),
       },
     };
   }, [locale]);
@@ -91,7 +97,7 @@ export function AuthorPage() {
 
       <div className="max-w-3xl mx-auto px-6 py-8">
         <Link
-          href="/"
+          href={homeHref}
           className="inline-flex items-center gap-1.5 text-xs font-medium transition-colors duration-200 mb-8 hover:opacity-80"
           style={{ color: "var(--text-secondary)" }}
         >

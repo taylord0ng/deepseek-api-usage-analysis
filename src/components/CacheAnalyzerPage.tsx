@@ -4,6 +4,7 @@
 import Link from "next/link";
 import { useTranslation } from "@/i18n";
 import { trackLandingCTA, trackOutboundClick } from "@/lib/analytics";
+import { buildLocalePath } from "@/lib/localeRouting";
 import TitleBar from "./TitleBar";
 import FooterBar from "./FooterBar";
 
@@ -19,7 +20,9 @@ const HOME_CTA = `/?${UTM}`;
  * 包含缓存机制教育模块和 MindRose 商业导流 CTA。
  */
 export function CacheAnalyzerPage() {
-  const { t } = useTranslation();
+  const { locale, t } = useTranslation();
+  const homeHref = buildLocalePath("/", locale);
+  const homeCtaHref = buildLocalePath(HOME_CTA, locale);
 
   const tips = [
     { title: t.cacheAnalyzer.cachingTip1Title, desc: t.cacheAnalyzer.cachingTip1Desc },
@@ -50,7 +53,7 @@ export function CacheAnalyzerPage() {
       <div className="max-w-3xl mx-auto px-6 py-8">
         {/* 返回首页 */}
         <Link
-          href="/"
+          href={homeHref}
           className="inline-flex items-center gap-1.5 text-xs font-medium transition-colors duration-200 mb-8 hover:opacity-80"
           style={{ color: "var(--text-secondary)" }}
         >
@@ -82,7 +85,7 @@ export function CacheAnalyzerPage() {
           </p>
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
             <a
-              href={HOME_CTA}
+              href={homeCtaHref}
               onClick={() => trackLandingCTA("cache_analyzer", "hero")}
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-200 hover:opacity-90"
               style={{ background: "var(--text-primary)", color: "var(--accent-inverse)" }}

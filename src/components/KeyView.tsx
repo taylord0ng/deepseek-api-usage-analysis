@@ -19,9 +19,18 @@ export default function KeyView() {
   const { filteredResult: result } = useData();
   const { locale, t } = useTranslation();
   const { theme } = useTheme();
-  if (!result) return null;
+  const keys = result?.keys;
+  const daily = result?.daily;
 
-  const { keys, daily } = result;
+  const isDark = theme === "dark";
+  const maxCost = Math.max(...(keys ?? []).map((k) => k.totalCost), 1);
+
+  const modelCount = useMemo(
+    () => new Set((daily ?? []).map((d) => d.model)).size,
+    [daily]
+  );
+
+  if (!result || !keys || !daily) return null;
 
   if (keys.length === 0) {
     return (
@@ -32,14 +41,6 @@ export default function KeyView() {
       </div>
     );
   }
-
-  const maxCost = Math.max(...keys.map((k) => k.totalCost), 1);
-  const isDark = theme === "dark";
-
-  const modelCount = useMemo(
-    () => new Set(daily.map((d) => d.model)).size,
-    [daily]
-  );
 
   return (
     <div>

@@ -9,10 +9,13 @@
  * 实际的交互式内容由 LandingPage.tsx 客户端组件负责渲染。
  */
 import translations from "@/i18n/translations";
+import { buildLocalePath } from "@/lib/localeRouting";
 
 /** 英文字符串（与 <html lang="en"> 初始值一致） */
 const en = translations.en;
 const zh = translations.zh;
+const EN_AUTHOR_PATH = buildLocalePath("/author", "en");
+const ZH_AUTHOR_PATH = buildLocalePath("/author", "zh");
 
 export default function LandingContent() {
   return (
@@ -133,7 +136,7 @@ export default function LandingContent() {
         </div>
 
         <p>
-          <a href="/author">{en.author.pageTitle}</a>
+          <a href={EN_AUTHOR_PATH}>{en.author.pageTitle}</a>
         </p>
 
         <p>
@@ -173,7 +176,7 @@ export default function LandingContent() {
         </div>
 
         <p>
-          <a href="/author">{zh.author.pageTitle}</a>
+          <a href={ZH_AUTHOR_PATH}>{zh.author.pageTitle}</a>
         </p>
 
         <p>

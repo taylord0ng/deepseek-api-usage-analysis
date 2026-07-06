@@ -5,6 +5,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useTranslation } from "@/i18n";
 import { trackOutboundClick } from "@/lib/analytics";
+import { buildLocalePath } from "@/lib/localeRouting";
 import TitleBar from "./TitleBar";
 import FooterBar from "./FooterBar";
 
@@ -32,7 +33,8 @@ function formatCost(usd: number): string {
  * 包含交互式计算器 + 竞品对比表 + Vultr 联盟导流 CTA。
  */
 export function PricingCalculatorPage() {
-  const { t } = useTranslation();
+  const { locale, t } = useTranslation();
+  const homeHref = buildLocalePath("/", locale);
 
   const [inputTokens, setInputTokens] = useState(10_000_000); // 10M
   const [outputTokens, setOutputTokens] = useState(1_000_000); // 1M
@@ -77,7 +79,7 @@ export function PricingCalculatorPage() {
       <div className="max-w-3xl mx-auto px-6 py-8">
         {/* 返回首页 */}
         <Link
-          href="/"
+          href={homeHref}
           className="inline-flex items-center gap-1.5 text-xs font-medium transition-colors duration-200 mb-8 hover:opacity-80"
           style={{ color: "var(--text-secondary)" }}
         >

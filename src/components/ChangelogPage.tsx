@@ -13,6 +13,7 @@
 
 import Link from "next/link";
 import { useTranslation } from "@/i18n";
+import { buildLocalePath, buildLocaleUrl } from "@/lib/localeRouting";
 import TitleBar from "./TitleBar";
 import FooterBar from "./FooterBar";
 import { useMemo } from "react";
@@ -585,6 +586,7 @@ const CHANGELOG_DATA: VersionEntry[] = [
  */
 export function ChangelogPage() {
   const { locale, t } = useTranslation();
+  const homeHref = buildLocalePath("/", locale);
 
   /** 判断当前是否为中文环境 */
   const isZh = locale === "zh";
@@ -600,6 +602,8 @@ export function ChangelogPage() {
       description: isZh
         ? "DeepSeek API 用量分析仪表盘完整更新日志。追踪自 v0.1.0 以来的所有新增功能、改进优化、问题修复和依赖变更。"
         : "Complete changelog for the DeepSeek API Usage Analytics Dashboard. Track all new features, improvements, bug fixes, and dependency changes since v0.1.0.",
+      url: buildLocaleUrl(locale, "/changelog"),
+      inLanguage: locale,
       about: {
         "@type": "Thing",
         name: isZh ? "更新日志" : "Changelog",
@@ -607,10 +611,10 @@ export function ChangelogPage() {
       isPartOf: {
         "@type": "WebSite",
         name: "DeepSeek API Usage Analytics Dashboard",
-        url: "https://deepseek-usage.xyz",
+        url: buildLocaleUrl(locale, "/"),
       },
     };
-  }, [isZh]);
+  }, [isZh, locale]);
 
   /**
    * 根据当前 locale 获取变更项文本
@@ -650,7 +654,7 @@ export function ChangelogPage() {
       <div className="max-w-3xl mx-auto px-6 py-8">
         {/* 返回首页 */}
         <Link
-          href="/"
+          href={homeHref}
           className="inline-flex items-center gap-1.5 text-xs font-medium transition-colors duration-200 mb-8 hover:opacity-80"
           style={{ color: "var(--text-secondary)" }}
         >

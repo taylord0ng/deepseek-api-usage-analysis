@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ReactNode } from "react";
 import { useTranslation } from "@/i18n";
 import { trackEvent } from "@/lib/analytics";
+import { buildLocalePath } from "@/lib/localeRouting";
 import {
   AUTHOR_PAGE_PATH,
   TEAM_MEMBERS_SECTION_ID,
@@ -51,7 +52,14 @@ export default function BlogPostLayout({
   nextPost,
   prevPost,
 }: BlogPostLayoutProps) {
-  const { t } = useTranslation();
+  const { locale, t } = useTranslation();
+  const blogHref = buildLocalePath("/blog", locale);
+  const authorHref = buildLocalePath(AUTHOR_PAGE_PATH, locale);
+  const teamMembersHref = buildLocalePath(
+    `${AUTHOR_PAGE_PATH}#${TEAM_MEMBERS_SECTION_ID}`,
+    locale
+  );
+  const ctaHref = buildLocalePath(`/?utm_source=deepseek-usage.xyz&utm_medium=referral&utm_campaign=blog_${meta.slug}`, locale);
 
   return (
     <div className="min-h-screen" style={{ background: "var(--bg)" }}>
@@ -60,7 +68,7 @@ export default function BlogPostLayout({
       <article className="max-w-3xl mx-auto px-6 py-8">
         {/* 返回 Blog 首页 */}
         <Link
-          href="/blog"
+          href={blogHref}
           className="inline-flex items-center gap-1.5 text-xs font-medium transition-colors duration-200 mb-8 hover:opacity-80"
           style={{ color: "var(--text-secondary)" }}
         >
@@ -102,7 +110,7 @@ export default function BlogPostLayout({
           <span aria-hidden="true">·</span>
           <span className="flex flex-wrap items-center gap-x-1.5 gap-y-1">
             <Link
-              href={AUTHOR_PAGE_PATH}
+              href={authorHref}
               className="transition-colors duration-200 hover:opacity-80"
               style={{ color: "var(--text-secondary)" }}
             >
@@ -110,7 +118,7 @@ export default function BlogPostLayout({
             </Link>
             <span aria-hidden="true">&amp;</span>
             <Link
-              href={`${AUTHOR_PAGE_PATH}#${TEAM_MEMBERS_SECTION_ID}`}
+              href={teamMembersHref}
               className="transition-colors duration-200 hover:opacity-80"
               style={{ color: "var(--text-secondary)" }}
             >
@@ -145,7 +153,7 @@ export default function BlogPostLayout({
             {t.blog.ctaDesc}
           </p>
           <Link
-            href={`/?utm_source=deepseek-usage.xyz&utm_medium=referral&utm_campaign=blog_${meta.slug}`}
+            href={ctaHref}
             onClick={() => trackEvent("blog_cta_click", { blog_slug: meta.slug, event_category: "conversion" })}
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold transition-all duration-200 hover:opacity-90"
             style={{
@@ -164,7 +172,7 @@ export default function BlogPostLayout({
             <div className="flex flex-wrap justify-between gap-4 text-xs">
               {prevPost ? (
                 <Link
-                  href={`/blog/${prevPost.slug}`}
+                  href={buildLocalePath(`/blog/${prevPost.slug}`, locale)}
                   className="transition-colors duration-200 hover:opacity-80"
                   style={{ color: "var(--text-secondary)" }}
                 >
@@ -175,7 +183,7 @@ export default function BlogPostLayout({
               )}
               {nextPost ? (
                 <Link
-                  href={`/blog/${nextPost.slug}`}
+                  href={buildLocalePath(`/blog/${nextPost.slug}`, locale)}
                   className="transition-colors duration-200 hover:opacity-80 text-right"
                   style={{ color: "var(--text-secondary)" }}
                 >

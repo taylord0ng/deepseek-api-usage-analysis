@@ -4,12 +4,12 @@ import { trackEvent } from "@/lib/analytics";
 describe("trackEvent", () => {
   beforeEach(() => {
     // Reset window.gtag before each test
-    delete (window as any).gtag;
+    delete window.gtag;
   });
 
   it("calls gtag when available", () => {
     const gtagSpy = vi.fn();
-    (window as any).gtag = gtagSpy;
+    window.gtag = gtagSpy as unknown as NonNullable<Window["gtag"]>;
 
     trackEvent("upload_csv");
 
@@ -18,7 +18,7 @@ describe("trackEvent", () => {
 
   it("passes params to gtag when provided", () => {
     const gtagSpy = vi.fn();
-    (window as any).gtag = gtagSpy;
+    window.gtag = gtagSpy as unknown as NonNullable<Window["gtag"]>;
 
     trackEvent("tab_switch", { event_label: "overview" });
 
@@ -39,9 +39,9 @@ describe("trackEvent", () => {
   });
 
   it("handles gtag throwing errors gracefully", () => {
-    (window as any).gtag = () => {
+    window.gtag = (() => {
       throw new Error("gtag crash");
-    };
+    }) as NonNullable<Window["gtag"]>;
 
     // Should not propagate the error
     expect(() => trackEvent("test_event")).not.toThrow();

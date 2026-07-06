@@ -497,6 +497,7 @@ export default function ShareCard({
           </span>
 
           {/* 应用 Logo */}
+          {/* eslint-disable-next-line @next/next/no-img-element -- 分享卡片会被 html2canvas 捕获为 PNG，固定尺寸静态资源直接使用 img 更稳定。 */}
           <img
             src="/ds-usage-logo.png"
             alt="Logo"
@@ -506,6 +507,7 @@ export default function ShareCard({
           />
 
           {/* 二维码 */}
+          {/* eslint-disable-next-line @next/next/no-img-element -- 二维码为运行时 data URL，直接使用 img 可避免 next/image 对导出截图链路的额外干预。 */}
           <img
             src={qrDataUrl}
             alt="QR"
@@ -518,4 +520,3 @@ export default function ShareCard({
     </div>
   );
 }
-

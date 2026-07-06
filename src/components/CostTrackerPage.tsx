@@ -4,6 +4,7 @@
 import Link from "next/link";
 import { useTranslation } from "@/i18n";
 import { trackLandingCTA, trackOutboundClick } from "@/lib/analytics";
+import { buildLocalePath } from "@/lib/localeRouting";
 import TitleBar from "./TitleBar";
 import FooterBar from "./FooterBar";
 
@@ -19,7 +20,9 @@ const HOME_CTA = `/?${UTM}`;
  * Apple 极简风格，与主应用一致。含商业化推荐模块占位（Portkey/Helicone 联盟链接）。
  */
 export function CostTrackerPage() {
-  const { t } = useTranslation();
+  const { locale, t } = useTranslation();
+  const homeHref = buildLocalePath("/", locale);
+  const homeCtaHref = buildLocalePath(HOME_CTA, locale);
 
   const features = [
     { title: t.costTracker.feature1Title, desc: t.costTracker.feature1Desc },
@@ -62,7 +65,7 @@ export function CostTrackerPage() {
       <div className="max-w-3xl mx-auto px-6 py-8">
         {/* 返回首页 */}
         <Link
-          href="/"
+          href={homeHref}
           className="inline-flex items-center gap-1.5 text-xs font-medium transition-colors duration-200 mb-8 hover:opacity-80"
           style={{ color: "var(--text-secondary)" }}
         >
@@ -112,7 +115,7 @@ export function CostTrackerPage() {
           </p>
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
             <a
-              href={HOME_CTA}
+              href={homeCtaHref}
               onClick={() => trackLandingCTA("cost_tracker", "hero")}
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-200 hover:opacity-90"
               style={{
@@ -283,7 +286,7 @@ export function CostTrackerPage() {
             {t.costTracker.bottomCTADesc}
           </p>
           <a
-            href={HOME_CTA}
+            href={homeCtaHref}
             onClick={() => trackLandingCTA("cost_tracker", "bottom")}
             className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-200 hover:opacity-90"
             style={{

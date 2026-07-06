@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useTranslation } from "@/i18n";
+import { buildLocalePath } from "@/lib/localeRouting";
 import { agnesProject, deepseekProject, TOOL_SERIES_NAME } from "@/lib/sisterProjects";
 
 /** 应用版本号，与 package.json 保持同步 */
@@ -26,7 +27,13 @@ interface FooterBarProps {
  * 可选 reveal-section 渐显动画，专用于 Landing 页面。
  */
 export default function FooterBar({ animate = false, sectionRef }: FooterBarProps) {
-  const { t } = useTranslation();
+  const { locale, t } = useTranslation();
+  const guidelineHref = buildLocalePath("/guideline", locale);
+  const privacyHref = buildLocalePath("/privacy", locale);
+  const termsHref = buildLocalePath("/terms", locale);
+  const blogHref = buildLocalePath("/blog", locale);
+  const authorHref = buildLocalePath("/author", locale);
+  const changelogHref = buildLocalePath("/changelog", locale);
 
   const content = (
     <footer
@@ -50,16 +57,6 @@ export default function FooterBar({ animate = false, sectionRef }: FooterBarProp
           {t.footer.sisterProject}
         </a>
         <span aria-hidden="true">·</span>
-        <a
-          href={agnesProject.trackedRepoUrls.footer}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="transition-colors duration-200 hover:underline underline-offset-2"
-          style={{ color: "var(--text-secondary)" }}
-        >
-          {t.footer.visitSisterRepo}
-        </a>
-        <span aria-hidden="true">·</span>
         <span>{TOOL_SERIES_NAME}</span>
       </div>
 
@@ -67,7 +64,7 @@ export default function FooterBar({ animate = false, sectionRef }: FooterBarProp
       <div className="flex flex-wrap items-center justify-center gap-x-1.5 text-xs">
         <span>{t.footer.text}</span>
         <Link
-          href="/guideline"
+          href={guidelineHref}
           className="transition-colors duration-200 hover:underline underline-offset-2"
           style={{ color: "var(--text-secondary)" }}
         >
@@ -75,7 +72,7 @@ export default function FooterBar({ animate = false, sectionRef }: FooterBarProp
         </Link>
         <span aria-hidden="true">·</span>
         <Link
-          href="/privacy"
+          href={privacyHref}
           className="transition-colors duration-200 hover:underline underline-offset-2"
           style={{ color: "var(--text-secondary)" }}
         >
@@ -83,7 +80,7 @@ export default function FooterBar({ animate = false, sectionRef }: FooterBarProp
         </Link>
         <span aria-hidden="true">·</span>
         <Link
-          href="/terms"
+          href={termsHref}
           className="transition-colors duration-200 hover:underline underline-offset-2"
           style={{ color: "var(--text-secondary)" }}
         >
@@ -91,7 +88,7 @@ export default function FooterBar({ animate = false, sectionRef }: FooterBarProp
         </Link>
         <span aria-hidden="true">·</span>
         <Link
-          href="/blog"
+          href={blogHref}
           className="transition-colors duration-200 hover:underline underline-offset-2"
           style={{ color: "var(--text-secondary)" }}
         >
@@ -99,7 +96,7 @@ export default function FooterBar({ animate = false, sectionRef }: FooterBarProp
         </Link>
         <span aria-hidden="true">·</span>
         <Link
-          href="/author"
+          href={authorHref}
           className="transition-colors duration-200 hover:underline underline-offset-2"
           style={{ color: "var(--text-secondary)" }}
         >
@@ -107,7 +104,7 @@ export default function FooterBar({ animate = false, sectionRef }: FooterBarProp
         </Link>
         <span aria-hidden="true">·</span>
         <Link
-          href="/changelog"
+          href={changelogHref}
           className="transition-colors duration-200 hover:underline underline-offset-2"
           style={{ color: "var(--text-secondary)" }}
         >

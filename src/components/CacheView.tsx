@@ -17,17 +17,19 @@ export default function CacheView() {
     const { filteredResult: result } = useData();
     const { locale, t } = useTranslation();
     const { theme } = useTheme();
-    if (!result) return null;
-
-    const { daily, summary } = result;
+    const daily = result?.daily;
+    const summary = result?.summary;
     const isDark = theme === "dark";
     const textColor = isDark ? "#98989D" : "#86868B";
     const gridColor = isDark ? "#2C2C2E" : "#E5E5EA";
 
-    const hasCache = summary.totalCacheHitTokens + summary.totalCacheMissTokens > 0;
+    const hasCache =
+        (summary?.totalCacheHitTokens ?? 0) + (summary?.totalCacheMissTokens ?? 0) > 0;
 
     // 每日缓存命中率趋势
     const trendOption = useMemo(() => {
+        if (!result || !daily) return {};
+
         const dates = [...new Set(daily.map((d) => d.date))].sort();
         const hitsByDate = new Map<string, number>();
         const missesByDate = new Map<string, number>();
@@ -75,10 +77,12 @@ export default function CacheView() {
                 },
             ],
         };
-    }, [daily, t.cache.hitRateTitle, isDark, textColor, gridColor]);
+    }, [result, daily, t.cache.hitRateTitle, isDark, textColor, gridColor]);
 
     // 各 Key 缓存命中 / 未命中堆叠柱状图（含命中率）
     const byKeyOption = useMemo(() => {
+        if (!result || !daily) return {};
+
         const keyNames = [...new Set(daily.map((d) => d.apiKeyName))];
         const hits = keyNames.map((k) =>
             daily.filter((d) => d.apiKeyName === k).reduce((s, d) => s + d.inputCacheHitTokens, 0)
@@ -150,7 +154,9 @@ export default function CacheView() {
                 },
             ],
         };
-    }, [daily, t.cache.hits, t.cache.misses, t.cache.hitRateTitle, isDark, textColor, gridColor]);
+    }, [result, daily, t.cache.hits, t.cache.misses, t.cache.hitRateTitle, isDark, textColor, gridColor]);
+
+    if (!result || !summary) return null;
 
     if (!hasCache) {
         return (

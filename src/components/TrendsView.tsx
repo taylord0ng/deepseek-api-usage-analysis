@@ -22,21 +22,11 @@ export default function TrendsView() {
   const { locale, t } = useTranslation();
   const { theme } = useTheme();
   const [metric, setMetric] = useState<MetricKey>("cost");
-  if (!result) return null;
-
-  const { daily } = result;
-
-  if (daily.length === 0) {
-    return (
-      <div className="py-16 text-center">
-        <p className="text-sm" style={{ color: "var(--text-secondary)" }}>
-          {t.empty?.trends ?? "Not enough data to show trends. Upload more months of CSVs."}
-        </p>
-      </div>
-    );
-  }
-
-  const dates = [...new Set(daily.map((d) => d.date))].sort();
+  const daily = result?.daily;
+  const dates = useMemo(
+    () => [...new Set((daily ?? []).map((d) => d.date))].sort(),
+    [daily]
+  );
   const isDark = theme === "dark";
 
   const textColor = isDark ? "#98989D" : "#86868B";
@@ -52,6 +42,8 @@ export default function TrendsView() {
 
   // 计算当前指标的汇总值（用于 Hero）
   const heroValue = useMemo(() => {
+    if (!result || !daily) return 0;
+
     let total = 0;
     let totalHit = 0;
     let totalMiss = 0;
@@ -78,7 +70,7 @@ export default function TrendsView() {
       return totalHit + totalMiss > 0 ? totalHit / (totalHit + totalMiss) : 0;
     }
     return total;
-  }, [daily, metric]);
+  }, [result, daily, metric]);
 
   const activeMetric = METRICS.find((m) => m.key === metric)!;
 
@@ -91,6 +83,8 @@ export default function TrendsView() {
   }, [metric, heroValue, locale]);
 
   const option = useMemo(() => {
+    if (!result || !daily) return {};
+
     const byDate = new Map<string, number>();
     // cacheHitRate 按日期分别累加 hit/miss token，再算比例，避免比例数值被错误累加
     const hitByDate = metric === "cacheHitRate" ? new Map<string, number>() : null;
@@ -171,7 +165,19 @@ export default function TrendsView() {
         },
       ],
     };
-  }, [daily, metric, textColor, gridColor, lineColor, isDark, dates, activeMetric]);
+  }, [result, daily, metric, textColor, gridColor, lineColor, isDark, dates, activeMetric]);
+
+  if (!result || !daily) return null;
+
+  if (daily.length === 0) {
+    return (
+      <div className="py-16 text-center">
+        <p className="text-sm" style={{ color: "var(--text-secondary)" }}>
+          {t.empty?.trends ?? "Not enough data to show trends. Upload more months of CSVs."}
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div>

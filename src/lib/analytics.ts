@@ -18,6 +18,23 @@ interface GtagEventParams {
   [key: string]: string | number | boolean | undefined;
 }
 
+/** GA4 页面浏览参数类型 */
+interface GtagConfigParams {
+  page_path: string;
+}
+
+/** gtag 函数签名 */
+interface GtagFunction {
+  (command: "event", eventName: string, params?: GtagEventParams): void;
+  (command: "config", targetId: string, params: GtagConfigParams): void;
+}
+
+declare global {
+  interface Window {
+    gtag?: GtagFunction;
+  }
+}
+
 /**
  * 发送 GA4 自定义事件
  *
@@ -28,9 +45,9 @@ export function trackEvent(
   eventName: string,
   params?: GtagEventParams
 ): void {
-  if (typeof window !== "undefined" && typeof (window as any).gtag !== "undefined") {
+  if (typeof window !== "undefined" && typeof window.gtag !== "undefined") {
     try {
-      (window as any).gtag("event", eventName, params);
+      window.gtag("event", eventName, params);
     } catch {
       // gtag may not be fully initialized — silently ignore
     }
@@ -88,9 +105,9 @@ export function trackOutboundClick(
 export function trackPageView(location: string): void {
   const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
   if (!GA_ID) return;
-  if (typeof window !== "undefined" && typeof (window as any).gtag !== "undefined") {
+  if (typeof window !== "undefined" && typeof window.gtag !== "undefined") {
     try {
-      (window as any).gtag("config", GA_ID, {
+      window.gtag("config", GA_ID, {
         page_path: location,
       });
     } catch {

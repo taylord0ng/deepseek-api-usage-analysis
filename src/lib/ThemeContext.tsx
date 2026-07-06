@@ -49,11 +49,7 @@ function detectTheme(): Theme {
 /* ------------------------------------------------------------------ */
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setTheme] = useState<Theme>("light");
-
-  useEffect(() => {
-    setTheme(detectTheme());
-  }, []);
+  const [theme, setTheme] = useState<Theme>(() => detectTheme());
 
   // 同步 class 到 <html>
   useEffect(() => {

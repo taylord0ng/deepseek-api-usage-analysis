@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useTranslation } from "@/i18n";
+import { buildLocalePath, buildLocaleUrl } from "@/lib/localeRouting";
 import TitleBar from "./TitleBar";
 import FooterBar from "./FooterBar";
 import { useMemo } from "react";
@@ -33,6 +34,7 @@ interface ContentBlock {
  */
 export function TermsPage() {
   const { locale, t } = useTranslation();
+  const homeHref = buildLocalePath("/", locale);
 
   /** 使用条款页 JSON-LD 结构化数据 */
   const termsJsonLd = useMemo(() => {
@@ -46,6 +48,8 @@ export function TermsPage() {
       description: isZh
         ? "DeepSeek API 用量分析仪表盘使用条款。按现状提供的开源软件，无担保，与 DeepSeek 无关。由 Gavin Chen 和 MindRose 团队开发维护。"
         : "Terms of Use for the DeepSeek API Usage Analytics Dashboard. As-is open source software under the MIT License, no warranty, not affiliated with DeepSeek. Built by Gavin Chen & MindRose Team.",
+      url: buildLocaleUrl(locale, "/terms"),
+      inLanguage: locale,
       about: {
         "@type": "Thing",
         name: isZh ? "使用条款" : "Terms of Use",
@@ -53,7 +57,7 @@ export function TermsPage() {
       isPartOf: {
         "@type": "WebSite",
         name: "DeepSeek API Usage Analytics Dashboard",
-        url: "https://deepseek-usage.xyz",
+        url: buildLocaleUrl(locale, "/"),
       },
     };
   }, [locale]);
@@ -110,7 +114,7 @@ export function TermsPage() {
       <div className="max-w-3xl mx-auto px-6 py-8">
         {/* 返回首页 */}
         <Link
-          href="/"
+          href={homeHref}
           className="inline-flex items-center gap-1.5 text-xs font-medium transition-colors duration-200 mb-8 hover:opacity-80"
           style={{ color: "var(--text-secondary)" }}
         >

@@ -2,6 +2,8 @@
 
 import { useTranslation } from "@/i18n";
 import { trackEvent } from "@/lib/analytics";
+import { switchLocalePath } from "@/lib/localeRouting";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 /**
  * 语言切换组件
@@ -11,6 +13,27 @@ import { trackEvent } from "@/lib/analytics";
  */
 export default function LanguageSwitcher() {
   const { locale, setLocale } = useTranslation();
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  /**
+   * 切换当前页面语言，并导航到对应语言 URL。
+   *
+   * 这里保留查询参数与 hash，保证文章锚点、活动参数等不会在切换时丢失。
+   */
+  function handleSwitch(nextLocale: "en" | "zh") {
+    if (nextLocale === locale) return;
+
+    const queryString = searchParams.toString();
+    const hash = typeof window !== "undefined" ? window.location.hash : "";
+    const currentPath = `${pathname}${queryString ? `?${queryString}` : ""}${hash}`;
+    const nextPath = switchLocalePath(currentPath, nextLocale);
+
+    setLocale(nextLocale);
+    trackEvent("language_switch", { event_label: nextLocale });
+    router.push(nextPath);
+  }
 
   return (
     <div
@@ -20,7 +43,8 @@ export default function LanguageSwitcher() {
       aria-label="Language"
     >
       <button
-        onClick={() => { setLocale("en"); trackEvent("language_switch", { event_label: "en" }); }}
+        type="button"
+        onClick={() => handleSwitch("en")}
         role="radio"
         aria-checked={locale === "en"}
         className="px-3 py-1 rounded-full transition-all duration-200"
@@ -33,7 +57,8 @@ export default function LanguageSwitcher() {
         EN
       </button>
       <button
-        onClick={() => { setLocale("zh"); trackEvent("language_switch", { event_label: "zh" }); }}
+        type="button"
+        onClick={() => handleSwitch("zh")}
         role="radio"
         aria-checked={locale === "zh"}
         className="px-3 py-1 rounded-full transition-all duration-200"

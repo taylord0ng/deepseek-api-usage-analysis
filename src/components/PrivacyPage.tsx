@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useTranslation } from "@/i18n";
+import { buildLocalePath, buildLocaleUrl } from "@/lib/localeRouting";
 import TitleBar from "./TitleBar";
 import FooterBar from "./FooterBar";
 
@@ -34,6 +35,7 @@ interface ContentBlock {
  */
 export function PrivacyPage() {
   const { locale, t } = useTranslation();
+  const homeHref = buildLocalePath("/", locale);
 
   /** 隐私政策页 JSON-LD 结构化数据 */
   const privacyJsonLd = useMemo(() => {
@@ -47,6 +49,8 @@ export function PrivacyPage() {
       description: isZh
         ? "DeepSeek API 用量分析仪表盘隐私政策。了解我们如何处理您的数据：所有 CSV 解析均在本地浏览器完成，不上传任何数据，Google Analytics 可选启用。"
         : "Privacy Policy for the DeepSeek API Usage Analytics Dashboard. Learn how we handle your data: all CSV parsing runs locally in your browser, no data is uploaded, and Google Analytics is opt-in only.",
+      url: buildLocaleUrl(locale, "/privacy"),
+      inLanguage: locale,
       about: {
         "@type": "Thing",
         name: isZh ? "隐私政策" : "Privacy Policy",
@@ -54,7 +58,7 @@ export function PrivacyPage() {
       isPartOf: {
         "@type": "WebSite",
         name: "DeepSeek API Usage Analytics Dashboard",
-        url: "https://deepseek-usage.xyz",
+        url: buildLocaleUrl(locale, "/"),
       },
     };
   }, [locale]);
@@ -108,7 +112,7 @@ export function PrivacyPage() {
       <div className="max-w-3xl mx-auto px-6 py-8">
         {/* 返回首页 */}
         <Link
-          href="/"
+          href={homeHref}
           className="inline-flex items-center gap-1.5 text-xs font-medium transition-colors duration-200 mb-8 hover:opacity-80"
           style={{ color: "var(--text-secondary)" }}
         >

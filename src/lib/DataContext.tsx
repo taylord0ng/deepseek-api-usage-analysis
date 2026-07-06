@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useState, useCallback, useMemo, type ReactNode } from "react";
-import type { ParseResult, ParseError, ParseWarning, KeyStats } from "./types";
+import type { ParseResult, ParseError, ParseWarning } from "./types";
 import { parseDeepSeekData, computeKeyStats } from "./parser";
 
 /** Sentinel value for "show all models" */

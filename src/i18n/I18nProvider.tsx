@@ -1,3 +1,9 @@
+/**
+ * 文件说明：i18n 上下文提供者与 Hook。
+ *
+ * URL 级 i18n 路由启用后，locale 应优先由当前路由显式传入。
+ * localStorage 仅保留为历史兼容写回，不再作为首屏语言主来源。
+ */
 "use client";
 
 import {
@@ -5,7 +11,6 @@ import {
   useContext,
   useState,
   useCallback,
-  useEffect,
   type ReactNode,
 } from "react";
 import translations, { type Locale, type TranslationKeys } from "./translations";
@@ -42,24 +47,43 @@ function detectLocale(): Locale {
 /*  Provider                                                            */
 /* ------------------------------------------------------------------ */
 
-export function I18nProvider({ children }: { children: ReactNode }) {
-  const [locale, setLocaleState] = useState<Locale>("en");
+interface I18nProviderProps {
+  children: ReactNode;
+  initialLocale?: Locale;
+  lockLocale?: boolean;
+}
 
-  useEffect(() => {
-    setLocaleState(detectLocale());
-  }, []);
+/**
+ * i18n Provider
+ *
+ * - 当 `initialLocale` 存在时，说明当前页面语言由 URL 显式提供
+ * - 当 `lockLocale` 为 true 时，运行时只允许同步兼容存储，不允许脱离 URL 切换页面语言
+ * - 当 `initialLocale` 缺失时，回退到历史 localStorage / 浏览器语言检测
+ */
+export function I18nProvider({
+  children,
+  initialLocale,
+  lockLocale = false,
+}: I18nProviderProps) {
+  const [locale, setLocaleState] = useState<Locale>(() => initialLocale ?? detectLocale());
+  const resolvedLocale = lockLocale && initialLocale ? initialLocale : locale;
 
   const setLocale = useCallback((next: Locale) => {
-    setLocaleState(next);
     try {
       localStorage.setItem("ds-locale", next);
     } catch {
       // localStorage may be unavailable
     }
-  }, []);
+
+    if (lockLocale) return;
+
+    setLocaleState(next);
+  }, [lockLocale]);
 
   return (
-    <I18nContext.Provider value={{ locale, setLocale, t: translations[locale] }}>
+    <I18nContext.Provider
+      value={{ locale: resolvedLocale, setLocale, t: translations[resolvedLocale] }}
+    >
       {children}
     </I18nContext.Provider>
   );

@@ -43,29 +43,19 @@ export default function ProjectView() {
   const { theme } = useTheme();
   const { config, setConfig, matchProject } = useProjectConfig();
   const [showConfig, setShowConfig] = useState(false);
-  if (!result) return null;
-
-  const { daily } = result;
+  const daily = result?.daily;
   const isDark = theme === "dark";
 
   // 从 daily 数据中提取所有唯一的 Key 名称
   const allKeys = useMemo(
-    () => [...new Set(daily.map((d) => d.apiKeyName))].sort(),
+    () => [...new Set((daily ?? []).map((d) => d.apiKeyName))].sort(),
     [daily]
   );
 
-  if (allKeys.length === 0) {
-    return (
-      <div className="py-16 text-center">
-        <p className="text-sm" style={{ color: "var(--text-secondary)" }}>
-          {t.empty?.projects ?? "No data yet. Upload CSVs and configure project groups."}
-        </p>
-      </div>
-    );
-  }
-
   // 按项目配置聚合 daily 数据
   const projects = useMemo((): ProjectStats[] => {
+    if (!daily) return [];
+
     const map = new Map<string, {
       name: string;
       totalTokens: number;
@@ -118,7 +108,19 @@ export default function ProjectView() {
 
   const maxCost = Math.max(...projects.map((p) => p.totalCost), 1);
   const activeCount = projects.filter((p) => !p.isUncategorized).length;
-  const modelCount = result.summary.models.length;
+  const modelCount = result?.summary.models.length ?? 0;
+
+  if (!result || !daily) return null;
+
+  if (allKeys.length === 0) {
+    return (
+      <div className="py-16 text-center">
+        <p className="text-sm" style={{ color: "var(--text-secondary)" }}>
+          {t.empty?.projects ?? "No data yet. Upload CSVs and configure project groups."}
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -508,7 +510,7 @@ function ConfigModal({ config, allKeys, onSave, onClose, t }: ConfigModalProps) 
               color: "var(--error-text)",
             }}
           >
-            {t.projects.duplicateName}: "{dupError}"
+            {t.projects.duplicateName}: &quot;{dupError}&quot;
           </div>
         )}
 

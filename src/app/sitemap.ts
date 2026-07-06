@@ -3,99 +3,141 @@
  *
  * 遵循 Next.js 16 App Router 约定：导出默认函数返回 MetadataRoute.Sitemap。
  * 构建时自动生成 /sitemap.xml，与 static export (output: "export") 兼容。
- * 站点域名从 .env 的 NEXT_PUBLIC_SITE_URL 读取。
+ * 当前实现为每个公开页面同时输出：
+ * - 英文无前缀 URL
+ * - 中文 `/zh` 镜像 URL
+ *
+ * 并为两种语言条目都补齐 `alternates.languages`，以便搜索引擎识别双语镜像关系。
  */
 import type { MetadataRoute } from "next";
+import { buildLocaleAlternates, buildLocalePathname } from "@/lib/localeRouting";
+import { SITE_URL } from "@/lib/site";
 
 /** 静态导出兼容：标记此路由在构建时静态生成 */
 export const dynamic = "force-static";
 
-/** 读取公开域名，构建时注入 */
-const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL || "https://deepseek-usage.xyz";
+/** sitemap 路由配置项。 */
+interface SitemapRouteConfig {
+  pathname: string;
+  lastModified: Date;
+  changeFrequency: NonNullable<MetadataRoute.Sitemap[number]["changeFrequency"]>;
+  priority: number;
+}
 
-/** 构建时生成 sitemap.xml 条目，lastModified 按实际更新频率差异化设置 */
-export default function sitemap(): MetadataRoute.Sitemap {
-  const buildDate = new Date();
+/** 构建时统一的当前构建日期。 */
+const buildDate = new Date();
+
+/** 公开页面路由清单。 */
+const ROUTES: SitemapRouteConfig[] = [
+  {
+    pathname: "/",
+    lastModified: buildDate,
+    changeFrequency: "monthly",
+    priority: 1,
+  },
+  {
+    pathname: "/guideline",
+    lastModified: buildDate,
+    changeFrequency: "monthly",
+    priority: 0.8,
+  },
+  {
+    pathname: "/privacy",
+    lastModified: new Date("2026-06-08"),
+    changeFrequency: "yearly",
+    priority: 0.5,
+  },
+  {
+    pathname: "/terms",
+    lastModified: new Date("2026-06-08"),
+    changeFrequency: "yearly",
+    priority: 0.5,
+  },
+  {
+    pathname: "/changelog",
+    lastModified: buildDate,
+    changeFrequency: "monthly",
+    priority: 0.5,
+  },
+  {
+    pathname: "/deepseek-api-cost-tracker",
+    lastModified: buildDate,
+    changeFrequency: "monthly",
+    priority: 0.8,
+  },
+  {
+    pathname: "/deepseek-cache-hit-rate-analyzer",
+    lastModified: buildDate,
+    changeFrequency: "monthly",
+    priority: 0.8,
+  },
+  {
+    pathname: "/deepseek-api-pricing-calculator",
+    lastModified: buildDate,
+    changeFrequency: "monthly",
+    priority: 0.8,
+  },
+  {
+    pathname: "/blog",
+    lastModified: buildDate,
+    changeFrequency: "weekly",
+    priority: 0.7,
+  },
+  {
+    pathname: "/author",
+    lastModified: buildDate,
+    changeFrequency: "monthly",
+    priority: 0.6,
+  },
+  {
+    pathname: "/blog/deepseek-context-caching-guide",
+    lastModified: buildDate,
+    changeFrequency: "monthly",
+    priority: 0.6,
+  },
+  {
+    pathname: "/blog/deepseek-cost-optimization-tools",
+    lastModified: buildDate,
+    changeFrequency: "monthly",
+    priority: 0.6,
+  },
+  {
+    pathname: "/blog/openai-vs-deepseek-cost-comparison",
+    lastModified: buildDate,
+    changeFrequency: "monthly",
+    priority: 0.6,
+  },
+];
+
+/**
+ * 为单个公开路径生成英文与中文的双语 sitemap 条目。
+ */
+function buildLocalizedEntries(
+  route: SitemapRouteConfig
+): MetadataRoute.Sitemap {
+  const alternates = {
+    languages: buildLocaleAlternates(route.pathname),
+  };
 
   return [
     {
-      url: SITE_URL,
-      lastModified: buildDate,
-      changeFrequency: "monthly" as const,
-      priority: 1,
+      url: `${SITE_URL}${buildLocalePathname("en", route.pathname)}`,
+      lastModified: route.lastModified,
+      changeFrequency: route.changeFrequency,
+      priority: route.priority,
+      alternates,
     },
     {
-      url: `${SITE_URL}/guideline`,
-      lastModified: buildDate,
-      changeFrequency: "monthly" as const,
-      priority: 0.8,
-    },
-    {
-      url: `${SITE_URL}/privacy`,
-      lastModified: new Date("2026-06-08"),
-      changeFrequency: "yearly" as const,
-      priority: 0.5,
-    },
-    {
-      url: `${SITE_URL}/terms`,
-      lastModified: new Date("2026-06-08"),
-      changeFrequency: "yearly" as const,
-      priority: 0.5,
-    },
-    {
-      url: `${SITE_URL}/changelog`,
-      lastModified: buildDate,
-      changeFrequency: "monthly" as const,
-      priority: 0.5,
-    },
-    {
-      url: `${SITE_URL}/deepseek-api-cost-tracker`,
-      lastModified: buildDate,
-      changeFrequency: "monthly" as const,
-      priority: 0.8,
-    },
-    {
-      url: `${SITE_URL}/deepseek-cache-hit-rate-analyzer`,
-      lastModified: buildDate,
-      changeFrequency: "monthly" as const,
-      priority: 0.8,
-    },
-    {
-      url: `${SITE_URL}/deepseek-api-pricing-calculator`,
-      lastModified: buildDate,
-      changeFrequency: "monthly" as const,
-      priority: 0.8,
-    },
-    {
-      url: `${SITE_URL}/blog`,
-      lastModified: buildDate,
-      changeFrequency: "weekly" as const,
-      priority: 0.7,
-    },
-    {
-      url: `${SITE_URL}/author`,
-      lastModified: buildDate,
-      changeFrequency: "monthly" as const,
-      priority: 0.6,
-    },
-    {
-      url: `${SITE_URL}/blog/deepseek-context-caching-guide`,
-      lastModified: buildDate,
-      changeFrequency: "monthly" as const,
-      priority: 0.6,
-    },
-    {
-      url: `${SITE_URL}/blog/deepseek-cost-optimization-tools`,
-      lastModified: buildDate,
-      changeFrequency: "monthly" as const,
-      priority: 0.6,
-    },
-    {
-      url: `${SITE_URL}/blog/openai-vs-deepseek-cost-comparison`,
-      lastModified: buildDate,
-      changeFrequency: "monthly" as const,
-      priority: 0.6,
+      url: `${SITE_URL}${buildLocalePathname("zh", route.pathname)}`,
+      lastModified: route.lastModified,
+      changeFrequency: route.changeFrequency,
+      priority: route.priority,
+      alternates,
     },
   ];
+}
+
+/** 构建时生成 sitemap.xml 条目，lastModified 按实际更新频率差异化设置 */
+export default function sitemap(): MetadataRoute.Sitemap {
+  return ROUTES.flatMap(buildLocalizedEntries);
 }

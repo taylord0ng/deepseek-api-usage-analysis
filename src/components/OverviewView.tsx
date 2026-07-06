@@ -18,19 +18,9 @@ export default function OverviewView() {
   const { filteredResult: result } = useData();
   const { locale, t } = useTranslation();
   const { theme } = useTheme();
-  if (!result) return null;
-
-  const { daily, keys, summary } = result;
-
-  if (daily.length === 0) {
-    return (
-      <div className="py-16 text-center">
-        <p className="text-sm" style={{ color: "var(--text-secondary)" }}>
-          {t.empty?.overview ?? "No data for the selected model. Try a different filter."}
-        </p>
-      </div>
-    );
-  }
+  const daily = result?.daily;
+  const keys = result?.keys;
+  const summary = result?.summary;
 
   // 主题感知色
   const isDark = theme === "dark";
@@ -39,6 +29,8 @@ export default function OverviewView() {
 
   // 每日费用柱状图
   const dailyOption = useMemo(() => {
+    if (!result || !daily) return {};
+
     const dates = [...new Set(daily.map((d) => d.date))].sort();
     const byDate = new Map<string, number>();
     for (const d of daily) {
@@ -70,10 +62,12 @@ export default function OverviewView() {
         },
       ],
     };
-  }, [daily, isDark, textColor, gridColor]);
+  }, [result, daily, isDark, textColor, gridColor]);
 
   // 各 Key 费用环形图（donut）
   const donutOption = useMemo(() => {
+    if (!result || !keys) return {};
+
     const data = keys.map((k) => ({
       name: k.apiKeyName,
       value: +k.totalCost.toFixed(4),
@@ -109,7 +103,19 @@ export default function OverviewView() {
         },
       ],
     };
-  }, [keys, isDark, textColor]);
+  }, [result, keys, isDark, textColor]);
+
+  if (!result || !daily || !keys || !summary) return null;
+
+  if (daily.length === 0) {
+    return (
+      <div className="py-16 text-center">
+        <p className="text-sm" style={{ color: "var(--text-secondary)" }}>
+          {t.empty?.overview ?? "No data for the selected model. Try a different filter."}
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div>

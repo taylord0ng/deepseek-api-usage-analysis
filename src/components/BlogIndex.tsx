@@ -2,11 +2,13 @@
 
 import Link from "next/link";
 import { useTranslation } from "@/i18n";
+import { buildLocalePath } from "@/lib/localeRouting";
 import TitleBar from "@/components/TitleBar";
 import FooterBar from "@/components/FooterBar";
 
 export default function BlogIndex() {
-  const { t } = useTranslation();
+  const { locale, t } = useTranslation();
+  const homeHref = buildLocalePath("/", locale);
 
   const posts = [
     {
@@ -35,7 +37,7 @@ export default function BlogIndex() {
 
       <div className="max-w-3xl mx-auto px-6 py-8">
         <Link
-          href="/"
+          href={homeHref}
           className="inline-flex items-center gap-1.5 text-xs font-medium transition-colors duration-200 mb-8 hover:opacity-80"
           style={{ color: "var(--text-secondary)" }}
         >
@@ -62,7 +64,7 @@ export default function BlogIndex() {
           {posts.map((post) => (
             <Link
               key={post.slug}
-              href={`/blog/${post.slug}`}
+              href={buildLocalePath(`/blog/${post.slug}`, locale)}
               className="block p-6 rounded-subtle transition-all duration-200 hover:opacity-90 group"
               style={{ border: "1px solid var(--border)" }}
             >

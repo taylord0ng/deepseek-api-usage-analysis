@@ -1,12 +1,13 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { Suspense, useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useTranslation } from "@/i18n";
 import { useTheme } from "@/lib/ThemeContext";
+import { buildLocalePath } from "@/lib/localeRouting";
 import LanguageSwitcher from "./LanguageSwitcher";
-import { agnesProject } from "@/lib/sisterProjects";
+import { agnesProject, deepseekProject } from "@/lib/sisterProjects";
 
 /* ===== SVG 图标组件 ===== */
 
@@ -71,6 +72,16 @@ function MoreIcon() {
   );
 }
 
+/**
+ * 语言切换器的静态回退占位。
+ *
+ * 在静态预渲染阶段为 `useSearchParams()` 提供 Suspense 包裹，
+ * 同时保持标题栏左右布局稳定，避免按钮位置跳动。
+ */
+function LanguageSwitcherFallback() {
+  return <div className="h-8 w-[76px] rounded-full" aria-hidden="true" />;
+}
+
 /* ===== 主组件 ===== */
 
 /**
@@ -83,11 +94,15 @@ function MoreIcon() {
  * 移动端菜单为 Apple 风格 popover，点击外部自动关闭。
  */
 export default function TitleBar() {
-  const { t } = useTranslation();
+  const { locale, t } = useTranslation();
   const { theme, toggleTheme } = useTheme();
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const btnRef = useRef<HTMLButtonElement>(null);
+  const homeHref = buildLocalePath("/", locale);
+  const guidelineHref = buildLocalePath("/guideline", locale);
+  const blogHref = buildLocalePath("/blog", locale);
+  const changelogHref = buildLocalePath("/changelog", locale);
 
   /** 点击菜单外部时关闭 */
   useEffect(() => {
@@ -118,7 +133,7 @@ export default function TitleBar() {
         style={{ borderBottom: "1px solid var(--border)" }}
       >
         {/* ====== 左侧：Logo + 标题（点击回首页）====== */}
-        <Link href="/" className="flex items-center gap-2.5 sm:gap-3" aria-label="Home">
+        <Link href={homeHref} className="flex items-center gap-2.5 sm:gap-3" aria-label="Home">
           <Image
             src="/ds-usage-logo.png"
             alt="DeepSeek Usage Logo"
@@ -153,7 +168,7 @@ export default function TitleBar() {
 
           {/* GitHub */}
           <a
-            href={agnesProject.githubUrl}
+            href={deepseekProject.githubUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center justify-center w-8 h-8 rounded-full transition-all duration-200 hover:bg-[var(--border)]"
@@ -165,7 +180,7 @@ export default function TitleBar() {
 
           {/* Guideline */}
           <Link
-            href="/guideline"
+            href={guidelineHref}
             className="flex items-center justify-center w-8 h-8 rounded-full transition-all duration-200 hover:bg-[var(--border)]"
             style={{ color: "var(--text-secondary)" }}
             aria-label={t.guideline.pageTitle}
@@ -176,7 +191,7 @@ export default function TitleBar() {
 
           {/* Blog */}
           <Link
-            href="/blog"
+            href={blogHref}
             className="flex items-center justify-center w-8 h-8 rounded-full transition-all duration-200 hover:bg-[var(--border)]"
             style={{ color: "var(--text-secondary)" }}
             aria-label={t.blog.pageTitle}
@@ -187,7 +202,7 @@ export default function TitleBar() {
 
           {/* Changelog */}
           <Link
-            href="/changelog"
+            href={changelogHref}
             className="flex items-center justify-center w-8 h-8 rounded-full transition-all duration-200 hover:bg-[var(--border)]"
             style={{ color: "var(--text-secondary)" }}
             aria-label={t.changelog.pageTitle}
@@ -196,7 +211,9 @@ export default function TitleBar() {
             <ClockIcon />
           </Link>
 
-          <LanguageSwitcher />
+          <Suspense fallback={<LanguageSwitcherFallback />}>
+            <LanguageSwitcher />
+          </Suspense>
 
           {/* 主题切换 */}
           <button
@@ -212,7 +229,9 @@ export default function TitleBar() {
 
         {/* ====== 右侧：移动端 — 语言 + ⋯ ====== */}
         <div className="flex md:hidden items-center gap-1.5">
-          <LanguageSwitcher />
+          <Suspense fallback={<LanguageSwitcherFallback />}>
+            <LanguageSwitcher />
+          </Suspense>
 
           <button
             ref={btnRef}
@@ -253,7 +272,7 @@ export default function TitleBar() {
 
               {/* GitHub */}
               <a
-                href={agnesProject.githubUrl}
+                href={deepseekProject.githubUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={closeMenu}
@@ -266,7 +285,7 @@ export default function TitleBar() {
 
               {/* Guideline */}
               <Link
-                href="/guideline"
+                href={guidelineHref}
                 onClick={closeMenu}
                 className="flex items-center gap-3 px-4 py-2.5 text-sm transition-colors duration-150 hover:bg-[var(--border)]"
                 style={{ color: "var(--text-primary)" }}
@@ -277,7 +296,7 @@ export default function TitleBar() {
 
               {/* Blog */}
               <Link
-                href="/blog"
+                href={blogHref}
                 onClick={closeMenu}
                 className="flex items-center gap-3 px-4 py-2.5 text-sm transition-colors duration-150 hover:bg-[var(--border)]"
                 style={{ color: "var(--text-primary)" }}
@@ -288,7 +307,7 @@ export default function TitleBar() {
 
               {/* Changelog */}
               <Link
-                href="/changelog"
+                href={changelogHref}
                 onClick={closeMenu}
                 className="flex items-center gap-3 px-4 py-2.5 text-sm transition-colors duration-150 hover:bg-[var(--border)]"
                 style={{ color: "var(--text-primary)" }}

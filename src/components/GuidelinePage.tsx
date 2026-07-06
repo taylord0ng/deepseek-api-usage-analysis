@@ -4,7 +4,7 @@ import { useMemo, useState, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useTranslation } from "@/i18n";
-import { useTheme } from "@/lib/ThemeContext";
+import { buildLocalePath } from "@/lib/localeRouting";
 import TitleBar from "./TitleBar";
 import FooterBar from "./FooterBar";
 
@@ -323,11 +323,10 @@ function renderInline(text: string): React.ReactNode {
  */
 export function GuidelinePage() {
   const { locale, t } = useTranslation();
-  const { theme } = useTheme();
-  const isDark = theme === "dark";
+  const homeHref = buildLocalePath("/", locale);
 
-  // 仅加载中文章节标题用于目录
-  const [activeSection, setActiveSection] = useState<string>("");
+  // 当前目录高亮锚点（当前实现暂未启用滚动同步）
+  const [activeSection] = useState<string>("");
 
   /** 指南页 JSON-LD 结构化数据 */
   const guidelineJsonLd = useMemo(() => {
@@ -630,7 +629,7 @@ export function GuidelinePage() {
             >
               {/* 返回首页 — 固定在侧边栏顶部 */}
               <Link
-                href="/"
+                href={homeHref}
                 className="inline-flex items-center gap-1.5 text-xs font-medium transition-colors duration-200 mb-5 hover:opacity-80"
                 style={{ color: "var(--text-secondary)" }}
               >
