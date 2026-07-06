@@ -44,7 +44,7 @@
 - **姊妹项目交叉链接** — 集中化的 `sisterProjects.ts` 模块管理「API Usage Analyzer Series」产品矩阵中两个姐妹工具（DeepSeek + Agnes）之间的交叉链接。所有跨站 URL 均通过统一配置来源流转，并附带 UTM 追踪（`utm_source=agnes_site`、`utm_medium=referral`、按位置区分的 `utm_campaign`）。姊妹项目链接出现在 TitleBar（胶囊按钮）、LandingPage（专属区段）、FooterBar（「姊妹工具」行）以及 Organization JSON-LD Schema 中。
 - **落地页** — 完整的上传前落地页，包含主题感知背景图片、姊妹项目区段（Agnes AI 交叉链接，含 UTM 追踪 URL）、使用说明步骤、手风琴常见问题（9 项，含文件大小限制和项目分组）、多板块关于页面（项目起源、隐私与技术、团队介绍、商业合作含邮箱复制与社交链接 +「查看更新日志 →」链接）、滚动渐显动画、支持锚点链接的板块与延迟渲染性能优化
 - **用户操作手册** — 位于 `/guideline` 的完整双语使用指南，包含标注截图、交互式目录导航、分步仪表盘操作说明、CSV 导出指引、图表解读和故障排查章节
-- **更新日志** — 位于 `/changelog` 的专属页面，展示 v0.1.0 至 v0.5.4 的完整版本历史，按类别（新增/改进/修复/依赖变更）以彩色圆点分组；Apple 极简双语设计，与隐私政策/使用条款风格一致，含 JSON-LD WebPage 结构化数据、独立 SEO 元数据，可从 TitleBar、FooterBar 和落地页访问
+- **更新日志** — 位于 `/changelog` 的专属页面，展示 v0.1.0 至 v0.6.2 的完整版本历史，按类别（新增/改进/修复/依赖变更）以彩色圆点分组；Apple 极简双语设计，与隐私政策/使用条款风格一致，含 JSON-LD WebPage 结构化数据、独立 SEO 元数据，可从 TitleBar、FooterBar 和落地页访问
 - **隐私政策与使用条款** — `/privacy` 和 `/terms` 页面，包含双语法务内容、独立 SEO 元数据（规范 URL、OpenGraph、Twitter 卡片）、JSON-LD WebPage Schema 以及 Apple 极简风格的法律文本布局；每页页脚均有导航链接
 - **数据分析** — 可选的 Google Analytics 4 集成，通过 `NEXT_PUBLIC_GA_ID` 环境变量控制；未设置时零开销。追踪页面浏览、文件上传、分享卡片生成、标签页切换和语言切换 — 绝不追踪任何 CSV 数据。
 - **增强 SEO** — Twitter `summary_large_image` 卡片含 1200×630 OG 图片、用于 Google 知识面板的 `Organization` JSON-LD Schema、包含所有子页面的扩展 `BreadcrumbList`、差异化的站点地图 `lastModified` 日期、所有页面的 `keywords` + `author` + `twitter:site`/`creator` 元标签
@@ -129,7 +129,7 @@ src/
 │   ├── GuidelinePage.tsx    # 完整交互式用户操作手册（双语、标注截图、目录导航、滚动渐显）
 │   ├── PrivacyPage.tsx      # 隐私政策页（双语 7 章节法律文本，JSON-LD WebPage Schema，GitHub 源码链接）
 │   ├── TermsPage.tsx        # 使用条款页（双语 8 章节法律文本，JSON-LD WebPage Schema，MIT 许可证引用）
-│   ├── ChangelogPage.tsx     # 更新日志页（v0.1.0–v0.6.1 完整版本历史，按类别以彩色圆点分组，JSON-LD WebPage Schema，双语）
+│   ├── ChangelogPage.tsx     # 更新日志页（v0.1.0–v0.6.2 完整版本历史，按类别以彩色圆点分组，JSON-LD WebPage Schema，双语）
 │   ├── CostTrackerPage.tsx    # SEO 落地页：DeepSeek API 费用追踪器（功能 + 联盟推荐）
 │   ├── CacheAnalyzerPage.tsx  # SEO 落地页：DeepSeek 缓存命中率分析器（缓存教育 + MindRose CTA）
 │   ├── PricingCalculatorPage.tsx # SEO 落地页：DeepSeek API 价格计算器（交互式滑块 + 竞品对比表 + Vultr CTA）
@@ -227,6 +227,20 @@ npm run build
 - **缓存**：`/_next/static` 和 `/fonts` 永久缓存（1 年），`/landing` 和 `/guideline` 图片 stale-while-revalidate 缓存（1 周）
 
 ## 更新日志
+
+### v0.6.2
+
+**新增：**
+
+- URL 级国际化路由 — 为中文语言引入 `/zh` 路径前缀（如 `/zh/guideline`、`/zh/blog`）。英文路由保持无前缀。所有页面、SEO 落地页和博客文章实现完整的双语 URL 镜像。新增集中化模块：`localeRouting.ts`（语言检测、路径构建、重定向）、`site.ts`（SITE_URL、SITE_NAME、OG/Logo 图片 URL）、`pageMetadata.ts` 和 `routeMetadata.ts`（共享 `generateMetadata()` 辅助函数）。从旧 `layout.tsx` 中提取 `AppRootLayout.tsx` 以支持语言感知的根布局。每个路由现在通过 `(site)/` 和 `zh/` 路由组拥有独立的 SEO 元数据生成。
+- 语言感知导航 — 所有内部链接（TitleBar、FooterBar、LandingPage、GuidelinePage、博客组件、子页面）已更新为使用 `buildLocalePath()` 正确处理语言前缀。LanguageSwitcher 现在使用语言感知的路径构建，切换语言时不会丢失当前页面上下文。
+
+**改进：**
+
+- 博客文章多语言支持 — 将 BlogArticlePage 和 BlogPostLayout 中的硬编码英文文本替换为 i18n 翻译键。博客元数据获取现在使用语言感知逻辑，复用已有的博客翻译字符串以保持双语内容的一致性。
+- 落地页外链按钮样式统一 — 统一了落地页外链按钮的视觉风格，修复了不同区块之间按钮外观不一致的问题。
+- 博客首页布局优化 — 将博客列表段落最大宽度调整为 `max-w-3xl`，提升宽屏下的阅读体验。
+- 测试覆盖 — 新增 `localeRouting.test.ts`（69 个测试用例）覆盖语言路由模块。更新 `analytics.test.ts` 和 `sitemap.test.ts` 以覆盖新的路由结构。
 
 ### v0.6.1
 

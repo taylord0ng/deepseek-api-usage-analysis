@@ -1,6 +1,6 @@
 # DeepSeek API Usage Analytics Dashboard — Full Content
 
-> A free, privacy-first analytics tool for DeepSeek API users. Drop your monthly ZIP exports or CSV files and get instant cost analytics, cache analysis, and per-key breakdowns. Open source (MIT), bilingual (EN/中文), entirely browser-side. No account, no upload, no database. Built by Gavin Chen & the MindRose team. Version 0.6.1.
+> A free, privacy-first analytics tool for DeepSeek API users. Drop your monthly ZIP exports or CSV files and get instant cost analytics, cache analysis, and per-key breakdowns. Open source (MIT), bilingual (EN/中文), entirely browser-side. No account, no upload, no database. Built by Gavin Chen & the MindRose team. Version 0.6.2.
 
 ---
 
@@ -266,6 +266,18 @@ If you have questions about these Terms of Use, please open an issue on our GitH
 
 ### English
 
+**v0.6.2** (2026-07-06)
+
+*Added*
+- URL-level i18n routing — introduced `/zh` prefix for Chinese locale routes. English routes remain prefix-free. Full bilingual URL mirroring for all pages, SEO landing pages, and blog articles. New `localeRouting.ts`, `site.ts`, `pageMetadata.ts`, and `routeMetadata.ts` modules.
+- Locale-aware navigation — updated all internal links to use `buildLocalePath()` for correct locale prefix handling.
+
+*Improved*
+- Blog article multi-language support — replaced hardcoded English text with i18n translation keys.
+- Landing page external link button styling — unified visual style across sections.
+- Blog index layout — adjusted paragraph max-width to `max-w-3xl`.
+- Test coverage — added `localeRouting.test.ts` (69 tests), updated analytics and sitemap tests.
+
 **v0.6.1** (2026-07-05)
 
 *Added*
@@ -368,6 +380,18 @@ If you have questions about these Terms of Use, please open an issue on our GitH
 ---
 
 ### 中文
+
+**v0.6.2**（2026-07-06）
+
+*新增*
+- URL 级国际化路由 — 为中文引入 `/zh` 路径前缀。英文路由保持无前缀。所有页面、SEO 落地页和博客文章实现完整双语 URL 镜像。新增 `localeRouting.ts`、`site.ts`、`pageMetadata.ts` 和 `routeMetadata.ts` 模块。
+- 语言感知导航 — 所有内部链接更新为使用 `buildLocalePath()` 正确处理语言前缀。
+
+*改进*
+- 博客文章多语言支持 — 将硬编码英文文本替换为 i18n 翻译键。
+- 落地页外链按钮样式统一 — 统一了各区块按钮视觉风格。
+- 博客首页布局 — 段落最大宽度调整为 `max-w-3xl`。
+- 测试覆盖 — 新增 `localeRouting.test.ts`（69 个测试），更新 analytics 和 sitemap 测试。
 
 **v0.6.1**（2026-07-05）
 

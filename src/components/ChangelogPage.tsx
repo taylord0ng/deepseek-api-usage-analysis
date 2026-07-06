@@ -50,6 +50,38 @@ interface VersionEntry {
 /** 所有版本的更新日志，按版本倒序排列 */
 const CHANGELOG_DATA: VersionEntry[] = [
   {
+    version: "v0.6.2",
+    date: "2026-07-06",
+    added: [
+      {
+        en: "URL-level i18n routing — introduced `/zh` prefix for Chinese locale routes (e.g., `/zh/guideline`, `/zh/blog`). English routes remain prefix-free. Full bilingual URL mirroring for all pages, SEO landing pages, and blog articles. New `localeRouting.ts` module centralizes locale detection, path construction, and redirect logic. New `site.ts` module centralizes site-level constants (SITE_URL, SITE_NAME, OG/logo image URLs). New `pageMetadata.ts` and `routeMetadata.ts` provide shared `generateMetadata()` helpers for all routes. `AppRootLayout.tsx` extracted from old `layout.tsx` to support locale-aware root layout. Each route now has independent SEO metadata generation via `(site)/` and `zh/` route groups.",
+        zh: "URL 级国际化路由 — 为中文语言引入 `/zh` 路径前缀（如 `/zh/guideline`、`/zh/blog`）。英文路由保持无前缀。所有页面、SEO 落地页和博客文章实现完整的双语 URL 镜像。新增 `localeRouting.ts` 模块集中管理语言检测、路径构建和重定向逻辑。新增 `site.ts` 模块集中管理站点级常量（SITE_URL、SITE_NAME、OG/Logo 图片 URL）。新增 `pageMetadata.ts` 和 `routeMetadata.ts` 为所有路由提供共享的 `generateMetadata()` 辅助函数。从旧的 `layout.tsx` 中提取 `AppRootLayout.tsx` 以支持语言感知的根布局。每个路由现在通过 `(site)/` 和 `zh/` 路由组拥有独立的 SEO 元数据生成。",
+      },
+      {
+        en: "Locale-aware navigation — updated all internal links (TitleBar, FooterBar, LandingPage, GuidelinePage, blog components, sub-pages) to use `buildLocalePath()` for correct locale prefix handling. LanguageSwitcher now uses locale-aware path construction for seamless locale switching without losing current page context.",
+        zh: "语言感知导航 — 更新所有内部链接（TitleBar、FooterBar、LandingPage、GuidelinePage、博客组件、子页面），使用 `buildLocalePath()` 正确处理语言前缀。LanguageSwitcher 现在使用语言感知的路径构建，切换语言时不会丢失当前页面上下文。",
+      },
+    ],
+    improved: [
+      {
+        en: "Blog article multi-language support — replaced hardcoded English text in BlogArticlePage and BlogPostLayout with i18n translation keys. Blog metadata fetching now uses locale-aware logic, reusing existing blog translation strings for consistent bilingual content.",
+        zh: "博客文章多语言支持 — 将 BlogArticlePage 和 BlogPostLayout 中的硬编码英文文本替换为 i18n 翻译键。博客元数据获取现在使用语言感知逻辑，复用已有的博客翻译字符串以保持双语内容的一致性。",
+      },
+      {
+        en: "Landing page external link button styling — unified the visual style of outbound link buttons on the landing page, fixing inconsistent button appearances across different sections.",
+        zh: "落地页外链按钮样式统一 — 统一了落地页外链按钮的视觉风格，修复了不同区块之间按钮外观不一致的问题。",
+      },
+      {
+        en: "Blog index layout refinement — adjusted blog list paragraph max-width to `max-w-3xl` for improved reading experience on wide viewports.",
+        zh: "博客首页布局优化 — 将博客列表段落最大宽度调整为 `max-w-3xl`，提升宽屏下的阅读体验。",
+      },
+      {
+        en: "Test coverage — added `localeRouting.test.ts` (69 new tests) for the locale routing module. Updated `analytics.test.ts` and `sitemap.test.ts` to cover new route structures.",
+        zh: "测试覆盖 — 新增 `localeRouting.test.ts`（69 个测试用例）覆盖语言路由模块。更新 `analytics.test.ts` 和 `sitemap.test.ts` 以覆盖新的路由结构。",
+      },
+    ],
+  },
+  {
     version: "v0.6.1",
     date: "2026-07-05",
     added: [
