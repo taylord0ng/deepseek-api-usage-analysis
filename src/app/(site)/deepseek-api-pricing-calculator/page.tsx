@@ -1,6 +1,7 @@
 /** 文件说明：DeepSeek API 定价计算器落地页路由与 SEO 元数据。 */
 import type { Metadata } from "next";
 import { PricingCalculatorPage } from "@/components/PricingCalculatorPage";
+import PricingCalculatorContent from "@/components/PricingCalculatorContent";
 import { buildPricingCalculatorMetadata } from "@/lib/routeMetadata";
 
 /**
@@ -14,5 +15,10 @@ export function generateMetadata(): Metadata {
  * 渲染定价计算器落地页路由。
  */
 export default function PricingCalculatorRoute() {
-  return <PricingCalculatorPage />;
+  return (
+    <>
+      <PricingCalculatorPage />
+      <PricingCalculatorContent />
+    </>
+  );
 }

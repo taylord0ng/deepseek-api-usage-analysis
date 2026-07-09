@@ -355,3 +355,108 @@ export function buildArticleJsonLd(
     image: [input.imageUrl],
   };
 }
+
+/* ------------------------------------------------------------------ */
+/*  子页面专属 JSON-LD                                                   */
+/* ------------------------------------------------------------------ */
+
+import translations from "@/i18n/translations";
+
+/**
+ * 生成 CostTracker 页面的 FAQPage JSON-LD
+ */
+export function buildCostTrackerFaqJsonLd(locale: Locale): Record<string, unknown> {
+  const t = translations[locale].costTracker;
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    url: buildLocaleUrl(locale, "/deepseek-api-cost-tracker"),
+    inLanguage: locale,
+    mainEntity: [
+      {
+        "@type": "Question",
+        name: t.faq1Q,
+        acceptedAnswer: { "@type": "Answer", text: t.faq1A },
+      },
+      {
+        "@type": "Question",
+        name: t.faq2Q,
+        acceptedAnswer: { "@type": "Answer", text: t.faq2A },
+      },
+      {
+        "@type": "Question",
+        name: t.faq3Q,
+        acceptedAnswer: { "@type": "Answer", text: t.faq3A },
+      },
+    ],
+  };
+}
+
+/**
+ * 生成 CostTracker 页面的 SoftwareApplication JSON-LD
+ */
+export function buildCostTrackerSoftwareAppJsonLd(locale: Locale): Record<string, unknown> {
+  const t = translations[locale].costTracker;
+  return {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name: t.pageTitle,
+    url: buildLocaleUrl(locale, "/deepseek-api-cost-tracker"),
+    version: APP_VERSION,
+    operatingSystem: "Any (web browser)",
+    applicationCategory: "DeveloperApplication",
+    description: t.heroDesc,
+    inLanguage: locale,
+    offers: {
+      "@type": "Offer",
+      price: "0",
+      priceCurrency: "USD",
+    },
+  };
+}
+
+/**
+ * 生成 PricingCalculator 页面的 SoftwareApplication JSON-LD
+ */
+export function buildPricingCalculatorSoftwareAppJsonLd(locale: Locale): Record<string, unknown> {
+  const t = translations[locale].pricingCalculator;
+  return {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name: t.pageTitle,
+    url: buildLocaleUrl(locale, "/deepseek-api-pricing-calculator"),
+    version: APP_VERSION,
+    operatingSystem: "Any (web browser)",
+    applicationCategory: "DeveloperApplication",
+    description: t.heroDesc,
+    inLanguage: locale,
+    offers: {
+      "@type": "Offer",
+      price: "0",
+      priceCurrency: "USD",
+    },
+  };
+}
+
+/**
+ * 生成 CacheAnalyzer 页面的 SoftwareApplication JSON-LD
+ */
+export function buildCacheAnalyzerSoftwareAppJsonLd(locale: Locale): Record<string, unknown> {
+  const t = translations[locale].cacheAnalyzer;
+  return {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name: t.pageTitle,
+    url: buildLocaleUrl(locale, "/deepseek-cache-hit-rate-analyzer"),
+    version: APP_VERSION,
+    operatingSystem: "Any (web browser)",
+    applicationCategory: "DeveloperApplication",
+    description: t.heroDesc,
+    inLanguage: locale,
+    offers: {
+      "@type": "Offer",
+      price: "0",
+      priceCurrency: "USD",
+    },
+  };
+}

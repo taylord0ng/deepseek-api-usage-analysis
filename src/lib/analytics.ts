@@ -83,7 +83,7 @@ export function trackLandingCTA(
  * @param target - 目标标识，如 'portkey' | 'helicone' | 'vultr' | 'mindrose'
  */
 export function trackOutboundClick(
-  page: "cost_tracker" | "cache_analyzer" | "pricing_calculator",
+  page: "cost_tracker" | "cache_analyzer" | "pricing_calculator" | "affiliate_wall",
   target: string
 ): void {
   trackEvent("outbound_link_click", {

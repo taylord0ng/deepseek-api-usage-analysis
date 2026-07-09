@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useTranslation } from "@/i18n";
 import { trackLandingCTA, trackOutboundClick } from "@/lib/analytics";
 import { buildLocalePath } from "@/lib/localeRouting";
+import { buildCacheAnalyzerSoftwareAppJsonLd } from "@/lib/schema";
 import TitleBar from "./TitleBar";
 import FooterBar from "./FooterBar";
 
@@ -48,6 +49,13 @@ export function CacheAnalyzerPage() {
 
   return (
     <div className="min-h-screen" style={{ background: "var(--bg)" }}>
+      {/* 注入页面专属结构化数据 */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(buildCacheAnalyzerSoftwareAppJsonLd(locale)),
+        }}
+      />
       <TitleBar />
 
       <div className="max-w-3xl mx-auto px-6 py-8">
@@ -200,7 +208,7 @@ export function CacheAnalyzerPage() {
             {t.cacheAnalyzer.strategyTitle}
           </h2>
           <div className="grid grid-cols-1 gap-5">
-            {strategies.map((item) => (
+            {strategies.map((item, idx) => (
               <div key={item.title}>
                 <h3
                   className="text-sm font-semibold mb-2"
@@ -213,6 +221,18 @@ export function CacheAnalyzerPage() {
                   style={{ color: "var(--text-secondary)" }}
                 >
                   {item.desc}
+                  {idx === strategies.length - 1 && (
+                    <span className="block mt-2">
+                      <Link
+                        href={buildLocalePath("/blog/deepseek-context-caching-guide", locale)}
+                        className="inline-flex items-center gap-1 font-medium hover:underline"
+                        style={{ color: "var(--accent)" }}
+                      >
+                        {locale === "zh" ? "阅读完整上下文缓存指南" : "Read the full context caching guide"}
+                        <span aria-hidden="true">→</span>
+                      </Link>
+                    </span>
+                  )}
                 </p>
               </div>
             ))}

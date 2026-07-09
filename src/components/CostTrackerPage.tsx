@@ -3,8 +3,10 @@
 
 import Link from "next/link";
 import { useTranslation } from "@/i18n";
-import { trackLandingCTA, trackOutboundClick } from "@/lib/analytics";
+import { trackLandingCTA } from "@/lib/analytics";
 import { buildLocalePath } from "@/lib/localeRouting";
+import AffiliateWall from "./AffiliateWall";
+import { buildCostTrackerSoftwareAppJsonLd, buildCostTrackerFaqJsonLd } from "@/lib/schema";
 import TitleBar from "./TitleBar";
 import FooterBar from "./FooterBar";
 
@@ -60,6 +62,19 @@ export function CostTrackerPage() {
 
   return (
     <div className="min-h-screen" style={{ background: "var(--bg)" }}>
+      {/* 注入页面专属结构化数据 */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(buildCostTrackerSoftwareAppJsonLd(locale)),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(buildCostTrackerFaqJsonLd(locale)),
+        }}
+      />
       <TitleBar />
 
       <div className="max-w-3xl mx-auto px-6 py-8">
@@ -170,6 +185,18 @@ export function CostTrackerPage() {
                   style={{ color: "var(--text-secondary)" }}
                 >
                   {f.desc}
+                  {idx === 2 && (
+                    <span className="block mt-2">
+                      <Link
+                        href={buildLocalePath("/deepseek-cache-hit-rate-analyzer", locale)}
+                        className="inline-flex items-center gap-1 font-medium hover:underline"
+                        style={{ color: "var(--accent)" }}
+                      >
+                        {locale === "zh" ? "深入分析缓存命中率" : "Deep dive into cache hit rate"}
+                        <span aria-hidden="true">→</span>
+                      </Link>
+                    </span>
+                  )}
                 </p>
               </div>
             ))}
@@ -350,40 +377,7 @@ export function CostTrackerPage() {
           >
             {t.costTracker.recommendedDesc}
           </p>
-          <div className="flex flex-wrap gap-3">
-            <a
-              href="https://portkey.ai"
-              target="_blank"
-              rel="sponsored nofollow noopener noreferrer"
-              onClick={() => trackOutboundClick("cost_tracker", "portkey")}
-              className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-2 rounded-subtle transition-all duration-200 hover:opacity-80"
-              style={{
-                color: "var(--text-secondary)",
-                border: "1px solid var(--border)",
-              }}
-            >
-              Portkey — AI Gateway & Observability
-              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M7 17L17 7M17 7H7m10 0v10" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-            </a>
-            <a
-              href="https://www.helicone.ai"
-              target="_blank"
-              rel="sponsored nofollow noopener noreferrer"
-              onClick={() => trackOutboundClick("cost_tracker", "helicone")}
-              className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-2 rounded-subtle transition-all duration-200 hover:opacity-80"
-              style={{
-                color: "var(--text-secondary)",
-                border: "1px solid var(--border)",
-              }}
-            >
-              Helicone — LLM Monitoring
-              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M7 17L17 7M17 7H7m10 0v10" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-            </a>
-          </div>
+          <AffiliateWall ids={["portkey", "helicone"]} />
         </section>
       </div>
 

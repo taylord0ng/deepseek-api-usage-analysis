@@ -6,6 +6,8 @@ import Link from "next/link";
 import { useTranslation } from "@/i18n";
 import { trackOutboundClick } from "@/lib/analytics";
 import { buildLocalePath } from "@/lib/localeRouting";
+import { getAffiliatesByIds } from "@/lib/affiliates";
+import { buildPricingCalculatorSoftwareAppJsonLd } from "@/lib/schema";
 import TitleBar from "./TitleBar";
 import FooterBar from "./FooterBar";
 
@@ -56,6 +58,7 @@ export function PricingCalculatorPage() {
   const v4ProCost = calcCost(PRICING.v4Pro);
   const o3Cost = calcCost(PRICING.openaiO3);
   const claudeCost = calcCost(PRICING.claudeOpus);
+  const vultrAffiliate = getAffiliatesByIds(["vultr"])[0];
   const estimateSteps = [
     { title: t.pricingCalculator.estimateStep1Title, desc: t.pricingCalculator.estimateStep1Desc },
     { title: t.pricingCalculator.estimateStep2Title, desc: t.pricingCalculator.estimateStep2Desc },
@@ -74,6 +77,13 @@ export function PricingCalculatorPage() {
 
   return (
     <div className="min-h-screen" style={{ background: "var(--bg)" }}>
+      {/* 注入页面专属结构化数据 */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(buildPricingCalculatorSoftwareAppJsonLd(locale)),
+        }}
+      />
       <TitleBar />
 
       <div className="max-w-3xl mx-auto px-6 py-8">
@@ -115,6 +125,7 @@ export function PricingCalculatorPage() {
 
         {/* 交互式计算器 */}
         <section className="mb-16">
+          <h2 className="sr-only">{t.pricingCalculator.estimationGuideTitle}</h2>
           <div
             className="p-6 rounded-subtle mb-8"
             style={{ border: "1px solid var(--border)" }}
@@ -122,12 +133,14 @@ export function PricingCalculatorPage() {
             {/* Input Tokens */}
             <div className="mb-5">
               <label
+                htmlFor="input-tokens-range"
                 className="block text-xs font-semibold mb-2"
                 style={{ color: "var(--text-primary)" }}
               >
                 {t.pricingCalculator.inputTokensLabel}: {Math.round(inputM).toLocaleString()}M
               </label>
               <input
+                id="input-tokens-range"
                 type="range"
                 min={1}
                 max={500}
@@ -145,12 +158,14 @@ export function PricingCalculatorPage() {
             {/* Output Tokens */}
             <div className="mb-5">
               <label
+                htmlFor="output-tokens-range"
                 className="block text-xs font-semibold mb-2"
                 style={{ color: "var(--text-primary)" }}
               >
                 {t.pricingCalculator.outputTokensLabel}: {Math.round(outputM).toLocaleString()}M
               </label>
               <input
+                id="output-tokens-range"
                 type="range"
                 min={0.1}
                 max={100}
@@ -169,12 +184,14 @@ export function PricingCalculatorPage() {
             {/* Cache Hit Rate */}
             <div className="mb-5">
               <label
+                htmlFor="cache-hit-rate-range"
                 className="block text-xs font-semibold mb-2"
                 style={{ color: "var(--text-primary)" }}
               >
                 {t.pricingCalculator.cacheHitRateLabel}: {cacheHitRate}%
               </label>
               <input
+                id="cache-hit-rate-range"
                 type="range"
                 min={0}
                 max={80}
@@ -311,12 +328,22 @@ export function PricingCalculatorPage() {
 
         {/* 竞品对比表 */}
         <section className="mb-16">
-          <h2
-            className="text-lg font-bold tracking-tight mb-3"
-            style={{ color: "var(--text-primary)", letterSpacing: "-0.02em" }}
-          >
-            {t.pricingCalculator.competitorComparison}
-          </h2>
+          <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2 mb-3">
+            <h2
+              className="text-lg font-bold tracking-tight"
+              style={{ color: "var(--text-primary)", letterSpacing: "-0.02em" }}
+            >
+              {t.pricingCalculator.competitorComparison}
+            </h2>
+            <Link
+              href={buildLocalePath("/blog/openai-vs-deepseek-cost-comparison", locale)}
+              className="text-xs font-medium hover:underline inline-flex items-center gap-1"
+              style={{ color: "var(--accent)" }}
+            >
+              {locale === "zh" ? "阅读深度对比报告" : "Read the deep-dive comparison"}
+              <span aria-hidden="true">→</span>
+            </Link>
+          </div>
           <p className="text-xs mb-6" style={{ color: "var(--text-tertiary)" }}>
             {t.pricingCalculator.comparisonNote}
           </p>
@@ -421,33 +448,35 @@ export function PricingCalculatorPage() {
         <hr style={{ borderColor: "var(--border)", marginBottom: "3rem" }} />
 
         {/* Vultr 联盟导流 CTA */}
-        <section className="mb-16 text-center">
-          <h2
-            className="text-xl font-bold tracking-tight mb-3"
-            style={{ color: "var(--text-primary)", letterSpacing: "-0.02em" }}
-          >
-            {t.pricingCalculator.deployCTA}
-          </h2>
-          <p
-            className="text-sm leading-relaxed text-pretty mb-6 max-w-md mx-auto"
-            style={{ color: "var(--text-secondary)" }}
-          >
-            {t.pricingCalculator.deployCTADesc}
-          </p>
-          <a
-            href="https://www.vultr.com/?ref=9726658"
-            target="_blank"
-            rel="sponsored nofollow noopener noreferrer"
-            onClick={() => trackOutboundClick("pricing_calculator", "vultr")}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-200 hover:opacity-90"
-            style={{ background: "var(--text-primary)", color: "var(--accent-inverse)" }}
-          >
-            {t.pricingCalculator.deployCTALink}
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M7 17L17 7M17 7H7m10 0v10" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </a>
-        </section>
+        {vultrAffiliate && (
+          <section className="mb-16 text-center">
+            <h2
+              className="text-xl font-bold tracking-tight mb-3"
+              style={{ color: "var(--text-primary)", letterSpacing: "-0.02em" }}
+            >
+              {t.pricingCalculator.deployCTA}
+            </h2>
+            <p
+              className="text-sm leading-relaxed text-pretty mb-6 max-w-md mx-auto"
+              style={{ color: "var(--text-secondary)" }}
+            >
+              {t.pricingCalculator.deployCTADesc}
+            </p>
+            <a
+              href={vultrAffiliate.url}
+              target="_blank"
+              rel={vultrAffiliate.rel}
+              onClick={() => trackOutboundClick("pricing_calculator", "vultr")}
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-200 hover:opacity-90"
+              style={{ background: "var(--text-primary)", color: "var(--accent-inverse)" }}
+            >
+              {t.pricingCalculator.deployCTALink}
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M7 17L17 7M17 7H7m10 0v10" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </a>
+          </section>
+        )}
       </div>
 
       <FooterBar />

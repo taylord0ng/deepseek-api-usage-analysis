@@ -1,6 +1,7 @@
 /** 文件说明：DeepSeek 缓存命中率分析页路由与 SEO 元数据。 */
 import type { Metadata } from "next";
 import { CacheAnalyzerPage } from "@/components/CacheAnalyzerPage";
+import CacheAnalyzerContent from "@/components/CacheAnalyzerContent";
 import { buildCacheAnalyzerMetadata } from "@/lib/routeMetadata";
 
 /**
@@ -14,5 +15,10 @@ export function generateMetadata(): Metadata {
  * 渲染缓存命中率分析落地页路由。
  */
 export default function CacheAnalyzerRoute() {
-  return <CacheAnalyzerPage />;
+  return (
+    <>
+      <CacheAnalyzerPage />
+      <CacheAnalyzerContent />
+    </>
+  );
 }
