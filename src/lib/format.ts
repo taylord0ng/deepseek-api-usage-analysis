@@ -23,14 +23,14 @@ export function formatCost(yuan: number, locale: Locale): string {
 export function formatTokens(n: number, locale?: Locale): string {
   if (locale === "zh") {
     if (n >= 100_000_000) {
-      return `${(n / 100_000_000).toFixed(3)}亿`;
+      return `${Number((n / 100_000_000).toFixed(3))}亿`;
     }
     if (n >= 10_000) {
-      return `${(n / 10_000).toFixed(1)}万`;
+      return `${Number((n / 10_000).toFixed(1))}万`;
     }
   }
-  if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M`;
-  if (n >= 1_000) return `${(n / 1_000).toFixed(0)}K`;
+  if (n >= 1_000_000) return `${Number((n / 1_000_000).toFixed(1))}M`;
+  if (n >= 1_000) return `${Number((n / 1_000).toFixed(0))}K`;
   return String(n);
 }
 

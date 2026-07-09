@@ -8,24 +8,32 @@ import { trackOutboundClick } from "@/lib/analytics";
 import { buildLocalePath } from "@/lib/localeRouting";
 import { getAffiliatesByIds } from "@/lib/affiliates";
 import { buildPricingCalculatorSoftwareAppJsonLd } from "@/lib/schema";
+import { formatTokens } from "@/lib/format";
 import TitleBar from "./TitleBar";
 import FooterBar from "./FooterBar";
 
 /** DeepSeek V4 定价 (USD, per 1M tokens, as of July 2026) */
 const PRICING = {
-  v4Flash: { input: 0.27, output: 1.10, cacheHit: 0.07 },
-  v4Pro: { input: 0.55, output: 2.19, cacheHit: 0.14 },
+  v4Flash: { input: 0.1449, output: 0.2899, cacheHit: 0.0028 },
+  v4Pro: { input: 0.4348, output: 0.8696, cacheHit: 0.0036 },
   openaiO3: { input: 10.00, output: 40.00, cacheHit: 2.50 },
   claudeOpus: { input: 15.00, output: 75.00, cacheHit: 3.75 },
 };
 
 /**
- * 格式化美元成本显示。
+ * 格式化成本显示 (支持 CNY/USD 切换)
  */
-function formatCost(usd: number): string {
-  if (usd < 0.01) return "$0.01";
-  if (usd < 1000) return `$${usd.toFixed(2)}`;
-  return `$${(usd / 1000).toFixed(1)}K`;
+function formatCurrency(usd: number, currency: "USD" | "CNY", locale: string): string {
+  const symbol = currency === "USD" ? "$" : "¥";
+  const val = currency === "USD" ? usd : usd * 6.9;
+
+  if (val === 0) return `${symbol}0.00`;
+  if (val < 0.01) return `<${symbol}0.01`;
+  if (currency === "CNY" && locale === "zh" && val >= 10000) {
+    return `${symbol}${(val / 10000).toFixed(2)}万`;
+  }
+  if (val < 1000) return `${symbol}${val.toFixed(2)}`;
+  return `${symbol}${(val / 1000).toFixed(1)}K`;
 }
 
 /**
@@ -41,6 +49,7 @@ export function PricingCalculatorPage() {
   const [inputTokens, setInputTokens] = useState(10_000_000); // 10M
   const [outputTokens, setOutputTokens] = useState(1_000_000); // 1M
   const [cacheHitRate, setCacheHitRate] = useState(40); // 40%
+  const [currency, setCurrency] = useState<"CNY" | "USD">("CNY");
 
   const inputM = inputTokens / 1_000_000;
   const outputM = outputTokens / 1_000_000;
@@ -125,50 +134,99 @@ export function PricingCalculatorPage() {
 
         {/* 交互式计算器 */}
         <section className="mb-16">
-          <h2 className="sr-only">{t.pricingCalculator.estimationGuideTitle}</h2>
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+            <h2 className="sr-only">{t.pricingCalculator.estimationGuideTitle}</h2>
+            {/* 货币切换 */}
+            <div className="flex bg-[var(--border)] rounded-full p-1 w-fit ml-auto">
+              <button
+                onClick={() => setCurrency("CNY")}
+                className={`px-3 py-1 text-[11px] font-semibold rounded-full transition-colors ${currency === "CNY" ? "bg-[var(--text-primary)] text-[var(--bg)] shadow-sm" : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"}`}
+              >
+                {t.pricingCalculator.currencyCNY}
+              </button>
+              <button
+                onClick={() => setCurrency("USD")}
+                className={`px-3 py-1 text-[11px] font-semibold rounded-full transition-colors ${currency === "USD" ? "bg-[var(--text-primary)] text-[var(--bg)] shadow-sm" : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"}`}
+              >
+                {t.pricingCalculator.currencyUSD}
+              </button>
+            </div>
+          </div>
           <div
             className="p-6 rounded-subtle mb-8"
             style={{ border: "1px solid var(--border)" }}
           >
             {/* Input Tokens */}
             <div className="mb-5">
-              <label
-                htmlFor="input-tokens-range"
-                className="block text-xs font-semibold mb-2"
-                style={{ color: "var(--text-primary)" }}
-              >
-                {t.pricingCalculator.inputTokensLabel}: {Math.round(inputM).toLocaleString()}M
-              </label>
+              <div className="flex justify-between items-center mb-2">
+                <label
+                  htmlFor="input-tokens-range"
+                  className="block text-xs font-semibold"
+                  style={{ color: "var(--text-primary)" }}
+                >
+                  {t.pricingCalculator.inputTokensLabel}
+                </label>
+                <div className="flex items-center gap-2">
+                  <input
+                    type="text"
+                    value={inputTokens.toLocaleString("en-US")}
+                    onChange={(e) => {
+                      const raw = e.target.value.replace(/,/g, "");
+                      const num = parseInt(raw, 10);
+                      if (!isNaN(num)) setInputTokens(Math.min(num, 50000000000));
+                      else if (raw === "") setInputTokens(0);
+                    }}
+                    className="text-xs px-2 py-1 rounded border outline-none w-32 text-right font-mono"
+                    style={{ background: "var(--bg)", borderColor: "var(--border)", color: "var(--text-primary)" }}
+                  />
+                </div>
+              </div>
               <input
                 id="input-tokens-range"
                 type="range"
                 min={1}
-                max={500}
+                max={50000}
                 value={inputM}
                 onChange={(e) => setInputTokens(Number(e.target.value) * 1_000_000)}
                 className="w-full h-1.5 appearance-none rounded-full cursor-pointer"
                 style={{ accentColor: "var(--text-primary)", background: "var(--border)" }}
               />
               <div className="flex justify-between text-[10px] mt-1" style={{ color: "var(--text-tertiary)" }}>
-                <span>1M</span>
-                <span>500M</span>
+                <span>{formatTokens(1_000_000, locale)}</span>
+                <span>{formatTokens(50_000_000_000, locale)}</span>
               </div>
             </div>
 
             {/* Output Tokens */}
             <div className="mb-5">
-              <label
-                htmlFor="output-tokens-range"
-                className="block text-xs font-semibold mb-2"
-                style={{ color: "var(--text-primary)" }}
-              >
-                {t.pricingCalculator.outputTokensLabel}: {Math.round(outputM).toLocaleString()}M
-              </label>
+              <div className="flex justify-between items-center mb-2">
+                <label
+                  htmlFor="output-tokens-range"
+                  className="block text-xs font-semibold"
+                  style={{ color: "var(--text-primary)" }}
+                >
+                  {t.pricingCalculator.outputTokensLabel}
+                </label>
+                <div className="flex items-center gap-2">
+                  <input
+                    type="text"
+                    value={outputTokens.toLocaleString("en-US")}
+                    onChange={(e) => {
+                      const raw = e.target.value.replace(/,/g, "");
+                      const num = parseInt(raw, 10);
+                      if (!isNaN(num)) setOutputTokens(Math.min(num, 5000000000));
+                      else if (raw === "") setOutputTokens(0);
+                    }}
+                    className="text-xs px-2 py-1 rounded border outline-none w-32 text-right font-mono"
+                    style={{ background: "var(--bg)", borderColor: "var(--border)", color: "var(--text-primary)" }}
+                  />
+                </div>
+              </div>
               <input
                 id="output-tokens-range"
                 type="range"
                 min={0.1}
-                max={100}
+                max={5000}
                 step={0.1}
                 value={outputM}
                 onChange={(e) => setOutputTokens(Number(e.target.value) * 1_000_000)}
@@ -176,25 +234,39 @@ export function PricingCalculatorPage() {
                 style={{ accentColor: "var(--text-primary)", background: "var(--border)" }}
               />
               <div className="flex justify-between text-[10px] mt-1" style={{ color: "var(--text-tertiary)" }}>
-                <span>0.1M</span>
-                <span>100M</span>
+                <span>{formatTokens(100_000, locale)}</span>
+                <span>{formatTokens(5_000_000_000, locale)}</span>
               </div>
             </div>
 
             {/* Cache Hit Rate */}
             <div className="mb-5">
-              <label
-                htmlFor="cache-hit-rate-range"
-                className="block text-xs font-semibold mb-2"
-                style={{ color: "var(--text-primary)" }}
-              >
-                {t.pricingCalculator.cacheHitRateLabel}: {cacheHitRate}%
-              </label>
+              <div className="flex justify-between items-center mb-2">
+                <label
+                  htmlFor="cache-hit-rate-range"
+                  className="block text-xs font-semibold"
+                  style={{ color: "var(--text-primary)" }}
+                >
+                  {t.pricingCalculator.cacheHitRateLabel}
+                </label>
+                <div className="flex items-center gap-2">
+                  <input
+                    type="number"
+                    min={0}
+                    max={100}
+                    value={cacheHitRate}
+                    onChange={(e) => setCacheHitRate(Number(e.target.value))}
+                    className="text-xs px-2 py-1 rounded border outline-none w-16 text-right font-mono"
+                    style={{ background: "var(--bg)", borderColor: "var(--border)", color: "var(--text-primary)" }}
+                  />
+                  <span className="text-xs font-mono text-[var(--text-tertiary)]">%</span>
+                </div>
+              </div>
               <input
                 id="cache-hit-rate-range"
                 type="range"
                 min={0}
-                max={80}
+                max={100}
                 value={cacheHitRate}
                 onChange={(e) => setCacheHitRate(Number(e.target.value))}
                 className="w-full h-1.5 appearance-none rounded-full cursor-pointer"
@@ -202,7 +274,7 @@ export function PricingCalculatorPage() {
               />
               <div className="flex justify-between text-[10px] mt-1" style={{ color: "var(--text-tertiary)" }}>
                 <span>0%</span>
-                <span>80%</span>
+                <span>100%</span>
               </div>
             </div>
 
@@ -218,7 +290,7 @@ export function PricingCalculatorPage() {
                 {t.pricingCalculator.deepseekV4Flash}
               </span>
               <span className="text-lg font-bold" style={{ color: "var(--positive)" }}>
-                {formatCost(v4FlashCost)}
+                {formatCurrency(v4FlashCost, currency, locale)}
               </span>
             </div>
             <div className="p-4 rounded-subtle text-center" style={{ border: "1px solid var(--border)" }}>
@@ -226,7 +298,7 @@ export function PricingCalculatorPage() {
                 {t.pricingCalculator.deepseekV4Pro}
               </span>
               <span className="text-lg font-bold" style={{ color: "var(--text-primary)" }}>
-                {formatCost(v4ProCost)}
+                {formatCurrency(v4ProCost, currency, locale)}
               </span>
             </div>
             <div className="p-4 rounded-subtle text-center" style={{ border: "1px solid var(--border)" }}>
@@ -234,7 +306,7 @@ export function PricingCalculatorPage() {
                 OpenAI o3
               </span>
               <span className="text-lg font-bold" style={{ color: "var(--danger)" }}>
-                {formatCost(o3Cost)}
+                {formatCurrency(o3Cost, currency, locale)}
               </span>
             </div>
             <div className="p-4 rounded-subtle text-center" style={{ border: "1px solid var(--border)" }}>
@@ -242,7 +314,7 @@ export function PricingCalculatorPage() {
                 Claude Opus
               </span>
               <span className="text-lg font-bold" style={{ color: "var(--danger)" }}>
-                {formatCost(claudeCost)}
+                {formatCurrency(claudeCost, currency, locale)}
               </span>
             </div>
           </div>
@@ -374,27 +446,27 @@ export function PricingCalculatorPage() {
                   <td className="py-2.5 pr-4 font-semibold" style={{ color: "var(--positive)" }}>
                     {t.pricingCalculator.compDeepseekV4Flash}
                   </td>
-                  <td className="text-right py-2.5 px-3 font-mono" style={{ color: "var(--text-primary)" }}>$0.27</td>
-                  <td className="text-right py-2.5 px-3 font-mono" style={{ color: "var(--text-primary)" }}>$1.10</td>
-                  <td className="text-right py-2.5 px-3 font-mono" style={{ color: "var(--positive)" }}>$0.07</td>
+                  <td className="text-right py-2.5 px-3 font-mono" style={{ color: "var(--text-primary)" }}>{formatCurrency(PRICING.v4Flash.input, currency, locale)}</td>
+                  <td className="text-right py-2.5 px-3 font-mono" style={{ color: "var(--text-primary)" }}>{formatCurrency(PRICING.v4Flash.output, currency, locale)}</td>
+                  <td className="text-right py-2.5 px-3 font-mono" style={{ color: "var(--positive)" }}>{formatCurrency(PRICING.v4Flash.cacheHit, currency, locale)}</td>
                   <td className="py-2.5 pl-3" style={{ color: "var(--text-tertiary)" }}>—</td>
                 </tr>
                 <tr style={{ borderBottom: "1px solid var(--border)" }}>
                   <td className="py-2.5 pr-4 font-semibold" style={{ color: "var(--text-primary)" }}>
                     {t.pricingCalculator.compDeepseekV4Pro}
                   </td>
-                  <td className="text-right py-2.5 px-3 font-mono" style={{ color: "var(--text-primary)" }}>$0.55</td>
-                  <td className="text-right py-2.5 px-3 font-mono" style={{ color: "var(--text-primary)" }}>$2.19</td>
-                  <td className="text-right py-2.5 px-3 font-mono" style={{ color: "var(--text-primary)" }}>$0.14</td>
+                  <td className="text-right py-2.5 px-3 font-mono" style={{ color: "var(--text-primary)" }}>{formatCurrency(PRICING.v4Pro.input, currency, locale)}</td>
+                  <td className="text-right py-2.5 px-3 font-mono" style={{ color: "var(--text-primary)" }}>{formatCurrency(PRICING.v4Pro.output, currency, locale)}</td>
+                  <td className="text-right py-2.5 px-3 font-mono" style={{ color: "var(--text-primary)" }}>{formatCurrency(PRICING.v4Pro.cacheHit, currency, locale)}</td>
                   <td className="py-2.5 pl-3" style={{ color: "var(--text-tertiary)" }}>—</td>
                 </tr>
                 <tr style={{ borderBottom: "1px solid var(--border)" }}>
                   <td className="py-2.5 pr-4 font-semibold" style={{ color: "var(--text-primary)" }}>
                     {t.pricingCalculator.compOpenaiO3}
                   </td>
-                  <td className="text-right py-2.5 px-3 font-mono" style={{ color: "var(--danger)" }}>$10.00</td>
-                  <td className="text-right py-2.5 px-3 font-mono" style={{ color: "var(--danger)" }}>$40.00</td>
-                  <td className="text-right py-2.5 px-3 font-mono" style={{ color: "var(--text-primary)" }}>$2.50</td>
+                  <td className="text-right py-2.5 px-3 font-mono" style={{ color: "var(--danger)" }}>{formatCurrency(PRICING.openaiO3.input, currency, locale)}</td>
+                  <td className="text-right py-2.5 px-3 font-mono" style={{ color: "var(--danger)" }}>{formatCurrency(PRICING.openaiO3.output, currency, locale)}</td>
+                  <td className="text-right py-2.5 px-3 font-mono" style={{ color: "var(--text-primary)" }}>{formatCurrency(PRICING.openaiO3.cacheHit, currency, locale)}</td>
                   <td className="py-2.5 pl-3" style={{ color: "var(--text-tertiary)" }}>
                     {t.pricingCalculator.compOpenaiO3Notes}
                   </td>
@@ -403,9 +475,9 @@ export function PricingCalculatorPage() {
                   <td className="py-2.5 pr-4 font-semibold" style={{ color: "var(--text-primary)" }}>
                     {t.pricingCalculator.compClaudeOpus}
                   </td>
-                  <td className="text-right py-2.5 px-3 font-mono" style={{ color: "var(--danger)" }}>$15.00</td>
-                  <td className="text-right py-2.5 px-3 font-mono" style={{ color: "var(--danger)" }}>$75.00</td>
-                  <td className="text-right py-2.5 px-3 font-mono" style={{ color: "var(--text-primary)" }}>$3.75</td>
+                  <td className="text-right py-2.5 px-3 font-mono" style={{ color: "var(--danger)" }}>{formatCurrency(PRICING.claudeOpus.input, currency, locale)}</td>
+                  <td className="text-right py-2.5 px-3 font-mono" style={{ color: "var(--danger)" }}>{formatCurrency(PRICING.claudeOpus.output, currency, locale)}</td>
+                  <td className="text-right py-2.5 px-3 font-mono" style={{ color: "var(--text-primary)" }}>{formatCurrency(PRICING.claudeOpus.cacheHit, currency, locale)}</td>
                   <td className="py-2.5 pl-3" style={{ color: "var(--text-tertiary)" }}>
                     {t.pricingCalculator.compClaudeOpusNotes}
                   </td>

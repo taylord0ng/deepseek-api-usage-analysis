@@ -450,6 +450,8 @@ const translations = {
       heroTitle: "Estimate Your DeepSeek API Costs Instantly",
       heroDesc:
         "Compare DeepSeek V4 Flash, V4 Pro, and competitor model pricing. Adjust input/output token counts and cache hit rate assumptions to see real cost projections.",
+      currencyCNY: "CNY",
+      currencyUSD: "USD",
       inputTokensLabel: "Monthly Input Tokens",
       outputTokensLabel: "Monthly Output Tokens",
       cacheHitRateLabel: "Cache Hit Rate (%)",
@@ -1012,6 +1014,8 @@ const translations = {
       heroTitle: "即刻估算你的 DeepSeek API 成本",
       heroDesc:
         "对比 DeepSeek V4 Flash、V4 Pro 及竞品模型价格。调整输入/输出 Token 数量和缓存命中率假设，查看真实的成本预估。",
+      currencyCNY: "人民币 (CNY)",
+      currencyUSD: "美元 (USD)",
       inputTokensLabel: "月输入 Token 量",
       outputTokensLabel: "月输出 Token 量",
       cacheHitRateLabel: "缓存命中率 (%)",
