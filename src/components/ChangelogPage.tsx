@@ -50,6 +50,48 @@ interface VersionEntry {
 /** 所有版本的更新日志，按版本倒序排列 */
 const CHANGELOG_DATA: VersionEntry[] = [
   {
+    version: "v0.6.3",
+    date: "2026-07-09",
+    added: [
+      {
+        en: "CNY/USD currency toggle in Pricing Calculator — users can switch between RMB (¥) and US Dollar ($) for all pricing displays, with real-time conversion at approximate exchange rate.",
+        zh: "定价计算器人民币/美元货币切换 — 用户可以在人民币（¥）和美元（$）之间切换所有价格显示，按近似汇率实时转换。",
+      },
+      {
+        en: "AffiliateWall component — centralized affiliate link showcase section for SEO landing pages, providing structured vendor recommendations (Vultr, DigitalOcean, Namecheap, OpenRouter) with referral links and `rel=sponsored nofollow` compliance.",
+        zh: "AffiliateWall 组件 — SEO 落地页集中化的联盟链接展示区段，提供结构化的服务商推荐（Vultr、DigitalOcean、Namecheap、OpenRouter），含推荐链接和 `rel=sponsored nofollow` 合规标注。",
+      },
+      {
+        en: "`<noscript>` SEO fallback content for all 3 tool landing pages — `CacheAnalyzerContent`, `CostTrackerContent`, and `PricingCalculatorContent` components provide bilingual crawler-readable content for better search engine indexing, matching the pattern used by PrivacyContent and TermsContent.",
+        zh: "3 个工具落地页的 `<noscript>` SEO 回退内容 — `CacheAnalyzerContent`、`CostTrackerContent` 和 `PricingCalculatorContent` 组件提供双语爬虫可读内容，提升搜索引擎索引效果，与 PrivacyContent、TermsContent 保持一致的模式。",
+      },
+      {
+        en: "Expanded LLM cost comparison in the OpenAI vs DeepSeek blog article — added latest GPT models (GPT-4.1, GPT-4.5 Preview, GPT-5) and Claude models (Opus 4.5, Sonnet 4.5, Haiku 4.5) with updated pricing data across all model families for more comprehensive cost-benefit analysis.",
+        zh: "扩展 OpenAI vs DeepSeek 博客文章中的大模型成本对比 — 新增最新 GPT 模型（GPT-4.1、GPT-4.5 Preview、GPT-5）和 Claude 模型（Opus 4.5、Sonnet 4.5、Haiku 4.5），同步更新所有模型族的最新定价数据，提供更全面的成本收益分析。",
+      },
+    ],
+    improved: [
+      {
+        en: "Affiliate link system refactored — centralized `affiliates.ts` configuration expanded with additional vendor programs, improved type safety with categorized link groups (`serverProviders`, `domainRegistrars`, `aiGateways`), and better UTM tracking integration across landing pages and blog CTAs.",
+        zh: "联盟链接系统重构 — 集中化 `affiliates.ts` 配置扩展了更多服务商项目，通过分类链接组（`serverProviders`、`domainRegistrars`、`aiGateways`）改进类型安全，优化落地页和博客 CTA 区域的 UTM 追踪集成。",
+      },
+      {
+        en: "Landing page SEO enhanced — tool landing pages (`/deepseek-api-cost-tracker`, `/deepseek-cache-hit-rate-analyzer`, `/deepseek-api-pricing-calculator`) now include enhanced JSON-LD structured data and bilingual `<noscript>` crawler fallback content for better search engine visibility and EEAT trust signals.",
+        zh: "落地页 SEO 增强 — 工具落地页（`/deepseek-api-cost-tracker`、`/deepseek-cache-hit-rate-analyzer`、`/deepseek-api-pricing-calculator`）现包含增强的 JSON-LD 结构化数据和双语 `<noscript>` 爬虫回退内容，提升搜索引擎可见性和 EEAT 信任信号。",
+      },
+      {
+        en: "Blog article cost comparison accuracy — updated with latest model pricing across GPT, Claude, and DeepSeek families for more accurate cost-benefit analysis in the OpenAI vs DeepSeek comparison article.",
+        zh: "博客文章成本对比准确性 — 同步更新 GPT、Claude 和 DeepSeek 全系模型的最新定价，在 OpenAI vs DeepSeek 对比文章中提供更精准的成本收益分析。",
+      },
+    ],
+    fixed: [
+      {
+        en: "Homepage URL canonicalization — fixed inconsistent canonical path generation for the root URL that could produce duplicate canonical URLs (both `/` and empty path variants). Simplified sitemap generation logic for cleaner, more maintainable output.",
+        zh: "首页 URL 规范化 — 修复根 URL 可能产生不一致规范路径（`/` 和空路径两种变体）导致重复规范 URL 的问题。简化站点地图生成逻辑，输出更清晰、更易维护。",
+      },
+    ],
+  },
+  {
     version: "v0.6.2",
     date: "2026-07-06",
     added: [

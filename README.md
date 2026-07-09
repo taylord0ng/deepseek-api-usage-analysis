@@ -44,7 +44,7 @@ If you also analyze Agnes AI usage, check the companion open-source project in t
 - **Sister project cross-linking** — Centralized `sisterProjects.ts` module manages cross-links between the two sibling tools in the "API Usage Analyzer Series" product family (DeepSeek + Agnes). All cross-site URLs flow through a single config source with UTM tracking (`utm_source=agnes_site`, `utm_medium=referral`, per-location `utm_campaign`). Sister project links appear in the TitleBar (pill button), LandingPage (dedicated section), FooterBar ("Related Tools" row), and Organization JSON-LD schema.
 - **Landing page** — Complete pre-upload landing with theme-aware background images, Sister Project section (Agnes AI cross-link with tracked UTM URLs), How It Works steps, accordion FAQ (9 items, including file size limits and project grouping), expanded multi-section About (project origin, privacy & tech, team, contact with email copy & social links + "View Changelog →" link), scroll-reveal animations, anchor-linkable sections with deferred rendering for performance
 - **User Guide** — Comprehensive bilingual user manual at `/guideline` with annotated screenshots, interactive table of contents, step-by-step dashboard navigation, CSV export instructions, chart interpretation guide, and troubleshooting section
-- **Changelog** — Dedicated `/changelog` page with complete version history (v0.1.0–v0.6.2) organized by category (Added/Improved/Fixed/Dependencies) with color-coded dots; Apple-minimalist bilingual design matching privacy/terms pages, JSON-LD WebPage schema, independent SEO metadata, linked from TitleBar, FooterBar, and LandingPage
+- **Changelog** — Dedicated `/changelog` page with complete version history (v0.1.0–v0.6.3) organized by category (Added/Improved/Fixed/Dependencies) with color-coded dots; Apple-minimalist bilingual design matching privacy/terms pages, JSON-LD WebPage schema, independent SEO metadata, linked from TitleBar, FooterBar, and LandingPage
 - **Privacy Policy & Terms** — `/privacy` and `/terms` pages with bilingual legal content, independent SEO metadata (canonical, OpenGraph, Twitter), JSON-LD WebPage schemas, and Apple-minimalist legal-text layout; linked from footer on every page
 - **Analytics** — Optional Google Analytics 4 integration via `NEXT_PUBLIC_GA_ID` env var; zero overhead when unset. Tracks page views, file uploads, share card generations, tab switches, and language switches — zero CSV data ever tracked.
 - **Enhanced SEO** — Twitter `summary_large_image` card with 1200×630 OG image, `Organization` JSON-LD schema for Google Knowledge Panel, expanded `BreadcrumbList` with all sub-pages, differentiated sitemap `lastModified` dates, `keywords` + `author` + `twitter:site`/`creator` meta tags on all pages
@@ -129,7 +129,7 @@ src/
 │   ├── GuidelinePage.tsx    # Full interactive user guide (bilingual, annotated screenshots, table of contents, scroll-reveal)
 │   ├── PrivacyPage.tsx      # Privacy policy page (bilingual 7-section legal text, JSON-LD WebPage schema, GitHub source links)
 │   ├── TermsPage.tsx        # Terms of use page (bilingual 8-section legal text, JSON-LD WebPage schema, MIT License reference)
-│   ├── ChangelogPage.tsx     # Changelog page (complete version history v0.1.0–v0.6.2, entries by category with colored dots, JSON-LD WebPage schema, bilingual)
+│   ├── ChangelogPage.tsx     # Changelog page (complete version history v0.1.0–v0.6.3, entries by category with colored dots, JSON-LD WebPage schema, bilingual)
 │   ├── CostTrackerPage.tsx    # SEO landing: DeepSeek API Cost Tracker (features + affiliate recommendations)
 │   ├── CacheAnalyzerPage.tsx  # SEO landing: DeepSeek Cache Hit Rate Analyzer (caching education + MindRose CTA)
 │   ├── PricingCalculatorPage.tsx # SEO landing: DeepSeek API Pricing Calculator (interactive slider + competitor table + Vultr CTA)
@@ -227,6 +227,25 @@ The repo includes `vercel.json` with pre-configured security headers and caching
 - **Caching**: immutable caching for `/_next/static` and `/fonts` (1 year), stale-while-revalidate for `/landing` and `/guideline` images (1 week)
 
 ## Changelog
+
+### v0.6.3
+
+**Added:**
+
+- CNY/USD currency toggle in Pricing Calculator — users can switch between RMB (¥) and US Dollar ($) for all pricing displays, with real-time conversion at approximate exchange rate
+- AffiliateWall component — centralized affiliate link showcase section for SEO landing pages, providing structured vendor recommendations (Vultr, DigitalOcean, Namecheap, OpenRouter) with referral links and `rel=sponsored nofollow` compliance
+- `<noscript>` SEO fallback content for all 3 tool landing pages (CacheAnalyzerContent, CostTrackerContent, PricingCalculatorContent) — bilingual crawler-readable content for better search indexing, matching the pattern used by PrivacyContent and TermsContent
+- Expanded LLM cost comparison in the OpenAI vs DeepSeek blog article — added latest GPT models (GPT-4.1, GPT-4.5 Preview, GPT-5) and Claude models (Opus 4.5, Sonnet 4.5, Haiku 4.5) with updated pricing data across all model families
+
+**Improved:**
+
+- Affiliate link system refactored — centralized `affiliates.ts` configuration expanded with additional vendor programs, improved type safety with categorized link groups, and better UTM tracking integration across landing pages and blog CTAs
+- Landing page SEO enhanced — tool landing pages now include enhanced JSON-LD structured data and bilingual `<noscript>` crawler fallback content for better search engine visibility and EEAT trust signals
+- Blog article cost comparison accuracy — updated with latest model pricing across GPT, Claude, and DeepSeek families for more accurate cost-benefit analysis
+
+**Fixed:**
+
+- Homepage URL canonicalization — fixed inconsistent canonical path generation for the root URL that could produce duplicate canonical URLs; simplified sitemap generation logic for cleaner output
 
 ### v0.6.2
 

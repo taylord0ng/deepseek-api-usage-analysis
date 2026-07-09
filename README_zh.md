@@ -44,7 +44,7 @@
 - **姊妹项目交叉链接** — 集中化的 `sisterProjects.ts` 模块管理「API Usage Analyzer Series」产品矩阵中两个姐妹工具（DeepSeek + Agnes）之间的交叉链接。所有跨站 URL 均通过统一配置来源流转，并附带 UTM 追踪（`utm_source=agnes_site`、`utm_medium=referral`、按位置区分的 `utm_campaign`）。姊妹项目链接出现在 TitleBar（胶囊按钮）、LandingPage（专属区段）、FooterBar（「姊妹工具」行）以及 Organization JSON-LD Schema 中。
 - **落地页** — 完整的上传前落地页，包含主题感知背景图片、姊妹项目区段（Agnes AI 交叉链接，含 UTM 追踪 URL）、使用说明步骤、手风琴常见问题（9 项，含文件大小限制和项目分组）、多板块关于页面（项目起源、隐私与技术、团队介绍、商业合作含邮箱复制与社交链接 +「查看更新日志 →」链接）、滚动渐显动画、支持锚点链接的板块与延迟渲染性能优化
 - **用户操作手册** — 位于 `/guideline` 的完整双语使用指南，包含标注截图、交互式目录导航、分步仪表盘操作说明、CSV 导出指引、图表解读和故障排查章节
-- **更新日志** — 位于 `/changelog` 的专属页面，展示 v0.1.0 至 v0.6.2 的完整版本历史，按类别（新增/改进/修复/依赖变更）以彩色圆点分组；Apple 极简双语设计，与隐私政策/使用条款风格一致，含 JSON-LD WebPage 结构化数据、独立 SEO 元数据，可从 TitleBar、FooterBar 和落地页访问
+- **更新日志** — 位于 `/changelog` 的专属页面，展示 v0.1.0 至 v0.6.3 的完整版本历史，按类别（新增/改进/修复/依赖变更）以彩色圆点分组；Apple 极简双语设计，与隐私政策/使用条款风格一致，含 JSON-LD WebPage 结构化数据、独立 SEO 元数据，可从 TitleBar、FooterBar 和落地页访问
 - **隐私政策与使用条款** — `/privacy` 和 `/terms` 页面，包含双语法务内容、独立 SEO 元数据（规范 URL、OpenGraph、Twitter 卡片）、JSON-LD WebPage Schema 以及 Apple 极简风格的法律文本布局；每页页脚均有导航链接
 - **数据分析** — 可选的 Google Analytics 4 集成，通过 `NEXT_PUBLIC_GA_ID` 环境变量控制；未设置时零开销。追踪页面浏览、文件上传、分享卡片生成、标签页切换和语言切换 — 绝不追踪任何 CSV 数据。
 - **增强 SEO** — Twitter `summary_large_image` 卡片含 1200×630 OG 图片、用于 Google 知识面板的 `Organization` JSON-LD Schema、包含所有子页面的扩展 `BreadcrumbList`、差异化的站点地图 `lastModified` 日期、所有页面的 `keywords` + `author` + `twitter:site`/`creator` 元标签
@@ -129,7 +129,7 @@ src/
 │   ├── GuidelinePage.tsx    # 完整交互式用户操作手册（双语、标注截图、目录导航、滚动渐显）
 │   ├── PrivacyPage.tsx      # 隐私政策页（双语 7 章节法律文本，JSON-LD WebPage Schema，GitHub 源码链接）
 │   ├── TermsPage.tsx        # 使用条款页（双语 8 章节法律文本，JSON-LD WebPage Schema，MIT 许可证引用）
-│   ├── ChangelogPage.tsx     # 更新日志页（v0.1.0–v0.6.2 完整版本历史，按类别以彩色圆点分组，JSON-LD WebPage Schema，双语）
+│   ├── ChangelogPage.tsx     # 更新日志页（v0.1.0–v0.6.3 完整版本历史，按类别以彩色圆点分组，JSON-LD WebPage Schema，双语）
 │   ├── CostTrackerPage.tsx    # SEO 落地页：DeepSeek API 费用追踪器（功能 + 联盟推荐）
 │   ├── CacheAnalyzerPage.tsx  # SEO 落地页：DeepSeek 缓存命中率分析器（缓存教育 + MindRose CTA）
 │   ├── PricingCalculatorPage.tsx # SEO 落地页：DeepSeek API 价格计算器（交互式滑块 + 竞品对比表 + Vultr CTA）
@@ -227,6 +227,25 @@ npm run build
 - **缓存**：`/_next/static` 和 `/fonts` 永久缓存（1 年），`/landing` 和 `/guideline` 图片 stale-while-revalidate 缓存（1 周）
 
 ## 更新日志
+
+### v0.6.3
+
+**新增：**
+
+- 定价计算器人民币/美元货币切换 — 用户可以在人民币（¥）和美元（$）之间切换所有价格显示，按近似汇率实时转换
+- AffiliateWall 组件 — SEO 落地页集中化的联盟链接展示区段，提供结构化的服务商推荐（Vultr、DigitalOcean、Namecheap、OpenRouter），含推荐链接和 `rel=sponsored nofollow` 合规标注
+- 3 个工具落地页的 `<noscript>` SEO 回退内容（CacheAnalyzerContent、CostTrackerContent、PricingCalculatorContent）— 双语爬虫可读内容，提升搜索引擎索引效果，与 PrivacyContent、TermsContent 保持一致的模式
+- 扩展 OpenAI vs DeepSeek 博客文章中的大模型成本对比 — 新增最新 GPT 模型（GPT-4.1、GPT-4.5 Preview、GPT-5）和 Claude 模型（Opus 4.5、Sonnet 4.5、Haiku 4.5），同步更新所有模型族的最新定价数据
+
+**改进：**
+
+- 联盟链接系统重构 — 集中化 `affiliates.ts` 配置扩展了更多服务商项目，通过分类链接组改进类型安全，优化落地页和博客 CTA 区域的 UTM 追踪集成
+- 落地页 SEO 增强 — 工具落地页现包含增强的 JSON-LD 结构化数据和双语 `<noscript>` 爬虫回退内容，提升搜索引擎可见性和 EEAT 信任信号
+- 博客文章成本对比准确性 — 同步更新 GPT、Claude 和 DeepSeek 全系模型的最新定价，提供更精准的成本收益分析
+
+**修复：**
+
+- 首页 URL 规范化 — 修复根 URL 可能产生不一致规范路径的问题，简化站点地图生成逻辑，输出更清晰
 
 ### v0.6.2
 

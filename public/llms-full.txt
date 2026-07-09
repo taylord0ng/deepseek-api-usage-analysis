@@ -1,6 +1,6 @@
 # DeepSeek API Usage Analytics Dashboard — Full Content
 
-> A free, privacy-first analytics tool for DeepSeek API users. Drop your monthly ZIP exports or CSV files and get instant cost analytics, cache analysis, and per-key breakdowns. Open source (MIT), bilingual (EN/中文), entirely browser-side. No account, no upload, no database. Built by Gavin Chen & the MindRose team. Version 0.6.2.
+> A free, privacy-first analytics tool for DeepSeek API users. Drop your monthly ZIP exports or CSV files and get instant cost analytics, cache analysis, and per-key breakdowns. Open source (MIT), bilingual (EN/中文), entirely browser-side. No account, no upload, no database. Built by Gavin Chen & the MindRose team. Version 0.6.3.
 
 ---
 
@@ -266,6 +266,22 @@ If you have questions about these Terms of Use, please open an issue on our GitH
 
 ### English
 
+**v0.6.3** (2026-07-09)
+
+*Added*
+- CNY/USD currency toggle in Pricing Calculator — users can switch between RMB (¥) and US Dollar ($) for all pricing displays, with real-time conversion at approximate exchange rate.
+- AffiliateWall component — centralized affiliate link showcase section for SEO landing pages, providing structured vendor recommendations (Vultr, DigitalOcean, Namecheap, OpenRouter) with referral links and `rel=sponsored nofollow` compliance.
+- `<noscript>` SEO fallback content for all 3 tool landing pages (CacheAnalyzerContent, CostTrackerContent, PricingCalculatorContent) — bilingual crawler-readable content for better search indexing.
+- Expanded LLM cost comparison in the OpenAI vs DeepSeek blog article — added latest GPT models (GPT-4.1, GPT-4.5 Preview, GPT-5) and Claude models (Opus 4.5, Sonnet 4.5, Haiku 4.5) with updated pricing data.
+
+*Improved*
+- Affiliate link system refactored — centralized `affiliates.ts` configuration expanded with additional vendor programs, improved type safety with categorized link groups, and better UTM tracking integration.
+- Landing page SEO — tool landing pages now include enhanced JSON-LD structured data and bilingual `<noscript>` crawler fallback content for better search engine visibility.
+- Blog article cost comparison accuracy — updated with latest model pricing across GPT, Claude, and DeepSeek families.
+
+*Fixed*
+- Homepage URL canonicalization — fixed inconsistent canonical path generation for the root URL; simplified sitemap generation logic.
+
 **v0.6.2** (2026-07-06)
 
 *Added*
@@ -380,6 +396,22 @@ If you have questions about these Terms of Use, please open an issue on our GitH
 ---
 
 ### 中文
+
+**v0.6.3**（2026-07-09）
+
+*新增*
+- 定价计算器人民币/美元货币切换 — 用户可以在人民币（¥）和美元（$）之间切换所有价格显示，按近似汇率实时转换。
+- AffiliateWall 组件 — SEO 落地页集中化的联盟链接展示区段，提供结构化的服务商推荐（Vultr、DigitalOcean、Namecheap、OpenRouter），含推荐链接和 `rel=sponsored nofollow` 合规标注。
+- 3 个工具落地页的 `<noscript>` SEO 回退内容（CacheAnalyzerContent、CostTrackerContent、PricingCalculatorContent）— 双语爬虫可读内容，提升搜索引擎索引效果。
+- 扩展 OpenAI vs DeepSeek 博客文章中的大模型成本对比 — 新增最新 GPT 模型（GPT-4.1、GPT-4.5 Preview、GPT-5）和 Claude 模型（Opus 4.5、Sonnet 4.5、Haiku 4.5），同步更新所有模型族的最新定价数据。
+
+*改进*
+- 联盟链接系统重构 — 集中化 `affiliates.ts` 配置扩展了更多服务商项目，通过分类链接组改进类型安全，优化 UTM 追踪集成。
+- 落地页 SEO — 工具落地页现包含增强的 JSON-LD 结构化数据和双语 `<noscript>` 爬虫回退内容，提升搜索引擎可见性。
+- 博客文章成本对比准确性 — 同步更新 GPT、Claude 和 DeepSeek 全系模型的最新定价。
+
+*修复*
+- 首页 URL 规范化 — 修复根 URL 可能产生不一致规范路径的问题，简化站点地图生成逻辑。
 
 **v0.6.2**（2026-07-06）
 

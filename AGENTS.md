@@ -10,8 +10,8 @@ A browser-side dashboard for DeepSeek API usage analytics. Users drag their mont
 
 Strictly follows an Apple-minimalist design language: cold gray paper-texture backgrounds, ample whitespace, "no-card" full-width modules with thin horizontal dividers, subtle rounded corners, and diffuse shadows. Full light/dark dual-theme support driven by CSS custom properties.
 
-**Version**: 0.6.2
-- **New in this version**: URL-level i18n routing (`/zh` prefix), blog/landing multi-language and style refinements
+**Version**: 0.6.3
+- **New in this version**: CNY/USD currency toggle in Pricing Calculator, expanded LLM cost comparison with latest GPT & Claude models, affiliate link system refactor with enhanced landing page SEO, homepage URL canonicalization fix
 
 ## Architecture
 
@@ -54,7 +54,7 @@ src/
 │   ├── GuidelinePage.tsx     # Full interactive user guide page: bilingual content blocks (h1–h6, p, blockquote, tables, ul/ol), screenshot embedding with locale-aware image switching, dynamic table-of-contents, scroll-reveal sections (1660 lines of structured guide content)
 │   ├── PrivacyPage.tsx        # Privacy policy page: bilingual content (7 sections), JSON-LD WebPage schema, Apple-minimalist legal-text layout, back-to-home link + FooterBar, GitHub source link for transparency verification
 │   ├── TermsPage.tsx          # Terms of use page: bilingual content (8 sections), JSON-LD WebPage schema, Apple-minimalist legal-text layout, back-to-home link + FooterBar, open-source license reference
-│   ├── ChangelogPage.tsx      # Changelog page: complete version history (v0.1.0–v0.6.2), entries by category (Added/Improved/Fixed/Dependencies) with color-coded dots, JSON-LD WebPage schema, bilingual, Apple-minimalist legal-text layout matching privacy/terms pages
+│   ├── ChangelogPage.tsx      # Changelog page: complete version history (v0.1.0–v0.6.3), entries by category (Added/Improved/Fixed/Dependencies) with color-coded dots, JSON-LD WebPage schema, bilingual, Apple-minimalist legal-text layout matching privacy/terms pages
 │   ├── CostTrackerPage.tsx     # SEO landing page: DeepSeek API Cost Tracker — captures "deepseek api cost tracker" intent, features + recommended tools (Portkey/Helicone affiliate links)
 │   ├── CacheAnalyzerPage.tsx   # SEO landing page: DeepSeek Cache Hit Rate Analyzer — caching education module (prefix matching, 3 optimization tips) + MindRose consulting CTA
 │   ├── PricingCalculatorPage.tsx  # SEO landing page: DeepSeek API Pricing Calculator — interactive slider calculator + competitor pricing comparison table + Vultr affiliate CTA
@@ -178,7 +178,7 @@ All sub-pages follow the same pattern: route directory under `src/app/` with `pa
 - **`/guideline`** (`GuidelinePage.tsx`): Bilingual user manual — markdown-like content blocks, 24 annotated screenshots (12 per locale, locale-aware `-cn.png`/`-en.png`), dynamic sidebar ToC with Intersection Observer scroll tracking. Priority 0.8 in sitemap.
 - **`/privacy`** (`PrivacyPage.tsx`): 7-section bilingual legal text, JSON-LD WebPage schema, `max-w-3xl` centered layout, GitHub source links for transparency. Priority 0.5 in sitemap.
 - **`/terms`** (`TermsPage.tsx`): 8-section bilingual legal text, MIT License reference, JSON-LD WebPage schema, `max-w-2xl` layout. Priority 0.5 in sitemap.
-- **`/changelog`** (`ChangelogPage.tsx`): Complete version history from v0.1.0 to v0.6.2, entries organized by category (Added/Improved/Fixed/Dependencies) with color-coded dots, JSON-LD WebPage schema, bilingual, Apple-minimalist legal-text layout matching privacy/terms pages. Priority 0.5 in sitemap.
+- **`/changelog`** (`ChangelogPage.tsx`): Complete version history from v0.1.0 to v0.6.3, entries organized by category (Added/Improved/Fixed/Dependencies) with color-coded dots, JSON-LD WebPage schema, bilingual, Apple-minimalist legal-text layout matching privacy/terms pages. Priority 0.5 in sitemap.
 - **`/llms.txt`**: Static markdown file in `public/` — LLM-friendly site description (purpose, features, data format, privacy, links).
 
 ## Theme system
