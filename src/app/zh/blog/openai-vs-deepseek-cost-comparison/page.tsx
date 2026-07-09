@@ -9,7 +9,7 @@ import { OG_IMAGE_URL } from "@/lib/site";
 
 /** 中文博客文章元数据。 */
 const META = {
-  title: "OpenAI o3 vs DeepSeek V4 Pro：开发者成本收益分析",
+  title: "OpenAI GPT vs Claude vs DeepSeek V4 Pro：开发者成本收益分析",
   description:
     "用硬数据比较 API 定价差异。输入成本最高可相差 270 倍，并分析各模型在什么场景下更具经济性，以及如何平滑迁移。",
   date: "2026 年 7 月 4 日",

@@ -12,12 +12,17 @@ import { formatTokens } from "@/lib/format";
 import TitleBar from "./TitleBar";
 import FooterBar from "./FooterBar";
 
-/** DeepSeek V4 定价 (USD, per 1M tokens, as of July 2026) */
+/** DeepSeek V4 定价及其他模型价格 (USD, per 1M tokens) */
 const PRICING = {
   v4Flash: { input: 0.1449, output: 0.2899, cacheHit: 0.0028 },
   v4Pro: { input: 0.4348, output: 0.8696, cacheHit: 0.0036 },
-  openaiO3: { input: 10.00, output: 40.00, cacheHit: 2.50 },
-  claudeOpus: { input: 15.00, output: 75.00, cacheHit: 3.75 },
+  gpt55: { input: 5.00, output: 30.00, cacheHit: 0.50 },
+  gpt54: { input: 2.50, output: 15.00, cacheHit: 0.25 },
+  gpt54Mini: { input: 0.75, output: 4.50, cacheHit: 0.07 },
+  claudeFable5: { input: 10.00, output: 50.00, cacheHit: 1.00 },
+  claudeOpus48: { input: 5.00, output: 25.00, cacheHit: 0.50 },
+  claudeSonnet5: { input: 2.00, output: 10.00, cacheHit: 0.20 },
+  claudeHaiku45: { input: 1.00, output: 5.00, cacheHit: 0.10 },
 };
 
 /**
@@ -29,11 +34,20 @@ function formatCurrency(usd: number, currency: "USD" | "CNY", locale: string): s
 
   if (val === 0) return `${symbol}0.00`;
   if (val < 0.01) return `<${symbol}0.01`;
-  if (currency === "CNY" && locale === "zh" && val >= 10000) {
-    return `${symbol}${(val / 10000).toFixed(2)}万`;
+
+  if (locale === "zh") {
+    if (val >= 100000000) {
+      return `${symbol}${Number((val / 100000000).toFixed(2))}亿`;
+    }
+    if (val >= 10000) {
+      return `${symbol}${Number((val / 10000).toFixed(2))}万`;
+    }
+    return `${symbol}${val.toFixed(2)}`;
   }
+
   if (val < 1000) return `${symbol}${val.toFixed(2)}`;
-  return `${symbol}${(val / 1000).toFixed(1)}K`;
+  if (val < 1000000) return `${symbol}${(val / 1000).toFixed(1)}K`;
+  return `${symbol}${(val / 1000000).toFixed(1)}M`;
 }
 
 /**
@@ -63,10 +77,18 @@ export function PricingCalculatorPage() {
     return cachedInput + uncachedInput + outputCost;
   };
 
-  const v4FlashCost = calcCost(PRICING.v4Flash);
-  const v4ProCost = calcCost(PRICING.v4Pro);
-  const o3Cost = calcCost(PRICING.openaiO3);
-  const claudeCost = calcCost(PRICING.claudeOpus);
+  const modelsData = [
+    { key: "v4Flash", name: t.pricingCalculator.deepseekV4Flash, pricing: PRICING.v4Flash, color: "var(--positive)", notes: "—" },
+    { key: "v4Pro", name: t.pricingCalculator.deepseekV4Pro, pricing: PRICING.v4Pro, color: "var(--positive)", notes: "—" },
+    { key: "gpt55", name: "GPT-5.5", pricing: PRICING.gpt55, color: "var(--danger)", notes: "—" },
+    { key: "gpt54", name: "GPT-5.4", pricing: PRICING.gpt54, color: "var(--danger)", notes: "—" },
+    { key: "gpt54Mini", name: "GPT-5.4 mini", pricing: PRICING.gpt54Mini, color: "var(--text-primary)", notes: "—" },
+    { key: "claudeFable5", name: "Claude Fable 5", pricing: PRICING.claudeFable5, color: "var(--danger)", notes: "—" },
+    { key: "claudeOpus48", name: "Claude Opus 4.8", pricing: PRICING.claudeOpus48, color: "var(--danger)", notes: "—" },
+    { key: "claudeSonnet5", name: "Claude Sonnet 5", pricing: PRICING.claudeSonnet5, color: "var(--text-primary)", notes: "—" },
+    { key: "claudeHaiku45", name: "Claude Haiku 4.5", pricing: PRICING.claudeHaiku45, color: "var(--positive)", notes: "—" },
+  ];
+
   const vultrAffiliate = getAffiliatesByIds(["vultr"])[0];
   const estimateSteps = [
     { title: t.pricingCalculator.estimateStep1Title, desc: t.pricingCalculator.estimateStep1Desc },
@@ -284,39 +306,30 @@ export function PricingCalculatorPage() {
           </div>
 
           {/* 预估结果 */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
-            <div className="p-4 rounded-subtle text-center" style={{ border: "1px solid var(--border)" }}>
-              <span className="block text-[10px] uppercase tracking-wider mb-1" style={{ color: "var(--text-tertiary)" }}>
-                {t.pricingCalculator.deepseekV4Flash}
-              </span>
-              <span className="text-lg font-bold" style={{ color: "var(--positive)" }}>
-                {formatCurrency(v4FlashCost, currency, locale)}
-              </span>
-            </div>
-            <div className="p-4 rounded-subtle text-center" style={{ border: "1px solid var(--border)" }}>
-              <span className="block text-[10px] uppercase tracking-wider mb-1" style={{ color: "var(--text-tertiary)" }}>
-                {t.pricingCalculator.deepseekV4Pro}
-              </span>
-              <span className="text-lg font-bold" style={{ color: "var(--text-primary)" }}>
-                {formatCurrency(v4ProCost, currency, locale)}
-              </span>
-            </div>
-            <div className="p-4 rounded-subtle text-center" style={{ border: "1px solid var(--border)" }}>
-              <span className="block text-[10px] uppercase tracking-wider mb-1" style={{ color: "var(--text-tertiary)" }}>
-                OpenAI o3
-              </span>
-              <span className="text-lg font-bold" style={{ color: "var(--danger)" }}>
-                {formatCurrency(o3Cost, currency, locale)}
-              </span>
-            </div>
-            <div className="p-4 rounded-subtle text-center" style={{ border: "1px solid var(--border)" }}>
-              <span className="block text-[10px] uppercase tracking-wider mb-1" style={{ color: "var(--text-tertiary)" }}>
-                Claude Opus
-              </span>
-              <span className="text-lg font-bold" style={{ color: "var(--danger)" }}>
-                {formatCurrency(claudeCost, currency, locale)}
-              </span>
-            </div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-8">
+            {modelsData.map((item) => {
+              const currentCost = calcCost(item.pricing);
+              const isBaseModel = item.key === "v4Flash" || item.key === "v4Pro";
+              const multiplierFlash = currentCost > 0 ? (currentCost / calcCost(PRICING.v4Flash)).toFixed(1) : "0";
+              const multiplierPro = currentCost > 0 ? (currentCost / calcCost(PRICING.v4Pro)).toFixed(1) : "0";
+
+              return (
+                <div key={item.key} className="p-4 rounded-subtle text-center flex flex-col justify-center" style={{ border: "1px solid var(--border)" }}>
+                  <span className="block text-[10px] uppercase tracking-wider mb-1" style={{ color: "var(--text-tertiary)" }}>
+                    {item.name}
+                  </span>
+                  <span className="text-lg font-bold" style={{ color: item.color }}>
+                    {formatCurrency(currentCost, currency, locale)}
+                  </span>
+                  {!isBaseModel && currentCost > 0 && (
+                    <div className="text-[10px] mt-1.5 flex justify-center gap-2" style={{ color: "var(--text-tertiary)" }}>
+                      <span>Flash ×{multiplierFlash}</span>
+                      <span>Pro ×{multiplierPro}</span>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </div>
         </section>
 
@@ -400,21 +413,38 @@ export function PricingCalculatorPage() {
 
         {/* 竞品对比表 */}
         <section className="mb-16">
-          <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2 mb-3">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
             <h2
               className="text-lg font-bold tracking-tight"
               style={{ color: "var(--text-primary)", letterSpacing: "-0.02em" }}
             >
               {t.pricingCalculator.competitorComparison}
             </h2>
-            <Link
-              href={buildLocalePath("/blog/openai-vs-deepseek-cost-comparison", locale)}
-              className="text-xs font-medium hover:underline inline-flex items-center gap-1"
-              style={{ color: "var(--accent)" }}
-            >
-              {locale === "zh" ? "阅读深度对比报告" : "Read the deep-dive comparison"}
-              <span aria-hidden="true">→</span>
-            </Link>
+            <div className="flex items-center gap-4">
+              {/* 货币切换 */}
+              <div className="flex bg-[var(--border)] rounded-full p-1 w-fit">
+                <button
+                  onClick={() => setCurrency("CNY")}
+                  className={`px-3 py-1 text-[11px] font-semibold rounded-full transition-colors ${currency === "CNY" ? "bg-[var(--text-primary)] text-[var(--bg)] shadow-sm" : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"}`}
+                >
+                  {t.pricingCalculator.currencyCNY}
+                </button>
+                <button
+                  onClick={() => setCurrency("USD")}
+                  className={`px-3 py-1 text-[11px] font-semibold rounded-full transition-colors ${currency === "USD" ? "bg-[var(--text-primary)] text-[var(--bg)] shadow-sm" : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"}`}
+                >
+                  {t.pricingCalculator.currencyUSD}
+                </button>
+              </div>
+              <Link
+                href={buildLocalePath("/blog/openai-vs-deepseek-cost-comparison", locale)}
+                className="text-xs font-medium hover:underline inline-flex items-center gap-1"
+                style={{ color: "var(--accent)" }}
+              >
+                {locale === "zh" ? "阅读深度对比报告" : "Read the deep-dive comparison"}
+                <span aria-hidden="true">→</span>
+              </Link>
+            </div>
           </div>
           <p className="text-xs mb-6" style={{ color: "var(--text-tertiary)" }}>
             {t.pricingCalculator.comparisonNote}
@@ -442,46 +472,25 @@ export function PricingCalculatorPage() {
                 </tr>
               </thead>
               <tbody>
-                <tr style={{ borderBottom: "1px solid var(--border)" }}>
-                  <td className="py-2.5 pr-4 font-semibold" style={{ color: "var(--positive)" }}>
-                    {t.pricingCalculator.compDeepseekV4Flash}
-                  </td>
-                  <td className="text-right py-2.5 px-3 font-mono" style={{ color: "var(--text-primary)" }}>{formatCurrency(PRICING.v4Flash.input, currency, locale)}</td>
-                  <td className="text-right py-2.5 px-3 font-mono" style={{ color: "var(--text-primary)" }}>{formatCurrency(PRICING.v4Flash.output, currency, locale)}</td>
-                  <td className="text-right py-2.5 px-3 font-mono" style={{ color: "var(--positive)" }}>{formatCurrency(PRICING.v4Flash.cacheHit, currency, locale)}</td>
-                  <td className="py-2.5 pl-3" style={{ color: "var(--text-tertiary)" }}>—</td>
-                </tr>
-                <tr style={{ borderBottom: "1px solid var(--border)" }}>
-                  <td className="py-2.5 pr-4 font-semibold" style={{ color: "var(--text-primary)" }}>
-                    {t.pricingCalculator.compDeepseekV4Pro}
-                  </td>
-                  <td className="text-right py-2.5 px-3 font-mono" style={{ color: "var(--text-primary)" }}>{formatCurrency(PRICING.v4Pro.input, currency, locale)}</td>
-                  <td className="text-right py-2.5 px-3 font-mono" style={{ color: "var(--text-primary)" }}>{formatCurrency(PRICING.v4Pro.output, currency, locale)}</td>
-                  <td className="text-right py-2.5 px-3 font-mono" style={{ color: "var(--text-primary)" }}>{formatCurrency(PRICING.v4Pro.cacheHit, currency, locale)}</td>
-                  <td className="py-2.5 pl-3" style={{ color: "var(--text-tertiary)" }}>—</td>
-                </tr>
-                <tr style={{ borderBottom: "1px solid var(--border)" }}>
-                  <td className="py-2.5 pr-4 font-semibold" style={{ color: "var(--text-primary)" }}>
-                    {t.pricingCalculator.compOpenaiO3}
-                  </td>
-                  <td className="text-right py-2.5 px-3 font-mono" style={{ color: "var(--danger)" }}>{formatCurrency(PRICING.openaiO3.input, currency, locale)}</td>
-                  <td className="text-right py-2.5 px-3 font-mono" style={{ color: "var(--danger)" }}>{formatCurrency(PRICING.openaiO3.output, currency, locale)}</td>
-                  <td className="text-right py-2.5 px-3 font-mono" style={{ color: "var(--text-primary)" }}>{formatCurrency(PRICING.openaiO3.cacheHit, currency, locale)}</td>
-                  <td className="py-2.5 pl-3" style={{ color: "var(--text-tertiary)" }}>
-                    {t.pricingCalculator.compOpenaiO3Notes}
-                  </td>
-                </tr>
-                <tr style={{ borderBottom: "1px solid var(--border)" }}>
-                  <td className="py-2.5 pr-4 font-semibold" style={{ color: "var(--text-primary)" }}>
-                    {t.pricingCalculator.compClaudeOpus}
-                  </td>
-                  <td className="text-right py-2.5 px-3 font-mono" style={{ color: "var(--danger)" }}>{formatCurrency(PRICING.claudeOpus.input, currency, locale)}</td>
-                  <td className="text-right py-2.5 px-3 font-mono" style={{ color: "var(--danger)" }}>{formatCurrency(PRICING.claudeOpus.output, currency, locale)}</td>
-                  <td className="text-right py-2.5 px-3 font-mono" style={{ color: "var(--text-primary)" }}>{formatCurrency(PRICING.claudeOpus.cacheHit, currency, locale)}</td>
-                  <td className="py-2.5 pl-3" style={{ color: "var(--text-tertiary)" }}>
-                    {t.pricingCalculator.compClaudeOpusNotes}
-                  </td>
-                </tr>
+                {modelsData.map((item) => (
+                  <tr key={item.key} style={{ borderBottom: "1px solid var(--border)" }}>
+                    <td className="py-2.5 pr-4 font-semibold" style={{ color: item.color }}>
+                      {item.name}
+                    </td>
+                    <td className="text-right py-2.5 px-3 font-mono" style={{ color: item.color === "var(--positive)" || item.color === "var(--text-primary)" ? item.color : "var(--danger)" }}>
+                      {formatCurrency(item.pricing.input, currency, locale)}
+                    </td>
+                    <td className="text-right py-2.5 px-3 font-mono" style={{ color: item.color === "var(--positive)" || item.color === "var(--text-primary)" ? item.color : "var(--danger)" }}>
+                      {formatCurrency(item.pricing.output, currency, locale)}
+                    </td>
+                    <td className="text-right py-2.5 px-3 font-mono" style={{ color: item.color === "var(--danger)" ? "var(--text-primary)" : item.color }}>
+                      {formatCurrency(item.pricing.cacheHit, currency, locale)}
+                    </td>
+                    <td className="py-2.5 pl-3" style={{ color: "var(--text-tertiary)" }}>
+                      {item.notes}
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>

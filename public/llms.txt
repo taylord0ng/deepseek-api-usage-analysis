@@ -17,7 +17,7 @@
 - [Blog](https://deepseek-usage.xyz/blog) — DeepSeek API cost optimization articles and developer guides
 - [Blog: Context Caching Guide](https://deepseek-usage.xyz/blog/deepseek-context-caching-guide) — Deep dive into DeepSeek prefix-matching disk caching
 - [Blog: Cost Optimization Tools](https://deepseek-usage.xyz/blog/deepseek-cost-optimization-tools) — Top 5 DeepSeek API cost optimization & observability tools compared
-- [Blog: OpenAI vs DeepSeek](https://deepseek-usage.xyz/blog/openai-vs-deepseek-cost-comparison) — Cost-benefit analysis: OpenAI o3 vs DeepSeek V4 Pro
+- [Blog: OpenAI vs DeepSeek](https://deepseek-usage.xyz/blog/openai-vs-deepseek-cost-comparison) — Cost-benefit analysis: OpenAI GPT vs Claude vs DeepSeek V4 Pro
 - [User Guide](https://deepseek-usage.xyz/guideline) — Bilingual step-by-step usage documentation with annotated screenshots
 - [Changelog](https://deepseek-usage.xyz/changelog) — Complete version history from v0.1.0 to v0.6.2
 - [Author](https://deepseek-usage.xyz/author) — Gavin Chen's profile page with bio, skills, and social links

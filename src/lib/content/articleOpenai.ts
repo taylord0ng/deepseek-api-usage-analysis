@@ -8,12 +8,12 @@ export const en: ArticleContent = {
         {
           type: "p",
           content:
-            "Choosing an LLM provider in 2026 is as much an economic decision as a technical one. With DeepSeek V4 Pro delivering GPT-4-class reasoning at a fraction of the cost, and OpenAI o3 pushing the frontier of agentic capabilities, developers face a real trade-off. Here's the data to help you decide.",
+            "Choosing an LLM provider in 2026 is as much an economic decision as a technical one. With DeepSeek V4 Pro delivering GPT-4-class reasoning at a fraction of the cost, and OpenAI pushing the frontier of agentic capabilities, developers face a real trade-off. Here's the data to help you decide.",
         },
       ],
     },
     {
-      heading: "The Numbers: A 270× Price Gap",
+      heading: "The Numbers",
       blocks: [
         {
           type: "p",
@@ -38,7 +38,7 @@ export const en: ArticleContent = {
         {
           type: "p",
           content:
-            "<strong>OpenAI o3</strong> pushes further on agentic tool use and complex multi-step reasoning. For applications where correctness is absolutely critical — legal document analysis, medical coding, financial compliance — the premium may be justified. But for the vast majority of developer use cases (code generation, content summarization, data extraction), DeepSeek V4 Pro is more than capable.",
+            "<strong>OpenAI</strong> pushes further on agentic tool use and complex multi-step reasoning. For applications where correctness is absolutely critical — legal document analysis, medical coding, financial compliance — the premium may be justified. But for the vast majority of developer use cases (code generation, content summarization, data extraction), DeepSeek V4 Pro is more than capable.",
         },
       ],
     },
@@ -67,7 +67,7 @@ export const en: ArticleContent = {
         {
           type: "p",
           content:
-            "For most developers and teams, the math is clear: DeepSeek V4 Flash and Pro deliver 90%+ of the capability at 3–5% of the cost. The exceptions are use cases where the highest possible reasoning accuracy justifies a 20–270× premium — and those use cases are rarer than most teams think.",
+            "For most developers and teams, the math is clear: DeepSeek V4 Flash and Pro deliver excellent capability at a fraction of the cost. The exceptions are use cases where the highest possible reasoning accuracy justifies a premium — and those use cases are rarer than most teams think.",
         },
         {
           type: "p",
@@ -85,10 +85,15 @@ export const en: ArticleContent = {
   pricingTable: {
     headers: ["Model", "Input / 1M tokens", "Output / 1M tokens", "Cache Hit / 1M tokens"],
     rows: [
-      { model: "DeepSeek V4 Flash", modelColor: "var(--positive)", input: "$0.27", output: "$1.10", cacheHit: "$0.07", cacheHitColor: "var(--positive)", notes: "—" },
-      { model: "DeepSeek V4 Pro", input: "$0.55", output: "$2.19", cacheHit: "$0.14", notes: "—" },
-      { model: "OpenAI o3", input: "$10.00", inputColor: "var(--danger)", output: "$40.00", outputColor: "var(--danger)", cacheHit: "$2.50", notes: "~37× more expensive input vs DS V4 Flash" },
-      { model: "Claude Opus 4.8", input: "$15.00", inputColor: "var(--danger)", output: "$75.00", outputColor: "var(--danger)", cacheHit: "$3.75", notes: "~270× more expensive input vs DS V4 Flash" },
+      { model: "DeepSeek V4 Flash", modelColor: "var(--positive)", input: "$0.14", output: "$0.29", cacheHit: "$0.003", cacheHitColor: "var(--positive)", notes: "—" },
+      { model: "DeepSeek V4 Pro", input: "$0.43", output: "$0.87", cacheHit: "$0.004", notes: "—" },
+      { model: "GPT-5.5", input: "$15.00", inputColor: "var(--danger)", output: "$60.00", outputColor: "var(--danger)", cacheHit: "$7.50", notes: "—" },
+      { model: "GPT-5.4", input: "$5.00", inputColor: "var(--danger)", output: "$15.00", outputColor: "var(--danger)", cacheHit: "$2.50", notes: "—" },
+      { model: "GPT-5.4 mini", input: "$0.15", output: "$0.60", cacheHit: "$0.075", notes: "—" },
+      { model: "Claude Fable 5", input: "$0.80", output: "$4.00", cacheHit: "$0.08", notes: "—" },
+      { model: "Claude Opus 4.8", input: "$15.00", inputColor: "var(--danger)", output: "$75.00", outputColor: "var(--danger)", cacheHit: "$3.75", notes: "—" },
+      { model: "Claude Sonnet 5", input: "$3.00", inputColor: "var(--danger)", output: "$15.00", outputColor: "var(--danger)", cacheHit: "$0.30", notes: "—" },
+      { model: "Claude Haiku 4.5", input: "$0.25", output: "$1.25", cacheHit: "$0.025", notes: "—" },
     ],
   },
 };
@@ -101,12 +106,12 @@ export const zh: ArticleContent = {
         {
           type: "p",
           content:
-            "在 2026 年选择 LLM 供应商，既是技术决策，也是经济决策。DeepSeek V4 Pro 以极低的成本提供媲美 GPT-4 级别的推理能力，而 OpenAI o3 则在 Agent 能力上更进一步——开发者面临真实的取舍。以下是帮助你决策的数据。",
+            "在 2026 年选择 LLM 供应商，既是技术决策，也是经济决策。DeepSeek V4 Pro 以极低的成本提供媲美 GPT-4 级别的推理能力，而 OpenAI 则在 Agent 能力上更进一步——开发者面临真实的取舍。以下是帮助你决策的数据。",
         },
       ],
     },
     {
-      heading: "数据对比：高达 270 倍的价格差距",
+      heading: "数据对比",
       blocks: [
         {
           type: "p",
@@ -131,7 +136,7 @@ export const zh: ArticleContent = {
         {
           type: "p",
           content:
-            "<strong>OpenAI o3</strong> 在工具使用和复杂多步推理方面更进一步。对于正确性至关重要的应用——法律文件分析、医疗编码、金融合规——这种溢价可能是值得的。但对绝大多数开发者场景（代码生成、内容摘要、数据抽取），DeepSeek V4 Pro 已绰绰有余。",
+            "<strong>OpenAI</strong> 在工具使用和复杂多步推理方面更进一步。对于正确性至关重要的应用——法律文件分析、医疗编码、金融合规——这种溢价可能是值得的。但对绝大多数开发者场景（代码生成、内容摘要、数据抽取），DeepSeek V4 Pro 已绰绰有余。",
         },
       ],
     },
@@ -160,7 +165,7 @@ export const zh: ArticleContent = {
         {
           type: "p",
           content:
-            "对大多数开发者和团队来说，数据很清楚：DeepSeek V4 Flash 和 Pro 以 3–5% 的成本提供了 90% 以上的能力。例外情况是那些需要最高推理准确度、且愿意支付 20–270 倍溢价的场景——而这些场景比大多数人想象的要少得多。",
+            "对大多数开发者和团队来说，数据很清楚：DeepSeek V4 Flash 和 Pro 以极低的成本提供了卓越的能力。例外情况是那些需要最高推理准确度、且愿意支付溢价的场景——而这些场景比大多数人想象的要少得多。",
         },
         {
           type: "p",
@@ -178,10 +183,15 @@ export const zh: ArticleContent = {
   pricingTable: {
     headers: ["模型", "输入 / 百万 Token", "输出 / 百万 Token", "缓存命中 / 百万 Token"],
     rows: [
-      { model: "DeepSeek V4 Flash", modelColor: "var(--positive)", input: "$0.27", output: "$1.10", cacheHit: "$0.07", cacheHitColor: "var(--positive)", notes: "—" },
-      { model: "DeepSeek V4 Pro", input: "$0.55", output: "$2.19", cacheHit: "$0.14", notes: "—" },
-      { model: "OpenAI o3", input: "$10.00", inputColor: "var(--danger)", output: "$40.00", outputColor: "var(--danger)", cacheHit: "$2.50", notes: "输入价格约为 DS V4 Flash 的 37 倍" },
-      { model: "Claude Opus 4.8", input: "$15.00", inputColor: "var(--danger)", output: "$75.00", outputColor: "var(--danger)", cacheHit: "$3.75", notes: "输入价格约为 DS V4 Flash 的 270 倍" },
+      { model: "DeepSeek V4 Flash", modelColor: "var(--positive)", input: "$0.14", output: "$0.29", cacheHit: "$0.003", cacheHitColor: "var(--positive)", notes: "—" },
+      { model: "DeepSeek V4 Pro", input: "$0.43", output: "$0.87", cacheHit: "$0.004", notes: "—" },
+      { model: "GPT-5.5", input: "$15.00", inputColor: "var(--danger)", output: "$60.00", outputColor: "var(--danger)", cacheHit: "$7.50", notes: "—" },
+      { model: "GPT-5.4", input: "$5.00", inputColor: "var(--danger)", output: "$15.00", outputColor: "var(--danger)", cacheHit: "$2.50", notes: "—" },
+      { model: "GPT-5.4 mini", input: "$0.15", output: "$0.60", cacheHit: "$0.075", notes: "—" },
+      { model: "Claude Fable 5", input: "$0.80", output: "$4.00", cacheHit: "$0.08", notes: "—" },
+      { model: "Claude Opus 4.8", input: "$15.00", inputColor: "var(--danger)", output: "$75.00", outputColor: "var(--danger)", cacheHit: "$3.75", notes: "—" },
+      { model: "Claude Sonnet 5", input: "$3.00", inputColor: "var(--danger)", output: "$15.00", outputColor: "var(--danger)", cacheHit: "$0.30", notes: "—" },
+      { model: "Claude Haiku 4.5", input: "$0.25", output: "$1.25", cacheHit: "$0.025", notes: "—" },
     ],
   },
 };

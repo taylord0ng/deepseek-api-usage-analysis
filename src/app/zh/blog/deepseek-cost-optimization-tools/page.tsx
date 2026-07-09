@@ -58,7 +58,7 @@ export default function ZhArticleToolsPage() {
           slug: "deepseek-context-caching-guide",
         }}
         nextPost={{
-          title: "OpenAI o3 vs DeepSeek V4 Pro: A Developer's Cost-Benefit Analysis",
+          title: "OpenAI GPT vs Claude vs DeepSeek V4 Pro: A Developer's Cost-Benefit Analysis",
           slug: "openai-vs-deepseek-cost-comparison",
         }}
       />

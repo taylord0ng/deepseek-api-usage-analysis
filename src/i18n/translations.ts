@@ -303,7 +303,7 @@ const translations = {
         "A comprehensive comparison of the best tools for monitoring and optimizing DeepSeek API costs — from real-time observability platforms to privacy-first CSV analyzers.",
       article2Tags: "Tools, Comparison, Cost Optimization",
       article3Title:
-        "OpenAI o3 vs DeepSeek V4 Pro: A Developer's Cost-Benefit Analysis",
+        "OpenAI GPT vs Claude vs DeepSeek V4 Pro: A Developer's Cost-Benefit Analysis",
       article3Desc:
         "Hard numbers on API pricing differences — input costs can differ by 270×. We break down when each model makes economic sense and how to migrate smoothly.",
       article3Tags: "Comparison, Pricing, OpenAI",
@@ -469,10 +469,6 @@ const translations = {
       compNotesHeader: "Notes",
       compDeepseekV4Flash: "DeepSeek V4 Flash",
       compDeepseekV4Pro: "DeepSeek V4 Pro",
-      compOpenaiO3: "OpenAI o3",
-      compClaudeOpus: "Claude Opus 4.8",
-      compOpenaiO3Notes: "~270× more expensive input vs DS V4 Flash",
-      compClaudeOpusNotes: "~45× more expensive input vs DS V4 Flash",
       estimationGuideTitle: "How to Estimate Monthly Usage",
       estimationGuideDesc:
         "If you do not already have billing exports, start from product traffic: requests per day, average prompt size, average response length, and expected cache reuse.",
@@ -867,7 +863,7 @@ const translations = {
         "深度盘点主流 DeepSeek API 监控与优化工具——从实时可观测性平台到隐私优先的 CSV 分析器，全面对比。",
       article2Tags: "工具, 对比, 成本优化",
       article3Title:
-        "OpenAI o3 vs DeepSeek V4 Pro：开发者成本收益分析",
+        "OpenAI GPT vs Claude vs DeepSeek V4 Pro：开发者成本收益分析",
       article3Desc:
         "硬核 API 定价数据对比——输入成本差距可达 270 倍。分析各模型的经济适用场景，以及如何平滑迁移。",
       article3Tags: "对比, 定价, OpenAI",
@@ -1033,10 +1029,6 @@ const translations = {
       compNotesHeader: "备注",
       compDeepseekV4Flash: "DeepSeek V4 Flash",
       compDeepseekV4Pro: "DeepSeek V4 Pro",
-      compOpenaiO3: "OpenAI o3",
-      compClaudeOpus: "Claude Opus 4.8",
-      compOpenaiO3Notes: "输入价格约为 DS V4 Flash 的 270 倍",
-      compClaudeOpusNotes: "输入价格约为 DS V4 Flash 的 45 倍",
       estimationGuideTitle: "如何估算月用量",
       estimationGuideDesc:
         "如果你手头还没有账单导出，可以先从产品流量倒推：每天请求数、平均 Prompt 长度、平均回复长度，以及预期缓存复用率。",

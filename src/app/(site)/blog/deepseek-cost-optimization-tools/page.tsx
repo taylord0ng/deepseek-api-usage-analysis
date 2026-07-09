@@ -52,7 +52,7 @@ export default function Page() {
         meta={META}
         content={{ en, zh }}
         prevPost={{ title: "The Ultimate Guide to DeepSeek API Context Caching (2026)", slug: "deepseek-context-caching-guide" }}
-        nextPost={{ title: "OpenAI o3 vs DeepSeek V4 Pro: A Developer's Cost-Benefit Analysis", slug: "openai-vs-deepseek-cost-comparison" }}
+        nextPost={{ title: "OpenAI GPT vs Claude vs DeepSeek V4 Pro: A Developer's Cost-Benefit Analysis", slug: "openai-vs-deepseek-cost-comparison" }}
       />
     </>
   );

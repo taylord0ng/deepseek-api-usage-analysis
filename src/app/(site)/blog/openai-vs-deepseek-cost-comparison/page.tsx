@@ -8,8 +8,8 @@ import { buildArticleJsonLd } from "@/lib/schema";
 import { OG_IMAGE_URL } from "@/lib/site";
 
 const META = {
-  title: "OpenAI o3 vs DeepSeek V4 Pro: A Developer's Cost-Benefit Analysis",
-  description: "Hard numbers on API pricing differences — input costs can differ by 270×. We break down when each model makes economic sense and how to migrate smoothly.",
+  title: "OpenAI vs DeepSeek V4 Pro: A Developer's Cost-Benefit Analysis",
+  description: "Hard numbers on API pricing differences. We break down when each model makes economic sense and how to migrate smoothly.",
   date: "July 4, 2026",
   publishedTime: "2026-07-04T00:00:00.000Z",
   modifiedTime: "2026-07-04T00:00:00.000Z",

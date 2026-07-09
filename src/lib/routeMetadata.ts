@@ -295,8 +295,8 @@ export function buildPricingCalculatorMetadata(locale: Locale): Metadata {
       zh: "DeepSeek API 价格计算器 | 即时比较模型成本",
     },
     description: {
-      en: "Estimate your DeepSeek API costs with our interactive pricing calculator. Compare DeepSeek V4 Flash, V4 Pro, OpenAI o3, and Claude Opus pricing side by side. Adjust token counts and cache hit rate assumptions.",
-      zh: "使用交互式价格计算器估算 DeepSeek API 成本。横向比较 DeepSeek V4 Flash、V4 Pro、OpenAI o3 与 Claude Opus 的价格，并调整 Token 数量与缓存命中率假设。",
+      en: "Estimate your DeepSeek API costs with our interactive pricing calculator. Compare DeepSeek V4 Flash, V4 Pro, OpenAI GPT (5.5、5.4、5.4 mini), and Claude (Fable、Opus、Sonnet、Haiku) pricing side by side. Adjust token counts and cache hit rate assumptions.",
+      zh: "使用交互式价格计算器估算 DeepSeek API 成本。横向比较 DeepSeek V4 Flash、V4 Pro、OpenAI GPT （5.5、5.4、5.4 mini） 与 Claude （Fable、Opus、Sonnet、Haiku） 价格，并调整 Token 数量与缓存命中率假设。",
     },
     keywords: {
       en: [
@@ -465,8 +465,8 @@ export function buildArticleOpenAiMetadata(locale: Locale): Metadata {
   return buildBlogArticleMetadata(locale, {
     pathname: "/blog/openai-vs-deepseek-cost-comparison",
     title: {
-      en: "OpenAI o3 vs DeepSeek V4 Pro: A Developer's Cost-Benefit Analysis",
-      zh: "OpenAI o3 vs DeepSeek V4 Pro：开发者成本收益分析",
+      en: "OpenAI GPT vs Claude vs DeepSeek V4 Pro: A Developer's Cost-Benefit Analysis",
+      zh: "OpenAI GPT vs Claude vs DeepSeek V4 Pro：开发者成本收益分析",
     },
     description: {
       en: "Hard numbers on API pricing differences — input costs can differ by 270×. We break down when each model makes economic sense and how to migrate smoothly.",
@@ -474,15 +474,19 @@ export function buildArticleOpenAiMetadata(locale: Locale): Metadata {
     },
     keywords: {
       en: [
-        "DeepSeek vs OpenAI",
-        "OpenAI o3 pricing",
+        "DeepSeek vs OpenAI GPT",
+        "DeepSeek vs Claude",
+        "OpenAI GPT Pricing",
+        "Claude Pricing",
         "DeepSeek V4 Pro",
         "LLM cost comparison",
         "AI pricing 2026",
       ],
       zh: [
-        "DeepSeek vs OpenAI",
-        "OpenAI o3 定价",
+        "DeepSeek vs OpenAI GPT",
+        "DeepSeek vs Claude",
+        "OpenAI GPT 定价",
+        "Claude 定价",
         "DeepSeek V4 Pro",
         "大模型成本对比",
         "AI 定价 2026",
