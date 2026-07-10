@@ -60,8 +60,23 @@ export const affiliatesRegistry: AffiliateItem[] = [
       zh: "云服务器、云数据库、COS、CDN、短信等云产品特惠热卖中",
     },
     condition: {
-      en: "For verified individual users only; paid in a lump sum the following month",
-      zh: "仅限个人实名认证用户；次月一次性到账",
+      en: "AWS high-quality alternative, we use COS as a replacement for S3",
+      zh: "AWS的优质替代品，我们应用COS替代S3",
+    },
+    isActive: true,
+    rel: "sponsored nofollow",
+  },
+    {
+    id: "tencent-cloud-global",
+    name: "腾讯云国际站 Tencent Cloud Global",
+    url: "https://curl.qcloud.com/yWOyshuD",
+    commission: {
+      en: "Cloud servers, cloud databases, COS, CDN, SMS and other cloud products are on special offer now.",
+      zh: "云服务器、云数据库、COS、CDN、短信等云产品特惠热卖中",
+    },
+    condition: {
+      en: "AWS high-quality alternative, we use COS as a replacement for S3",
+      zh: "AWS的优质替代品，我们应用COS替代S3",
     },
     isActive: true,
     rel: "sponsored nofollow",
@@ -323,7 +338,7 @@ export const affiliatesRegistry: AffiliateItem[] = [
     platform: "Direct",
     condition: {
       en: "Interestingly, we can directly use various top-tier models in Warp without leaving the terminal.",
-      zh: "有趣的是，我们可以直接在 Warp 中使用各种顶级模型，而不离开终端",
+      zh: "我们可以直接在 Warp 中使用各种顶级模型，而不离开终端",
     },
     isActive: true,
     rel: "sponsored nofollow",

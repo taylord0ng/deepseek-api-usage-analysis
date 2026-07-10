@@ -319,28 +319,74 @@ export function AuthorPage() {
           >
             {t.author.teamMembersDesc}
           </p>
-          <div
-            className="p-5 rounded-subtle"
-            style={{ border: "1px dashed var(--border)" }}
-          >
-            <h3
-              className="text-sm font-semibold mb-1"
-              style={{ color: "var(--text-primary)" }}
-            >
-              {t.author.memberPlaceholderName}
-            </h3>
-            <p
-              className="text-xs mb-2"
-              style={{ color: "var(--text-tertiary)" }}
-            >
-              {t.author.memberPlaceholderRole}
-            </p>
-            <p
-              className="text-sm leading-relaxed text-pretty"
-              style={{ color: "var(--text-secondary)" }}
-            >
-              {t.author.memberPlaceholderDesc}
-            </p>
+          {/* 团队成员列表：使用 CSS Grid 布局，支持四位成员简介展示 */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {[
+              {
+                name: t.author.member1Name,
+                role: t.author.member1Role,
+                desc: t.author.member1Desc,
+                initial: "G",
+              },
+              {
+                name: t.author.member2Name,
+                role: t.author.member2Role,
+                desc: t.author.member2Desc,
+                initial: "L",
+              },
+              {
+                name: t.author.member3Name,
+                role: t.author.member3Role,
+                desc: t.author.member3Desc,
+                initial: "A",
+              },
+              {
+                name: t.author.member4Name,
+                role: t.author.member4Role,
+                desc: t.author.member4Desc,
+                initial: "S",
+              },
+            ].map((member, index) => (
+              <div
+                key={index}
+                className="p-5 rounded-subtle flex flex-row items-start justify-between gap-4 transition-colors duration-200 hover:bg-[var(--bg-surface-hover)]"
+                style={{ border: "1px dashed var(--border)" }}
+              >
+                {/* 成员信息区：包含姓名、title 和简介 */}
+                <div className="flex-1">
+                  <h3
+                    className="text-sm font-semibold mb-1"
+                    style={{ color: "var(--text-primary)" }}
+                  >
+                    {member.name}
+                  </h3>
+                  <p
+                    className="text-xs mb-2"
+                    style={{ color: "var(--text-tertiary)" }}
+                  >
+                    {member.role}
+                  </p>
+                  <p
+                    className="text-sm leading-relaxed text-pretty"
+                    style={{ color: "var(--text-secondary)" }}
+                  >
+                    {member.desc}
+                  </p>
+                </div>
+
+                {/* 成员首字母文字头像 */}
+                <div
+                  className="w-12 h-12 rounded-full shrink-0 flex items-center justify-center overflow-hidden font-semibold text-lg"
+                  style={{
+                    backgroundColor: "var(--bg-surface-hover)",
+                    color: "var(--text-primary)",
+                    border: "1px solid var(--border)",
+                  }}
+                >
+                  {member.initial}
+                </div>
+              </div>
+            ))}
           </div>
         </section>
 

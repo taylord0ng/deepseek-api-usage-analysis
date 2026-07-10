@@ -266,24 +266,36 @@ const translations = {
       ctaButton: "Open Dashboard",
     },
     author: {
-      pageTitle: "Author",
+      pageTitle: "Author & Team",
       pageSubtitle:
         "Background, authorship, and public identity signals for the DeepSeek API Usage Analytics Dashboard project.",
       intro:
-        "This page consolidates the people and team information behind the project, so readers and search engines can connect the product, blog content, and external profiles in one place.",
+        "The Mindrose team is composed of members with diverse backgrounds, coming from various major tech companies, with extensive experience in software architecture, business analysis, online marketing, SEO & GEO, and more.",
       profileTitle: "Author Profile",
       profileName: "Gavin Chen",
-      profileRole: "Builder of the DeepSeek API Usage Analytics Dashboard",
+      profileRole: "Solution Architect & Developer",
       profileDesc:
-        "Gavin Chen leads product direction, technical implementation, and content strategy for this project, working together with the MindRose team on product delivery and consulting.",
+        "Gavin Chen leads product direction, technical implementation, and content strategy for this project, working together with the MindRose team on product delivery, marketing, and maintenance.",
       verificationTitle: "Public Profiles & Verification",
       teamMembersTitle: "Team Members",
       teamMembersDesc:
-        "This section is intentionally reserved for future member profiles, including role, expertise, and public links as the team page expands.",
-      memberPlaceholderName: "More member profiles coming soon",
-      memberPlaceholderRole: "Reserved section",
-      memberPlaceholderDesc:
-        "When additional contributors are introduced, this block will list their responsibilities, background, and profile links.",
+        "Meet the core contributors and specialists behind the MindRose team, who drive the continuous evolution of our products.",
+      member1Name: "Gavin Chen",
+      member1Role: "Business Analyst & System Architect",
+      member1Desc:
+        "An architect with years of BA experience, focusing on business requirements, product strategy, and system architecture (and development).",
+      member2Name: "Lindsay Lin",
+      member2Role: "SEO & International Trade Specialist",
+      member2Desc:
+        "Familiar with cross-border product marketing strategies and highly experienced in hands-on SEO, leading our SEO & GEO strategies.",
+      member3Name: "Angela Lee",
+      member3Role: "Online Marketing Specialist",
+      member3Desc:
+        "Expert in online marketing strategies, content creation, and analysis, helping products and services succeed in digital marketing and promotion.",
+      member4Name: "Simon L.",
+      member4Role: "Backend & DevOps Engineer",
+      member4Desc:
+        "Leads various server architecture designs, database optimizations, and cloud-native deployments.",
       githubLabel: "Project GitHub Repository",
       linkedInLabel: "Gavin's LinkedIn",
       websiteLabel: "MindRose Website",
@@ -829,24 +841,36 @@ const translations = {
       ctaButton: "打开仪表盘",
     },
     author: {
-      pageTitle: "作者",
+      pageTitle: "作者团队",
       pageSubtitle:
-        "集中展示 DeepSeek API 用量分析仪表盘项目背后的作者背景、团队信息与公开身份信号。",
+        "关于本项目（DeepSeek API 用量分析仪表盘）背后的作者背景、团队信息与更多联系信息。",
       intro:
-        "这个页面把项目背后的人、团队与公开资料汇总到一起，便于读者和搜索引擎把产品、博客内容与外部身份信息建立起清晰关联。",
+        "Mindrose 团队由背景各异的成员组成，他们来自不同的大厂，在软件架构、业务分析、在线营销、SEO & GEO 等领域有丰富的经验。",
       profileTitle: "作者简介",
       profileName: "Gavin Chen",
-      profileRole: "DeepSeek API 用量分析仪表盘创建者",
+      profileRole: "Solution Architect & Developer",
       profileDesc:
-        "Gavin Chen 负责这个项目的产品方向、技术实现与内容策略，并与 MindRose 团队一起完成产品交付与咨询工作。",
-      verificationTitle: "公开资料与身份验证",
+        "Gavin Chen 负责这个项目的产品方向、技术实现与内容策略，并与 MindRose 团队一起完成产品部署、推广和维护。",
+      verificationTitle: "更多公开资料",
       teamMembersTitle: "团队成员",
       teamMembersDesc:
-        "这里预留给后续补充的成员档案，包括角色、专长与公开链接，方便逐步扩展团队页面。",
-      memberPlaceholderName: "更多成员资料即将补充",
-      memberPlaceholderRole: "预留区块",
-      memberPlaceholderDesc:
-        "后续引入更多贡献者时，这里会列出他们的职责分工、背景信息与个人主页链接。",
+        "认识 MindRose 团队背后的核心贡献者与专家，他们共同推动了产品的持续演进。",
+      member1Name: "Gavin Chen",
+      member1Role: "业务分析 & 系统架构",
+      member1Desc:
+        "多年BA经验的架构师，专注于业务需求梳理、产品策略规划与系统架构（还有开发）。",
+      member2Name: "Lindsay Lin",
+      member2Role: "SEO与外贸专家",
+      member2Desc:
+        "熟悉跨国产品营销策略，有丰富的 SEO 实战经验，负责产品的 SEO & GEO 策略。",
+      member3Name: "Angela Lee",
+      member3Role: "在线营销专家",
+      member3Desc:
+        "熟悉在线营销策略、内容创作与分析，帮助产品和服务在获得在线营销推广方面取得成功。",
+      member4Name: "Simon L.",
+      member4Role: "后端与运维工程师",
+      member4Desc:
+        "主导各种服务端架构设计、数据库优化及云原生部署。",
       githubLabel: "项目 GitHub 仓库",
       linkedInLabel: "Gavin 的 LinkedIn",
       websiteLabel: "MindRose 官网",
