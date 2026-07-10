@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useMemo } from "react";
 import { useTranslation } from "@/i18n";
 import { buildLocalePath, buildLocaleUrl } from "@/lib/localeRouting";
+import AffiliateWall from "@/components/AffiliateWall";
 import {
   buildAuthorPageUrl,
   buildTeamMembersUrl,
@@ -341,6 +342,26 @@ export function AuthorPage() {
               {t.author.memberPlaceholderDesc}
             </p>
           </div>
+        </section>
+
+        {/* Recommended Tools (商业化模块) */}
+        <section className="mb-16">
+          <h2
+            className="text-sm font-semibold mb-3"
+            style={{
+              color: "var(--text-primary)",
+              letterSpacing: "-0.01em",
+            }}
+          >
+            {t.costTracker.recommendedUsingTools}
+          </h2>
+          <p
+            className="text-xs leading-relaxed text-pretty mb-4"
+            style={{ color: "var(--text-tertiary)" }}
+          >
+            {t.costTracker.recommendedUsingDes}
+          </p>
+          <AffiliateWall ids={["vultr", "railway", "tencent-cloud", "silicon-flow", "warp"]} />
         </section>
       </div>
 

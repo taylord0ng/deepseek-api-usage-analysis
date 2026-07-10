@@ -39,10 +39,10 @@ export const affiliatesRegistry: AffiliateItem[] = [
   {
     id: "aliyun-bailian",
     name: "阿里云百炼",
-    url: "https://dashi.aliyun.com/",
+    url: "https://www.aliyun.com/minisite/goods?userCode=9yd8ilcf",
     commission: {
-      en: "Up to 45% one-time cash reward",
-      zh: "最高 45% 一次性现金奖励",
+      en: "We gift you an extra 20% off coupon, exclusive discounts on 120+ cloud products.",
+      zh: "赠送您一张额外八折优惠券，120+款云产品专属折扣",
     },
     condition: {
       en: "Recommending large models/Agent products extends attribution period to 365 days; withdrawable after 30 days.",
@@ -53,11 +53,11 @@ export const affiliatesRegistry: AffiliateItem[] = [
   },
   {
     id: "tencent-cloud",
-    name: "腾讯云",
-    url: "https://cloud.tencent.com/act/partner/cps",
+    name: "腾讯云 Tencent Cloud",
+    url: "https://curl.qcloud.com/mJQjoF6K",
     commission: {
-      en: "20%–35% commission, max ¥80K/month, max ¥5000 per transaction",
-      zh: "20%–35% 返佣，月佣金上限 ¥8 万，单笔上限 ¥5000",
+      en: "Cloud servers, cloud databases, COS, CDN, SMS and other cloud products are on special offer now.",
+      zh: "云服务器、云数据库、COS、CDN、短信等云产品特惠热卖中",
     },
     condition: {
       en: "For verified individual users only; paid in a lump sum the following month",
@@ -67,46 +67,16 @@ export const affiliatesRegistry: AffiliateItem[] = [
     rel: "sponsored nofollow",
   },
   {
-    id: "baidu-qianfan",
-    name: "百度智能云千帆",
-    url: "https://cloud.baidu.com/campaign/ambassador/index.html",
-    commission: {
-      en: "Base 20%, up to 34%; max ¥80K/month",
-      zh: "基础 20%，叠加最高 34%；单月上限 ¥8 万",
-    },
-    condition: {
-      en: "New user must spend >¥30; paid over 4 months (20/20/20/40%); individual income tax applies",
-      zh: "有效拉新用户需实付 >¥30；佣金分 4 个月发放（20/20/20/40%）；需依法缴纳个人劳务税",
-    },
-    isActive: true,
-    rel: "sponsored nofollow",
-  },
-  {
     id: "silicon-flow",
     name: "硅基流动 SiliconFlow",
-    url: "https://siliconflow.feishu.cn/share/base/form/shrcnFexyHcMNEntvR08shp8Tbd",
+    url: "https://cloud.siliconflow.cn/i/oEWYkQgZ",
     commission: {
-      en: "Undisclosed (primarily resource support)",
-      zh: "未公开（资源扶持为主）",
+      en: "¥16 universal voucher for all platforms, valid for 180 days from the date of receipt",
+      zh: "¥16 元全平台通用代金券，领取之日起 180 天内有效",
     },
     condition: {
-      en: "For tech bloggers/creators, providing traffic and resource support",
-      zh: "面向技术博主/创作者，提供流量扶持和资源护航",
-    },
-    isActive: true,
-    rel: "sponsored nofollow",
-  },
-  {
-    id: "huawei-cloud",
-    name: "华为云",
-    url: "https://activity.huaweicloud.com/cps/index.html",
-    commission: {
-      en: "Historically up to 28% (for ≤1 year plans)",
-      zh: "历史最高 28%（包周期≤1年）",
-    },
-    condition: {
-      en: "Old CPS program suspended; recommend contacting Huawei Cloud sales for new programs",
-      zh: "旧 CPS 计划已暂停，建议联系华为云商务确认是否有新计划",
+      en: "A comprehensive product matrix supporting the full-process implementation of AI applications.",
+      zh: "全场景产品矩阵，支撑 AI 应用全流程落地",
     },
     isActive: true,
     rel: "sponsored nofollow",
@@ -123,7 +93,7 @@ export const affiliatesRegistry: AffiliateItem[] = [
       en: "Affiliate page may show 404; login to dashboard for link",
       zh: "联盟页面可能显示 404；请登录控制台获取链接",
     },
-    isActive: true,
+    isActive: false,
     rel: "sponsored nofollow",
   },
   {
@@ -139,7 +109,7 @@ export const affiliatesRegistry: AffiliateItem[] = [
       en: "60-day cookie; min withdrawal $50; paid monthly",
       zh: "60 天 Cookie；最低提现 $50；月结",
     },
-    isActive: true,
+    isActive: false,
     rel: "sponsored nofollow",
   },
   {
@@ -155,16 +125,16 @@ export const affiliatesRegistry: AffiliateItem[] = [
       en: "Geared towards enterprise partnerships; requires application and review",
       zh: "偏向企业合作，需提交申请后审核",
     },
-    isActive: true,
+    isActive: false,
     rel: "sponsored nofollow",
   },
   {
     id: "vultr",
     name: "Vultr",
-    url: "https://www.vultr.com/?ref=9911427",
+    url: "https://www.vultr.com/?ref=9911428-9J",
     commission: {
-      en: "Up to $100 per new user",
-      zh: "每位新用户最高 $100",
+      en: "RReceive $300 to test out VVultr platform",
+      zh: "获得 $300 测试 Vultr 云平台",
     },
     condition: {
       en: "Referred user must be active 30+ days and spend $10–$25",
@@ -182,21 +152,21 @@ export const affiliatesRegistry: AffiliateItem[] = [
       zh: "10% 循环佣金，持续 12 个月",
     },
     platform: "Awin",
-    isActive: true,
+    isActive: false,
     rel: "sponsored nofollow",
   },
   {
     id: "railway",
     name: "Railway",
-    url: "https://railway.com/affiliate-program",
+    url: "https://railway.com?referralCode=4BEzda",
     commission: {
-      en: "15% recurring (first 12 months)",
-      zh: "15% 循环（前 12 个月）",
+      en: "Deploy anything without the complexity",
+      zh: "无需复杂性即可部署任何内容（我们的各种前/后端服务和容器）",
     },
     platform: "Direct",
     condition: {
-      en: "Referred user gets $20 credit; min withdrawal $100",
-      zh: "推荐用户可获 $20 积分；提现下限 $100",
+      en: "Connect your repo, Railway handles the rest. ",
+      zh: "连接您的代码仓库，Railway 会处理其余部分",
     },
     isActive: true,
     rel: "sponsored nofollow",
@@ -214,7 +184,7 @@ export const affiliatesRegistry: AffiliateItem[] = [
       en: "Offers Slab/Hybrid/Custom models; 90-day cookie; supports sub-affiliates",
       zh: "提供 Slab/Hybrid/Custom 三种佣金模式；90 天 Cookie；支持二级佣金",
     },
-    isActive: true,
+    isActive: false,
     rel: "sponsored nofollow",
   },
   {
@@ -230,7 +200,7 @@ export const affiliatesRegistry: AffiliateItem[] = [
       en: "New link generation method required after June 2026",
       zh: "2026 年 6 月后需用新方式获取链接",
     },
-    isActive: true,
+    isActive: false,
     rel: "sponsored nofollow",
   },
   {
@@ -246,7 +216,7 @@ export const affiliatesRegistry: AffiliateItem[] = [
       en: "Referred user gets $100 free credit, high conversion rate",
       zh: "被推荐人可获 $100 免费额度，转化率高",
     },
-    isActive: true,
+    isActive: false,
     rel: "sponsored nofollow",
   },
   {
@@ -259,7 +229,7 @@ export const affiliatesRegistry: AffiliateItem[] = [
     },
     platform: "Impact / Commission Junction",
     cookieDays: 30,
-    isActive: true,
+    isActive: false,
     rel: "sponsored nofollow",
   },
   {
@@ -275,7 +245,7 @@ export const affiliatesRegistry: AffiliateItem[] = [
       en: "Applies to Pro and Business subscriptions; 60-day cookie; min withdrawal $50; paid monthly, supports PayPal",
       zh: "适用于 Pro 和 Business 订阅；Cookie 60 天；最低提现 $50；月结，支持 PayPal",
     },
-    isActive: true,
+    isActive: false,
     rel: "sponsored nofollow",
   },
   {
@@ -291,7 +261,7 @@ export const affiliatesRegistry: AffiliateItem[] = [
       en: "Requires a Raycast account; paid via Wise; min withdrawal £50; 30-day pending period",
       zh: "需有 Raycast 账户；通过 Wise 支付；最低提现 £50；30 天待处理期",
     },
-    isActive: true,
+    isActive: false,
     rel: "sponsored nofollow",
   },
   {
@@ -307,7 +277,7 @@ export const affiliatesRegistry: AffiliateItem[] = [
       en: "Manual review takes 1–5 business days; min withdrawal $50",
       zh: "人工审核 1–5 个工作日；最低提现 $50",
     },
-    isActive: true,
+    isActive: false,
     rel: "sponsored nofollow",
   },
   {
@@ -323,7 +293,7 @@ export const affiliatesRegistry: AffiliateItem[] = [
       en: "Requires Vercel account to apply, manual review",
       zh: "只需 Vercel 账号即可申请，人工审核",
     },
-    isActive: true,
+    isActive: false,
     rel: "sponsored nofollow",
   },
   {
@@ -339,21 +309,21 @@ export const affiliatesRegistry: AffiliateItem[] = [
       en: "Must provide website URL and audience info when applying",
       zh: "申请时需填写网站 URL 和受众信息",
     },
-    isActive: true,
+    isActive: false,
     rel: "sponsored nofollow",
   },
   {
     id: "warp",
     name: "Warp",
-    url: "https://www.warp.dev",
+    url: "https://app.warp.dev/referral/3RYED4",
     commission: {
-      en: "Tiered rewards: 5 referrals = $5, 50 = $50, 100 = $100",
-      zh: "阶梯式奖励：5 次推荐 = $5，50 次 = $50，100 次 = $100",
+      en: "One of the best AI terminal tools in the world",
+      zh: "世界上最好用的 AI 终端工具之一",
     },
     platform: "Direct",
     condition: {
-      en: "International users can opt for digital gift cards",
-      zh: "国际用户可选数字礼品卡",
+      en: "Interestingly, we can directly use various top-tier models in Warp without leaving the terminal.",
+      zh: "有趣的是，我们可以直接在 Warp 中使用各种顶级模型，而不离开终端",
     },
     isActive: true,
     rel: "sponsored nofollow",
@@ -366,7 +336,7 @@ export const affiliatesRegistry: AffiliateItem[] = [
       zh: "AI 网关与可观测性平台 — 为生产环境的 LLM 部署提供企业级防护。",
     },
     url: "https://portkey.ai",
-    isActive: true,
+    isActive: false,
     rel: "noopener noreferrer",
   },
   {
@@ -377,7 +347,7 @@ export const affiliatesRegistry: AffiliateItem[] = [
       zh: "LLM 监控平台 — 极速的实时可观测性工具，单行代码即可集成。",
     },
     url: "https://www.helicone.ai",
-    isActive: true,
+    isActive: false,
     rel: "noopener noreferrer",
   },
   {
@@ -388,7 +358,7 @@ export const affiliatesRegistry: AffiliateItem[] = [
       zh: "开源 LLM 追踪工具 — 提供详细的追踪记录、成本归因和评估流水线。",
     },
     url: "https://langfuse.com",
-    isActive: true,
+    isActive: false,
     rel: "noopener noreferrer",
   },
 ];

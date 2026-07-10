@@ -334,7 +334,10 @@ const translations = {
       recommendedTools: "Recommended Tools",
       recommendedDesc:
         "Looking for real-time API observability? These tools complement our CSV-based analyzer:",
-      useCasesTitle: "Real Usage Scenarios",
+      recommendedUsingTools: "Recommended Tools We ARE USING",
+      recommendedUsingDes:
+        "We are using these tools ourselves for Development / Deployment. Check out for more details.",
+        useCasesTitle: "Real Usage Scenarios",
       useCase1Title: "Finance or ops review",
       useCase1Desc:
         "Upload the monthly export before invoice review. The dashboard highlights daily spikes, zero-cost anomalies, and which keys drove the change.",
@@ -894,6 +897,9 @@ const translations = {
       recommendedTools: "推荐工具",
       recommendedDesc:
         "需要实时 API 可观测性？以下工具可与我们的 CSV 分析器互补：",
+      recommendedUsingTools: "我们正在使用的好工具",
+      recommendedUsingDes:
+        "我们正在使用这些工具自己进行开发和部署，好用，就推荐了。",
       useCasesTitle: "典型使用场景",
       useCase1Title: "财务或运营月度复盘",
       useCase1Desc:

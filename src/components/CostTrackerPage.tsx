@@ -361,7 +361,7 @@ export function CostTrackerPage() {
         <hr style={{ borderColor: "var(--border)", marginBottom: "3rem" }} />
 
         {/* Recommended Tools (商业化模块) */}
-        <section className="mb-16">
+        <section className="mb-16">  
           <h2
             className="text-sm font-semibold mb-3"
             style={{
@@ -369,15 +369,15 @@ export function CostTrackerPage() {
               letterSpacing: "-0.01em",
             }}
           >
-            {t.costTracker.recommendedTools}
+            {t.costTracker.recommendedUsingTools}
           </h2>
           <p
             className="text-xs leading-relaxed text-pretty mb-4"
             style={{ color: "var(--text-tertiary)" }}
           >
-            {t.costTracker.recommendedDesc}
+            {t.costTracker.recommendedUsingDes}
           </p>
-          <AffiliateWall ids={["portkey", "helicone"]} />
+          <AffiliateWall ids={["vultr", "railway", "tencent-cloud", "silicon-flow", "warp"]} />
         </section>
       </div>
 
