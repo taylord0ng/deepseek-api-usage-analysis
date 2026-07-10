@@ -70,9 +70,36 @@ export default function AuthorContent() {
         <div id="team-members">
           <h2>{en.author.teamMembersTitle}</h2>
           <p>{en.author.teamMembersDesc}</p>
-          <h3>{en.author.memberPlaceholderName}</h3>
-          <p>{en.author.memberPlaceholderRole}</p>
-          <p>{en.author.memberPlaceholderDesc}</p>
+          <div>
+            {[
+              {
+                name: en.author.member1Name,
+                role: en.author.member1Role,
+                desc: en.author.member1Desc,
+              },
+              {
+                name: en.author.member2Name,
+                role: en.author.member2Role,
+                desc: en.author.member2Desc,
+              },
+              {
+                name: en.author.member3Name,
+                role: en.author.member3Role,
+                desc: en.author.member3Desc,
+              },
+              {
+                name: en.author.member4Name,
+                role: en.author.member4Role,
+                desc: en.author.member4Desc,
+              },
+            ].map((member, i) => (
+              <div key={i}>
+                <h3>{member.name}</h3>
+                <p>{member.role}</p>
+                <p>{member.desc}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -133,9 +160,36 @@ export default function AuthorContent() {
         <div id="team-members">
           <h2>{zh.author.teamMembersTitle}</h2>
           <p>{zh.author.teamMembersDesc}</p>
-          <h3>{zh.author.memberPlaceholderName}</h3>
-          <p>{zh.author.memberPlaceholderRole}</p>
-          <p>{zh.author.memberPlaceholderDesc}</p>
+          <div>
+            {[
+              {
+                name: zh.author.member1Name,
+                role: zh.author.member1Role,
+                desc: zh.author.member1Desc,
+              },
+              {
+                name: zh.author.member2Name,
+                role: zh.author.member2Role,
+                desc: zh.author.member2Desc,
+              },
+              {
+                name: zh.author.member3Name,
+                role: zh.author.member3Role,
+                desc: zh.author.member3Desc,
+              },
+              {
+                name: zh.author.member4Name,
+                role: zh.author.member4Role,
+                desc: zh.author.member4Desc,
+              },
+            ].map((member, i) => (
+              <div key={i}>
+                <h3>{member.name}</h3>
+                <p>{member.role}</p>
+                <p>{member.desc}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
     </noscript>
