@@ -463,14 +463,14 @@ export function buildArticleToolsMetadata(locale: Locale): Metadata {
  */
 export function buildArticleOpenAiMetadata(locale: Locale): Metadata {
   return buildBlogArticleMetadata(locale, {
-    pathname: "/blog/openai-vs-deepseek-cost-comparison",
+    pathname: "/blog/openai-claude-vs-deepseek-cost-comparison",
     title: {
       en: "OpenAI GPT vs Claude vs DeepSeek V4 Pro: A Developer's Cost-Benefit Analysis",
       zh: "OpenAI GPT vs Claude vs DeepSeek V4 Pro：开发者成本收益分析",
     },
     description: {
-      en: "Hard numbers on API pricing differences — input costs can differ by 270×. We break down when each model makes economic sense and how to migrate smoothly.",
-      zh: "用硬数据比较 API 定价差异。输入成本最高可相差 270 倍，并分析各模型在什么场景下更具经济性，以及如何平滑迁移。",
+      en: "Hard numbers on API pricing differences. We break down when DeepSeek, OpenAI GPT, or Anthropic Claude makes economic sense and how to migrate smoothly.",
+      zh: "用硬数据比较 API 定价差异。分析 DeepSeek、OpenAI GPT 与 Anthropic Claude 各自在什么场景下更具经济性，以及如何平滑迁移。",
     },
     keywords: {
       en: [

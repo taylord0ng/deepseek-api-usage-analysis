@@ -43,7 +43,7 @@ function getLocalizedArticleMeta(
       title: t.blogIndex.article2Title,
       description: t.blogIndex.article2Desc,
     },
-    "openai-vs-deepseek-cost-comparison": {
+    "openai-claude-vs-deepseek-cost-comparison": {
       title: t.blogIndex.article3Title,
       description: t.blogIndex.article3Desc,
     },

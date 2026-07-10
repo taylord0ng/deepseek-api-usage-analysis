@@ -8,7 +8,7 @@ export const en: ArticleContent = {
         {
           type: "p",
           content:
-            "Choosing an LLM provider in 2026 is as much an economic decision as a technical one. With DeepSeek V4 Pro delivering GPT-4-class reasoning at a fraction of the cost, and OpenAI pushing the frontier of agentic capabilities, developers face a real trade-off. Here's the data to help you decide.",
+            "Choosing an LLM provider in 2026 is as much an economic decision as a technical one. With DeepSeek V4 Pro delivering flagship-level reasoning at a fraction of the cost, and OpenAI GPT and Anthropic Claude pushing the frontier of agentic capabilities, developers face a real trade-off. Here's the data to help you decide.",
         },
       ],
     },
@@ -38,7 +38,7 @@ export const en: ArticleContent = {
         {
           type: "p",
           content:
-            "<strong>OpenAI</strong> pushes further on agentic tool use and complex multi-step reasoning. For applications where correctness is absolutely critical — legal document analysis, medical coding, financial compliance — the premium may be justified. But for the vast majority of developer use cases (code generation, content summarization, data extraction), DeepSeek V4 Pro is more than capable.",
+            "<strong>OpenAI GPT</strong> and <strong>Anthropic Claude</strong> push further on agentic tool use, nuanced writing, and complex multi-step reasoning. For applications where correctness and sophisticated language generation are absolutely critical — legal document analysis, medical coding, financial compliance — the premium may be justified. But for the vast majority of developer use cases (code generation, content summarization, data extraction), DeepSeek V4 Pro is more than capable.",
         },
       ],
     },
@@ -48,15 +48,15 @@ export const en: ArticleContent = {
         {
           type: "p",
           content:
-            "If you're considering migrating from OpenAI to DeepSeek (or running both in parallel), here's a practical approach:",
+            "If you're considering migrating from OpenAI or Claude to DeepSeek (or running them in parallel), here's a practical approach:",
         },
         {
           type: "ol",
           items: [
-            "<strong>Use an AI Gateway.</strong> Portkey and Helicone both support multi-provider routing. Configure them to send a percentage of traffic to DeepSeek while keeping OpenAI as fallback.",
+            "<strong>Use an AI Gateway.</strong> Portkey and Helicone both support multi-provider routing. Configure them to send a percentage of traffic to DeepSeek while keeping OpenAI or Claude as fallback.",
             "<strong>Start with non-critical workloads.</strong> Migrate internal tools, data extraction pipelines, and summarization tasks first. Keep customer-facing chat on your current provider until you've validated DeepSeek's performance on your specific prompts.",
             'Monitor cache hit rates. DeepSeek\'s cost advantage is amplified by effective caching. Use our <a href="/">free dashboard</a> to track cache hit rates per key and optimize your prompt structure.',
-            "<strong>Compare real costs, not list prices.</strong> Your effective cost depends on your cache hit rate, input/output ratio, and thinking token usage. Upload CSVs from both providers to see actual per-request costs side by side.",
+            "<strong>Compare real costs, not list prices.</strong> Your effective cost depends on your cache hit rate, input/output ratio, and thinking token usage. Upload CSVs from your providers to see actual per-request costs side by side.",
           ],
         },
       ],
@@ -87,13 +87,13 @@ export const en: ArticleContent = {
     rows: [
       { model: "DeepSeek V4 Flash", modelColor: "var(--positive)", input: "$0.14", output: "$0.29", cacheHit: "$0.003", cacheHitColor: "var(--positive)", notes: "—" },
       { model: "DeepSeek V4 Pro", input: "$0.43", output: "$0.87", cacheHit: "$0.004", notes: "—" },
-      { model: "GPT-5.5", input: "$15.00", inputColor: "var(--danger)", output: "$60.00", outputColor: "var(--danger)", cacheHit: "$7.50", notes: "—" },
-      { model: "GPT-5.4", input: "$5.00", inputColor: "var(--danger)", output: "$15.00", outputColor: "var(--danger)", cacheHit: "$2.50", notes: "—" },
-      { model: "GPT-5.4 mini", input: "$0.15", output: "$0.60", cacheHit: "$0.075", notes: "—" },
-      { model: "Claude Fable 5", input: "$0.80", output: "$4.00", cacheHit: "$0.08", notes: "—" },
-      { model: "Claude Opus 4.8", input: "$15.00", inputColor: "var(--danger)", output: "$75.00", outputColor: "var(--danger)", cacheHit: "$3.75", notes: "—" },
-      { model: "Claude Sonnet 5", input: "$3.00", inputColor: "var(--danger)", output: "$15.00", outputColor: "var(--danger)", cacheHit: "$0.30", notes: "—" },
-      { model: "Claude Haiku 4.5", input: "$0.25", output: "$1.25", cacheHit: "$0.025", notes: "—" },
+      { model: "GPT-5.5", input: "$5.00", inputColor: "var(--danger)", output: "$30.00", outputColor: "var(--danger)", cacheHit: "$0.50", notes: "—" },
+      { model: "GPT-5.4", input: "$2.50", inputColor: "var(--danger)", output: "$15.00", outputColor: "var(--danger)", cacheHit: "$0.25", notes: "—" },
+      { model: "GPT-5.4 mini", input: "$0.75", output: "$4.50", cacheHit: "$0.07", notes: "—" },
+      { model: "Claude Fable 5", input: "$10.00", inputColor: "var(--danger)", output: "$50.00", outputColor: "var(--danger)", cacheHit: "$1.00", notes: "—" },
+      { model: "Claude Opus 4.8", input: "$5.00", inputColor: "var(--danger)", output: "$25.00", outputColor: "var(--danger)", cacheHit: "$0.50", notes: "—" },
+      { model: "Claude Sonnet 5", input: "$2.00", inputColor: "var(--danger)", output: "$10.00", outputColor: "var(--danger)", cacheHit: "$0.20", notes: "—" },
+      { model: "Claude Haiku 4.5", input: "$1.00", output: "$5.00", cacheHit: "$0.10", notes: "—" },
     ],
   },
 };
@@ -106,7 +106,7 @@ export const zh: ArticleContent = {
         {
           type: "p",
           content:
-            "在 2026 年选择 LLM 供应商，既是技术决策，也是经济决策。DeepSeek V4 Pro 以极低的成本提供媲美 GPT-4 级别的推理能力，而 OpenAI 则在 Agent 能力上更进一步——开发者面临真实的取舍。以下是帮助你决策的数据。",
+            "在 2026 年选择 LLM 供应商，既是技术决策，也是经济决策。DeepSeek V4 Pro 以极低的成本提供媲美旗舰大模型的推理能力，而 OpenAI GPT 和 Anthropic Claude 则在 Agent 能力和复杂文本生成上更进一步——开发者面临真实的取舍。以下是帮助你决策的数据。",
         },
       ],
     },
@@ -136,7 +136,7 @@ export const zh: ArticleContent = {
         {
           type: "p",
           content:
-            "<strong>OpenAI</strong> 在工具使用和复杂多步推理方面更进一步。对于正确性至关重要的应用——法律文件分析、医疗编码、金融合规——这种溢价可能是值得的。但对绝大多数开发者场景（代码生成、内容摘要、数据抽取），DeepSeek V4 Pro 已绰绰有余。",
+            "<strong>OpenAI GPT</strong> 与 <strong>Anthropic Claude</strong> 在工具使用、细腻的文本生成和复杂多步推理方面更进一步。对于正确性和语言表达至关重要的应用——法律文件分析、医疗编码、金融合规——这种溢价可能是值得的。但对绝大多数开发者场景（代码生成、内容摘要、数据抽取），DeepSeek V4 Pro 已绰绰有余。",
         },
       ],
     },
@@ -146,15 +146,15 @@ export const zh: ArticleContent = {
         {
           type: "p",
           content:
-            "如果你正在考虑从 OpenAI 迁移到 DeepSeek（或两者并行运行），以下是一个实操方案：",
+            "如果你正在考虑从 OpenAI 或 Claude 迁移到 DeepSeek（或多模型并行运行），以下是一个实操方案：",
         },
         {
           type: "ol",
           items: [
-            "<strong>使用 AI 网关。</strong> Portkey 和 Helicone 都支持多供应商路由。将它们配置为将一部分流量发送到 DeepSeek，同时保留 OpenAI 作为回退方案。",
+            "<strong>使用 AI 网关。</strong> Portkey 和 Helicone 都支持多供应商路由。将它们配置为将一部分流量发送到 DeepSeek，同时保留 OpenAI 或 Claude 作为回退方案。",
             "<strong>先从非关键负载开始。</strong>优先迁移内部工具、数据抽取流水线和摘要任务。在验证 DeepSeek 在你具体 Prompt 上的表现之前，保持面向客户的对话在现有供应商上。",
             '<strong>监控缓存命中率。</strong> DeepSeek 的成本优势在有效缓存的加持下更为显著。使用我们的<a href="/">免费仪表盘</a>追踪各 Key 的缓存命中率并优化 Prompt 结构。',
-            "<strong>对比实际成本而不是标价。</strong>你的实际成本取决于缓存命中率、输入/输出比例和思考 Token 的使用量。上传两家供应商的 CSV 数据，查看每次请求的真实成本对比。",
+            "<strong>对比实际成本而不是标价。</strong>你的实际成本取决于缓存命中率、输入/输出比例和思考 Token 的使用量。上传不同供应商的账单数据，查看每次请求的真实成本对比。",
           ],
         },
       ],
@@ -185,13 +185,13 @@ export const zh: ArticleContent = {
     rows: [
       { model: "DeepSeek V4 Flash", modelColor: "var(--positive)", input: "$0.14", output: "$0.29", cacheHit: "$0.003", cacheHitColor: "var(--positive)", notes: "—" },
       { model: "DeepSeek V4 Pro", input: "$0.43", output: "$0.87", cacheHit: "$0.004", notes: "—" },
-      { model: "GPT-5.5", input: "$15.00", inputColor: "var(--danger)", output: "$60.00", outputColor: "var(--danger)", cacheHit: "$7.50", notes: "—" },
-      { model: "GPT-5.4", input: "$5.00", inputColor: "var(--danger)", output: "$15.00", outputColor: "var(--danger)", cacheHit: "$2.50", notes: "—" },
-      { model: "GPT-5.4 mini", input: "$0.15", output: "$0.60", cacheHit: "$0.075", notes: "—" },
-      { model: "Claude Fable 5", input: "$0.80", output: "$4.00", cacheHit: "$0.08", notes: "—" },
-      { model: "Claude Opus 4.8", input: "$15.00", inputColor: "var(--danger)", output: "$75.00", outputColor: "var(--danger)", cacheHit: "$3.75", notes: "—" },
-      { model: "Claude Sonnet 5", input: "$3.00", inputColor: "var(--danger)", output: "$15.00", outputColor: "var(--danger)", cacheHit: "$0.30", notes: "—" },
-      { model: "Claude Haiku 4.5", input: "$0.25", output: "$1.25", cacheHit: "$0.025", notes: "—" },
+      { model: "GPT-5.5", input: "$5.00", inputColor: "var(--danger)", output: "$30.00", outputColor: "var(--danger)", cacheHit: "$0.50", notes: "—" },
+      { model: "GPT-5.4", input: "$2.50", inputColor: "var(--danger)", output: "$15.00", outputColor: "var(--danger)", cacheHit: "$0.25", notes: "—" },
+      { model: "GPT-5.4 mini", input: "$0.75", output: "$4.50", cacheHit: "$0.07", notes: "—" },
+      { model: "Claude Fable 5", input: "$10.00", inputColor: "var(--danger)", output: "$50.00", outputColor: "var(--danger)", cacheHit: "$1.00", notes: "—" },
+      { model: "Claude Opus 4.8", input: "$5.00", inputColor: "var(--danger)", output: "$25.00", outputColor: "var(--danger)", cacheHit: "$0.50", notes: "—" },
+      { model: "Claude Sonnet 5", input: "$2.00", inputColor: "var(--danger)", output: "$10.00", outputColor: "var(--danger)", cacheHit: "$0.20", notes: "—" },
+      { model: "Claude Haiku 4.5", input: "$1.00", output: "$5.00", cacheHit: "$0.10", notes: "—" },
     ],
   },
 };

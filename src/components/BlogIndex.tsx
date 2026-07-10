@@ -26,7 +26,7 @@ export default function BlogIndex() {
     {
       title: t.blogIndex.article3Title,
       description: t.blogIndex.article3Desc,
-      slug: "openai-vs-deepseek-cost-comparison",
+      slug: "openai-claude-vs-deepseek-cost-comparison",
       tags: t.blogIndex.article3Tags.split(", "),
     },
   ];

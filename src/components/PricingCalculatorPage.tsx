@@ -437,7 +437,7 @@ export function PricingCalculatorPage() {
                 </button>
               </div>
               <Link
-                href={buildLocalePath("/blog/openai-vs-deepseek-cost-comparison", locale)}
+                href={buildLocalePath("/blog/openai-claude-vs-deepseek-cost-comparison", locale)}
                 className="text-xs font-medium hover:underline inline-flex items-center gap-1"
                 style={{ color: "var(--accent)" }}
               >

@@ -38,7 +38,7 @@ src/
 │   │   ├── page.tsx                    # /blog article index: 3-card grid with tags/descriptions
 │   │   ├── deepseek-context-caching-guide/page.tsx    # Blog article 1: Context caching deep-dive
 │   │   ├── deepseek-cost-optimization-tools/page.tsx  # Blog article 2: Top 5 tools comparison
-│   │   └── openai-vs-deepseek-cost-comparison/page.tsx # Blog article 3: OpenAI vs DeepSeek pricing
+│   │   └── openai-claude-vs-deepseek-cost-comparison/page.tsx # Blog article 3: OpenAI vs Claude vs DeepSeek pricing
 │   ├── author/
 │   │   └── page.tsx          # /author route: generates independent SEO metadata (canonical, OG, Twitter), renders <AuthorPage />
 │   ├── globals.css          # Tailwind v4 + @font-face Hubot Sans + CSS variables + reveal/accordion + base styles

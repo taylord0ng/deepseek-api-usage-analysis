@@ -296,17 +296,17 @@ const translations = {
         "The Ultimate Guide to DeepSeek API Context Caching (2026)",
       article1Desc:
         "Learn how DeepSeek's prefix-matching disk caching works, why your cache hit rate might be lower than expected, and 5 prompt engineering techniques to maximize savings.",
-      article1Tags: "Caching, Cost Optimization, DeepSeek",
+      article1Tags: "Caching, Cost Optimization, DeepSeek, Token Cost",
       article2Title:
         "Top 5 DeepSeek API Cost Optimization & Observability Tools",
       article2Desc:
         "A comprehensive comparison of the best tools for monitoring and optimizing DeepSeek API costs — from real-time observability platforms to privacy-first CSV analyzers.",
-      article2Tags: "Tools, Comparison, Cost Optimization",
+      article2Tags: "Tools, Comparison, Cost Optimization, DeepSeek, Token Cost",
       article3Title:
         "OpenAI GPT vs Claude vs DeepSeek V4 Pro: A Developer's Cost-Benefit Analysis",
       article3Desc:
         "Hard numbers on API pricing differences — input costs can differ by 270×. We break down when each model makes economic sense and how to migrate smoothly.",
-      article3Tags: "Comparison, Pricing, OpenAI",
+      article3Tags: "Comparison, Pricing, OpenAI, Claude, GPT, Anthropic",
     },
     costTracker: {
       pageTitle: "DeepSeek API Cost Tracker",
@@ -856,17 +856,17 @@ const translations = {
         "DeepSeek API 上下文缓存终极指南（2026）",
       article1Desc:
         "了解 DeepSeek 前缀匹配磁盘缓存的运作原理、缓存命中率偏低的原因，以及 5 个提升缓存命中率的 Prompt 工程技巧。",
-      article1Tags: "缓存, 成本优化, DeepSeek",
+      article1Tags: "缓存, 成本优化, DeepSeek, Token成本",
       article2Title:
         "Top 5 DeepSeek API 成本优化与可观测性工具横评",
       article2Desc:
         "深度盘点主流 DeepSeek API 监控与优化工具——从实时可观测性平台到隐私优先的 CSV 分析器，全面对比。",
-      article2Tags: "工具, 对比, 成本优化",
+      article2Tags: "工具, 对比, 成本优化, DeepSeek, Token成本",
       article3Title:
         "OpenAI GPT vs Claude vs DeepSeek V4 Pro：开发者成本收益分析",
       article3Desc:
         "硬核 API 定价数据对比——输入成本差距可达 270 倍。分析各模型的经济适用场景，以及如何平滑迁移。",
-      article3Tags: "对比, 定价, OpenAI",
+      article3Tags: "对比, 定价, OpenAI, Claude, GPT, Anthropic",
     },
     costTracker: {
       pageTitle: "DeepSeek API 费用追踪器",

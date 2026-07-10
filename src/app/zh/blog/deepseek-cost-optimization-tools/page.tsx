@@ -59,7 +59,7 @@ export default function ZhArticleToolsPage() {
         }}
         nextPost={{
           title: "OpenAI GPT vs Claude vs DeepSeek V4 Pro: A Developer's Cost-Benefit Analysis",
-          slug: "openai-vs-deepseek-cost-comparison",
+          slug: "openai-claude-vs-deepseek-cost-comparison",
         }}
       />
     </>

@@ -535,7 +535,7 @@ If you have questions about these Terms of Use, please open an issue on our GitH
 - [Blog](https://deepseek-usage.xyz/blog) — DeepSeek API cost optimization articles and developer guides
 - [Blog: Context Caching Guide](https://deepseek-usage.xyz/blog/deepseek-context-caching-guide) — Deep dive into DeepSeek prefix-matching disk caching
 - [Blog: Cost Optimization Tools](https://deepseek-usage.xyz/blog/deepseek-cost-optimization-tools) — Top 5 DeepSeek API cost optimization & observability tools
-- [Blog: OpenAI vs DeepSeek](https://deepseek-usage.xyz/blog/openai-vs-deepseek-cost-comparison) — OpenAI GPT vs Claude vs DeepSeek V4 Pro cost-benefit analysis
+- [Blog: OpenAI vs DeepSeek](https://deepseek-usage.xyz/blog/openai-claude-vs-deepseek-cost-comparison) — OpenAI GPT vs Claude vs DeepSeek V4 Pro cost-benefit analysis
 - [User Guide / 用户操作手册](https://deepseek-usage.xyz/guideline) — Bilingual step-by-step documentation with screenshots
 - [Changelog / 更新日志](https://deepseek-usage.xyz/changelog) — Complete version history
 - [Privacy Policy / 隐私政策](https://deepseek-usage.xyz/privacy) — Bilingual legal text

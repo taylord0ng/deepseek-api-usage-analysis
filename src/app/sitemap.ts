@@ -101,7 +101,7 @@ const ROUTES: SitemapRouteConfig[] = [
     priority: 0.6,
   },
   {
-    pathname: "/blog/openai-vs-deepseek-cost-comparison",
+    pathname: "/blog/openai-claude-vs-deepseek-cost-comparison",
     lastModified: buildDate,
     changeFrequency: "monthly",
     priority: 0.6,
