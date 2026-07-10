@@ -50,6 +50,44 @@ interface VersionEntry {
 /** 所有版本的更新日志，按版本倒序排列 */
 const CHANGELOG_DATA: VersionEntry[] = [
   {
+    version: "v0.6.4",
+    date: "2026-07-10",
+    added: [
+      {
+        en: "Author & Team page comprehensively revamped — replaced placeholder team section with 4 real member profiles (Gavin Chen, Lindsay Lin, Angela Lee, Simon L.) each with role, description, and initial avatar in a responsive CSS Grid layout; page title updated to \"Author & Team\" with refined bilingual copy throughout the author page, member bios, and verification sections to reflect the expanded team scope.",
+        zh: "作者团队页面全面重构 — 用 4 位真实成员简介（Gavin Chen、Lindsay Lin、Angela Lee、Simon L.）替换原有的占位内容，采用响应式 CSS Grid 布局展示每位成员的角色、描述和首字母头像；页面标题更新为「作者团队」，作者页、成员简介和验证区域的英中双语内容全面优化以反映扩展的团队范围。",
+      },
+      {
+        en: "Tencent Cloud affiliate program added to `affiliates.ts` registry — new referral link integrated into the AffiliateWall component across AuthorPage and CostTrackerPage, alongside expanded developer infrastructure vendor coverage (Vultr, Railway, Silicon Flow, Warp) with updated i18n labels \"Recommended Tools We ARE USING\" / \"我们正在使用的好工具\".",
+        zh: "腾讯云联盟推广新增至 `affiliates.ts` 注册表 — 新推荐链接集成到 AuthorPage 和 CostTrackerPage 的 AffiliateWall 组件，同步扩展开发者基础设施服务商覆盖（Vultr、Railway、硅基流动、Warp），新增双语标签「Recommended Tools We ARE USING」/「我们正在使用的好工具」。",
+      },
+      {
+        en: "og-image.png static asset added to `/public` — 1200×630 social preview image for OpenGraph/Twitter cards, enhancing link previews when the site URL is shared on social media platforms.",
+        zh: "og-image.png 静态资源添加至 `/public` — 1200×630 社交媒体预览图片，用于 OpenGraph/Twitter 卡片，增强网站在社交平台分享时的链接预览效果。",
+      },
+    ],
+    improved: [
+      {
+        en: "Blog article cost comparison data refreshed — updated GPT-5.5 ($15.00→$5.00), GPT-5.4 ($5.00→$2.50), GPT-5.4 mini ($0.15→$0.75), Claude Fable 5 ($0.80→$10.00), Opus 4.8 ($15.00→$5.00), Sonnet 5 ($3.00→$2.00), and Haiku 4.5 ($0.25→$1.00) pricing across all comparison tables in the OpenAI vs DeepSeek blog article. Article narrative updated to include Anthropic Claude alongside OpenAI GPT and DeepSeek throughout the migration and cost-benefit analysis sections.",
+        zh: "博客文章成本对比数据更新 — 更新 OpenAI vs DeepSeek 博客文章中所有对比表格的 GPT-5.5（$15.00→$5.00）、GPT-5.4（$5.00→$2.50）、GPT-5.4 mini（$0.15→$0.75）、Claude Fable 5（$0.80→$10.00）、Opus 4.8（$15.00→$5.00）、Sonnet 5（$3.00→$2.00）和 Haiku 4.5（$0.25→$1.00）定价数据。文章迁移指南和成本收益分析章节的叙事已更新为涵盖 Anthropic Claude、OpenAI GPT 和 DeepSeek 三家供应商。",
+      },
+      {
+        en: "Affiliate link system streamlined — `affiliates.ts` registry trimmed and reorganized with updated vendor categories (`serverProviders`, `domainRegistrars`, `aiGateways`); CostTrackerPage recommended tools section switched from Portkey/Helicone to developer infrastructure tools (Vultr, Railway, Tencent Cloud, Silicon Flow, Warp) with new descriptive labels reflecting real usage context.",
+        zh: "联盟链接系统精简 — `affiliates.ts` 注册表重新整理，更新服务商分类（`serverProviders`、`domainRegistrars`、`aiGateways`）；CostTrackerPage 推荐工具区从 Portkey/Helicone 切换为开发者基础设施工具（Vultr、Railway、腾讯云、硅基流动、Warp），新增描述性标签以反映实际使用场景。",
+      },
+      {
+        en: "Blog article tag metadata enriched — added \"Token Cost\", \"Claude\", \"GPT\", and \"Anthropic\" tags to blog index article cards for improved SEO keyword coverage and search relevance across both English and Chinese locales.",
+        zh: "博客文章标签元数据增强 — 为博客首页文章卡片添加「Token成本」「Claude」「GPT」「Anthropic」等标签（中英双语），提升 SEO 关键词覆盖和搜索相关性。",
+      },
+    ],
+    fixed: [
+      {
+        en: "Blog comparison article URL normalization — sitemap, route metadata (`routeMetadata.ts`), and article page paths corrected from `/blog/openai-vs-deepseek-cost-comparison` to `/blog/openai-claude-vs-deepseek-cost-comparison` to accurately reflect the three-provider comparison scope (OpenAI GPT + Anthropic Claude + DeepSeek).",
+        zh: "博客对比文章 URL 规范化 — sitemap、路由元数据（`routeMetadata.ts`）和文章页面路径从 `/blog/openai-vs-deepseek-cost-comparison` 修正为 `/blog/openai-claude-vs-deepseek-cost-comparison`，准确反映三家供应商对比的文章内容范围（OpenAI GPT + Anthropic Claude + DeepSeek）。",
+      },
+    ],
+  },
+  {
     version: "v0.6.3",
     date: "2026-07-09",
     added: [

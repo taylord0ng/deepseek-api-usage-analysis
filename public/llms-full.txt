@@ -1,6 +1,6 @@
 # DeepSeek API Usage Analytics Dashboard — Full Content
 
-> A free, privacy-first analytics tool for DeepSeek API users. Drop your monthly ZIP exports or CSV files and get instant cost analytics, cache analysis, and per-key breakdowns. Open source (MIT), bilingual (EN/中文), entirely browser-side. No account, no upload, no database. Built by Gavin Chen & the MindRose team. Version 0.6.3.
+> A free, privacy-first analytics tool for DeepSeek API users. Drop your monthly ZIP exports or CSV files and get instant cost analytics, cache analysis, and per-key breakdowns. Open source (MIT), bilingual (EN/中文), entirely browser-side. No account, no upload, no database. Built by Gavin Chen & the MindRose team. Version 0.6.4.
 
 ---
 
@@ -266,6 +266,21 @@ If you have questions about these Terms of Use, please open an issue on our GitH
 
 ### English
 
+**v0.6.4** (2026-07-10)
+
+*Added*
+- Author & Team page comprehensively revamped — replaced placeholder team section with 4 real member profiles (Gavin Chen, Lindsay Lin, Angela Lee, Simon L.) each with role, description, and initial avatar; page title updated to "Author & Team" with refined bilingual copy.
+- Tencent Cloud affiliate program added to `affiliates.ts` registry — new referral links integrated into AffiliateWall component on both AuthorPage and CostTrackerPage for broader vendor coverage.
+- og-image.png static asset added to `/public` — social preview image for OpenGraph/Twitter cards at 1200×630.
+
+*Improved*
+- Blog article cost comparison data refreshed — updated GPT-5.5, GPT-5.4, GPT-5.4 mini, Claude Fable 5, Opus 4.8, Sonnet 5, and Haiku 4.5 pricing across all comparison tables; article narrative updated to include Anthropic Claude alongside OpenAI GPT.
+- Affiliate link system streamlined — `affiliates.ts` registry trimmed and reorganized with updated vendor categories; CostTrackerPage recommended tools section switched from Portkey/Helicone to developer infrastructure tools (Vultr, Railway, Tencent Cloud, Silicon Flow, Warp) with new i18n labels ("Recommended Tools We ARE USING").
+- Blog article tag metadata enriched — added "Token Cost", "Claude", "GPT", and "Anthropic" tags to article cards for improved SEO keyword coverage.
+
+*Fixed*
+- Blog comparison article URL normalization — sitemap, route metadata, and article page paths corrected from `/blog/openai-vs-deepseek-cost-comparison` to `/blog/openai-claude-vs-deepseek-cost-comparison` to match the actual article content scope.
+
 **v0.6.3** (2026-07-09)
 
 *Added*
@@ -396,6 +411,21 @@ If you have questions about these Terms of Use, please open an issue on our GitH
 ---
 
 ### 中文
+
+**v0.6.4**（2026-07-10）
+
+*新增*
+- 作者团队页面全面重构 — 用 4 位真实成员简介（Gavin Chen、Lindsay Lin、Angela Lee、Simon L.）替换占位内容，每位成员展示角色、描述和首字母头像；页面标题更新为「作者团队」，双语文案优化。
+- 腾讯云联盟推广新增至 `affiliates.ts` 注册表 — 新推荐链接集成到 AuthorPage 和 CostTrackerPage 的 AffiliateWall 组件，扩展服务商覆盖范围。
+- og-image.png 静态资源添加至 `/public` — 1200×630 社交媒体预览图片，用于 OpenGraph/Twitter 卡片。
+
+*改进*
+- 博客文章成本对比数据更新 — GPT-5.5、GPT-5.4、GPT-5.4 mini、Claude Fable 5、Opus 4.8、Sonnet 5、Haiku 4.5 全系定价更新；文章叙事从单一 OpenAI 角度扩展至包含 Anthropic Claude 在内。
+- 联盟链接系统精简 — `affiliates.ts` 注册表重新组织，更新服务商分类；CostTrackerPage 推荐工具区从 Portkey/Helicone 切换为开发者基础设施工具（Vultr、Railway、腾讯云、硅基流动、Warp），新增双语标签「我们正在使用的好工具」。
+- 博客文章标签元数据增强 — 为文章卡片添加「Token成本」「Claude」「GPT」「Anthropic」等标签，提升 SEO 关键词覆盖。
+
+*修复*
+- 博客对比文章 URL 规范化 — sitemap、路由元数据和文章页面路径从 `/blog/openai-vs-deepseek-cost-comparison` 修正为 `/blog/openai-claude-vs-deepseek-cost-comparison`，与文章实际内容范围一致。
 
 **v0.6.3**（2026-07-09）
 

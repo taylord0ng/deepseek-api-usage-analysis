@@ -44,7 +44,7 @@ If you also analyze Agnes AI usage, check the companion open-source project in t
 - **Sister project cross-linking** — Centralized `sisterProjects.ts` module manages cross-links between the two sibling tools in the "API Usage Analyzer Series" product family (DeepSeek + Agnes). All cross-site URLs flow through a single config source with UTM tracking (`utm_source=agnes_site`, `utm_medium=referral`, per-location `utm_campaign`). Sister project links appear in the TitleBar (pill button), LandingPage (dedicated section), FooterBar ("Related Tools" row), and Organization JSON-LD schema.
 - **Landing page** — Complete pre-upload landing with theme-aware background images, Sister Project section (Agnes AI cross-link with tracked UTM URLs), How It Works steps, accordion FAQ (9 items, including file size limits and project grouping), expanded multi-section About (project origin, privacy & tech, team, contact with email copy & social links + "View Changelog →" link), scroll-reveal animations, anchor-linkable sections with deferred rendering for performance
 - **User Guide** — Comprehensive bilingual user manual at `/guideline` with annotated screenshots, interactive table of contents, step-by-step dashboard navigation, CSV export instructions, chart interpretation guide, and troubleshooting section
-- **Changelog** — Dedicated `/changelog` page with complete version history (v0.1.0–v0.6.3) organized by category (Added/Improved/Fixed/Dependencies) with color-coded dots; Apple-minimalist bilingual design matching privacy/terms pages, JSON-LD WebPage schema, independent SEO metadata, linked from TitleBar, FooterBar, and LandingPage
+- **Changelog** — Dedicated `/changelog` page with complete version history (v0.1.0–v0.6.4) organized by category (Added/Improved/Fixed/Dependencies) with color-coded dots; Apple-minimalist bilingual design matching privacy/terms pages, JSON-LD WebPage schema, independent SEO metadata, linked from TitleBar, FooterBar, and LandingPage
 - **Privacy Policy & Terms** — `/privacy` and `/terms` pages with bilingual legal content, independent SEO metadata (canonical, OpenGraph, Twitter), JSON-LD WebPage schemas, and Apple-minimalist legal-text layout; linked from footer on every page
 - **Analytics** — Optional Google Analytics 4 integration via `NEXT_PUBLIC_GA_ID` env var; zero overhead when unset. Tracks page views, file uploads, share card generations, tab switches, and language switches — zero CSV data ever tracked.
 - **Enhanced SEO** — Twitter `summary_large_image` card with 1200×630 OG image, `Organization` JSON-LD schema for Google Knowledge Panel, expanded `BreadcrumbList` with all sub-pages, differentiated sitemap `lastModified` dates, `keywords` + `author` + `twitter:site`/`creator` meta tags on all pages
@@ -129,7 +129,7 @@ src/
 │   ├── GuidelinePage.tsx    # Full interactive user guide (bilingual, annotated screenshots, table of contents, scroll-reveal)
 │   ├── PrivacyPage.tsx      # Privacy policy page (bilingual 7-section legal text, JSON-LD WebPage schema, GitHub source links)
 │   ├── TermsPage.tsx        # Terms of use page (bilingual 8-section legal text, JSON-LD WebPage schema, MIT License reference)
-│   ├── ChangelogPage.tsx     # Changelog page (complete version history v0.1.0–v0.6.3, entries by category with colored dots, JSON-LD WebPage schema, bilingual)
+│   ├── ChangelogPage.tsx     # Changelog page (complete version history v0.1.0–v0.6.4, entries by category with colored dots, JSON-LD WebPage schema, bilingual)
 │   ├── CostTrackerPage.tsx    # SEO landing: DeepSeek API Cost Tracker (features + affiliate recommendations)
 │   ├── CacheAnalyzerPage.tsx  # SEO landing: DeepSeek Cache Hit Rate Analyzer (caching education + MindRose CTA)
 │   ├── PricingCalculatorPage.tsx # SEO landing: DeepSeek API Pricing Calculator (interactive slider + competitor table + Vultr CTA)
@@ -227,6 +227,24 @@ The repo includes `vercel.json` with pre-configured security headers and caching
 - **Caching**: immutable caching for `/_next/static` and `/fonts` (1 year), stale-while-revalidate for `/landing` and `/guideline` images (1 week)
 
 ## Changelog
+
+### v0.6.4
+
+**Added:**
+
+- Author & Team page comprehensively revamped — replaced placeholder team section with 4 real member profiles (Gavin Chen, Lindsay Lin, Angela Lee, Simon L.) each with role, description, and initial avatar in a responsive CSS Grid layout; page title updated to "Author & Team" with refined bilingual copy across profile, bio, verification, and member sections.
+- Tencent Cloud affiliate program added to `affiliates.ts` registry — new referral link integrated into the `AffiliateWall` component across AuthorPage and CostTrackerPage, alongside expanded developer infrastructure vendor coverage (Vultr, Railway, Silicon Flow, Warp) with new i18n labels ("Recommended Tools We ARE USING" / "我们正在使用的好工具").
+- `og-image.png` static asset added to `/public` — 1200×630 social preview image for OpenGraph/Twitter cards, enhancing link previews when shared on social media platforms.
+
+**Improved:**
+
+- Blog article cost comparison data refreshed — updated pricing for GPT-5.5, GPT-5.4, GPT-5.4 mini, Claude Fable 5, Opus 4.8, Sonnet 5, and Haiku 4.5 across all comparison tables in the OpenAI vs DeepSeek blog article. Article narrative updated to include Anthropic Claude alongside OpenAI GPT and DeepSeek throughout the migration guide and cost-benefit analysis sections.
+- Affiliate link system streamlined — `affiliates.ts` registry trimmed and reorganized with updated vendor categories; CostTrackerPage recommended tools section switched from Portkey/Helicone to developer infrastructure tools (Vultr, Railway, Tencent Cloud, Silicon Flow, Warp) with new descriptive labels reflecting real usage context.
+- Blog article tag metadata enriched — added "Token Cost", "Claude", "GPT", and "Anthropic" tags to blog index article cards for improved SEO keyword coverage across both locales.
+
+**Fixed:**
+
+- Blog comparison article URL normalization — sitemap, route metadata (`routeMetadata.ts`), and blog article page paths corrected from `/blog/openai-vs-deepseek-cost-comparison` to `/blog/openai-claude-vs-deepseek-cost-comparison` to accurately reflect the three-provider comparison scope (OpenAI GPT + Anthropic Claude + DeepSeek).
 
 ### v0.6.3
 

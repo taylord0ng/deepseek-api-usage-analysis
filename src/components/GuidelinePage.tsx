@@ -755,7 +755,7 @@ function getManualContent(locale: string): string {
 function getManualContentZh(): string {
   return `# DeepSeek API 用量分析仪表盘 — 用户操作手册
 
-> 版本：v0.6.3 | 适用语言：中文 / English | 最后更新：2026-07-09
+> 版本：v0.6.4 | 适用语言：中文 / English | 最后更新：2026-07-10
 
 ---
 
@@ -1207,7 +1207,7 @@ Apple 风格下划线标签，5 个标签页：
 function getManualContentEn(): string {
   return `# DeepSeek API Usage Analytics Dashboard — User Guide
 
-> Version: v0.6.3 | Language: English / 中文 | Last Updated: 2026-07-09
+> Version: v0.6.4 | Language: English / 中文 | Last Updated: 2026-07-10
 
 ---
 
