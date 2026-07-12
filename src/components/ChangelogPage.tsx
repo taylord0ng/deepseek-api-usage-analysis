@@ -50,6 +50,34 @@ interface VersionEntry {
 /** 所有版本的更新日志，按版本倒序排列 */
 const CHANGELOG_DATA: VersionEntry[] = [
   {
+    version: "v0.6.5",
+    date: "2026-07-12",
+    improved: [
+      {
+        en: "Blog metadata management centralized — extracted all 3 blog article metadata (title, description, tags, publish date, SEO fields) into a shared `blogArticles.ts` module, replacing inline metadata in individual article page files for consistent single-source-of-truth management.",
+        zh: "博客元数据集中管理 — 将 3 篇博客文章的元数据（标题、描述、标签、发布日期、SEO 字段）提取到共享的 `blogArticles.ts` 模块中，替换各文章页面文件中的内联元数据，实现一致的单源管理。",
+      },
+      {
+        en: "Reusable JsonLd component extracted — encapsulated JSON-LD structured data generation into a generic `<JsonLd />` component, simplifying the 5 blog article page files and `layout.tsx` that previously duplicated schema generation logic.",
+        zh: "抽取可复用 JsonLd 组件 — 将 JSON-LD 结构化数据生成封装为通用的 `<JsonLd />` 组件，简化了原先在 5 个博客文章页面文件和 `layout.tsx` 中重复的 Schema 生成逻辑。",
+      },
+      {
+        en: "AuthorContent team member display refactored — rebuilt team member rendering with array mapping (`TEAM_MEMBERS` config array + `.map()`) replacing individual hardcoded member blocks, reducing code duplication and improving maintainability.",
+        zh: "AuthorContent 团队成员展示重构 — 使用数组映射模式（`TEAM_MEMBERS` 配置数组 + `.map()`）重建团队成员渲染逻辑，替换原有的逐个硬编码成员区块，减少代码重复并提升可维护性。",
+      },
+      {
+        en: "Schema module simplified — `schema.ts` streamlined by extracting reusable JSON-LD rendering logic into `JsonLd.tsx` component, reducing the module from 129+ lines of inline schema generation.",
+        zh: "Schema 模块精简 — 将可复用的 JSON-LD 渲染逻辑提取到 `JsonLd.tsx` 组件中，`schema.ts` 从 129+ 行内联 Schema 生成代码大幅精简。",
+      },
+    ],
+    added: [
+      {
+        en: "Schema unit tests added — new `schema.test.ts` test file with validation coverage for JSON-LD schema generation functions, ensuring structured data correctness across versions.",
+        zh: "新增 Schema 单元测试 — 新增 `schema.test.ts` 测试文件，覆盖 JSON-LD Schema 生成函数的验证，确保跨版本结构化数据的正确性。",
+      },
+    ],
+  },
+  {
     version: "v0.6.4",
     date: "2026-07-10",
     added: [

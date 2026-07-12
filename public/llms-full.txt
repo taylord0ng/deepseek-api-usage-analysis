@@ -1,6 +1,6 @@
 # DeepSeek API Usage Analytics Dashboard — Full Content
 
-> A free, privacy-first analytics tool for DeepSeek API users. Drop your monthly ZIP exports or CSV files and get instant cost analytics, cache analysis, and per-key breakdowns. Open source (MIT), bilingual (EN/中文), entirely browser-side. No account, no upload, no database. Built by Gavin Chen & the MindRose team. Version 0.6.4.
+> A free, privacy-first analytics tool for DeepSeek API users. Drop your monthly ZIP exports or CSV files and get instant cost analytics, cache analysis, and per-key breakdowns. Open source (MIT), bilingual (EN/中文), entirely browser-side. No account, no upload, no database. Built by Gavin Chen & the MindRose team. Version 0.6.5.
 
 ---
 
@@ -266,6 +266,17 @@ If you have questions about these Terms of Use, please open an issue on our GitH
 
 ### English
 
+**v0.6.5** (2026-07-12)
+
+*Added*
+- Schema unit tests added — new `schema.test.ts` test file with validation coverage for JSON-LD schema generation functions.
+
+*Improved*
+- Blog metadata management centralized — extracted all 3 blog article metadata into shared `blogArticles.ts` module, replacing inline metadata for consistent single-source-of-truth management.
+- Reusable JsonLd component extracted — encapsulated JSON-LD structured data generation into generic `<JsonLd />` component, simplifying duplicated schema logic across 5 blog article pages and layout.
+- AuthorContent team member display refactored — rebuilt with array mapping pattern replacing individual hardcoded member blocks, reducing code duplication.
+- Schema module simplified — `schema.ts` streamlined by extracting reusable JSON-LD rendering logic into `JsonLd.tsx` component.
+
 **v0.6.4** (2026-07-10)
 
 *Added*
@@ -411,6 +422,17 @@ If you have questions about these Terms of Use, please open an issue on our GitH
 ---
 
 ### 中文
+
+**v0.6.5**（2026-07-12）
+
+*新增*
+- Schema 单元测试 — 新增 `schema.test.ts` 测试文件，覆盖 JSON-LD Schema 生成函数的验证。
+
+*改进*
+- 博客元数据集中管理 — 将 3 篇博客文章元数据提取到共享的 `blogArticles.ts` 模块，实现一致的单源管理。
+- 可复用 JsonLd 组件抽取 — 将 JSON-LD 结构化数据生成封装为通用 `<JsonLd />` 组件，简化重复的 Schema 逻辑。
+- AuthorContent 团队成员展示重构 — 使用数组映射模式替换硬编码成员区块，减少代码重复。
+- Schema 模块精简 — 提取可复用的 JSON-LD 渲染逻辑到 `JsonLd.tsx` 组件。
 
 **v0.6.4**（2026-07-10）
 

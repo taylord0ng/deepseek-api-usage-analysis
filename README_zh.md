@@ -44,7 +44,7 @@
 - **姊妹项目交叉链接** — 集中化的 `sisterProjects.ts` 模块管理「API Usage Analyzer Series」产品矩阵中两个姐妹工具（DeepSeek + Agnes）之间的交叉链接。所有跨站 URL 均通过统一配置来源流转，并附带 UTM 追踪（`utm_source=agnes_site`、`utm_medium=referral`、按位置区分的 `utm_campaign`）。姊妹项目链接出现在 TitleBar（胶囊按钮）、LandingPage（专属区段）、FooterBar（「姊妹工具」行）以及 Organization JSON-LD Schema 中。
 - **落地页** — 完整的上传前落地页，包含主题感知背景图片、姊妹项目区段（Agnes AI 交叉链接，含 UTM 追踪 URL）、使用说明步骤、手风琴常见问题（9 项，含文件大小限制和项目分组）、多板块关于页面（项目起源、隐私与技术、团队介绍、商业合作含邮箱复制与社交链接 +「查看更新日志 →」链接）、滚动渐显动画、支持锚点链接的板块与延迟渲染性能优化
 - **用户操作手册** — 位于 `/guideline` 的完整双语使用指南，包含标注截图、交互式目录导航、分步仪表盘操作说明、CSV 导出指引、图表解读和故障排查章节
-- **更新日志** — 位于 `/changelog` 的专属页面，展示 v0.1.0 至 v0.6.4 的完整版本历史，按类别（新增/改进/修复/依赖变更）以彩色圆点分组；Apple 极简双语设计，与隐私政策/使用条款风格一致，含 JSON-LD WebPage 结构化数据、独立 SEO 元数据，可从 TitleBar、FooterBar 和落地页访问
+- **更新日志** — 位于 `/changelog` 的专属页面，展示 v0.1.0 至 v0.6.5 的完整版本历史，按类别（新增/改进/修复/依赖变更）以彩色圆点分组；Apple 极简双语设计，与隐私政策/使用条款风格一致，含 JSON-LD WebPage 结构化数据、独立 SEO 元数据，可从 TitleBar、FooterBar 和落地页访问
 - **隐私政策与使用条款** — `/privacy` 和 `/terms` 页面，包含双语法务内容、独立 SEO 元数据（规范 URL、OpenGraph、Twitter 卡片）、JSON-LD WebPage Schema 以及 Apple 极简风格的法律文本布局；每页页脚均有导航链接
 - **数据分析** — 可选的 Google Analytics 4 集成，通过 `NEXT_PUBLIC_GA_ID` 环境变量控制；未设置时零开销。追踪页面浏览、文件上传、分享卡片生成、标签页切换和语言切换 — 绝不追踪任何 CSV 数据。
 - **增强 SEO** — Twitter `summary_large_image` 卡片含 1200×630 OG 图片、用于 Google 知识面板的 `Organization` JSON-LD Schema、包含所有子页面的扩展 `BreadcrumbList`、差异化的站点地图 `lastModified` 日期、所有页面的 `keywords` + `author` + `twitter:site`/`creator` 元标签
@@ -129,7 +129,7 @@ src/
 │   ├── GuidelinePage.tsx    # 完整交互式用户操作手册（双语、标注截图、目录导航、滚动渐显）
 │   ├── PrivacyPage.tsx      # 隐私政策页（双语 7 章节法律文本，JSON-LD WebPage Schema，GitHub 源码链接）
 │   ├── TermsPage.tsx        # 使用条款页（双语 8 章节法律文本，JSON-LD WebPage Schema，MIT 许可证引用）
-│   ├── ChangelogPage.tsx     # 更新日志页（v0.1.0–v0.6.4 完整版本历史，按类别以彩色圆点分组，JSON-LD WebPage Schema，双语）
+│   ├── ChangelogPage.tsx     # 更新日志页（v0.1.0–v0.6.5 完整版本历史，按类别以彩色圆点分组，JSON-LD WebPage Schema，双语）
 │   ├── CostTrackerPage.tsx    # SEO 落地页：DeepSeek API 费用追踪器（功能 + 联盟推荐）
 │   ├── CacheAnalyzerPage.tsx  # SEO 落地页：DeepSeek 缓存命中率分析器（缓存教育 + MindRose CTA）
 │   ├── PricingCalculatorPage.tsx # SEO 落地页：DeepSeek API 价格计算器（交互式滑块 + 竞品对比表 + Vultr CTA）
@@ -227,6 +227,19 @@ npm run build
 - **缓存**：`/_next/static` 和 `/fonts` 永久缓存（1 年），`/landing` 和 `/guideline` 图片 stale-while-revalidate 缓存（1 周）
 
 ## 更新日志
+
+### v0.6.5
+
+**新增：**
+
+- 新增 Schema 单元测试 — 新增 `schema.test.ts` 测试文件，覆盖 JSON-LD Schema 生成函数的验证，确保跨版本结构化数据的正确性。
+
+**改进：**
+
+- 博客元数据集中管理 — 将 3 篇博客文章的元数据（标题、描述、标签、发布日期、SEO 字段）提取到共享的 `blogArticles.ts` 模块中，替换各文章页面文件中的内联元数据，实现一致的单源管理。
+- 抽取可复用 JsonLd 组件 — 将 JSON-LD 结构化数据生成封装为通用的 `<JsonLd />` 组件，简化了原先在 5 个博客文章页面文件和 `layout.tsx` 中重复的 Schema 生成逻辑。
+- AuthorContent 团队成员展示重构 — 使用数组映射模式（`TEAM_MEMBERS` 配置数组 + `.map()`）重建团队成员渲染逻辑，替换原有的逐个硬编码成员区块，减少代码重复并提升可维护性。
+- Schema 模块精简 — 将可复用的 JSON-LD 渲染逻辑提取到 `JsonLd.tsx` 组件中，大幅精简模块复杂度。
 
 ### v0.6.4
 

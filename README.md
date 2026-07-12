@@ -44,7 +44,7 @@ If you also analyze Agnes AI usage, check the companion open-source project in t
 - **Sister project cross-linking** — Centralized `sisterProjects.ts` module manages cross-links between the two sibling tools in the "API Usage Analyzer Series" product family (DeepSeek + Agnes). All cross-site URLs flow through a single config source with UTM tracking (`utm_source=agnes_site`, `utm_medium=referral`, per-location `utm_campaign`). Sister project links appear in the TitleBar (pill button), LandingPage (dedicated section), FooterBar ("Related Tools" row), and Organization JSON-LD schema.
 - **Landing page** — Complete pre-upload landing with theme-aware background images, Sister Project section (Agnes AI cross-link with tracked UTM URLs), How It Works steps, accordion FAQ (9 items, including file size limits and project grouping), expanded multi-section About (project origin, privacy & tech, team, contact with email copy & social links + "View Changelog →" link), scroll-reveal animations, anchor-linkable sections with deferred rendering for performance
 - **User Guide** — Comprehensive bilingual user manual at `/guideline` with annotated screenshots, interactive table of contents, step-by-step dashboard navigation, CSV export instructions, chart interpretation guide, and troubleshooting section
-- **Changelog** — Dedicated `/changelog` page with complete version history (v0.1.0–v0.6.4) organized by category (Added/Improved/Fixed/Dependencies) with color-coded dots; Apple-minimalist bilingual design matching privacy/terms pages, JSON-LD WebPage schema, independent SEO metadata, linked from TitleBar, FooterBar, and LandingPage
+- **Changelog** — Dedicated `/changelog` page with complete version history (v0.1.0–v0.6.5) organized by category (Added/Improved/Fixed/Dependencies) with color-coded dots; Apple-minimalist bilingual design matching privacy/terms pages, JSON-LD WebPage schema, independent SEO metadata, linked from TitleBar, FooterBar, and LandingPage
 - **Privacy Policy & Terms** — `/privacy` and `/terms` pages with bilingual legal content, independent SEO metadata (canonical, OpenGraph, Twitter), JSON-LD WebPage schemas, and Apple-minimalist legal-text layout; linked from footer on every page
 - **Analytics** — Optional Google Analytics 4 integration via `NEXT_PUBLIC_GA_ID` env var; zero overhead when unset. Tracks page views, file uploads, share card generations, tab switches, and language switches — zero CSV data ever tracked.
 - **Enhanced SEO** — Twitter `summary_large_image` card with 1200×630 OG image, `Organization` JSON-LD schema for Google Knowledge Panel, expanded `BreadcrumbList` with all sub-pages, differentiated sitemap `lastModified` dates, `keywords` + `author` + `twitter:site`/`creator` meta tags on all pages
@@ -129,7 +129,7 @@ src/
 │   ├── GuidelinePage.tsx    # Full interactive user guide (bilingual, annotated screenshots, table of contents, scroll-reveal)
 │   ├── PrivacyPage.tsx      # Privacy policy page (bilingual 7-section legal text, JSON-LD WebPage schema, GitHub source links)
 │   ├── TermsPage.tsx        # Terms of use page (bilingual 8-section legal text, JSON-LD WebPage schema, MIT License reference)
-│   ├── ChangelogPage.tsx     # Changelog page (complete version history v0.1.0–v0.6.4, entries by category with colored dots, JSON-LD WebPage schema, bilingual)
+│   ├── ChangelogPage.tsx     # Changelog page (complete version history v0.1.0–v0.6.5, entries by category with colored dots, JSON-LD WebPage schema, bilingual)
 │   ├── CostTrackerPage.tsx    # SEO landing: DeepSeek API Cost Tracker (features + affiliate recommendations)
 │   ├── CacheAnalyzerPage.tsx  # SEO landing: DeepSeek Cache Hit Rate Analyzer (caching education + MindRose CTA)
 │   ├── PricingCalculatorPage.tsx # SEO landing: DeepSeek API Pricing Calculator (interactive slider + competitor table + Vultr CTA)
@@ -227,6 +227,19 @@ The repo includes `vercel.json` with pre-configured security headers and caching
 - **Caching**: immutable caching for `/_next/static` and `/fonts` (1 year), stale-while-revalidate for `/landing` and `/guideline` images (1 week)
 
 ## Changelog
+
+### v0.6.5
+
+**Added:**
+
+- Schema unit tests added — new `schema.test.ts` test file with validation coverage for JSON-LD schema generation functions, ensuring structured data correctness across versions.
+
+**Improved:**
+
+- Blog metadata management centralized — extracted all 3 blog article metadata (title, description, tags, publish date, SEO fields) into a shared `blogArticles.ts` module, replacing inline metadata in individual article page files for consistent single-source-of-truth management.
+- Reusable JsonLd component extracted — encapsulated JSON-LD structured data generation into a generic `<JsonLd />` component, simplifying the 5 blog article page files and `layout.tsx` that previously duplicated schema generation logic.
+- AuthorContent team member display refactored — rebuilt team member rendering with array mapping (`TEAM_MEMBERS` config array + `.map()`) replacing individual hardcoded member blocks, reducing code duplication and improving maintainability.
+- Schema module simplified — `schema.ts` streamlined by extracting reusable JSON-LD rendering logic into `JsonLd.tsx` component, reducing module complexity.
 
 ### v0.6.4
 
