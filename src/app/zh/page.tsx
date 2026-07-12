@@ -1,6 +1,7 @@
 /** 文件说明：中文首页镜像路由。 */
 import type { Metadata } from "next";
 import Dashboard from "@/components/Dashboard";
+import JsonLd from "@/components/JsonLd";
 import { buildHomeMetadata } from "@/lib/routeMetadata";
 import {
   buildBreadcrumbJsonLd,
@@ -22,30 +23,10 @@ export function generateMetadata(): Metadata {
 export default function ZhHomePage() {
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(buildSoftwareAppJsonLd("zh")),
-        }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(buildFaqJsonLd("zh")),
-        }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(buildBreadcrumbJsonLd("zh")),
-        }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(buildOrganizationJsonLd("zh")),
-        }}
-      />
+      <JsonLd data={buildSoftwareAppJsonLd("zh")} />
+      <JsonLd data={buildFaqJsonLd("zh")} />
+      <JsonLd data={buildBreadcrumbJsonLd("zh")} />
+      <JsonLd data={buildOrganizationJsonLd("zh")} />
       <Dashboard />
     </>
   );

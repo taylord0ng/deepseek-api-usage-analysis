@@ -1,6 +1,7 @@
 /** 文件说明：英文首页路由。 */
 import type { Metadata } from "next";
 import Dashboard from "@/components/Dashboard";
+import JsonLd from "@/components/JsonLd";
 import { buildHomeMetadata } from "@/lib/routeMetadata";
 import {
   buildBreadcrumbJsonLd,
@@ -22,30 +23,10 @@ export function generateMetadata(): Metadata {
 export default function Home() {
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(buildSoftwareAppJsonLd("en")),
-        }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(buildFaqJsonLd("en")),
-        }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(buildBreadcrumbJsonLd("en")),
-        }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(buildOrganizationJsonLd("en")),
-        }}
-      />
+      <JsonLd data={buildSoftwareAppJsonLd("en")} />
+      <JsonLd data={buildFaqJsonLd("en")} />
+      <JsonLd data={buildBreadcrumbJsonLd("en")} />
+      <JsonLd data={buildOrganizationJsonLd("en")} />
       <Dashboard />
     </>
   );

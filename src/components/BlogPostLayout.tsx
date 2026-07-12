@@ -114,7 +114,7 @@ export default function BlogPostLayout({
               className="transition-colors duration-200 hover:opacity-80"
               style={{ color: "var(--text-secondary)" }}
             >
-              Gavin Chen
+              {meta.author}
             </Link>
             <span aria-hidden="true">&amp;</span>
             <Link

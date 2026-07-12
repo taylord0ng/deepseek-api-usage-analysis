@@ -6,6 +6,7 @@ import { useTranslation } from "@/i18n";
 import { trackLandingCTA } from "@/lib/analytics";
 import { buildLocalePath } from "@/lib/localeRouting";
 import AffiliateWall from "./AffiliateWall";
+import JsonLd from "./JsonLd";
 import { buildCostTrackerSoftwareAppJsonLd, buildCostTrackerFaqJsonLd } from "@/lib/schema";
 import TitleBar from "./TitleBar";
 import FooterBar from "./FooterBar";
@@ -63,18 +64,8 @@ export function CostTrackerPage() {
   return (
     <div className="min-h-screen" style={{ background: "var(--bg)" }}>
       {/* 注入页面专属结构化数据 */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(buildCostTrackerSoftwareAppJsonLd(locale)),
-        }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(buildCostTrackerFaqJsonLd(locale)),
-        }}
-      />
+      <JsonLd data={buildCostTrackerSoftwareAppJsonLd(locale)} />
+      <JsonLd data={buildCostTrackerFaqJsonLd(locale)} />
       <TitleBar />
 
       <div className="max-w-3xl mx-auto px-6 py-8">

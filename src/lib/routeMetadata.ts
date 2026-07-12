@@ -6,6 +6,7 @@
  */
 import type { Metadata } from "next";
 import type { Locale } from "@/i18n/translations";
+import { getBlogArticleLocaleMeta } from "@/lib/blogArticles";
 import { buildLocalizedPageMetadata } from "@/lib/pageMetadata";
 
 /** 博客文章元数据构建参数。 */
@@ -392,32 +393,26 @@ export function buildBlogIndexMetadata(locale: Locale): Metadata {
  * 构建文章《DeepSeek Context Caching Guide》的 metadata。
  */
 export function buildArticleCachingMetadata(locale: Locale): Metadata {
+  const article = getBlogArticleLocaleMeta("deepseek-context-caching-guide", locale);
+  const enArticle = getBlogArticleLocaleMeta("deepseek-context-caching-guide", "en");
+  const zhArticle = getBlogArticleLocaleMeta("deepseek-context-caching-guide", "zh");
+
   return buildBlogArticleMetadata(locale, {
-    pathname: "/blog/deepseek-context-caching-guide",
+    pathname: article.pathname,
     title: {
-      en: "The Ultimate Guide to DeepSeek API Context Caching (2026)",
-      zh: "DeepSeek API 上下文缓存终极指南（2026）",
+      en: enArticle.title,
+      zh: zhArticle.title,
     },
     description: {
-      en: "Learn how DeepSeek's prefix-matching disk caching works, why your cache hit rate might be lower than expected, and 5 prompt engineering techniques to maximize savings.",
-      zh: "了解 DeepSeek 前缀匹配磁盘缓存的工作原理、缓存命中率偏低的原因，以及 5 个最大化节省成本的 Prompt 工程技巧。",
+      en: enArticle.description,
+      zh: zhArticle.description,
     },
     keywords: {
-      en: [
-        "DeepSeek context caching",
-        "DeepSeek cache hit rate",
-        "DeepSeek API cost optimization",
-        "prompt caching guide",
-      ],
-      zh: [
-        "DeepSeek 上下文缓存",
-        "DeepSeek 缓存命中率",
-        "DeepSeek API 成本优化",
-        "Prompt 缓存指南",
-      ],
+      en: enArticle.keywords,
+      zh: zhArticle.keywords,
     },
-    publishedTime: "2026-07-04T00:00:00.000Z",
-    modifiedTime: "2026-07-04T00:00:00.000Z",
+    publishedTime: article.publishedTime,
+    modifiedTime: article.modifiedTime,
   });
 }
 
@@ -425,36 +420,26 @@ export function buildArticleCachingMetadata(locale: Locale): Metadata {
  * 构建文章《DeepSeek Cost Optimization Tools》的 metadata。
  */
 export function buildArticleToolsMetadata(locale: Locale): Metadata {
+  const article = getBlogArticleLocaleMeta("deepseek-cost-optimization-tools", locale);
+  const enArticle = getBlogArticleLocaleMeta("deepseek-cost-optimization-tools", "en");
+  const zhArticle = getBlogArticleLocaleMeta("deepseek-cost-optimization-tools", "zh");
+
   return buildBlogArticleMetadata(locale, {
-    pathname: "/blog/deepseek-cost-optimization-tools",
+    pathname: article.pathname,
     title: {
-      en: "Top 5 DeepSeek API Cost Optimization & Observability Tools",
-      zh: "Top 5 DeepSeek API 成本优化与可观测性工具横评",
+      en: enArticle.title,
+      zh: zhArticle.title,
     },
     description: {
-      en: "A comprehensive comparison of the best tools for monitoring and optimizing DeepSeek API costs — from real-time observability platforms to privacy-first CSV analyzers.",
-      zh: "深度对比最值得关注的 DeepSeek API 监控与成本优化工具，从实时可观测性平台到隐私优先的 CSV 分析器。",
+      en: enArticle.description,
+      zh: zhArticle.description,
     },
     keywords: {
-      en: [
-        "DeepSeek cost optimization tools",
-        "DeepSeek API monitoring",
-        "LLM observability",
-        "Helicone",
-        "Portkey",
-        "LangFuse",
-      ],
-      zh: [
-        "DeepSeek 成本优化工具",
-        "DeepSeek API 监控",
-        "LLM 可观测性",
-        "Helicone",
-        "Portkey",
-        "LangFuse",
-      ],
+      en: enArticle.keywords,
+      zh: zhArticle.keywords,
     },
-    publishedTime: "2026-07-04T00:00:00.000Z",
-    modifiedTime: "2026-07-04T00:00:00.000Z",
+    publishedTime: article.publishedTime,
+    modifiedTime: article.modifiedTime,
   });
 }
 
@@ -462,37 +447,25 @@ export function buildArticleToolsMetadata(locale: Locale): Metadata {
  * 构建文章《OpenAI vs DeepSeek Cost Comparison》的 metadata。
  */
 export function buildArticleOpenAiMetadata(locale: Locale): Metadata {
+  const article = getBlogArticleLocaleMeta("openai-claude-vs-deepseek-cost-comparison", locale);
+  const enArticle = getBlogArticleLocaleMeta("openai-claude-vs-deepseek-cost-comparison", "en");
+  const zhArticle = getBlogArticleLocaleMeta("openai-claude-vs-deepseek-cost-comparison", "zh");
+
   return buildBlogArticleMetadata(locale, {
-    pathname: "/blog/openai-claude-vs-deepseek-cost-comparison",
+    pathname: article.pathname,
     title: {
-      en: "OpenAI GPT vs Claude vs DeepSeek V4 Pro: A Developer's Cost-Benefit Analysis",
-      zh: "OpenAI GPT vs Claude vs DeepSeek V4 Pro：开发者成本收益分析",
+      en: enArticle.title,
+      zh: zhArticle.title,
     },
     description: {
-      en: "Hard numbers on API pricing differences. We break down when DeepSeek, OpenAI GPT, or Anthropic Claude makes economic sense and how to migrate smoothly.",
-      zh: "用硬数据比较 API 定价差异。分析 DeepSeek、OpenAI GPT 与 Anthropic Claude 各自在什么场景下更具经济性，以及如何平滑迁移。",
+      en: enArticle.description,
+      zh: zhArticle.description,
     },
     keywords: {
-      en: [
-        "DeepSeek vs OpenAI GPT",
-        "DeepSeek vs Claude",
-        "OpenAI GPT Pricing",
-        "Claude Pricing",
-        "DeepSeek V4 Pro",
-        "LLM cost comparison",
-        "AI pricing 2026",
-      ],
-      zh: [
-        "DeepSeek vs OpenAI GPT",
-        "DeepSeek vs Claude",
-        "OpenAI GPT 定价",
-        "Claude 定价",
-        "DeepSeek V4 Pro",
-        "大模型成本对比",
-        "AI 定价 2026",
-      ],
+      en: enArticle.keywords,
+      zh: zhArticle.keywords,
     },
-    publishedTime: "2026-07-04T00:00:00.000Z",
-    modifiedTime: "2026-07-04T00:00:00.000Z",
+    publishedTime: article.publishedTime,
+    modifiedTime: article.modifiedTime,
   });
 }
