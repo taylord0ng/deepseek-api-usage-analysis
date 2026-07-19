@@ -114,6 +114,17 @@ export function CostTrackerPage() {
             {t.costTracker.heroTitle}
           </h1>
           <p
+            className="text-lg font-medium mb-4 max-w-xl"
+            style={{
+              color: "var(--text-primary)",
+              letterSpacing: "-0.02em",
+            }}
+          >
+            {locale === "zh"
+              ? "免费 DeepSeek API 费用追踪器 — 上传 CSV，秒级分析"
+              : "Free DeepSeek API Cost Tracker — Upload CSV, Instant Analysis"}
+          </p>
+          <p
             className="text-base leading-relaxed text-pretty mb-6 max-w-xl"
             style={{ color: "var(--text-secondary)" }}
           >

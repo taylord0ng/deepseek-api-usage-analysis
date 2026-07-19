@@ -145,6 +145,14 @@ export function PricingCalculatorPage() {
             {t.pricingCalculator.heroTitle}
           </h1>
           <p
+            className="text-lg font-medium mb-4 max-w-xl"
+            style={{ color: "var(--text-primary)", letterSpacing: "-0.02em" }}
+          >
+            {locale === "zh"
+              ? "免费 DeepSeek API 价格计算器 — 拖动滑块，秒级估算成本"
+              : "Free DeepSeek API Pricing Calculator — Slide & Estimate Instantly"}
+          </p>
+          <p
             className="text-base leading-relaxed text-pretty max-w-xl"
             style={{ color: "var(--text-secondary)" }}
           >

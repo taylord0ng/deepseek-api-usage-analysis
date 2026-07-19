@@ -86,6 +86,14 @@ export function CacheAnalyzerPage() {
             {t.cacheAnalyzer.heroTitle}
           </h1>
           <p
+            className="text-lg font-medium mb-4 max-w-xl"
+            style={{ color: "var(--text-primary)", letterSpacing: "-0.02em" }}
+          >
+            {locale === "zh"
+              ? "免费 DeepSeek 缓存命中率分析器 — 上传 CSV，秒级诊断"
+              : "Free DeepSeek Cache Hit Rate Analyzer — Upload CSV, Instant Diagnosis"}
+          </p>
+          <p
             className="text-base leading-relaxed text-pretty mb-6 max-w-xl"
             style={{ color: "var(--text-secondary)" }}
           >

@@ -218,12 +218,12 @@ export function buildCostTrackerMetadata(locale: Locale): Metadata {
   return buildLocalizedPageMetadata(locale, {
     pathname: "/deepseek-api-cost-tracker",
     title: {
-      en: "DeepSeek API Cost Tracker | Free & Secure Billing Dashboard",
-      zh: "DeepSeek API 费用追踪器 | 免费且安全的账单仪表盘",
+      en: "DeepSeek API Cost Tracker — Free CSV Dashboard | No Signup",
+      zh: "DeepSeek API 费用追踪器 — 免费 CSV 仪表盘 | 无需注册",
     },
     description: {
-      en: "Track your DeepSeek API costs instantly. Drop your billing CSVs and get daily cost breakdowns, per-key attribution, and cache hit rate monitoring — 100% browser-side, no signup required.",
-      zh: "即时追踪 DeepSeek API 成本。拖入账单 CSV，获得每日费用拆分、按 Key 归因和缓存命中率监控，100% 浏览器本地处理，无需注册。",
+      en: "Free DeepSeek API cost tracker. Upload billing CSVs and instantly see daily costs, per-key attribution, cache hit rates, and project breakdowns — all processed locally in your browser.",
+      zh: "免费 DeepSeek API 费用追踪器。上传账单 CSV，即时查看每日费用、按 Key 归因、缓存命中率和项目拆分——全部在浏览器本地处理。",
     },
     keywords: {
       en: [
@@ -255,12 +255,12 @@ export function buildCacheAnalyzerMetadata(locale: Locale): Metadata {
   return buildLocalizedPageMetadata(locale, {
     pathname: "/deepseek-cache-hit-rate-analyzer",
     title: {
-      en: "DeepSeek Cache Hit Rate Analyzer | Optimize Your API Costs",
-      zh: "DeepSeek 缓存命中率分析器 | 优化你的 API 成本",
+      en: "DeepSeek Cache Hit Rate Analyzer — Optimize API Costs",
+      zh: "DeepSeek 缓存命中率分析器 — 优化 API 成本",
     },
     description: {
-      en: "Maximize your DeepSeek API cache hit rate and slash costs by up to 90%. Upload CSVs to analyze cache performance, learn prefix-matching caching strategies, and get per-key hits-vs-misses breakdowns.",
-      zh: "最大化 DeepSeek API 缓存命中率，最高可削减 90% 成本。上传 CSV 分析缓存表现，学习前缀匹配缓存策略，并查看按 Key 的命中/未命中拆分。",
+      en: "Analyze your DeepSeek cache hit rate from billing CSVs. Track daily trends, per-key hits vs misses, and discover prompt engineering tips to reduce API costs by up to 90%.",
+      zh: "从账单 CSV 分析 DeepSeek 缓存命中率。追踪每日趋势、各 Key 命中/未命中对比，获取 Prompt 工程优化技巧，最高可降低 90% API 成本。",
     },
     keywords: {
       en: [
@@ -292,12 +292,12 @@ export function buildPricingCalculatorMetadata(locale: Locale): Metadata {
   return buildLocalizedPageMetadata(locale, {
     pathname: "/deepseek-api-pricing-calculator",
     title: {
-      en: "DeepSeek API Pricing Calculator | Compare Model Costs Instantly",
-      zh: "DeepSeek API 价格计算器 | 即时比较模型成本",
+      en: "DeepSeek API Pricing Calculator — Compare Model Costs Instantly",
+      zh: "DeepSeek API 价格计算器 — 即时比较模型成本",
     },
     description: {
-      en: "Estimate your DeepSeek API costs with our interactive pricing calculator. Compare DeepSeek V4 Flash, V4 Pro, OpenAI GPT (5.5、5.4、5.4 mini), and Claude (Fable、Opus、Sonnet、Haiku) pricing side by side. Adjust token counts and cache hit rate assumptions.",
-      zh: "使用交互式价格计算器估算 DeepSeek API 成本。横向比较 DeepSeek V4 Flash、V4 Pro、OpenAI GPT （5.5、5.4、5.4 mini） 与 Claude （Fable、Opus、Sonnet、Haiku） 价格，并调整 Token 数量与缓存命中率假设。",
+      en: "Estimate your DeepSeek API costs with an interactive pricing calculator. Compare V4 Flash, V4 Pro, GPT, Claude models side by side. Adjust token counts and cache hit rate assumptions.",
+      zh: "使用交互式价格计算器估算 DeepSeek API 成本。横向比较 V4 Flash、V4 Pro、GPT、Claude 全系模型定价，调整 Token 数量与缓存命中率假设。",
     },
     keywords: {
       en: [
