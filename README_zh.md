@@ -40,7 +40,7 @@
 - **多月支持** — 一次拖入多个月份文件；根据文件名模式自动配对并拼接。同时支持 ZIP 压缩包直接上传 — 无需解压，直接将 DeepSeek 平台导出的 ZIP 文件拖入页面即可。
 - **Apple 极简设计** — 冷灰纸质感底、大量留白、「无卡片」通栏模块布局、细横线分割、5rem Hero 大数字、弥散阴影
 - **100% 隐私** — 所有 CSV 解析（Papa Parse）、ZIP 解压（JSZip）和费用计算均在浏览器客户端完成；项目配置仅存储于浏览器的 localStorage 中
-- **SEO 优化** — 服务端渲染元数据（规范 URL、OpenGraph 含 alternateLocale、Twitter 卡片）、JSON-LD 结构化数据（SoftwareApplication + FAQPage + BreadcrumbList，双语）、robots.txt + sitemap.xml、`<noscript>` 爬虫回退内容、支持锚点链接的落地页板块、`llms.txt` 面向 LLM 的站点描述
+- **SEO 优化** — 服务端渲染元数据（规范 URL、OpenGraph 含 `alternateLocale` en/zh、Twitter 卡片）、JSON-LD 结构化数据（`SoftwareApplication` + `FAQPage` + `BreadcrumbList` + `Organization`，双语，通过可复用 `<JsonLd />` 组件渲染）、robots.txt + sitemap.xml（每路由 en + zh 双语条目）、`<noscript>` 爬虫回退内容、支持锚点链接的落地页板块、`llms.txt` 面向 LLM 的站点描述
 - **姊妹项目交叉链接** — 集中化的 `sisterProjects.ts` 模块管理「API Usage Analyzer Series」产品矩阵中两个姐妹工具（DeepSeek + Agnes）之间的交叉链接。所有跨站 URL 均通过统一配置来源流转，并附带 UTM 追踪（`utm_source=agnes_site`、`utm_medium=referral`、按位置区分的 `utm_campaign`）。姊妹项目链接出现在 TitleBar（胶囊按钮）、LandingPage（专属区段）、FooterBar（「姊妹工具」行）以及 Organization JSON-LD Schema 中。
 - **落地页** — 完整的上传前落地页，包含主题感知背景图片、姊妹项目区段（Agnes AI 交叉链接，含 UTM 追踪 URL）、使用说明步骤、手风琴常见问题（9 项，含文件大小限制和项目分组）、多板块关于页面（项目起源、隐私与技术、团队介绍、商业合作含邮箱复制与社交链接 +「查看更新日志 →」链接）、滚动渐显动画、支持锚点链接的板块与延迟渲染性能优化
 - **用户操作手册** — 位于 `/guideline` 的完整双语使用指南，包含标注截图、交互式目录导航、分步仪表盘操作说明、CSV 导出指引、图表解读和故障排查章节
@@ -84,7 +84,7 @@ npm install
 npm run dev        # 开发服务器 → localhost:3000
 npm run build      # 静态导出 → out/
 npm run lint       # ESLint
-npm test           # Vitest（21 个测试用例）
+npm test           # Vitest（50 个测试用例）
 ```
 
 ### 技术栈
@@ -106,81 +106,115 @@ npm test           # Vitest（21 个测试用例）
 
 ```
 src/
-├── app/                    # Next.js App Router
-│   ├── layout.tsx          # 根布局、generateMetadata() SEO、JSON-LD 脚本、Google Analytics、Provider
-│   ├── page.tsx            # 入口 → <Dashboard />
-│   ├── guideline/
-│   │   └── page.tsx        # /guideline 路由，包含独立 SEO 元数据
-│   ├── privacy/
-│   │   └── page.tsx        # /privacy 路由，包含独立 SEO 元数据
-│   ├── terms/
-│   │   └── page.tsx        # /terms 路由，包含独立 SEO 元数据
-│   ├── changelog/
-│   │   └── page.tsx        # /changelog 路由，包含独立 SEO 元数据
-│   ├── globals.css         # Tailwind v4 + Hubot Sans @font-face + CSS 变量 + 渐显/手风琴 + 基础样式
+├── app/                    # Next.js App Router（路由组 + 双语镜像）
+│   ├── (site)/             # 英文根布局路由组（不可见路由组）
+│   │   ├── layout.tsx          # 英文根布局 → AppRootLayout(locale="en")
+│   │   ├── page.tsx            # 入口 → <Dashboard />
+│   │   ├── guideline/
+│   │   │   └── page.tsx        # /guideline 路由，包含独立 SEO 元数据
+│   │   ├── privacy/
+│   │   │   └── page.tsx        # /privacy 路由，包含独立 SEO 元数据
+│   │   ├── terms/
+│   │   │   └── page.tsx        # /terms 路由，包含独立 SEO 元数据
+│   │   ├── changelog/
+│   │   │   └── page.tsx        # /changelog 路由，包含独立 SEO 元数据
+│   │   ├── deepseek-api-cost-tracker/
+│   │   │   └── page.tsx        # SEO 落地页：DeepSeek API 费用追踪器
+│   │   ├── deepseek-cache-hit-rate-analyzer/
+│   │   │   └── page.tsx        # SEO 落地页：DeepSeek 缓存命中率分析器
+│   │   ├── deepseek-api-pricing-calculator/
+│   │   │   └── page.tsx        # SEO 落地页：DeepSeek API 价格计算器
+│   │   ├── blog/
+│   │   │   ├── page.tsx                    # /blog 文章索引：3 卡片网格
+│   │   │   ├── deepseek-context-caching-guide/page.tsx    # 博客文章 1
+│   │   │   ├── deepseek-cost-optimization-tools/page.tsx  # 博客文章 2
+│   │   │   └── openai-claude-vs-deepseek-cost-comparison/page.tsx # 博客文章 3
+│   │   └── author/
+│   │       └── page.tsx          # /author 路由，包含独立 SEO 元数据
+│   ├── zh/               # 中文根布局路由组（镜像所有 (site)/ 路由）
+│   │   ├── layout.tsx          # 中文根布局 → AppRootLayout(locale="zh")
+│   │   ├── page.tsx            # /zh 首页 → <Dashboard />
+│   │   └── ...                 # 所有 (site)/ 页面的中文镜像
+│   ├── globals.css         # Tailwind v4 + Hubot Sans @font-face + CSS 变量
 │   ├── AppI18nShell.tsx    # i18n 外壳 + <html lang> 同步
+│   ├── AppRootLayout.tsx   # 共享根布局渲染器（字体、GA、Provider）
 │   ├── robots.ts           # 构建时 robots.txt 生成
-│   └── sitemap.ts          # 构建时 sitemap.xml 生成（含 /、/guideline、/privacy、/terms、/changelog 条目）
+│   └── sitemap.ts          # 构建时 sitemap.xml（每路由 en + zh 双语条目）
 ├── components/
-│   ├── TitleBar.tsx         # 共享顶部导航栏（Logo + 应用名 + Agnes 姊妹项目胶囊按钮 + GitHub + 操作手册书籍图标 + 更新日志时钟图标 + 语言 + 主题）
-│   ├── FooterBar.tsx        # 共享页脚（「姊妹工具」交叉链接行 + 版权 + 操作手册链接 + 隐私政策链接 + 使用条款链接 + 更新日志链接 + GitHub 链接 + 版本号，可选渐显动画）
-│   ├── LandingPage.tsx      # 落地页（Hero 含主题背景图 + 姊妹项目区段 + 上传 + 使用说明含「查看完整指南」链接 + 手风琴FAQ + 关于，滚动渐显）
+│   ├── TitleBar.tsx         # 共享顶部导航栏（Logo + 应用名 + Agnes 胶囊按钮 + GitHub + 博客笔图标 + 指南针图标 + 更新日志时钟 + 语言 + 主题；移动端响应式弹出菜单）
+│   ├── FooterBar.tsx        # 共享页脚（「姊妹工具」行 + 版权 + 导航链接 + 版本号，可选渐显动画）
+│   ├── LandingPage.tsx      # 落地页（Hero + 姊妹项目区段 + 上传 + 使用说明 + FAQ 手风琴 + 关于，滚动渐显）
 │   ├── LandingContent.tsx   # 服务端渲染 <noscript> 回退内容，供搜索引擎爬虫抓取
 │   ├── GuidelinePage.tsx    # 完整交互式用户操作手册（双语、标注截图、目录导航、滚动渐显）
 │   ├── PrivacyPage.tsx      # 隐私政策页（双语 7 章节法律文本，JSON-LD WebPage Schema，GitHub 源码链接）
 │   ├── TermsPage.tsx        # 使用条款页（双语 8 章节法律文本，JSON-LD WebPage Schema，MIT 许可证引用）
-│   ├── ChangelogPage.tsx     # 更新日志页（v0.1.0–v0.6.5 完整版本历史，按类别以彩色圆点分组，JSON-LD WebPage Schema，双语）
+│   ├── ChangelogPage.tsx     # 更新日志页（v0.1.0–v0.6.5 完整版本历史，按类别以彩色圆点分组，JSON-LD WebPage Schema）
 │   ├── CostTrackerPage.tsx    # SEO 落地页：DeepSeek API 费用追踪器（功能 + 联盟推荐）
+│   ├── CostTrackerContent.tsx # <noscript> SEO 回退：双语费用追踪器内容供爬虫抓取
 │   ├── CacheAnalyzerPage.tsx  # SEO 落地页：DeepSeek 缓存命中率分析器（缓存教育 + MindRose CTA）
+│   ├── CacheAnalyzerContent.tsx # <noscript> SEO 回退：双语缓存分析器内容供爬虫抓取
 │   ├── PricingCalculatorPage.tsx # SEO 落地页：DeepSeek API 价格计算器（交互式滑块 + 竞品对比表 + Vultr CTA）
-│   ├── BlogPostLayout.tsx    # 可复用博客文章模板（Apple 极简风格，元数据行，交叉链接，CTA）
-│   ├── BlogArticlePage.tsx   # 通用博客文章包装器（根据语言加载内容）
-│   ├── ArticleRenderer.tsx   # 结构化内容渲染器（h2/h3/p/ul/ol/code/table 区块）
-│   ├── BlogIndex.tsx         # 博客首页（3 卡片网格，双语标题/描述/标签）
-│   ├── AuthorPage.tsx        # 作者个人资料页（双语简介、技能、社交链接、JSON-LD Person Schema）
-│   ├── AuthorContent.tsx     # <noscript> SEO 回退：双语作者简介供爬虫抓取
-│   ├── PrivacyContent.tsx    # <noscript> SEO 回退：双语隐私政策内容供爬虫抓取
-│   ├── TermsContent.tsx      # <noscript> SEO 回退：双语使用条款内容供爬虫抓取
-│   ├── ChangelogContent.tsx  # <noscript> SEO 回退：双语更新日志版本摘要供爬虫抓取
-│   ├── CopyButton.tsx       # 可复用剪贴板复制按钮（悬浮提示、国际化 Toast、定时器清理）
-│   ├── ShareButton.tsx      # 标签导航栏分享图标按钮 → 打开 ShareModal
-│   ├── ShareCard.tsx         # 1200×630 社交媒体信息图卡片（各标签页 KPI + 迷你图表 + QR 码 + 水印）
-│   ├── ShareModal.tsx        # 分享弹窗（实时预览、输入表单、复制到剪贴板、PNG 下载）
-│   ├── Dashboard.tsx        # 路由：落地页 / 5 标签页仪表盘视图切换（语义化隐藏 H1）
-│   ├── DropZone.tsx         # 拖拽或点击上传 CSV/ZIP（多文件，50MB 限制）
-│   ├── ProjectView.tsx      # 按项目标签页：拖拽自定义项目分组，按项目汇总费用/Token/缓存表格
-│   ├── KPICards.tsx         # 摘要指标卡片
-│   ├── OverviewView.tsx     # Hero 费用 + 日柱状图 + 环形图
-│   ├── KeyView.tsx          # Hero Key 数量 + 详细表格
-│   ├── CacheView.tsx        # Hero 命中率 + 趋势 + 堆叠图
-│   ├── TrendsView.tsx       # Hero 动态指标 + 折线图
-│   ├── ErrorDisplay.tsx     # 解析错误 & 警告横幅
-│   ├── LanguageSwitcher.tsx # EN / 中文 切换（胶囊分段控件）
-│   └── ThemeSwitcher.tsx    # 浅色 / 深色 切换（SVG 图标按钮）
+│   ├── PricingCalculatorContent.tsx # <noscript> SEO 回退：双语价格计算器内容供爬虫抓取
+│   ├── AuthorPage.tsx         # 作者个人资料页（双语简介、技能、社交链接、JSON-LD Person Schema）
+│   ├── AuthorContent.tsx      # <noscript> SEO 回退：双语作者简介供爬虫抓取
+│   ├── BlogPostLayout.tsx     # 可复用博客文章模板（Apple 极简风格，元数据行，交叉链接，CTA）
+│   ├── BlogArticlePage.tsx    # 通用博客文章包装器（根据语言加载内容）
+│   ├── ArticleRenderer.tsx    # 结构化内容渲染器（从 ArticleSection[] 渲染 h2/h3/p/ul/ol/code/table）
+│   ├── BlogIndex.tsx          # 博客首页（3 卡片网格，双语标题/描述/标签）
+│   ├── PrivacyContent.tsx     # <noscript> SEO 回退：双语隐私政策内容供爬虫抓取
+│   ├── TermsContent.tsx       # <noscript> SEO 回退：双语使用条款内容供爬虫抓取
+│   ├── ChangelogContent.tsx   # <noscript> SEO 回退：双语更新日志版本摘要供爬虫抓取
+│   ├── CopyButton.tsx         # 可复用剪贴板复制按钮（悬浮提示、国际化 Toast、定时器清理）
+│   ├── ShareButton.tsx        # 标签导航栏分享图标按钮 → 打开 ShareModal
+│   ├── ShareCard.tsx          # 1200×630 社交媒体信息图卡片（各标签页 KPI + 迷你图表 + QR 码 + 水印）
+│   ├── ShareModal.tsx         # 分享弹窗（实时预览、输入表单、复制到剪贴板、PNG 下载）
+│   ├── AffiliateWall.tsx      # 商业化推荐模块：卡片式布局展示联盟工具，含双语描述和佣金信息
+│   ├── Dashboard.tsx          # 路由：落地页 / 5 标签页仪表盘视图切换（语义化隐藏 H1）
+│   ├── DropZone.tsx           # 拖拽或点击上传 CSV/ZIP（多文件，50MB 限制）
+│   ├── ProjectView.tsx        # 按项目标签页：拖拽自定义项目分组，按项目汇总费用/Token/缓存表格
+│   ├── KPICards.tsx           # 摘要指标卡片
+│   ├── OverviewView.tsx       # Hero 费用 + 日柱状图 + 环形图
+│   ├── KeyView.tsx            # Hero Key 数量 + 详细表格
+│   ├── CacheView.tsx          # Hero 命中率 + 趋势 + 堆叠图
+│   ├── TrendsView.tsx         # Hero 动态指标 + 折线图
+│   ├── ErrorDisplay.tsx       # 解析错误 & 警告横幅
+│   ├── LanguageSwitcher.tsx   # EN / 中文 切换（胶囊分段控件）
+│   └── ThemeSwitcher.tsx      # 浅色 / 深色 切换（SVG 图标按钮）
 ├── i18n/
 │   ├── index.ts            # 统一导出
 │   ├── I18nProvider.tsx    # React 上下文 + useTranslation Hook
-│   └── translations.ts     # 全部 UI 文案（en + zh，含 projects、changelog 和 guideline 分组）
+│   └── translations.ts     # 全部 UI 文案（en + zh，35+ 分组）
 └── lib/
-    ├── types.ts            # TypeScript 接口与类型定义
-    ├── parser.ts           # CSV 解析管线
-    ├── concatFiles.ts      # 多月 CSV/ZIP 配对、解压与拼接 + 50MB 大小限制
-    ├── format.ts           # 本地化格式函数
-    ├── schema.ts           # JSON-LD 结构化数据（SoftwareApplication + FAQPage + BreadcrumbList，双语，含版本号）
-    ├── DataContext.tsx      # 数据状态 + 模型筛选
+    ├── types.ts              # TypeScript 接口与类型定义
+    ├── parser.ts             # CSV 解析管线
+    ├── concatFiles.ts        # 多月 CSV/ZIP 配对、解压与拼接 + 50MB 大小限制
+    ├── format.ts             # 本地化格式函数
+    ├── schema.ts             # JSON-LD 结构化数据（SoftwareApplication + FAQPage + BreadcrumbList + Organization，双语）
+    ├── DataContext.tsx       # 数据状态 + 模型筛选
     ├── ProjectConfigContext.tsx # 自定义项目分组配置（拖拽分配，localStorage 持久化）
-    ├── shareCardData.ts     # 分享卡片数据提取（从 ParseResult 提取各标签页汇总数据）
-    ├── analytics.ts         # GA4 事件追踪辅助函数（共享 gtag 封装，含守卫逻辑）
-    ├── sisterProjects.ts    # 姊妹项目交叉链接配置（Agnes/DeepSeek 品牌信息，含 UTM 参数的追踪链接）
-    ├── affiliates.ts        # 联盟营销链接配置（Vultr/DO/Namecheap/OpenRouter 推荐链接）
-    ├── authors.ts            # 作者个人资料配置（社交/联系链接、团队成员页面链接）
-    └── ThemeContext.tsx     # 主题状态 + useTheme Hook
+    ├── ThemeContext.tsx      # 主题状态 + useTheme Hook
+    ├── shareCardData.ts      # 分享卡片数据提取（从 ParseResult 提取各标签页汇总数据）
+    ├── analytics.ts          # GA4 事件追踪辅助函数（页面浏览、上传、分享、标签页切换、语言切换、联盟点击、落地页 CTA）
+    ├── sisterProjects.ts     # 姊妹项目交叉链接配置（Agnes/DeepSeek 品牌信息，含 UTM 参数的追踪链接）
+    ├── affiliates.ts         # 联盟营销链接配置（Vultr/DO/Namecheap/OpenRouter/腾讯云 推荐链接）
+    ├── authors.ts            # 作者个人资料配置（社交/联系链接、团队成员页面链接、buildAuthorMetadata）
+    ├── blogArticles.ts       # 博客文章定义：slug、路径、标题键、描述键、关键词、发布时间
+    ├── content.ts            # 文章内容类型定义（ArticleSection[]、ContentBlock、RichParagraph、PricingRow）
+    ├── content/articleCaching.ts   # 文章 1 内容：DeepSeek 上下文缓存指南（双语）
+    ├── content/articleTools.ts     # 文章 2 内容：Top 5 成本优化工具对比（双语）
+    ├── content/articleOpenai.ts    # 文章 3 内容：OpenAI GPT vs Claude vs DeepSeek V4 Pro 成本对比（双语 + 定价表）
+    ├── localeRouting.ts      # URL 级语言路由：DEFAULT_LOCALE、ZH_LOCALE_PREFIX、isZhPathname()、buildLocalePath()、switchLocalePath()
+    ├── site.ts               # 站点级公开常量：SITE_URL、SITE_NAME、OG_IMAGE_URL、LOGO_IMAGE_URL
+    ├── pageMetadata.ts       # 页面级 SEO 元数据构建器：buildLocalizedPageMetadata()（规范 URL、alternates、OG、Twitter、关键词、作者）
+    └── routeMetadata.ts      # 路由级元数据构建器：buildHomeMetadata()、buildGuidelineMetadata() 等（共 13 个构建器）
 ├── __tests__/
-│   ├── analytics.test.ts    # trackEvent 单元测试
-│   ├── schema.test.ts       # Organization + BreadcrumbList Schema 测试
-│   ├── sitemap.test.ts      # Sitemap lastModified 差异化测试
-│   ├── DataContext.test.tsx # loadFiles 错误处理测试
-│   └── DropZone.test.tsx    # 上传错误展示测试
+│   ├── analytics.test.ts       # trackEvent 单元测试
+│   ├── schema.test.ts          # Organization + BreadcrumbList Schema 测试
+│   ├── sitemap.test.ts         # Sitemap lastModified 差异化测试
+│   ├── localeRouting.test.ts   # URL 路由辅助函数（69 个测试用例）
+│   ├── DataContext.test.tsx    # loadFiles 错误处理测试
+│   ├── DropZone.test.tsx       # 上传错误展示测试
+│   └── BlogIndex.test.tsx      # 博客索引渲染测试
 ```
 
 ## 设计系统

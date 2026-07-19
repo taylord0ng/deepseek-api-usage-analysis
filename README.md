@@ -40,7 +40,7 @@ If you also analyze Agnes AI usage, check the companion open-source project in t
 - **Multi-month support** — Drag multiple months at once; files auto-pair by filename pattern and concatenate. Also supports ZIP archives directly — no extraction needed; drag DeepSeek platform ZIP exports straight onto the page.
 - **Apple-minimalist design** — Cold gray paper-texture background, generous whitespace, "no-card" full-width modules, thin horizontal dividers, 5rem hero numbers, diffuse shadows
 - **100% private** — All CSV parsing (Papa Parse), ZIP extraction (JSZip), and cost computation runs client-side; project configuration stored in your browser's localStorage only
-- **SEO optimized** — Server-rendered metadata (canonical URLs, OpenGraph with alternateLocale, Twitter cards), JSON-LD structured data (SoftwareApplication + FAQPage + BreadcrumbList, bilingual), robots.txt + sitemap.xml, `<noscript>` crawler fallback content, anchor-linkable landing page sections, `llms.txt` for LLM-friendly site description
+- **SEO optimized** — Server-rendered metadata (canonical URLs, OpenGraph with `alternateLocale` en/zh, Twitter cards), JSON-LD structured data (`SoftwareApplication` + `FAQPage` + `BreadcrumbList` + `Organization`, bilingual, rendered via reusable `<JsonLd />` component), robots.txt + sitemap.xml (bilingual en/zh entries per route), `<noscript>` crawler fallback content, anchor-linkable landing page sections, `llms.txt` for LLM-friendly site description
 - **Sister project cross-linking** — Centralized `sisterProjects.ts` module manages cross-links between the two sibling tools in the "API Usage Analyzer Series" product family (DeepSeek + Agnes). All cross-site URLs flow through a single config source with UTM tracking (`utm_source=agnes_site`, `utm_medium=referral`, per-location `utm_campaign`). Sister project links appear in the TitleBar (pill button), LandingPage (dedicated section), FooterBar ("Related Tools" row), and Organization JSON-LD schema.
 - **Landing page** — Complete pre-upload landing with theme-aware background images, Sister Project section (Agnes AI cross-link with tracked UTM URLs), How It Works steps, accordion FAQ (9 items, including file size limits and project grouping), expanded multi-section About (project origin, privacy & tech, team, contact with email copy & social links + "View Changelog →" link), scroll-reveal animations, anchor-linkable sections with deferred rendering for performance
 - **User Guide** — Comprehensive bilingual user manual at `/guideline` with annotated screenshots, interactive table of contents, step-by-step dashboard navigation, CSV export instructions, chart interpretation guide, and troubleshooting section
@@ -84,7 +84,7 @@ npm install
 npm run dev        # Dev server at localhost:3000
 npm run build      # Static export → out/
 npm run lint       # ESLint
-npm test           # Vitest (21 tests)
+npm test           # Vitest (50 tests)
 ```
 
 ### Tech Stack
@@ -106,81 +106,115 @@ npm test           # Vitest (21 tests)
 
 ```
 src/
-├── app/                    # Next.js App Router
-│   ├── layout.tsx          # Root layout, generateMetadata() SEO, JSON-LD scripts, Google Analytics, providers
-│   ├── page.tsx            # Entry → <Dashboard />
-│   ├── guideline/
-│   │   └── page.tsx        # /guideline route with independent SEO metadata
-│   ├── privacy/
-│   │   └── page.tsx        # /privacy route with independent SEO metadata
-│   ├── terms/
-│   │   └── page.tsx        # /terms route with independent SEO metadata
-│   ├── changelog/
-│   │   └── page.tsx        # /changelog route with independent SEO metadata
-│   ├── globals.css         # Tailwind v4 + Hubot Sans @font-face + CSS variables + reveal/accordion + base styles
+├── app/                    # Next.js App Router (route groups + bilingual mirroring)
+│   ├── (site)/             # English root layout group (invisible route group)
+│   │   ├── layout.tsx          # English root layout → AppRootLayout(locale="en")
+│   │   ├── page.tsx            # Entry → <Dashboard />
+│   │   ├── guideline/
+│   │   │   └── page.tsx        # /guideline route with independent SEO metadata
+│   │   ├── privacy/
+│   │   │   └── page.tsx        # /privacy route with independent SEO metadata
+│   │   ├── terms/
+│   │   │   └── page.tsx        # /terms route with independent SEO metadata
+│   │   ├── changelog/
+│   │   │   └── page.tsx        # /changelog route with independent SEO metadata
+│   │   ├── deepseek-api-cost-tracker/
+│   │   │   └── page.tsx        # SEO landing: DeepSeek API Cost Tracker
+│   │   ├── deepseek-cache-hit-rate-analyzer/
+│   │   │   └── page.tsx        # SEO landing: DeepSeek Cache Hit Rate Analyzer
+│   │   ├── deepseek-api-pricing-calculator/
+│   │   │   └── page.tsx        # SEO landing: DeepSeek API Pricing Calculator
+│   │   ├── blog/
+│   │   │   ├── page.tsx                    # /blog article index: 3-card grid
+│   │   │   ├── deepseek-context-caching-guide/page.tsx    # Blog article 1
+│   │   │   ├── deepseek-cost-optimization-tools/page.tsx  # Blog article 2
+│   │   │   └── openai-claude-vs-deepseek-cost-comparison/page.tsx # Blog article 3
+│   │   └── author/
+│   │       └── page.tsx          # /author route with independent SEO metadata
+│   ├── zh/               # Chinese root layout group (mirrors all (site)/ routes)
+│   │   ├── layout.tsx          # Chinese root layout → AppRootLayout(locale="zh")
+│   │   ├── page.tsx            # /zh home → <Dashboard />
+│   │   └── ...                 # Mirrors of all (site)/ pages
+│   ├── globals.css         # Tailwind v4 + Hubot Sans @font-face + CSS variables
 │   ├── AppI18nShell.tsx    # i18n shell + <html lang> sync
+│   ├── AppRootLayout.tsx   # Shared root layout renderer (font, GA, providers)
 │   ├── robots.ts           # Build-time robots.txt generation
-│   └── sitemap.ts          # Build-time sitemap.xml generation (includes /, /guideline, /privacy, /terms, /changelog)
+│   └── sitemap.ts          # Build-time sitemap.xml (en + zh bilingual entries per route)
 ├── components/
-│   ├── TitleBar.tsx         # Shared top nav bar (logo + app name + Agnes sister-project pill + GitHub + guide book icon + changelog clock icon + language + theme)
-│   ├── FooterBar.tsx        # Shared footer ("Related Tools" sister-project links row + copyright + guideline link + privacy link + terms link + changelog link + GitHub link + version, optional animate/reveal)
-│   ├── LandingPage.tsx      # Landing page (Hero with theme images + Sister Project section + Upload + HowItWorks + "View Full Guide" link + accordion QA + About, scroll-reveal)
+│   ├── TitleBar.tsx         # Shared top nav bar (logo + app name + Agnes pill + GitHub + blog pen + guideline compass + changelog clock + language + theme; responsive popover on mobile)
+│   ├── FooterBar.tsx        # Shared footer ("Related Tools" row + copyright + nav links + version, optional animate/reveal)
+│   ├── LandingPage.tsx      # Landing page (Hero + Sister Project + Upload + HowItWorks + FAQ accordion + About, scroll-reveal)
 │   ├── LandingContent.tsx   # Server-rendered <noscript> fallback for SEO crawlers
-│   ├── GuidelinePage.tsx    # Full interactive user guide (bilingual, annotated screenshots, table of contents, scroll-reveal)
-│   ├── PrivacyPage.tsx      # Privacy policy page (bilingual 7-section legal text, JSON-LD WebPage schema, GitHub source links)
-│   ├── TermsPage.tsx        # Terms of use page (bilingual 8-section legal text, JSON-LD WebPage schema, MIT License reference)
-│   ├── ChangelogPage.tsx     # Changelog page (complete version history v0.1.0–v0.6.5, entries by category with colored dots, JSON-LD WebPage schema, bilingual)
+│   ├── GuidelinePage.tsx    # Full interactive user guide (bilingual, annotated screenshots, ToC, scroll-reveal)
+│   ├── PrivacyPage.tsx      # Privacy policy (bilingual 7-section, JSON-LD WebPage, GitHub source links)
+│   ├── TermsPage.tsx        # Terms of use (bilingual 8-section, JSON-LD WebPage, MIT License reference)
+│   ├── ChangelogPage.tsx     # Changelog (v0.1.0–v0.6.5, category-grouped with colored dots, JSON-LD WebPage)
 │   ├── CostTrackerPage.tsx    # SEO landing: DeepSeek API Cost Tracker (features + affiliate recommendations)
+│   ├── CostTrackerContent.tsx # <noscript> SEO fallback: bilingual cost tracker content for crawlers
 │   ├── CacheAnalyzerPage.tsx  # SEO landing: DeepSeek Cache Hit Rate Analyzer (caching education + MindRose CTA)
+│   ├── CacheAnalyzerContent.tsx # <noscript> SEO fallback: bilingual cache analyzer content for crawlers
 │   ├── PricingCalculatorPage.tsx # SEO landing: DeepSeek API Pricing Calculator (interactive slider + competitor table + Vultr CTA)
-│   ├── BlogPostLayout.tsx    # Reusable blog post template (Apple-minimalist, metadata row, cross-links, CTA)
-│   ├── BlogArticlePage.tsx   # Generic blog article wrapper (locale-aware content loading)
-│   ├── ArticleRenderer.tsx   # Structured content renderer (h2/h3/p/ul/ol/code/table blocks)
-│   ├── BlogIndex.tsx         # Blog index page (3-card grid, bilingual titles/descriptions/tags)
-│   ├── AuthorPage.tsx        # Author profile page (bilingual bio, skills, social links, JSON-LD Person schema)
-│   ├── AuthorContent.tsx     # <noscript> SEO fallback: bilingual author bio for crawlers
-│   ├── PrivacyContent.tsx    # <noscript> SEO fallback: bilingual privacy policy for crawlers
-│   ├── TermsContent.tsx      # <noscript> SEO fallback: bilingual terms of use for crawlers
-│   ├── ChangelogContent.tsx  # <noscript> SEO fallback: bilingual changelog version summary for crawlers
-│   ├── CopyButton.tsx       # Reusable clipboard copy button (hover tooltip, i18n toast, timer cleanup)
-│   ├── ShareButton.tsx      # Share icon button in tab nav → opens ShareModal
-│   ├── ShareCard.tsx         # 1200×630 social media infographic card (per-tab KPI + mini-chart + QR + watermark)
-│   ├── ShareModal.tsx        # Share dialog (live preview, inputs, copy to clipboard, PNG download)
-│   ├── Dashboard.tsx        # Routes between LandingPage and 5-tab dashboard view (semantic hidden H1)
-│   ├── DropZone.tsx         # Drag-and-drop or click-to-upload CSV/ZIP (multi-file, 50MB limit)
-│   ├── ProjectView.tsx      # By Project tab: drag-and-drop custom project groups, per-project cost/token/cache table
-│   ├── KPICards.tsx         # Summary stat cards
-│   ├── OverviewView.tsx     # Hero cost + daily bars + donut
-│   ├── KeyView.tsx          # Hero key count + detailed table
-│   ├── CacheView.tsx        # Hero hit rate + trends + stacked bars
-│   ├── TrendsView.tsx       # Hero dynamic metric + line chart
-│   ├── ErrorDisplay.tsx     # Parse error & warning banners
-│   ├── LanguageSwitcher.tsx # EN / 中文 toggle (pill segmented control)
-│   └── ThemeSwitcher.tsx    # Light / Dark toggle (SVG icon button)
+│   ├── PricingCalculatorContent.tsx # <noscript> SEO fallback: bilingual pricing calculator content for crawlers
+│   ├── AuthorPage.tsx         # Author profile page (bilingual bio, skills, social links, JSON-LD Person schema)
+│   ├── AuthorContent.tsx      # <noscript> SEO fallback: bilingual author bio for crawlers
+│   ├── BlogPostLayout.tsx     # Reusable blog post template (Apple-minimalist, metadata row, cross-links, CTA)
+│   ├── BlogArticlePage.tsx    # Generic blog article wrapper (locale-aware content loading)
+│   ├── ArticleRenderer.tsx    # Structured content renderer (h2/h3/p/ul/ol/code/table from ArticleSection[])
+│   ├── BlogIndex.tsx          # Blog index page (3-card grid, bilingual titles/descriptions/tags)
+│   ├── PrivacyContent.tsx     # <noscript> SEO fallback: bilingual privacy policy for crawlers
+│   ├── TermsContent.tsx       # <noscript> SEO fallback: bilingual terms of use for crawlers
+│   ├── ChangelogContent.tsx   # <noscript> SEO fallback: bilingual changelog version summary for crawlers
+│   ├── CopyButton.tsx         # Reusable clipboard copy button (hover tooltip, i18n toast, timer cleanup)
+│   ├── ShareButton.tsx        # Share icon button in tab nav → opens ShareModal
+│   ├── ShareCard.tsx          # 1200×630 social media infographic card (per-tab KPI + mini-chart + QR + watermark)
+│   ├── ShareModal.tsx         # Share dialog (live preview, inputs, copy to clipboard, PNG download)
+│   ├── AffiliateWall.tsx      # Commercial recommendation module: card-based layout for affiliate tools
+│   ├── Dashboard.tsx          # Routes between LandingPage and 5-tab dashboard view (semantic hidden H1)
+│   ├── DropZone.tsx           # Drag-and-drop or click-to-upload CSV/ZIP (multi-file, 50MB limit)
+│   ├── ProjectView.tsx        # By Project tab: drag-and-drop custom project groups, per-project stats table
+│   ├── KPICards.tsx           # Summary stat cards
+│   ├── OverviewView.tsx       # Hero cost + daily bars + donut
+│   ├── KeyView.tsx            # Hero key count + detailed table
+│   ├── CacheView.tsx          # Hero hit rate + trends + stacked bars
+│   ├── TrendsView.tsx         # Hero dynamic metric + line chart
+│   ├── ErrorDisplay.tsx       # Parse error & warning banners
+│   ├── LanguageSwitcher.tsx   # EN / 中文 toggle (pill segmented control)
+│   └── ThemeSwitcher.tsx      # Light / Dark toggle (SVG icon button)
 ├── i18n/
 │   ├── index.ts            # Barrel export
 │   ├── I18nProvider.tsx    # React context + useTranslation hook
-│   └── translations.ts     # All UI strings (en + zh, including projects, changelog, and guideline groups)
+│   └── translations.ts     # All UI strings (en + zh, 35+ key groups)
 └── lib/
-    ├── types.ts            # TypeScript interfaces & types
-    ├── parser.ts           # CSV parsing pipeline
-    ├── concatFiles.ts      # Multi-month CSV/ZIP pairing, extraction & concat + 50MB size limit
-    ├── format.ts           # Locale-aware formatters
-    ├── schema.ts           # JSON-LD structured data (SoftwareApplication + FAQPage + BreadcrumbList, bilingual, versioned)
-    ├── DataContext.tsx      # Data state + model filter
+    ├── types.ts              # TypeScript interfaces & types
+    ├── parser.ts             # CSV parsing pipeline
+    ├── concatFiles.ts        # Multi-month CSV/ZIP pairing, extraction & concat + 50MB size limit
+    ├── format.ts             # Locale-aware formatters
+    ├── schema.ts             # JSON-LD structured data (SoftwareApplication + FAQPage + BreadcrumbList + Organization, bilingual)
+    ├── DataContext.tsx       # Data state + model filter
     ├── ProjectConfigContext.tsx # Custom project grouping config (drag-and-drop, localStorage persistence)
-    ├── shareCardData.ts     # Share card data extraction (per-tab summary data from ParseResult)
-    ├── analytics.ts         # GA4 event tracking helper (shared gtag wrapper with guard)
-    ├── sisterProjects.ts    # Sister project cross-linking config (Agnes/DeepSeek brand info, tracked URLs with UTM params)
-    ├── affiliates.ts        # Affiliate marketing link config (Vultr/DO/Namecheap/OpenRouter referral URLs)
-    ├── authors.ts            # Author profile config (social/contact URLs, team member page links)
-    └── ThemeContext.tsx     # Theme state + useTheme hook
+    ├── ThemeContext.tsx      # Theme state + useTheme hook
+    ├── shareCardData.ts      # Share card data extraction (per-tab summary data from ParseResult)
+    ├── analytics.ts          # GA4 event tracking helper (page views, uploads, shares, tabs, language, affiliate clicks, landing CTAs)
+    ├── sisterProjects.ts     # Sister project cross-linking config (Agnes/DeepSeek brand info, tracked URLs with UTM params)
+    ├── affiliates.ts         # Affiliate marketing link config (Vultr/DO/Namecheap/OpenRouter/TencentCloud referral URLs)
+    ├── authors.ts            # Author profile config (social/contact URLs, team member page URLs, buildAuthorMetadata)
+    ├── blogArticles.ts       # Blog article definitions: slug, pathname, titleKey, descriptionKey, keywords, publishedTime
+    ├── content.ts            # Article content type definitions (ArticleSection[], ContentBlock, RichParagraph, PricingRow)
+    ├── content/articleCaching.ts   # Article 1 content: DeepSeek context caching guide (bilingual)
+    ├── content/articleTools.ts     # Article 2 content: Top 5 cost optimization tools comparison (bilingual)
+    ├── content/articleOpenai.ts    # Article 3 content: OpenAI GPT vs Claude vs DeepSeek V4 Pro cost comparison (bilingual + pricingTable)
+    ├── localeRouting.ts      # URL-level language routing: DEFAULT_LOCALE, ZH_LOCALE_PREFIX, isZhPathname(), buildLocalePath(), switchLocalePath()
+    ├── site.ts               # Site-level public constants: SITE_URL, SITE_NAME, OG_IMAGE_URL, LOGO_IMAGE_URL
+    ├── pageMetadata.ts       # Page-level SEO metadata builder: buildLocalizedPageMetadata() (canonical, alternates, OG, Twitter, keywords, author)
+    └── routeMetadata.ts      # Route-specific metadata builders: buildHomeMetadata(), buildGuidelineMetadata(), etc. (13 builders)
 ├── __tests__/
-│   ├── analytics.test.ts    # trackEvent unit tests
-│   ├── schema.test.ts       # Organization + BreadcrumbList schema tests
-│   ├── sitemap.test.ts      # Sitemap lastModified differentiation tests
-│   ├── DataContext.test.tsx # loadFiles error handling tests
-│   └── DropZone.test.tsx    # Upload error display tests
+│   ├── analytics.test.ts       # trackEvent unit tests
+│   ├── schema.test.ts          # Organization + BreadcrumbList schema tests
+│   ├── sitemap.test.ts         # Sitemap lastModified differentiation tests
+│   ├── localeRouting.test.ts   # URL routing helpers (69 tests)
+│   ├── DataContext.test.tsx    # loadFiles error handling tests
+│   ├── DropZone.test.tsx       # Upload error display tests
+│   └── BlogIndex.test.tsx      # Blog index rendering tests
 ```
 
 ## Design System
