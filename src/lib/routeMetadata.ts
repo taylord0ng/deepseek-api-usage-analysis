@@ -57,12 +57,12 @@ export function buildHomeMetadata(locale: Locale): Metadata {
   return buildLocalizedPageMetadata(locale, {
     pathname: "/",
     title: {
-      en: "DeepSeek API Usage Dashboard & Cost Tracker | Free & Secure",
-      zh: "DeepSeek API 用量仪表盘与费用追踪器 | 免费且安全",
+      en: "DeepSeek API Cost Tracker & Usage Analytics — Free CSV Dashboard",
+      zh: "DeepSeek API 费用追踪器与用量分析 — 免费 CSV 仪表盘",
     },
     description: {
-      en: "Analyze your DeepSeek API billing CSVs instantly. Track token usage, monitor cache hit rates, and view cost by API key. 100% browser-side, no data uploaded. Free & open source.",
-      zh: "即时分析 DeepSeek API 账单 CSV。追踪 Token 用量、缓存命中率与 API Key 成本分布。100% 浏览器本地处理，不上传数据，免费且开源。",
+      en: "Free DeepSeek API cost tracker. Upload billing CSVs and get instant cost breakdowns, cache hit rate analysis, and per-key spending — all in your browser, no signup required.",
+      zh: "免费 DeepSeek API 费用追踪器。上传账单 CSV，即时查看费用拆分、缓存命中率分析和各 Key 支出明细——纯浏览器端处理，无需注册。",
     },
     keywords: {
       en: [

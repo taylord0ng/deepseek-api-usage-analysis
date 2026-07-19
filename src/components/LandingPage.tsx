@@ -178,6 +178,12 @@ export default function LandingPage() {
               {t.app.title}
             </h1>
             <p
+              className="text-lg leading-relaxed max-w-xl mx-auto text-pretty mb-2"
+              style={{ color: "var(--text-primary)", fontWeight: 500 }}
+            >
+              {locale === "zh" ? "免费 DeepSeek API 费用追踪器" : "Free DeepSeek API Cost Tracker"}
+            </p>
+            <p
               className="text-base leading-relaxed max-w-xl mx-auto text-pretty"
               style={{ color: "var(--text-secondary)" }}
             >
