@@ -50,6 +50,24 @@ interface VersionEntry {
 /** 所有版本的更新日志，按版本倒序排列 */
 const CHANGELOG_DATA: VersionEntry[] = [
   {
+    version: "v0.6.6",
+    date: "2026-07-19",
+    improved: [
+      {
+        en: "Homepage SEO metadata optimized — title changed to 'DeepSeek API Cost Tracker & Usage Analytics — Free CSV Dashboard' with keyword-first strategy; description rewritten to include primary keywords in first sentence.",
+        zh: "首页 SEO 元数据优化 — title 改为 'DeepSeek API Cost Tracker & Usage Analytics — Free CSV Dashboard'，采用关键词前置策略；description 重写，首句包含核心关键词。",
+      },
+      {
+        en: "Landing page hero section enhanced — added explicit keyword-rich subtitle below H1 on homepage and all three SEO landing pages (Cost Tracker, Cache Analyzer, Pricing Calculator) for improved search engine visibility.",
+        zh: "落地页 Hero 区域增强 — 在首页和三个 SEO 落地页（Cost Tracker、Cache Analyzer、Pricing Calculator）的 H1 下方新增显式关键词副标题，提升搜索引擎可见性。",
+      },
+      {
+        en: "Tool landing page metadata refined — Cost Tracker title updated to emphasize 'No Signup'; Cache Analyzer title streamlined; Pricing Calculator description de-emphasized model list in favor of action-oriented copy.",
+        zh: "工具落地页 metadata 精细化 — Cost Tracker 标题强调「无需注册」；Cache Analyzer 标题精简；Pricing Calculator description 从模型列表描述转向动作导向文案。",
+      },
+    ],
+  },
+  {
     version: "v0.6.5",
     date: "2026-07-12",
     improved: [
